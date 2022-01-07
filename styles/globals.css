@@ -1,16 +1,17 @@
-html,
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap");
+
+html {
+  overflow-y: scroll;
+}
+
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.main {
+  z-index: 100000000 !important;
 }
 
-* {
-  box-sizing: border-box;
+.ReactModal__Overlay {
+  z-index: 1000;
 }
