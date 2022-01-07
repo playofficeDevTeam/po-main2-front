@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.center {
+  @apply flex justify-center items-center;
+}
+.center-col {
+  @apply flex flex-col justify-center items-center;
+}
+
+.mo-max {
+  @apply max-w-xs w-11/12 mx-auto;
+}
+.pc-max {
+  @apply max-w-5xl mx-auto;
+}

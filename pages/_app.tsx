@@ -2,7 +2,7 @@ import "../styles/globals.css";
 import "../styles/tailwind.css";
 
 import type { AppProps } from "next/app";
-import Layout from "../components/Layout";
+import Layout from "../components/common/Layout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
