@@ -15,3 +15,10 @@
 .pc-max {
   @apply max-w-5xl mx-auto;
 }
+
+.mo-h1 {
+  @apply text-2xl font-bold;
+}
+.pc-h1 {
+  @apply text-3xl font-bold leading-normal;
+}

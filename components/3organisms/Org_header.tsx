@@ -1,7 +1,8 @@
 import { makeVar, useReactiveVar } from "@apollo/client";
+import { isMobileVar } from "../common/Layout";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { isMobileVar } from "../common/Layout";
+import { useRouter } from "next/router";
 
 const sitemapData = [
   { title: "서비스", url: "/service", selected: false },
@@ -14,14 +15,13 @@ export const sitemapDataVar = makeVar(sitemapData);
 export default function App({ floatingBtn = <></> }) {
   const isMobile = useReactiveVar(isMobileVar);
 
-  const sitemapDataReactiveVar = useReactiveVar(sitemapDataVar);
-
   const [menuState, setMenuState] = useState(false);
   const menuToggle = () => {
     setMenuState(!menuState);
   };
   const isMenuOpened = menuState;
 
+  const sitemapDataReactiveVar = useReactiveVar(sitemapDataVar);
   const selectTab = (id: number) => {
     const newSitemapData = [...sitemapDataReactiveVar];
     const selectOne = newSitemapData.map((val, idx) => ({
@@ -31,6 +31,8 @@ export default function App({ floatingBtn = <></> }) {
     sitemapDataVar(selectOne);
   };
 
+  const history = useRouter();
+
   useEffect(() => {
     const pathname = window.location.pathname;
     const pathnameFirst = pathname.split("/")[1];
@@ -38,7 +40,7 @@ export default function App({ floatingBtn = <></> }) {
       (val) => val.url.split("/")[1] === pathnameFirst
     );
     selectTab(nowPathIndex);
-  }, []);
+  }, [history]);
 
   return (
     <>

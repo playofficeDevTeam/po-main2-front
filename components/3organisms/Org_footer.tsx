@@ -52,6 +52,7 @@ export default function App() {
         // 피씨
         // 피씨
         <footer>
+          <div className="border-b"></div>
           <div className="pc-max my-10 flex justify-between">
             <div className="">
               <div className=" text-2xl font-black mb-4">POKETING</div>
