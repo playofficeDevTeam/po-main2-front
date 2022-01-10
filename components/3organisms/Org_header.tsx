@@ -1,7 +1,7 @@
 import { makeVar, useReactiveVar } from "@apollo/client";
-import { isMobile } from "react-device-detect";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { isMobileVar } from "../common/Layout";
 
 const sitemapData = [
   { title: "서비스", url: "/service", selected: false },
@@ -12,7 +12,10 @@ const sitemapData = [
 export const sitemapDataVar = makeVar(sitemapData);
 
 export default function App({ floatingBtn = <></> }) {
+  const isMobile = useReactiveVar(isMobileVar);
+
   const sitemapDataReactiveVar = useReactiveVar(sitemapDataVar);
+
   const [menuState, setMenuState] = useState(false);
   const menuToggle = () => {
     setMenuState(!menuState);
@@ -53,7 +56,7 @@ export default function App({ floatingBtn = <></> }) {
                   menuToggle();
                 }}
               >
-                ㅁ<i className="fas fa-bars text-xl text-gray-700"></i>
+                <i className="fas fa-bars text-xl text-gray-700"></i>
               </div>
               <Link href={"/"}>
                 <a
@@ -70,14 +73,13 @@ export default function App({ floatingBtn = <></> }) {
               <div className="w-2/12 center"></div>
             </div>
           </div>
-
           {/* 서브메뉴 */}
           {isMenuOpened ? (
             <div className="h-0">
-              <div className=" bg-white">
-                <div className="py-4 border-b shadow-md">
+              <nav className=" bg-white">
+                <ul className="py-4 border-b shadow-md">
                   {sitemapDataReactiveVar.map((val, idx) => (
-                    <Link href={val.url}>
+                    <Link href={val.url} key={idx}>
                       <a
                         className="center py-2 "
                         onClick={() => {
@@ -90,8 +92,8 @@ export default function App({ floatingBtn = <></> }) {
                       </a>
                     </Link>
                   ))}
-                </div>
-              </div>
+                </ul>
+              </nav>
             </div>
           ) : (
             <></>
@@ -113,10 +115,10 @@ export default function App({ floatingBtn = <></> }) {
                 </a>
               </Link>
 
-              <div className="w-8/12 h-full">
-                <div className="center h-full">
+              <nav className="w-8/12 h-full">
+                <ul className="center h-full">
                   {sitemapDataReactiveVar.map((val, idx) => (
-                    <Link href={val.url}>
+                    <Link href={val.url} key={idx}>
                       <a
                         className={`center px-3 pt-1 h-full hover:bg-gray-100 transition duration-200 ${
                           val.selected
@@ -128,8 +130,8 @@ export default function App({ floatingBtn = <></> }) {
                       </a>
                     </Link>
                   ))}
-                </div>
-              </div>
+                </ul>
+              </nav>
               <div className="w-2/12 flex justify-end">{floatingBtn}</div>
             </div>
           </div>

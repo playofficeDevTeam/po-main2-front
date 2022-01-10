@@ -1,9 +1,10 @@
-import { makeVar, useReactiveVar } from "@apollo/client";
-import { isMobile } from "react-device-detect";
+import { useReactiveVar } from "@apollo/client";
 import Link from "next/link";
+import { isMobileVar } from "../common/Layout";
 import { sitemapDataVar } from "./Org_header";
 
 export default function App() {
+  const isMobile = useReactiveVar(isMobileVar);
   const sitemapDataReactiveVar = useReactiveVar(sitemapDataVar);
   return (
     <>
@@ -16,11 +17,12 @@ export default function App() {
           <div className="my-4">
             <div className="mo-max">
               {sitemapDataReactiveVar.map((val, idx) => (
-                <Link href={val.url}>
+                <Link href={val.url} key={idx}>
                   <a className="flex py-2 border-b ">
                     <div className="center text-base">{val.title}</div>
-
-                    <i className="fas fa-chevron-right text-gray-500 pl-2   text-xs center relative top-px "></i>
+                    <div className="center">
+                      <i className="fas fa-chevron-right text-gray-500 pl-2 text-xs relative top-px "></i>
+                    </div>
                   </a>
                 </Link>
               ))}

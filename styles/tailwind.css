@@ -10,7 +10,7 @@
 }
 
 .mo-max {
-  @apply max-w-xs w-11/12 mx-auto;
+  @apply max-w-sm w-11/12 mx-auto;
 }
 .pc-max {
   @apply max-w-5xl mx-auto;

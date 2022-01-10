@@ -1,5 +1,3 @@
-import Org_header from "../components/3organisms/Org_header";
-
 export default function App() {
   return (
     <>
