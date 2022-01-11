@@ -1,9 +1,9 @@
 import { useReactiveVar } from "@apollo/client";
+import { isMobileVar } from "/home/app/components/common/Layout";
 import styled from "styled-components";
 import Br_mo from "../../../1atoms/Br_mo";
 import Carowsel1 from "../../../1atoms/Carowsel1";
 import Vdo from "../../../1atoms/Vdo";
-import { isMobileVar } from "/home/app/components/common/Layout";
 
 export const XscrollDiv = styled.div`
   overflow-x: scroll;
@@ -101,7 +101,7 @@ export default function App({
           </div>
           <div className="pc-max flex">
             <div className="w-7/12 mr-4">
-              <div className="w-10/12 mx-auto">
+              <div className="w-9/12 mx-auto">
                 <Carowsel1>
                   {videoData.map((val, idx) => (
                     <li key={idx} className=" ">

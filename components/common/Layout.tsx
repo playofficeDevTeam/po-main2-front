@@ -18,7 +18,7 @@ const client = new ApolloClient({
 
 const MinWidth: any = styled.div`
   min-width: ${(props: { isMobile: boolean }) =>
-    props.isMobile ? "20rem" : "64rem"};
+    props.isMobile ? "23.438rem" : "64rem"};
 `;
 
 export const isMobileVar = makeVar(false);
