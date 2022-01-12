@@ -104,13 +104,17 @@ export default function App() {
           광고는 ROAS가 평균 4배 높았습니다.
         </h3>
 
-        <div className="flex justify-center mb-14" style={{ height: "30rem" }}>
-          <div className="mr-8">
+        <div className="flex justify-center mb-14">
+          <div className="mr-8" style={{ height: "30rem" }}>
             <div className="h-0 relative z-10 top-8 w-80 mx-auto">
               <div className="">광고 개선</div>
             </div>
             <div className="center">
-              <Vdo src="/assets/서비스_비주얼/4_1" />
+              <Vdo
+                src="/assets/서비스_비주얼/4_1"
+                className="rounded-3xl"
+                style={{ width: "24rem" }}
+              />
             </div>
           </div>
 
@@ -130,27 +134,28 @@ export default function App() {
             />
           </div>
         </div>
-
-        <div className="mo-max p-4 mt-8  bg-white border-2 rounded-2xl">
-          <div className="flex items-center mb-4">
-            <img
-              src="/assets/서비스_비주얼/아이콘/리뷰 아이콘.png"
-              alt="리뷰아이콘"
-              className="h-14 mr-4"
-            />
-            <div className="font-bold text-gray-600">
-              안경 브랜드 W사 <br />
-              김** 팀장
+        <div className="pc-max">
+          <div className="w-6/12 mx-auto p-4 mt-8  bg-white border-2 rounded-2xl">
+            <div className="flex items-center mb-4">
+              <img
+                src="/assets/서비스_비주얼/아이콘/리뷰 아이콘.png"
+                alt="리뷰아이콘"
+                className="h-14 mr-4"
+              />
+              <div className="font-bold text-gray-600">
+                안경 브랜드 W사 <br />
+                김** 팀장
+              </div>
             </div>
-          </div>
-          <div className="px-1">
-            <div className="mb-1 text-orange-500 font-bold">
-              페이스북 광고 ROAS : 11.7
-            </div>
-            <div>
-              “100가지 정도 소재를 유형별로 테스트했는데, 비주얼 인플루언서
-              콘텐츠를 사용한 광고가 오랜 기간동안 ROAS가 가장 높았습니다.
-              만족스럽고, 앞으로도 잘 부탁 드릴게요~”
+            <div className="px-1">
+              <div className="mb-1 text-orange-500 font-bold">
+                페이스북 광고 ROAS : 11.7
+              </div>
+              <div>
+                “100가지 정도 소재를 유형별로 테스트했는데, 비주얼 인플루언서
+                콘텐츠를 사용한 광고가 오랜 기간동안 ROAS가 가장 높았습니다.
+                만족스럽고, 앞으로도 잘 부탁 드릴게요~”
+              </div>
             </div>
           </div>
         </div>

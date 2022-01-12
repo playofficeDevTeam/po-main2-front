@@ -11,9 +11,11 @@ const sitemapData = [
 ];
 
 export const sitemapDataVar = makeVar(sitemapData);
+export const headerFloatingBtnVar = makeVar(<></>);
 
-export default function App({ floatingBtn = <></> }) {
+export default function App() {
   const isMobile = useReactiveVar(isMobileVar);
+  const headerFloatingBtn = useReactiveVar(headerFloatingBtnVar);
 
   const [menuState, setMenuState] = useState(false);
   const menuToggle = () => {
@@ -134,7 +136,7 @@ export default function App({ floatingBtn = <></> }) {
                   ))}
                 </ul>
               </nav>
-              <div className="w-2/12 flex justify-end">{floatingBtn}</div>
+              <div className="w-2/12 flex justify-end">{headerFloatingBtn}</div>
             </div>
           </div>
         </header>

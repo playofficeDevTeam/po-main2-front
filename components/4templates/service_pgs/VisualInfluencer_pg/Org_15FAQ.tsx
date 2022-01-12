@@ -66,7 +66,7 @@ export default function App() {
         <div className={`text-center mb-10 ${isMobile ? "mo-h1" : "pc-h1"}`}>
           FAQ
         </div>
-        <ul>
+        <ul className={` ${isMobile ? " " : "w-10/12 mx-auto"}`}>
           {data1.map((val, idx) => (
             <li
               key={idx}

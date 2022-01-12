@@ -22,7 +22,7 @@ const defaultData = [
       </div>
     ),
     src: "/assets/서비스_비주얼/1_1.png",
-    url: "/costomer-story/visual-influencer/health-food",
+    url: "/costomer-story/health-food",
   },
   {
     title: (
@@ -42,7 +42,7 @@ const defaultData = [
       </div>
     ),
     src: "/assets/서비스_비주얼/1_2.png",
-    url: "/costomer-story/visual-influencer/fitness",
+    url: "/costomer-story/fitness",
   },
   {
     title: (
@@ -62,7 +62,7 @@ const defaultData = [
       </div>
     ),
     src: "/assets/서비스_비주얼/1_3.png",
-    url: "/costomer-story/visual-influencer/child",
+    url: "/costomer-story/child",
   },
 ];
 
@@ -82,10 +82,10 @@ export default function App({ data = defaultData }) {
         <div className="w-full">
           <div className="max-w-md mx-auto">
             <Carowsel1>
-              {data.map((val) => (
-                <div className="px-2">
+              {data.map((val, idx) => (
+                <div className="px-2 " key={idx}>
                   <Link href={val.url}>
-                    <div className="bg-indigo-50 p-3 mb-2 rounded-lg shadow-md max-w-xs mx-auto">
+                    <div className="bg-indigo-50 p-3 mb-2 rounded-lg shadow-md max-w-xs mx-auto cursor-pointer">
                       <div className="mb-4 flex justify-center">
                         <img src={val.src}></img>
                       </div>
@@ -123,10 +123,10 @@ export default function App({ data = defaultData }) {
           </h1>
         </div>
         <div className=" max-w-screen-lg mx-auto pb-10 ">
-          <ul className="grid grid-cols-3 min-w-max gap-3">
+          <ul className="grid grid-cols-3 min-w-max gap-5">
             {data.map((val) => (
               <Link href={val.url}>
-                <li className="bg-indigo-50 p-3 mb-2 rounded-lg shadow-md">
+                <li className="bg-indigo-50 p-3 mb-2 rounded-lg shadow-md cursor-pointer">
                   <div className="mb-4">
                     <img src={val.src}></img>
                   </div>

@@ -47,11 +47,11 @@ export default function App({ data = defaultData }) {
     // 피씨
     // 피씨
     <section className="">
-      <div className=" center-col text-center">
-        <h1 className="mo-h1 mb-7">{data.title}</h1>
+      <div className="center-col text-center">
+        <h1 className="pc-h1 mb-7">{data.title}</h1>
         <div className="text-lg mb-7 w-9/12 mx-auto">{data.content}</div>
       </div>
-      <div className="mo-max">
+      <div className="mo-max flex items-end" style={{ height: "43rem" }}>
         <Vdo src="/assets/서비스_비주얼/2" className=" rounded-t-lg" />
       </div>
     </section>

@@ -95,13 +95,13 @@ export default function App({
         // 피씨
         // 피씨
         // 피씨
-        <>
+        <div className="">
           <div className="pc-max mt-12 mb-20 ">
             <h1 className="pc-h1 text-center">{title}</h1>
           </div>
           <div className="pc-max flex">
-            <div className="w-7/12 mr-4">
-              <div className="w-9/12 mx-auto">
+            <div className="w-7/12 mr-4" style={{ height: "43rem" }}>
+              <div className="w-9/12 mx-auto ">
                 <Carowsel1>
                   {videoData.map((val, idx) => (
                     <li key={idx} className=" ">
@@ -123,7 +123,7 @@ export default function App({
             </div>
             <div className="w-5/12">{rightComponent}</div>
           </div>
-        </>
+        </div>
       )}
     </section>
   );

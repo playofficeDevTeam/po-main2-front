@@ -41,7 +41,7 @@ export default function App() {
               <div className="">강화된 상세페이지</div>
             </div>
             <div className="center">
-              <Vdo src="/assets/서비스_비주얼/3_1" />
+              <Vdo src="/assets/서비스_비주얼/3_1" className=" rounded-3xl" />
             </div>
           </div>
 
@@ -91,7 +91,7 @@ export default function App() {
     // 피씨
     <section className="bg-blue-50 py-20">
       <div className="pc-max">
-        <h1 className="center-col text-center pc-h1 text-4xl  mt-10 mb-28 ">
+        <h1 className=" center-col text-center text-4xl font-bold leading-normal   mt-10 mb-28 ">
           제품 마케팅에 꼭 필요한 <br />
           비주얼 인플루언서 콘텐츠 제작해 드릴게요.
           <br />
@@ -118,7 +118,11 @@ export default function App() {
             <div className="h-0 relative z-10 top-8 w-80 mx-auto">
               <div className="">강화된 상세페이지</div>
             </div>
-            <Vdo src="/assets/3_1" />
+            <Vdo
+              src="/assets/서비스_비주얼/3_1"
+              className="rounded-3xl"
+              style={{ height: "30rem" }}
+            />
           </div>
 
           <div className="" style={{ height: "30rem" }}>
@@ -131,32 +135,33 @@ export default function App() {
             </div>
             <img
               src="/assets/서비스_비주얼/3_2.png"
-              className="rounded-3xl relative mx-auto"
+              className="rounded-3xl relative mx-auto h-full"
               style={{ width: "24rem" }}
             ></img>
           </div>
         </div>
-
-        <div className="pc-max p-4 mt-8 bg-white border-2 rounded-2xl">
-          <div className="flex items-center mb-4">
-            <img
-              src="/assets/서비스_비주얼/아이콘/리뷰 아이콘.png"
-              alt="리뷰아이콘"
-              className="h-14 mr-4"
-            />
-            <div className="font-bold text-gray-600">
-              운동복 브랜드 Z사
-              <br />
-              윤** 이사
+        <div className="pc-max">
+          <div className="w-6/12 mx-auto p-4 mt-8 bg-white border-2 rounded-2xl">
+            <div className="flex items-center mb-4">
+              <img
+                src="/assets/서비스_비주얼/아이콘/리뷰 아이콘.png"
+                alt="리뷰아이콘"
+                className="h-14 mr-4"
+              />
+              <div className="font-bold text-gray-600">
+                운동복 브랜드 Z사
+                <br />
+                윤** 이사
+              </div>
             </div>
-          </div>
-          <div className="px-1">
-            <div className="mb-1 text-orange-500 font-bold">
-              상세페이지 구매전환율 증가 : 1.6% → 7.9%
-            </div>
-            <div>
-              “상세페이지 새로 만드는 것보다 동영상 추가만 하는게 훨씬 간단한데,
-              매출변화는 크네요. 제품별로 모두 진행 하겠습니다.”
+            <div className="px-1">
+              <div className="mb-1 text-orange-500 font-bold">
+                상세페이지 구매전환율 증가 : 1.6% → 7.9%
+              </div>
+              <div>
+                “상세페이지 새로 만드는 것보다 동영상 추가만 하는게 훨씬
+                간단한데, 매출변화는 크네요. 제품별로 모두 진행 하겠습니다.”
+              </div>
             </div>
           </div>
         </div>

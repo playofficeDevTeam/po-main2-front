@@ -106,29 +106,30 @@ export default function App() {
             />
           </div>
         </div>
-
-        <div className=" pc-max p-4 mt-8 bg-white border-2 rounded-2xl">
-          <div className="flex items-center mb-4">
-            <img
-              src="/assets/서비스_비주얼/아이콘/리뷰 아이콘.png"
-              alt="리뷰아이콘"
-              className="h-14 mr-4"
-            />
-            <div className="font-bold text-gray-600">
-              블루투스 이어폰 S사 <br />
-              서** 담당자
+        <div className="pc-max">
+          <div className="w-6/12 mx-auto p-4 mt-8 bg-white border-2 rounded-2xl">
+            <div className="flex items-center mb-4">
+              <img
+                src="/assets/서비스_비주얼/아이콘/리뷰 아이콘.png"
+                alt="리뷰아이콘"
+                className="h-14 mr-4"
+              />
+              <div className="font-bold text-gray-600">
+                블루투스 이어폰 S사 <br />
+                서** 담당자
+              </div>
             </div>
-          </div>
-          <div className="px-1">
-            <div className="mb-1 text-orange-500 font-bold">
-              공식쇼핑몰 일 방문자 수 : 360명 → 3,000명
-            </div>
-            <div>
-              “제품 컨셉에 맞는 해시태그를 구축하고 비주얼 인플루언서의 파급력이
-              대량 동원되니 방문자수가 다이내믹하게 증가했고, 함께 진행한 다른
-              마케팅의 성과도 같이 부스트 되었습니다. 해시태그는 무조건 많은 게
-              좋다고 생각했는데 보내주신 가이드대로 진행한 것이 가장 잘 노출
-              되더군요. 감사합니다.”
+            <div className="px-1">
+              <div className="mb-1 text-orange-500 font-bold">
+                공식쇼핑몰 일 방문자 수 : 360명 → 3,000명
+              </div>
+              <div>
+                “제품 컨셉에 맞는 해시태그를 구축하고 비주얼 인플루언서의
+                파급력이 대량 동원되니 방문자수가 다이내믹하게 증가했고, 함께
+                진행한 다른 마케팅의 성과도 같이 부스트 되었습니다. 해시태그는
+                무조건 많은 게 좋다고 생각했는데 보내주신 가이드대로 진행한 것이
+                가장 잘 노출 되더군요. 감사합니다.”
+              </div>
             </div>
           </div>
         </div>

@@ -33,23 +33,25 @@ export default function App() {
     </section>
   ) : (
     <section className="py-20 bg-gray-100">
-      <div className="pc-max flex">
-        <h2 className="w-1/2 pc-h1 flex items-center ">
-          브랜드마다 <br />
-          3인의 전문가로 구성 된 <br /> 전담팀이 배정되어 <br />
-          처음부터 끝까지 <br /> 성과를 견인합니다.
-        </h2>
-        <ul className="w-1/2 ml-6">
-          {data1.map((val, idx) => (
-            <li
-              key={idx}
-              className="flex bg-white border-2 rounded-lg px-5 py-3 mb-2 last:mb-0"
-            >
-              <div className="w-2/12">0{idx + 1}</div>
-              <div>{val}</div>
-            </li>
-          ))}
-        </ul>
+      <div className="pc-max ">
+        <div className="w-10/12 mx-auto flex">
+          <h2 className="w-1/2 pc-h1 flex items-center ">
+            브랜드마다 <br />
+            3인의 전문가로 구성 된 <br /> 전담팀이 배정되어 <br />
+            처음부터 끝까지 <br /> 성과를 견인합니다.
+          </h2>
+          <ul className="w-1/2 ml-6">
+            {data1.map((val, idx) => (
+              <li
+                key={idx}
+                className="flex bg-white border-2 rounded-lg px-5 py-3 mb-2 last:mb-0"
+              >
+                <div className="w-2/12">0{idx + 1}</div>
+                <div>{val}</div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );

@@ -1,19 +1,23 @@
-import { isMobile } from "react-device-detect";
-import Tem_modal1 from "./Tem_modal1_scrollTo";
-import Org_pricePlan_v4 from "./Org_pricePlan_v4";
-
-const data1 = [
-  <>
-    온라인에서 {isMobile ? <br /> : <> </>}
-    인상깊게 본 콘텐츠 10개 중{isMobile ? <br /> : <> </>}
-    적어도 3개는 포케팅 작품입니다.{isMobile ? <br /> : <></>}
-    <br />
-    매출 평균 11배 상승시킨 콘텐츠,{isMobile ? <br /> : <> </>}
-    지금 성과를 높이세요.
-  </>,
-];
+import { useReactiveVar } from "@apollo/client";
+import Br_mo from "../../../1atoms/Br_mo";
+import { isMobileVar } from "../../../common/Layout";
+import Mol_pricePlan_popup_Btn from "./Mol_pricePlan_popup_Btn";
 
 export default function App() {
+  const isMobile = useReactiveVar(isMobileVar);
+  const data1 = [
+    <>
+      온라인에서
+      <Br_mo />
+      인상깊게 본 콘텐츠 10개 중<Br_mo />
+      적어도 3개는 포케팅 작품입니다.
+      <Br_mo />
+      <br />
+      매출 평균 11배 상승시킨 콘텐츠,
+      <Br_mo />
+      지금 성과를 높이세요.
+    </>,
+  ];
   return (
     <section
       className={` bg-gray-800 text-white ${isMobile ? "py-20" : "py-24"}`}
@@ -27,24 +31,7 @@ export default function App() {
           {data1}
         </div>
 
-        <Tem_modal1
-          data={{
-            button: (
-              <div className="flex font-bold text-shadow-md bg-gradient-to-r from-orange-500 to-yellow-500 px-7 py-3 rounded-full cursor-pointer">
-                <img
-                  src={
-                    require("/home/po-main1-front/src/assets/서비스_비주얼2/아이콘/shuttle 2.png")
-                      .default
-                  }
-                  alt="바로 진행하기"
-                  className="mr-3"
-                />
-                바로 진행하기
-              </div>
-            ),
-            modal: <Org_pricePlan_v4></Org_pricePlan_v4>,
-          }}
-        />
+        <Mol_pricePlan_popup_Btn />
       </div>
     </section>
   );

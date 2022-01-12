@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { throttle } from "throttle-debounce";
 
-export const useScroll = (offset: number, once = false, init = true) => {
+export const useScroll = (offset: number, once = false, init = false) => {
   const ref = useRef<any>();
   const [trigger, setTrigger] = useState(init);
   const scrollCheck = () => {
