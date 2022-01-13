@@ -25,7 +25,7 @@ export default function App() {
     <>
       {isMobile ? (
         <>
-          <Org_0floatingBtn trigger={floatingBtnScroll.trigger} />
+          <Org_0floatingBtn trigger={!floatingBtnScroll.trigger} />
           <Org_1headLine />
           <div className="mt-16"></div>
           <Org_2explanation />

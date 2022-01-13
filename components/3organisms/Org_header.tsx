@@ -33,7 +33,7 @@ export default function App() {
     sitemapDataVar(selectOne);
   };
 
-  const history = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     const pathname = window.location.pathname;
@@ -42,7 +42,7 @@ export default function App() {
       (val) => val.url.split("/")[1] === pathnameFirst
     );
     selectTab(nowPathIndex);
-  }, [history]);
+  }, [router]);
 
   return (
     <>

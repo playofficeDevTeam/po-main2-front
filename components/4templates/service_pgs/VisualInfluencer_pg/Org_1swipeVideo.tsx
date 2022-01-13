@@ -46,6 +46,7 @@ const defaultvideoData = [
     title: "상세페이지 활용",
   },
 ];
+
 export default function App({
   title = defaultTitle,
   videoData = defaultvideoData,

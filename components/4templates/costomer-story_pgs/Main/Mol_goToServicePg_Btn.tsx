@@ -8,7 +8,7 @@ export default function App() {
       <RoundedOrangeBtn onClick={goToService}>
         <>
           <img
-            src="assets/서비스_비주얼/아이콘/shuttle 2.png"
+            src="/assets/서비스_비주얼/아이콘/shuttle 2.png"
             alt="
             서비스 알아보기"
             className="mr-3"

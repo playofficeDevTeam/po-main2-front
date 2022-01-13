@@ -1,4 +1,5 @@
 import Br_mo from "../../../1atoms/Br_mo";
+import Br_pc from "../../../1atoms/Br_pc";
 import Vdo from "../../../1atoms/Vdo";
 import useIsMobile from "../../../hooks/useIsMobile";
 import Org_2explanation_R_ from "./Org_2explanation_R_";
@@ -10,16 +11,15 @@ export default function App() {
       data={{
         title: (
           <>
-            마케터라면 대부분 <Br_mo />
+            마케터라면 대부분
+            <Br_mo />
             공감할거예요.
-            <br />
-            성과 내는 가장 확실한
+            <Br_pc />
+            성과 내는
             <Br_mo />
-            방법은 결국
+            가장 확실한 방법은 결국
             <br />
-            ‘고객을 사로잡는
-            <Br_mo />
-            콘텐츠’다.
+            ‘고객을 사로잡는 콘텐츠’다.
           </>
         ),
         content: (

@@ -35,7 +35,10 @@ export default function App() {
         </h3>
 
         <div className="mo-max grid gap-2">
-          <div style={{ height: "115vw", maxHeight: "26rem" }}>
+          <div
+            className="mb-52"
+            style={{ height: "50vw", maxHeight: "14rem", minHeight: "12rem" }}
+          >
             <div className="h-0 relative z-10 top-4 w-64 mx-auto">
               <div className="">강화된 상세페이지</div>
             </div>

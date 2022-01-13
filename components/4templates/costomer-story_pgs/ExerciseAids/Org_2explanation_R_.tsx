@@ -1,5 +1,6 @@
 import { isMobile } from "react-device-detect";
 import Br_mo from "../../../1atoms/Br_mo";
+import Br_pc from "../../../1atoms/Br_pc";
 import Vdo from "../../../1atoms/Vdo";
 import Atm_bgBlue from "./Atm_bgBlue";
 import Atm_quotesContainer from "./Atm_quotesContainer";
@@ -9,14 +10,13 @@ const defaultData = {
     <>
       입사 후 처음으로
       <Br_mo />
-      성과금 받았어요. <br />
-      <Atm_bgBlue>예산 600</Atm_bgBlue>, 이 유형의
-      <Br_mo /> 콘텐츠에 투자해서 <br />
+      성과금 받았어요. <Br_pc />
+      <Atm_bgBlue>예산 600</Atm_bgBlue>,
+      <Br_mo />이 유형의 콘텐츠에 투자해서 <br />
       <Atm_bgBlue>광고 시작 한 달</Atm_bgBlue>
       만에
       <Br_mo />
-      매출액 1억 <Br_mo />
-      달성했습니다.
+      매출액 1억 달성했습니다.
     </>
   ),
   content: (
@@ -33,9 +33,11 @@ export default function App({ data = defaultData }) {
       {isMobile ? (
         <div className="">
           <div className="mo-max mb-10">
-            <h2 className="mo-h1">
-              <Atm_quotesContainer>{data.title}</Atm_quotesContainer>
-            </h2>
+            <div className="w-11/12 mx-auto">
+              <h2 className="mo-h1">
+                <Atm_quotesContainer>{data.title}</Atm_quotesContainer>
+              </h2>
+            </div>
           </div>
           <div className="mo-max">{data.content}</div>
         </div>

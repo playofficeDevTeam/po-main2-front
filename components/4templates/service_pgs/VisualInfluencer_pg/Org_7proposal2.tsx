@@ -30,12 +30,18 @@ export default function App() {
         </h3>
 
         <div className="grid gap-2">
-          <div style={{ height: "115vw", maxHeight: "26rem" }}>
+          <div
+            className="mb-52"
+            style={{ height: "50vw", maxHeight: "13rem", minHeight: "12rem" }}
+          >
             <div className="h-0 relative z-10 top-4 w-64 mx-auto">
               <div className="">광고 개선</div>
             </div>
             <div className="center">
-              <Vdo src="/assets/서비스_비주얼/4_1_mobile" />
+              <Vdo
+                src="/assets/서비스_비주얼/4_1_mobile"
+                className=" rounded-3xl"
+              />
             </div>
           </div>
 

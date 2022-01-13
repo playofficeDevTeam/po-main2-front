@@ -40,7 +40,7 @@ export default function App({ data = defaultData }) {
               height: data.height,
             }}
           >
-            <h1 className="mo-h1 w-full text-white text-shadow-sm  mt-12 mb-10">
+            <h1 className=" font-bold text-3xl leading-normal w-full text-white text-shadow-sm  mt-12 mb-10">
               {data.title}
             </h1>
 

@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { throttle } from "throttle-debounce";
 
@@ -21,7 +22,6 @@ export const useScroll = (offset: number, once = false, init = false) => {
   };
   return { ref, trigger, scrollCheck };
 };
-
 export const useScrollEffect = (scrollChecks: Array<() => void>) => {
   const scrollYCheck = () => {
     scrollChecks.forEach((val) => {

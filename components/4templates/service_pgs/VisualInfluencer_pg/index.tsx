@@ -17,6 +17,7 @@ import Org_15FAQ from "./Org_15FAQ";
 import Org_16lastMessage from "./Org_16lastMessage";
 import Org_0floatingBtn from "./Org_0floatingBtn";
 import useIsMobile from "../../../hooks/useIsMobile";
+import { useEffect, useState } from "react";
 
 export default function App() {
   const isMobile = useIsMobile();
@@ -36,7 +37,6 @@ export default function App() {
         ]
       : [averagePerfomanceScroll.scrollCheck, poketingIsScroll.scrollCheck]
   );
-
   return (
     <>
       {isMobile ? (

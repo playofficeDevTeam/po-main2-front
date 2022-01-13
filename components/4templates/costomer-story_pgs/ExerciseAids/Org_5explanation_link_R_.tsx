@@ -10,11 +10,8 @@ export default function App() {
     title: (
       <>
         여러가지 콘텐츠 유형 중 <Br_mo />
-        비주얼 인플루언서
-        <Br_mo />
-        콘텐츠는 <Br_pc /> 고객을
-        <Br_mo />
-        가장 잘 설득하는
+        비주얼 인플루언서 콘텐츠는
+        <br /> 고객을 가장 잘 설득하는
         <Br_mo />
         콘텐츠 유형이라는 게<Br_mo />
         증명됐어요.
@@ -87,7 +84,10 @@ function Main({ data = defaultData }) {
       {isMobile ? (
         <div className=" text-center underline font-bold text-blue-600 flex flex-col justify-center">
           <div className="flex justify-center mb-2">
-            <img src="/assets/service_Icons/Icon_fire.png" alt="Icon_pushpin" />
+            <img
+              src="/assets/service_Icons/Icon_pushpin.png"
+              alt="Icon_pushpin"
+            />
           </div>
           <Link href={data.linkData.url}>
             <a>{data.linkData.title}</a>
@@ -96,7 +96,10 @@ function Main({ data = defaultData }) {
       ) : (
         <div className=" text-center underline font-bold text-blue-600 flex justify-center">
           <div className="flex justify-center mr-2">
-            <img src="/assets/service_Icons/Icon_fire.png" alt="Icon_pushpin" />
+            <img
+              src="/assets/service_Icons/Icon_pushpin.png"
+              alt="Icon_pushpin"
+            />
           </div>
           <Link href={data.linkData.url}>
             <a>{data.linkData.title}</a>
