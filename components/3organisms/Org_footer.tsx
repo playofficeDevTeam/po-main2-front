@@ -1,10 +1,10 @@
 import { useReactiveVar } from "@apollo/client";
 import Link from "next/link";
-import { isMobileVar } from "../common/Layout";
+import useIsMobile from "../hooks/useIsMobile";
 import { sitemapDataVar } from "./Org_header";
 
 export default function App() {
-  const isMobile = useReactiveVar(isMobileVar);
+  const isMobile = useIsMobile();
   const sitemapDataReactiveVar = useReactiveVar(sitemapDataVar);
   return (
     <>

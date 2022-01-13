@@ -1,5 +1,4 @@
-import { useReactiveVar } from "@apollo/client";
-import { isMobileVar } from "/home/app/components/common/Layout";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 const data1 = [
   <>안내 및 전담팀 배정</>,
@@ -10,7 +9,7 @@ const data1 = [
 ];
 
 export default function App() {
-  const isMobile = useReactiveVar(isMobileVar);
+  const isMobile = useIsMobile();
   return isMobile ? (
     <section className="py-20 bg-gray-100">
       <div className="mo-max ">

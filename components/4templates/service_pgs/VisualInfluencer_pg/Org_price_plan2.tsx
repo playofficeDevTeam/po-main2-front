@@ -1,7 +1,6 @@
 import { useReactiveVar } from "@apollo/client";
-import { isMobileVar } from "/home/app/components/common/Layout";
-import RoundedOrangeBtn from "../../../1atoms/RoundedOrangeBtn";
 import { ItemClass, serviceDatasVar } from "./Var_serviceDatas";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 const menuClickToggle = (id: number) => {
   const newServiceDatasVar = [...serviceDatasVar()];
@@ -12,7 +11,7 @@ const menuClickToggle = (id: number) => {
 };
 
 export default function App() {
-  const isMobile = useReactiveVar(isMobileVar);
+  const isMobile = useIsMobile();
   const serviceReactiveVar = useReactiveVar(serviceDatasVar);
   const services = serviceReactiveVar.map((val, idx) => new ItemClass(val));
 

@@ -1,0 +1,63 @@
+import { isMobile } from "react-device-detect";
+import { Link } from "react-router-dom";
+import Br_pc from "../../../1atoms/Br_pc";
+import Br_mo from "../../../1atoms/Br_mo";
+import Atm_bgBlue from "../ExerciseAids/Atm_bgBlue";
+import Org_2explanation_R_ from "../ExerciseAids/Org_2explanation_R_";
+import { requ } from "../../../../public/assets/고객반응_유아/func_nameToSrc";
+import Org_video from "../../../../public/assets/고객반응_유아/Org_video";
+
+export default function App() {
+  const data = {
+    title: (
+      <>
+        상세페이지 강화 후,
+        <br />
+        광고 소재도 <Br_mo />
+        변경했더니 ROAS까지
+        <Br_mo />
+        3배 높아졌어요.
+      </>
+    ),
+    content: (
+      <>
+        <Org_video
+          data={{
+            fileName: "5",
+            className: "max-w-sm mx-auto",
+          }}
+        />
+        <div className="mt-14">
+          비주얼 인플루언서 콘텐츠를 상세페이지에 활용하고 매출이 올라서
+          기뻐하고 있을 때, 원래 진행 중이던 인스타 광고도 검토해주셔서 인스타
+          광고까지 추가 의뢰 드렸어요. <br />
+          <br />
+          광고 소재부터 변경되었고, 변경 후 ROAS가 3배가량 더 높아졌어요. ROAS와
+          관련 된 여러 데이터를 보여주시면서 직접 설명해주셨는데, 일단 다른
+          이미지나 영상보다 비주얼 인플루언서 콘텐츠를 사용한 광고가{" "}
+          <b>
+            같은 예산을 태워도 클릭률이 훨씬 더 높다보니 ROAS가 좋아질 수 밖에
+            없더라구요.
+          </b>{" "}
+          그리고 비주얼 인플루언서 콘텐츠를 사용한 광고의 유입 고객은 다른
+          경로의 유입 고객보다 구매율이 2배 정도 더 높았는데, 그 이유는 광고
+          소재와 상세페이지에서 사용한 콘텐츠가 같은 메시지를 전달하고 있어서
+          고객의 기대감을 그대로 유지하기 때문이라고 알려주시더라구요. <br />
+          <br />
+          정말 너무 만족합니다. 매출도 매출이지만 고퀄리티면서도 자연스러운
+          영상을 만드려면 모델, 스튜디오 대관 등등 많은 돈과 시간이 들어갈 수
+          밖에 없는데,{" "}
+          <b>
+            합리적인 비용으로 여러 영상과 이미지를 제작 해주시니 정말 좋아요!
+          </b>{" "}
+          <br />
+          <br />
+          그거 아세요? 비주얼 인플루언서 마케팅 덕에 저희 제품 이번에 15차
+          완판했어요! (짝짝짝) 감사합니다!!
+        </div>
+      </>
+    ),
+  };
+
+  return <Org_2explanation_R_ data={data} />;
+}

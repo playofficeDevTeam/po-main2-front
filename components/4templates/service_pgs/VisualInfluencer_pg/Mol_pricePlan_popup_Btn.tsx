@@ -1,12 +1,11 @@
-import { useReactiveVar } from "@apollo/client";
 import RoundedOrangeBtn from "../../../1atoms/RoundedOrangeBtn";
+import useIsMobile from "../../../hooks/useIsMobile";
 import Modal_payment from "./Modal_payment";
 import Mol_goToPaymentPg_Btn from "./Mol_goToPaymentPg_Btn";
 import Org_price_plan2 from "./Org_price_plan2";
-import { isMobileVar } from "/home/app/components/common/Layout";
 
 export default function App() {
-  const isMobile = useReactiveVar(isMobileVar);
+  const isMobile = useIsMobile();
   return (
     <>
       <Modal_payment

@@ -1,8 +1,7 @@
-import { makeVar, useReactiveVar } from "@apollo/client";
-import RoundedOrangeBtn from "../../../1atoms/RoundedOrangeBtn";
+import { useReactiveVar } from "@apollo/client";
+import useIsMobile from "../../../hooks/useIsMobile";
 import Mol_goToPaymentPg_Btn from "./Mol_goToPaymentPg_Btn";
 import { ItemClass, serviceDatasVar } from "./Var_serviceDatas";
-import { isMobileVar } from "/home/app/components/common/Layout";
 
 const menuClickToggle = (id: number) => {
   const newServiceDatasVar = [...serviceDatasVar()];
@@ -13,9 +12,9 @@ const menuClickToggle = (id: number) => {
 };
 
 export default function App() {
-  const isMobile = useReactiveVar(isMobileVar);
+  const isMobile = useIsMobile();
   const serviceReactiveVar = useReactiveVar(serviceDatasVar);
-  const services = serviceReactiveVar.map((val, idx) => new ItemClass(val));
+  const services = serviceReactiveVar.map((val) => new ItemClass(val));
 
   return (
     <>
@@ -51,11 +50,11 @@ export default function App() {
                       {service.input.itemName}
                     </span>
                   </div>
-                  <div className="mb-6 px-4">
+                  <ul className="mb-6 px-4">
                     {service.detailInfoText.map((detailInfo, detailInfoIdx) => (
                       <li key={detailInfoIdx}>{"✅" + detailInfo}</li>
                     ))}
-                  </div>
+                  </ul>
                   <div className="flex  justify-between  text-gray-600 mb-6  px-4">
                     <div className="flex items-end">총 서비스 금액</div>
                     <div className="flex flex-col justify-end items-end">
@@ -153,11 +152,11 @@ export default function App() {
                       {service.input.itemName}
                     </span>
                   </div>
-                  <div className="mb-6 px-4">
+                  <ul className="mb-6 px-4">
                     {service.detailInfoText.map((detailInfo, detailInfoIdx) => (
                       <li key={detailInfoIdx}>{"✅" + detailInfo}</li>
                     ))}
-                  </div>
+                  </ul>
                   <div className="flex  justify-between  text-gray-600 mb-6  px-4">
                     <div className="flex items-end">총 서비스 금액</div>
                     <div className="flex flex-col justify-end items-end">

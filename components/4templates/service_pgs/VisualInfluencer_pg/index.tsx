@@ -1,5 +1,3 @@
-import { useReactiveVar } from "@apollo/client";
-import { isMobileVar } from "/home/app/components/common/Layout";
 import { useScroll, useScrollEffect } from "../../../hooks/useScroll";
 import Org_10performancePrinciple from "./Org_10performancePrinciple";
 import Org_11poketingIs from "./Org_11poketingIs";
@@ -18,9 +16,10 @@ import Org_9ref1 from "./Org_9ref1";
 import Org_15FAQ from "./Org_15FAQ";
 import Org_16lastMessage from "./Org_16lastMessage";
 import Org_0floatingBtn from "./Org_0floatingBtn";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 export default function App() {
-  const isMobile = useReactiveVar(isMobileVar);
+  const isMobile = useIsMobile();
 
   const averagePerfomanceScroll = useScroll(-200);
   const poketingIsScroll = useScroll(-200);

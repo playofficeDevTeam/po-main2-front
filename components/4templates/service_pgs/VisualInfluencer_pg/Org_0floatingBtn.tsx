@@ -1,8 +1,7 @@
-import { useReactiveVar } from "@apollo/client";
 import { useEffect } from "react";
 import { headerFloatingBtnVar } from "../../../3organisms/Org_header";
+import useIsMobile from "../../../hooks/useIsMobile";
 import Mol_pricePlan_popup_Btn from "./Mol_pricePlan_popup_Btn";
-import { isMobileVar } from "/home/app/components/common/Layout";
 
 export default function App({ trigger = false }) {
   // 피씨헤더
@@ -17,7 +16,7 @@ export default function App({ trigger = false }) {
     };
   }, []);
 
-  const isMobile = useReactiveVar(isMobileVar);
+  const isMobile = useIsMobile();
   return isMobile ? (
     // 모바일
     // 모바일

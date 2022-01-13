@@ -1,8 +1,8 @@
 import { makeVar, useReactiveVar } from "@apollo/client";
-import { isMobileVar } from "../common/Layout";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import useIsMobile from "../hooks/useIsMobile";
 
 const sitemapData = [
   { title: "서비스", url: "/service", selected: false },
@@ -14,7 +14,7 @@ export const sitemapDataVar = makeVar(sitemapData);
 export const headerFloatingBtnVar = makeVar(<></>);
 
 export default function App() {
-  const isMobile = useReactiveVar(isMobileVar);
+  const isMobile = useIsMobile();
   const headerFloatingBtn = useReactiveVar(headerFloatingBtnVar);
 
   const [menuState, setMenuState] = useState(false);

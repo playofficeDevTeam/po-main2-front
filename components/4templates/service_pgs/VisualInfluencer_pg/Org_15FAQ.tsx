@@ -1,11 +1,10 @@
-import { useReactiveVar } from "@apollo/client";
 import Link from "next/link";
 import { useState } from "react";
 import Br_pc from "../../../1atoms/Br_pc";
-import { isMobileVar } from "../../../common/Layout";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 export default function App() {
-  const isMobile = useReactiveVar(isMobileVar);
+  const isMobile = useIsMobile();
   const data1_raw = [
     {
       question: <>Q. 다른 브랜드 사례를 볼 수 있나요?</>,

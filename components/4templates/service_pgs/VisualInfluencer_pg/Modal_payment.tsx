@@ -1,8 +1,8 @@
 import { useReactiveVar } from "@apollo/client";
 import { useRef, useState } from "react";
 import Modal from "react-modal";
-import { isMobileVar } from "../../../common/Layout";
 import ScrollLock from "../../../effects/ScrollLock";
+import useIsMobile from "../../../hooks/useIsMobile";
 import { serviceDatasVar } from "./Var_serviceDatas";
 
 const data1 = {
@@ -11,7 +11,7 @@ const data1 = {
 };
 
 export default function App({ data = data1 }) {
-  const isMobile = useReactiveVar(isMobileVar);
+  const isMobile = useIsMobile();
   Modal.setAppElement("#__next");
   const [modalIsOpen, setIsOpen] = useState(false);
   const customStyles = isMobile

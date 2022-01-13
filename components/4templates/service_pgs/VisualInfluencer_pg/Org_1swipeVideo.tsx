@@ -1,9 +1,8 @@
-import { useReactiveVar } from "@apollo/client";
-import { isMobileVar } from "/home/app/components/common/Layout";
 import styled from "styled-components";
 import Br_mo from "../../../1atoms/Br_mo";
 import Carowsel1 from "../../../1atoms/Carowsel1";
 import Vdo from "../../../1atoms/Vdo";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 export const XscrollDiv = styled.div`
   overflow-x: scroll;
@@ -52,7 +51,7 @@ export default function App({
   videoData = defaultvideoData,
   rightComponent = <></>,
 }) {
-  const isMobile = useReactiveVar(isMobileVar);
+  const isMobile = useIsMobile();
   return (
     <section>
       {isMobile ? (

@@ -1,5 +1,4 @@
-import { useReactiveVar } from "@apollo/client";
-import { isMobileVar } from "../../../common/Layout";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 const data1_mo = [
   {
@@ -83,7 +82,7 @@ const data1_pc = [
 ];
 
 export default function App() {
-  const isMobile = useReactiveVar(isMobileVar);
+  const isMobile = useIsMobile();
   const data1 = isMobile ? data1_mo : data1_pc;
   return isMobile ? (
     // 모바일

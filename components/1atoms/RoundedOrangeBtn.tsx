@@ -1,8 +1,4 @@
-import { useReactiveVar } from "@apollo/client";
-import { isMobileVar } from "/home/app/components/common/Layout";
-
 export default function App({ children = <>버튼</>, onClick = () => {} }) {
-  const isMobile = useReactiveVar(isMobileVar);
   return (
     <div className="">
       <div className="h-0 relative -z-50">

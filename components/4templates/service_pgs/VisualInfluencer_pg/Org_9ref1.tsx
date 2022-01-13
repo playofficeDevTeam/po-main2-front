@@ -1,8 +1,7 @@
-import { useReactiveVar } from "@apollo/client";
 import { useState } from "react";
 import Carowsel_ref from "../../../1atoms/Carowsel_ref";
 import Vdo from "../../../1atoms/Vdo";
-import { isMobileVar } from "../../../common/Layout";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 const data1 = {
   h1: <></>,
@@ -41,7 +40,7 @@ const data1 = {
 };
 
 export default function App() {
-  const isMobile = useReactiveVar(isMobileVar);
+  const isMobile = useIsMobile();
   const [data1Tab, setData1Tab] = useState(0);
   return isMobile ? (
     // 모바일

@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Slider, { Settings } from "react-slick";
-import { useReactiveVar } from "@apollo/client";
-import { isMobileVar } from "/home/app/components/common/Layout";
+import useIsMobile from "../hooks/useIsMobile";
 
 const CustomCarousel: any = styled.div`
   width: 100%;
@@ -52,7 +51,7 @@ const CustomCarousel: any = styled.div`
 `;
 
 export default function App({ children }: any) {
-  const isMobile = useReactiveVar(isMobileVar);
+  const isMobile = useIsMobile();
 
   const settings: Settings = isMobile
     ? {

@@ -1,6 +1,5 @@
-import { useReactiveVar } from "@apollo/client";
-import { isMobileVar } from "../../../common/Layout";
 import AnimatedNumber from "../../../1atoms/AnimatedNumber";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 const defaultData = {
   title: [<>고객사 평균 성과</>],
@@ -28,7 +27,7 @@ const defaultData = {
 };
 
 export default function App({ data = defaultData, trigger = false }) {
-  const isMobile = useReactiveVar(isMobileVar);
+  const isMobile = useIsMobile();
   return isMobile ? (
     // 모바일
     // 모바일

@@ -1,4 +1,3 @@
-import { useReactiveVar } from "@apollo/client";
 import RoundedOrangeBtn from "../../../1atoms/RoundedOrangeBtn";
 
 export default function App() {
