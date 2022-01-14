@@ -1,11 +1,6 @@
-import { isMobile } from "react-device-detect";
-import { Link } from "react-router-dom";
-import Br_pc from "../../../1atoms/Br_pc";
 import Br_mo from "../../../1atoms/Br_mo";
-import Atm_bgBlue from "../ExerciseAids/Atm_bgBlue";
+import Vdo from "../../../1atoms/Vdo";
 import Org_2explanation_R_ from "../ExerciseAids/Org_2explanation_R_";
-import { requ } from "../../../../public/assets/고객반응_유아/func_nameToSrc";
-import Org_video from "../../../../public/assets/고객반응_유아/Org_video";
 
 export default function App() {
   const data = {
@@ -13,19 +8,16 @@ export default function App() {
       <>
         상세페이지 강화 후,
         <br />
-        광고 소재도 <Br_mo />
-        변경했더니 ROAS까지
+        광고 소재도 변경했더니
         <Br_mo />
-        3배 높아졌어요.
+        ROAS까지 3배 높아졌어요.
       </>
     ),
     content: (
       <>
-        <Org_video
-          data={{
-            fileName: "5",
-            className: "max-w-sm mx-auto",
-          }}
+        <Vdo
+          src="/assets/고객반응/고객반응_유아/5"
+          className=" max-w-xs mx-auto"
         />
         <div className="mt-14">
           비주얼 인플루언서 콘텐츠를 상세페이지에 활용하고 매출이 올라서

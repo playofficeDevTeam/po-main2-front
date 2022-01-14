@@ -1,12 +1,11 @@
-import { isMobile } from "react-device-detect";
-import { Link } from "react-router-dom";
 import Br_pc from "../../../1atoms/Br_pc";
 import Br_mo from "../../../1atoms/Br_mo";
-import Org_5explanation_link_R_ from "../ExerciseAids/Org_5explanation_link_R_";
-import { requ } from "../../../../public/assets/고객반응/고객반응_운동기구/func_nameToSrc";
-import Org_video from "../../../../public/assets/고객반응/고객반응_운동기구/Org_video";
+import useIsMobile from "../../../hooks/useIsMobile";
+import Vdo from "../../../1atoms/Vdo";
+import Org_explanation_link from "../ExerciseAids/Org_explanation_link";
 
 export default function App() {
+  const isMobile = useIsMobile();
   const data = {
     title: (
       <>
@@ -20,21 +19,21 @@ export default function App() {
       <>
         {isMobile ? (
           <>
-            <Org_video
-              data={{
-                fileName: "2_1_mobile",
-                className: " max-w-xs mx-auto",
-              }}
+            <Vdo
+              src="/assets/고객반응/고객반응_운동기구/2_1_mobile"
+              className=" max-w-xs mx-auto rounded-3xl"
+            />{" "}
+            <img
+              src="/assets/고객반응/고객반응_운동기구/2_2_mobile.png"
+              alt="2_2_mobile"
+              className="max-w-xs w-11/12 mx-auto"
             />
-            <img src={requ("2_2_mobile.png")} alt="2_2_mobile" />
           </>
         ) : (
           <div className="w-11/12 mx-auto">
-            <Org_video
-              data={{
-                fileName: "2",
-                className: " mx-auto",
-              }}
+            <Vdo
+              src="/assets/고객반응/고객반응_운동기구/2"
+              className=" mx-auto"
             />
           </div>
         )}
@@ -66,9 +65,9 @@ export default function App() {
           콘텐츠 마케팅 자세히 보기
         </>
       ),
-      to: "/service",
+      url: "/service",
     },
   };
 
-  return <Org_5explanation_link_R_ data={data} />;
+  return <Org_explanation_link data={data} />;
 }

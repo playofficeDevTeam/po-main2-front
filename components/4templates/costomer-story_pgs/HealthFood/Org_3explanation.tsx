@@ -1,16 +1,12 @@
-import { isMobile } from "react-device-detect";
 import Br_mo from "../../../1atoms/Br_mo";
-import Atm_bgBlue from "../ExerciseAids/Atm_bgBlue";
 import Org_2explanation_R_ from "../ExerciseAids/Org_2explanation_R_";
-import Org_video from "../../../../public/assets/고객반응/고객반응_건강식품/Org_video";
 
 export default function App() {
   const data = {
     title: (
       <>
         기존 상세페이지의 <br />
-        문제점부터 <Br_mo />
-        찾아 주셨어요.
+        문제점부터 찾아 주셨어요.
       </>
     ),
     content: (

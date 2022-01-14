@@ -1,13 +1,12 @@
-import { isMobile } from "react-device-detect";
-import { Link } from "react-router-dom";
 import Br_pc from "../../../1atoms/Br_pc";
 import Br_mo from "../../../1atoms/Br_mo";
-import Atm_bgBlue from "../ExerciseAids/Atm_bgBlue";
 import Org_2explanation_R_ from "../ExerciseAids/Org_2explanation_R_";
-import { requ } from "../../../../public/assets/고객반응_유아/func_nameToSrc";
-import Org_video from "../../../../public/assets/고객반응_유아/Org_video";
+import useIsMobile from "../../../hooks/useIsMobile";
+import Vdo from "../../../1atoms/Vdo";
+import Image from "next/image";
 
 export default function App() {
+  const isMobile = useIsMobile();
   const data = {
     title: (
       <>
@@ -15,37 +14,33 @@ export default function App() {
         <Br_mo />
         영상 콘텐츠를
         <Br_pc />
-        <Br_mo />
         상세페이지에 <Br_mo />
         업로드하고나서
         <Br_pc />
         <Br_mo />
-        단순 문의가 40%
-        <Br_mo />
-        감소해서 일이
-        <Br_mo />
-        줄었어요.
+        단순 문의가 40% 감소해서
+        <Br_mo /> 일이 줄었어요.
       </>
     ),
     content: (
       <>
         {isMobile ? (
           <>
-            <Org_video
-              data={{
-                fileName: "3_1_mobile",
-                className: " max-w-xs mx-auto",
-              }}
+            <Vdo
+              src="/assets/고객반응/고객반응_유아/3_1_mobile"
+              className=" max-w-xs mx-auto rounded-xl"
+            />{" "}
+            <img
+              src="/assets/고객반응/고객반응_유아/3_2_mobile.png"
+              alt="3_2_mobile"
+              className=" max-w-xs w-11/12 mx-auto"
             />
-            <img src={requ("3_2_mobile.png")} alt="3_2_mobile" />
           </>
         ) : (
           <div className="w-11/12 mx-auto">
-            <Org_video
-              data={{
-                fileName: "3_pc",
-                className: " mx-auto",
-              }}
+            <Vdo
+              src="/assets/고객반응/고객반응_유아/3_pc"
+              className=" mx-auto"
             />
           </div>
         )}

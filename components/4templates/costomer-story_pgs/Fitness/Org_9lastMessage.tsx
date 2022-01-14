@@ -1,6 +1,5 @@
-import { isMobile } from "react-device-detect";
 import Br_mo from "../../../1atoms/Br_mo";
-import Org_10lastMessage_R_ from "../ExerciseAids/Org_10lastMessage_R_";
+import Org_10lastMessage from "../ExerciseAids/Org_10lastMessage";
 
 const defaultData = {
   title: (
@@ -14,9 +13,9 @@ const defaultData = {
     </>
   ),
   btn: <>서비스 자세히 보기!</>,
-  linkTo: "/service",
+  url: "/service",
 };
 
 export default function App({ data = defaultData, trigger = false }) {
-  return <Org_10lastMessage_R_ data={data} trigger={trigger} />;
+  return <Org_10lastMessage data={data} trigger={trigger} />;
 }

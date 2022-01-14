@@ -1,13 +1,7 @@
-import { isMobile } from "react-device-detect";
-import { Link } from "react-router-dom";
-import Br_pc from "../../../1atoms/Br_pc";
 import Br_mo from "../../../1atoms/Br_mo";
-import Atm_bgBlue from "../ExerciseAids/Atm_bgBlue";
 import Org_2explanation_R_ from "../ExerciseAids/Org_2explanation_R_";
-import { requ } from "../../../../public/assets/고객반응/고객반응_운동기구/func_nameToSrc";
-import Org_video from "../../../../public/assets/고객반응/고객반응_운동기구/Org_video";
 
-export default function App({ trigger = true }) {
+export default function App() {
   const data = {
     title: (
       <>

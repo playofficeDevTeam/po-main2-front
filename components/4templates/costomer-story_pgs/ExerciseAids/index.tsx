@@ -3,11 +3,11 @@ import Org_1headLine from "./Org_1headLine";
 import Org_2explanation from "./Org_2explanation_R_";
 import Org_3explanation from "./Org_3explanation";
 import Org_4explanation from "./Org_4explanation";
-import Org_5explanation from "./Org_5explanation_link_R_";
+import Org_5explanation_link from "./Org_5explanation_link";
 import Org_6explanation from "./Org_6explanation";
 import Org_7midMessage from "./Org_7midMessage_R_";
 import Org_8reference from "./Org_8reference_R_";
-import Org_10lastMessage from "./Org_10lastMessage_R_";
+import Org_10lastMessage from "./Org_10lastMessage";
 import Org_9more_R_ from "./Org_9more_R_";
 import { useScroll, useScrollEffect } from "../../../hooks/useScroll";
 import Org_0floatingBtn from "../Main/Org_0floatingBtn";
@@ -34,7 +34,7 @@ export default function App() {
           <div className="mt-32"></div>
           <Org_4explanation />
           <div className="mt-32"></div>
-          <Org_5explanation />
+          <Org_5explanation_link />
           <div className="mt-32"></div>
           <Org_6explanation />
           <div className="mt-32"></div>
@@ -58,7 +58,7 @@ export default function App() {
           <div className="mt-40"></div>
           <Org_4explanation />
           <div className="mt-40"></div>
-          <Org_5explanation />
+          <Org_5explanation_link />
           <div className="mt-40"></div>
           <Org_6explanation />
           <div className="mt-40"></div>

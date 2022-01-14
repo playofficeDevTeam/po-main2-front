@@ -1,13 +1,10 @@
-import { isMobile } from "react-device-detect";
-import { Link } from "react-router-dom";
-import Br_pc from "../../../1atoms/Br_pc";
 import Br_mo from "../../../1atoms/Br_mo";
-import Atm_bgBlue from "../ExerciseAids/Atm_bgBlue";
+import useIsMobile from "../../../hooks/useIsMobile";
 import Org_2explanation_R_ from "../ExerciseAids/Org_2explanation_R_";
-import { requ } from "../../../../public/assets/고객반응/고객반응_건강식품/func_nameToSrc";
-import Org_video from "../../../../public/assets/고객반응/고객반응_건강식품/Org_video";
 
 export default function App({ trigger = true }) {
+  const isMobile = useIsMobile();
+
   const data = {
     title: (
       <>
@@ -26,18 +23,25 @@ export default function App({ trigger = true }) {
       <>
         <div className="flex justify-center">
           <div
-            className={`relative left-3 transition duration-200 transform ${
+            className={`relative left-4 transition duration-200 transform ${
               trigger ? "" : " opacity-0 translate-y-4"
             }`}
           >
-            <img src={requ("그래프1.png")} alt="그래프1" className="" />
+            <img
+              src="/assets/고객반응/고객반응_건강식품/그래프1.png"
+              alt="그래프1"
+              className=""
+            />
           </div>
           <div
-            className={`relative right-3 transition duration-200 transform delay-200 ${
+            className={`relative right-6 transition duration-200 transform delay-200 ${
               trigger ? "" : "opacity-0 -translate-x-4"
             }`}
           >
-            <img src={requ("그래프2.png")} alt="그래프2" />
+            <img
+              src="/assets/고객반응/고객반응_건강식품/그래프2.png"
+              alt="그래프2"
+            />
           </div>
         </div>
         <div className="mt-14">
@@ -71,18 +75,25 @@ export default function App({ trigger = true }) {
       <>
         <div className="flex justify-center">
           <div
-            className={`relative left-3 transition duration-200 transform ${
+            className={`relative left-6 transition duration-200 transform ${
               trigger ? "" : " opacity-0 translate-y-4"
             }`}
           >
-            <img src={requ("그래프1.png")} alt="그래프1" className="" />
+            <img
+              src="/assets/고객반응/고객반응_건강식품/그래프1.png"
+              alt="그래프1"
+              className=""
+            />
           </div>
           <div
-            className={`relative right-3 transition duration-200 transform delay-200 ${
+            className={`relative right-8 transition duration-200 transform delay-200 ${
               trigger ? "" : "opacity-0 -translate-x-4"
             }`}
           >
-            <img src={requ("그래프2.png")} alt="그래프2" />
+            <img
+              src="/assets/고객반응/고객반응_건강식품/그래프2.png"
+              alt="그래프2"
+            />
           </div>
         </div>
         <div className="mt-14">

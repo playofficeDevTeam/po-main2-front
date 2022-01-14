@@ -1,12 +1,6 @@
-import { isMobile } from "react-device-detect";
-import { Link } from "react-router-dom";
 import Br_pc from "../../../1atoms/Br_pc";
 import Br_mo from "../../../1atoms/Br_mo";
-import Atm_bgBlue from "../ExerciseAids/Atm_bgBlue";
 import Org_2explanation_R_ from "../ExerciseAids/Org_2explanation_R_";
-import Org_5explanation_link_R_ from "../ExerciseAids/Org_5explanation_link_R_";
-import { requ } from "../../../../public/assets/고객반응_유아/func_nameToSrc";
-import Org_video from "../../../../public/assets/고객반응_유아/Org_video";
 
 export default function App() {
   const data = {
@@ -14,16 +8,15 @@ export default function App() {
       <>
         아무리 안전하다고 <Br_mo />
         적어놔도
-        <Br_pc /> '안전한가요?'
+        <Br_pc /> {"'안전한가요?'"}
         <Br_mo />
-        라는 문의가 <Br_mo />
-        끊이질 않았어요.
+        라는 문의가 끊이질 않았어요.
       </>
     ),
     content: (
       <>
         <div className="max-w-sm mx-auto">
-          <img src={requ("2.png")} alt="2" />
+          <img src="/assets/고객반응/고객반응_유아/2.png" alt="2" />
         </div>
         <div className="mt-14">
           코로나 때문에 손소독제를 많이 사용하잖아요. 우리 아이가 사용해도

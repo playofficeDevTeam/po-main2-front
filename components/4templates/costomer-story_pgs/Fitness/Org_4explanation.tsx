@@ -1,48 +1,44 @@
-import { isMobile } from "react-device-detect";
-import { Link } from "react-router-dom";
 import Br_pc from "../../../1atoms/Br_pc";
 import Br_mo from "../../../1atoms/Br_mo";
-import Atm_bgBlue from "../ExerciseAids/Atm_bgBlue";
 import Org_2explanation_R_ from "../ExerciseAids/Org_2explanation_R_";
-import { requ } from "../../../../public/assets/고객반응/고객반응_운동기구/func_nameToSrc";
-import Org_video from "../../../../public/assets/고객반응/고객반응_운동기구/Org_video";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 export default function App({ trigger = true }) {
+  const isMobile = useIsMobile();
   const data = {
     title: (
       <>
         체류시간이 증가하니까
         <Br_mo />
         <Br_pc />
-        구매전환율
+        구매전환율이
         <Br_mo />
-        4%에서 25%가
-        <Br_mo />
-        되었습니다.
+        4%에서 25%가 되었습니다.
       </>
     ),
     content: isMobile ? (
       // 모바일
       // 모바일
       // 모바일
-      // 모바일
-      // 모바일
-      // 모바일
       <>
         <div className="flex justify-center">
           <div
-            className={`relative left-3 transition duration-200 transform ${
+            className={`relative left-4 transition duration-200 transform ${
               trigger ? "" : " opacity-0 translate-y-4"
             }`}
           >
-            <img src={requ("3_1.png")} alt="3_1" className="" />
+            <img
+              src="/assets/고객반응/고객반응_운동기구/3_1.png"
+              alt="3_1"
+              className=""
+            />
           </div>
           <div
-            className={`relative right-3 transition duration-200 transform delay-200 ${
+            className={`relative right-6 transition duration-200 transform delay-200 ${
               trigger ? "" : "opacity-0 -translate-x-4"
             }`}
           >
-            <img src={requ("3_2.png")} alt="3_2" />
+            <img src="/assets/고객반응/고객반응_운동기구/3_2.png" alt="3_2" />
           </div>
         </div>
         <div className="mt-14">
@@ -65,24 +61,25 @@ export default function App({ trigger = true }) {
       // 피씨
       // 피씨
       // 피씨
-      // 피씨
-      // 피씨
-      // 피씨
       <>
         <div className="flex justify-center">
           <div
-            className={`relative left-3 transition duration-200 transform ${
+            className={`relative left-6 transition duration-200 transform ${
               trigger ? "" : " opacity-0 translate-y-4"
             }`}
           >
-            <img src={requ("3_1.png")} alt="3_1" className="" />
+            <img
+              src="/assets/고객반응/고객반응_운동기구/3_1.png"
+              alt="3_1"
+              className=""
+            />
           </div>
           <div
-            className={`relative right-3 transition duration-200 transform delay-200 ${
+            className={`relative right-8 transition duration-200 transform delay-200 ${
               trigger ? "" : "opacity-0 -translate-x-4"
             }`}
           >
-            <img src={requ("3_2.png")} alt="3_2" />
+            <img src="/assets/고객반응/고객반응_운동기구/3_2.png" alt="3_2" />
           </div>
         </div>
         <div className="mt-14">

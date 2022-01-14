@@ -1,6 +1,7 @@
-import { isMobile } from "react-device-detect";
+import { useRouter } from "next/router";
 import Br_mo from "../../../1atoms/Br_mo";
-import Org_10lastMessage_R_ from "../ExerciseAids/Org_10lastMessage";
+import useIsMobile from "../../../hooks/useIsMobile";
+import Org_lastMessage from "../Main/Org_lastMessage";
 
 const defaultData = {
   title: (
@@ -16,5 +17,5 @@ const defaultData = {
 };
 
 export default function App({ data = defaultData, trigger = false }) {
-  return <Org_10lastMessage_R_ data={data} trigger={trigger} />;
+  return <Org_lastMessage data={data} trigger={trigger} />;
 }

@@ -105,7 +105,11 @@ export default function App({
                 <Carowsel1>
                   {videoData.map((val, idx) => (
                     <li key={idx} className=" ">
-                      <Vdo src={val.src} className="w-full" />
+                      <Vdo
+                        src={val.src}
+                        className="w-full rounded-3xl"
+                        style={{ height: "31rem" }}
+                      />
                       <div className=" my-3 font-bold flex  ">
                         <div>
                           <img

@@ -15,7 +15,7 @@ export default function App({ trigger = false }) {
         <Br_mo />더 알아보세요!
       </>
     ),
-    btn: <>서비스 자세히 보기</>,
+    btn: <>서비스 자세히 보기!</>,
     url: "/service",
   };
 

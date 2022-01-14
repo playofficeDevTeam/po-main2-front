@@ -29,7 +29,7 @@ const defaultData = {
 
 export default function App({ data = defaultData }) {
   return (
-    <section className="">
+    <section className="py-4">
       {isMobile ? (
         <div className="">
           <div className="mo-max mb-10">
@@ -48,7 +48,9 @@ export default function App({ data = defaultData }) {
               <Atm_quotesContainer>{data.title}</Atm_quotesContainer>
             </h2>
           </div>
-          <div className="pc-max">{data.content}</div>
+          <div className="pc-max">
+            <div className="w-10/12 mx-auto">{data.content}</div>
+          </div>
         </div>
       )}
     </section>

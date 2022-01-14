@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { throttle } from "throttle-debounce";
 
-export const useScroll = (offset: number, once = false, init = false) => {
+export const useScroll = (offset: number, init = false, once = false) => {
   const ref = useRef<any>();
   const [trigger, setTrigger] = useState(init);
   const scrollCheck = () => {
@@ -30,7 +30,12 @@ export const useScrollEffect = (scrollChecks: Array<() => void>) => {
   };
   const throttleScrollYCheck = throttle(150, scrollYCheck);
   useEffect(() => {
-    window.addEventListener("scroll", throttleScrollYCheck);
+    const loadThrottle = async () => {
+      setTimeout(() => {
+        window.addEventListener("scroll", throttleScrollYCheck);
+      }, 0);
+    };
+    loadThrottle();
     return () => window.removeEventListener("scroll", throttleScrollYCheck);
   }, []);
 };
@@ -44,10 +49,10 @@ export const useScrollEffect = (scrollChecks: Array<() => void>) => {
 //   return (
 //     <>
 //       <div ref={useScroll1.ref} />
-//       <Sec trigger={useScroll1.trigger} />
+//       <div trigger={useScroll1.trigger} />
 
 //       <div ref={useScroll2.ref} />
-//       <Sec trigger={useScroll2.trigger} />
+//       <div trigger={useScroll2.trigger} />
 //     </>
 //   );
 // }

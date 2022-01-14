@@ -1,12 +1,10 @@
-import { isMobile } from "react-device-detect";
 import Org_9more_R_ from "../ExerciseAids/Org_9more_R_";
 
 const defaultData = {
   title: <>고객사례 더보기</>,
   contents: [
     {
-      src: require("/home/po-main1-front/src/4pages/ServicePages/Service_visual2/assets/1_2.png")
-        .default,
+      src: "/assets/서비스_비주얼/1_2.png",
       title: (
         <>
           “상세페이지에 콘텐츠 잘 활용하여 <br />
@@ -14,23 +12,19 @@ const defaultData = {
         </>
       ),
       param: (
-        <div className="flex items-center justify-center">
+        <div className="center">
           <img
-            src={
-              require("/home/po-main1-front/src/assets/Icons/운동기구.png")
-                .default
-            }
+            src="/assets/service_Icons/운동기구.png"
             alt="운동기구"
             className="inline h-5 relative right-2"
           />{" "}
           운동기구 브랜드 Y사
         </div>
       ),
-      linkTo: "/costomer-story/visual-influencer/fitness",
+      url: "/costomer-story/fitness",
     },
     {
-      src: require("/home/po-main1-front/src/4pages/ServicePages/Service_visual2/assets/광고개선.png")
-        .default,
+      src: "/assets/서비스_비주얼/광고개선.png",
       title: (
         <>
           “광고 시작 한 달만에 <br />
@@ -38,19 +32,16 @@ const defaultData = {
         </>
       ),
       param: (
-        <div className="flex items-center justify-center">
+        <div className="center">
           <img
-            src={
-              require("/home/po-main1-front/src/assets/Icons/압박스타킹.png")
-                .default
-            }
+            src="/assets/service_Icons/압박스타킹.png"
             alt="압박스타킹"
             className="inline h-5 relative right-2"
           />{" "}
           압박스타킹 브랜드 B사
         </div>
       ),
-      linkTo: "/costomer-story/visual-influencer/exercise-aids",
+      url: "/costomer-story/exercise-aids",
     },
   ],
 };

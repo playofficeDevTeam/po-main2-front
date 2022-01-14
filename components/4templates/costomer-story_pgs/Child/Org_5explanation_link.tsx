@@ -1,12 +1,7 @@
-import { isMobile } from "react-device-detect";
-import { Link } from "react-router-dom";
 import Br_pc from "../../../1atoms/Br_pc";
 import Br_mo from "../../../1atoms/Br_mo";
-import Atm_bgBlue from "../ExerciseAids/Atm_bgBlue";
-import Org_2explanation_R_ from "../ExerciseAids/Org_2explanation_R_";
-import Org_5explanation_link_R_ from "../ExerciseAids/Org_5explanation_link_R_";
-import { requ } from "../../../../public/assets/고객반응_유아/func_nameToSrc";
-import Org_video from "../../../../public/assets/고객반응_유아/Org_video";
+import Vdo from "../../../1atoms/Vdo";
+import Org_explanation_link from "../ExerciseAids/Org_explanation_link";
 
 export default function App() {
   const data = {
@@ -19,11 +14,9 @@ export default function App() {
     ),
     content: (
       <>
-        <Org_video
-          data={{
-            fileName: "4",
-            className: "max-w-sm mx-auto",
-          }}
+        <Vdo
+          src="/assets/고객반응/고객반응_유아/4"
+          className=" max-w-xs mx-auto"
         />
         <div className="mt-14 ">
           처음에는 문의량이 줄어서 사실 겁이 많이 났어요. 우리 제품에 대해
@@ -51,9 +44,9 @@ export default function App() {
           자세히 보기
         </>
       ),
-      to: "/service",
+      url: "/service",
     },
   };
 
-  return <Org_5explanation_link_R_ data={data} />;
+  return <Org_explanation_link data={data} />;
 }

@@ -12,7 +12,7 @@ export default function App({ data = defaultData, trigger = false }) {
   return (
     <section className=" bg-gray-900">
       {isMobile ? (
-        <div className=" w-10/12 mx-auto py-20">
+        <div className="mo-max py-20 text-center">
           <div className=" text-2xl  leading-snug font-bold text-white mb-10">
             {data.title}
           </div>
@@ -28,7 +28,7 @@ export default function App({ data = defaultData, trigger = false }) {
           </div>
         </div>
       ) : (
-        <div className=" max-w-5xl mx-auto py-20 text-center flex  flex-col  justify-center">
+        <div className="pc-max py-20 text-center flex  flex-col  justify-center">
           <div className=" text-3xl leading-snug font-bold text-white mb-10">
             {data.title}
           </div>

@@ -1,12 +1,14 @@
-import { isMobile } from "react-device-detect";
 import AnimatedNumber from "../../../1atoms/AnimatedNumber";
-import Br_mo from "../../../1atoms/Br_mo";
+import useIsMobile from "../../../hooks/useIsMobile";
 import Org_headLine_R_ from "../ExerciseAids/Org_headLine_R_";
-import { requ } from "../../../../public/assets/고객반응/고객반응_건강식품/func_nameToSrc";
 
 export default function App() {
+  const isMobile = useIsMobile();
+
   const data = {
-    src: isMobile ? requ("1_mobile.png") : requ("1.png"),
+    src: isMobile
+      ? "/assets/고객반응/고객반응_건강식품/1_mobile.png"
+      : "/assets/고객반응/고객반응_건강식품/1.png",
     height: isMobile ? "44rem" : "28rem",
     title: (
       <>

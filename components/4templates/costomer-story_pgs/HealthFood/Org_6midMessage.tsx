@@ -1,4 +1,3 @@
-import { isMobile } from "react-device-detect";
 import Br_pc from "../../../1atoms/Br_pc";
 import Br_mo from "../../../1atoms/Br_mo";
 import Atm_bgBlue from "../ExerciseAids/Atm_bgBlue";

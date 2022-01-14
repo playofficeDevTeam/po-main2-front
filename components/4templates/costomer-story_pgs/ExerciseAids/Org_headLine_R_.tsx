@@ -77,7 +77,7 @@ export default function App({ data = defaultData }) {
               height: data.height,
             }}
           >
-            <h1 className="pc-h1 w-full text-white mt-12 mb-12">
+            <h1 className="pc-h1 w-full text-white mt-12 mb-12 text-shadow-sm ">
               {data.title}
             </h1>
 
@@ -87,7 +87,7 @@ export default function App({ data = defaultData }) {
                   key={idx}
                   className=" bg-white p-5 mb-3 rounded-xl w-4/12 mr-5 last:mr-0"
                 >
-                  <h2 className=" font-bold text-2xl">{val.title}</h2>
+                  <h2 className=" font-bold text-2xl ">{val.title}</h2>
                   <h3 className="font-bold text-2xl text-orange-500">
                     {val.content}
                   </h3>

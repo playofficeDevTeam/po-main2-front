@@ -1,5 +1,5 @@
 import { makeVar, useReactiveVar } from "@apollo/client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useIsMobile from "../hooks/useIsMobile";
@@ -15,6 +15,7 @@ export const headerFloatingBtnVar = makeVar(<></>);
 
 export default function App() {
   const isMobile = useIsMobile();
+  const router = useRouter();
   const headerFloatingBtn = useReactiveVar(headerFloatingBtnVar);
 
   const [menuState, setMenuState] = useState(false);
@@ -24,16 +25,18 @@ export default function App() {
   const isMenuOpened = menuState;
 
   const sitemapDataReactiveVar = useReactiveVar(sitemapDataVar);
-  const selectTab = (id: number) => {
-    const newSitemapData = [...sitemapDataReactiveVar];
-    const selectOne = newSitemapData.map((val, idx) => ({
-      ...val,
-      selected: id === idx ? true : false,
-    }));
-    sitemapDataVar(selectOne);
-  };
-
-  const router = useRouter();
+  const [sitemapState, setSitemapState] = useState(sitemapDataReactiveVar);
+  const selectTab = useCallback(
+    (id: number) => {
+      const newSitemapData = [...sitemapState];
+      const selectOne = newSitemapData.map((val, idx) => ({
+        ...val,
+        selected: id === idx ? true : false,
+      }));
+      sitemapDataVar(selectOne);
+    },
+    [sitemapState]
+  );
 
   useEffect(() => {
     const pathname = window.location.pathname;
@@ -42,7 +45,7 @@ export default function App() {
       (val) => val.url.split("/")[1] === pathnameFirst
     );
     selectTab(nowPathIndex);
-  }, [router]);
+  }, [router, selectTab]);
 
   return (
     <>

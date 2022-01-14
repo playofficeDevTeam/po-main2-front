@@ -1,14 +1,12 @@
-import { isMobile } from "react-device-detect";
-import { Link } from "react-router-dom";
 import Br_pc from "../../../1atoms/Br_pc";
 import Br_mo from "../../../1atoms/Br_mo";
-import Atm_bgBlue from "../ExerciseAids/Atm_bgBlue";
-import Org_2explanation_R_ from "../ExerciseAids/Org_2explanation_R_";
-import Org_5explanation_link_R_ from "../ExerciseAids/Org_5explanation_link_R_";
-import { requ } from "../../../../public/assets/고객반응/고객반응_건강식품/func_nameToSrc";
-import Org_video from "../../../../public/assets/고객반응/고객반응_건강식품/Org_video";
+import useIsMobile from "../../../hooks/useIsMobile";
+import Org_explanation_link from "../ExerciseAids/Org_explanation_link";
+import Vdo from "../../../1atoms/Vdo";
 
 export default function App() {
+  const isMobile = useIsMobile();
+
   const data = {
     title: (
       <>
@@ -26,21 +24,21 @@ export default function App() {
       <>
         {isMobile ? (
           <>
-            <Org_video
-              data={{
-                fileName: "3_1mobile",
-                className: " max-w-xs mx-auto",
-              }}
+            <Vdo
+              src="/assets/고객반응/고객반응_건강식품/3_1mobile"
+              className=" max-w-xs mx-auto rounded-3xl"
+            />{" "}
+            <img
+              src="/assets/고객반응/고객반응_건강식품/3_2mobile.png"
+              alt="3_2mobile.png"
+              className="max-w-xs w-11/12 mx-auto"
             />
-            <img src={requ("3_2mobile.png")} alt="3_2mobile" />
           </>
         ) : (
-          <div className="w-11/12 mx-auto">
-            <Org_video
-              data={{
-                fileName: "3",
-                className: " mx-auto",
-              }}
+          <div className="">
+            <Vdo
+              src="/assets/고객반응/고객반응_건강식품/3"
+              className=" mx-auto"
             />
           </div>
         )}
@@ -76,9 +74,9 @@ export default function App() {
           자세히 보기
         </>
       ),
-      to: "/service",
+      url: "/service",
     },
   };
 
-  return <Org_5explanation_link_R_ data={data} />;
+  return <Org_explanation_link data={data} />;
 }

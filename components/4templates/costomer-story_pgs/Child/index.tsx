@@ -1,8 +1,7 @@
 import { isMobile } from "react-device-detect";
-import LogPrevUrl from "../../../2molecules/LogPrevUrl";
 import { useScroll, useScrollEffect } from "../../../hooks/useScroll";
-import Org_0floatingBtn_R_ from "../ExerciseAids/Org_0floatingBtn_R_";
-import Org_0helmet from "./Org_0helmet";
+import Org_0floatingBtn from "../Main/Org_0floatingBtn";
+
 import Org_10lastMessage from "./Org_10lastMessage";
 import Org_1headline from "./Org_1headline";
 import Org_2explanation from "./Org_2explanation";
@@ -19,16 +18,14 @@ export default function App() {
   const lastMesageScroll = useScroll(-300);
 
   useScrollEffect([
-    lastMesageScroll.scrollCheck,
     floatingBtnScroll.scrollCheck,
+    lastMesageScroll.scrollCheck,
   ]);
   return (
     <>
-      <Org_0helmet />
-      <LogPrevUrl />
       {isMobile ? (
         <>
-          <Org_0floatingBtn_R_ trigger={floatingBtnScroll.scrollTrigger} />
+          <Org_0floatingBtn trigger={!floatingBtnScroll.trigger} />
           <Org_1headline />
           <div className="mt-32"></div>
           <Org_2explanation />
@@ -46,13 +43,13 @@ export default function App() {
           <Org_8ref />
           <div className="mt-32"></div>
           <Org_9more />
-          <div className="" ref={floatingBtnScroll.element}></div>
-          <div className="mt-32" ref={lastMesageScroll.element}></div>
-          <Org_10lastMessage trigger={lastMesageScroll.scrollTrigger} />
+          <div className="" ref={floatingBtnScroll.ref}></div>
+          <div className="mt-32" ref={lastMesageScroll.ref}></div>
+          <Org_10lastMessage trigger={lastMesageScroll.trigger} />
         </>
       ) : (
         <>
-          <Org_0floatingBtn_R_ trigger={floatingBtnScroll.scrollTrigger} />
+          <Org_0floatingBtn trigger={floatingBtnScroll.trigger} />
           <Org_1headline />
           <div className="mt-40"></div>
           <Org_2explanation />
@@ -70,9 +67,9 @@ export default function App() {
           <Org_8ref />
           <div className="mt-40"></div>
           <Org_9more />
-          <div className="" ref={floatingBtnScroll.element}></div>
-          <div className="mt-40" ref={lastMesageScroll.element}></div>
-          <Org_10lastMessage trigger={lastMesageScroll.scrollTrigger} />
+          <div className="" ref={floatingBtnScroll.ref}></div>
+          <div className="mt-40" ref={lastMesageScroll.ref}></div>
+          <Org_10lastMessage trigger={lastMesageScroll.trigger} />
         </>
       )}
     </>

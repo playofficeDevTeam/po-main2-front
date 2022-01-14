@@ -1,6 +1,6 @@
-import { isMobile } from "react-device-detect";
+import useIsMobile from "../../../hooks/useIsMobile";
 import { useScroll, useScrollEffect } from "../../../hooks/useScroll";
-import Org_0floatingBtn_R_ from "../ExerciseAids/Org_0floatingBtn_R_";
+import Org_0floatingBtn from "../Main/Org_0floatingBtn";
 
 import Org_1headline from "./Org_1headline";
 import Org_2explanation from "./Org_2explanation";
@@ -13,27 +13,28 @@ import Org_8more from "./Org_8more";
 import Org_9lastMessage from "./Org_9lastMessage";
 
 export default function App() {
+  const isMobile = useIsMobile();
   const floatingBtnScroll = useScroll(0);
   const lastMesageScroll = useScroll(-300);
   const graphAosScroll = useScroll(-400);
 
   useScrollEffect([
-    lastMesageScroll.scrollCheck,
     floatingBtnScroll.scrollCheck,
+    lastMesageScroll.scrollCheck,
     graphAosScroll.scrollCheck,
   ]);
   return (
     <>
       {isMobile ? (
         <>
-          <Org_0floatingBtn_R_ trigger={floatingBtnScroll.scrollTrigger} />
+          <Org_0floatingBtn trigger={!floatingBtnScroll.trigger} />
           <Org_1headline />
           <div className="mt-32"></div>
           <Org_2explanation />
           <div className="mt-32"></div>
           <Org_3explanation />
-          <div className="mt-32" ref={graphAosScroll.element}></div>
-          <Org_4explanation trigger={graphAosScroll.scrollTrigger} />
+          <div className="mt-32" ref={graphAosScroll.ref}></div>
+          <Org_4explanation trigger={graphAosScroll.trigger} />
           <div className="mt-32"></div>
           <Org_5explanation />
           <div className="mt-32"></div>
@@ -42,20 +43,20 @@ export default function App() {
           <Org_7ref />
           <div className="mt-32"></div>
           <Org_8more />
-          <div className="" ref={floatingBtnScroll.element}></div>
-          <div className="mt-32" ref={lastMesageScroll.element}></div>
-          <Org_9lastMessage trigger={lastMesageScroll.scrollTrigger} />
+          <div className="mt-32" ref={lastMesageScroll.ref}></div>
+          <div className="" ref={floatingBtnScroll.ref}></div>
+          <Org_9lastMessage trigger={lastMesageScroll.trigger} />
         </>
       ) : (
         <>
-          <Org_0floatingBtn_R_ trigger={floatingBtnScroll.scrollTrigger} />
+          <Org_0floatingBtn trigger={floatingBtnScroll.trigger} />
           <Org_1headline />
           <div className="mt-40"></div>
           <Org_2explanation />
           <div className="mt-40"></div>
           <Org_3explanation />
-          <div className="mt-40" ref={graphAosScroll.element}></div>
-          <Org_4explanation trigger={graphAosScroll.scrollTrigger} />
+          <div className="mt-40" ref={graphAosScroll.ref}></div>
+          <Org_4explanation trigger={graphAosScroll.trigger} />
           <div className="mt-40"></div>
           <Org_5explanation />
           <div className="mt-40"></div>
@@ -64,9 +65,9 @@ export default function App() {
           <Org_7ref />
           <div className="mt-40"></div>
           <Org_8more />
-          <div className="" ref={floatingBtnScroll.element}></div>
-          <div className="mt-40" ref={lastMesageScroll.element}></div>
-          <Org_9lastMessage trigger={lastMesageScroll.scrollTrigger} />
+          <div className="" ref={floatingBtnScroll.ref}></div>
+          <div className="mt-40" ref={lastMesageScroll.ref}></div>
+          <Org_9lastMessage trigger={lastMesageScroll.trigger} />
         </>
       )}
     </>
