@@ -156,8 +156,8 @@ export default function App() {
                     <div
                       className="mx-auto"
                       style={{
-                        maxWidth: "366px",
                         height: "140vw",
+                        maxWidth: "366px",
                         maxHeight: "595.838px",
                       }}
                     >
