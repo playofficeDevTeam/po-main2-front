@@ -13,7 +13,7 @@ export default function App({
       muted
       autoPlay
       playsInline
-      className={`object-cover ${className}`}
+      className={`object-cover w-full h-full ${className}`}
       style={style}
     >
       <source src={`${src}.webm`} type="video/webm" />

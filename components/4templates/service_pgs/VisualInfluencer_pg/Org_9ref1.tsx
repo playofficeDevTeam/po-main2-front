@@ -9,31 +9,91 @@ const data1 = {
     {
       h1: <>상세페이지</>,
       src: [
-        <Vdo src="/assets/서비스_비주얼/7_1" className="rounded-2xl mx-auto" />,
-        <Vdo src="/assets/서비스_비주얼/7_2" className="rounded-2xl mx-auto" />,
-        <Vdo src="/assets/서비스_비주얼/7_3" className="rounded-2xl mx-auto" />,
-        <Vdo src="/assets/서비스_비주얼/7_4" className="rounded-2xl mx-auto" />,
-        <Vdo src="/assets/서비스_비주얼/7_5" className="rounded-2xl mx-auto" />,
+        <Vdo
+          key={1}
+          src="/assets/서비스_비주얼/7_1"
+          className="rounded-2xl mx-auto"
+        />,
+        <Vdo
+          key={2}
+          src="/assets/서비스_비주얼/7_2"
+          className="rounded-2xl mx-auto"
+        />,
+        <Vdo
+          key={3}
+          src="/assets/서비스_비주얼/7_3"
+          className="rounded-2xl mx-auto"
+        />,
+        <Vdo
+          key={4}
+          src="/assets/서비스_비주얼/7_4"
+          className="rounded-2xl mx-auto"
+        />,
+        <Vdo
+          key={5}
+          src="/assets/서비스_비주얼/7_5"
+          className="rounded-2xl mx-auto"
+        />,
       ],
     },
     {
       h1: <>광고소재</>,
       src: [
-        <Vdo src="/assets/서비스_비주얼/8_1" className="rounded-2xl mx-auto" />,
-        <Vdo src="/assets/서비스_비주얼/8_2" className="rounded-2xl mx-auto" />,
-        <Vdo src="/assets/서비스_비주얼/8_3" className="rounded-2xl mx-auto" />,
-        <Vdo src="/assets/서비스_비주얼/8_4" className="rounded-2xl mx-auto" />,
-        <Vdo src="/assets/서비스_비주얼/8_5" className="rounded-2xl mx-auto" />,
+        <Vdo
+          key={1}
+          src="/assets/서비스_비주얼/8_1"
+          className="rounded-2xl mx-auto"
+        />,
+        <Vdo
+          key={2}
+          src="/assets/서비스_비주얼/8_2"
+          className="rounded-2xl mx-auto"
+        />,
+        <Vdo
+          key={3}
+          src="/assets/서비스_비주얼/8_3"
+          className="rounded-2xl mx-auto"
+        />,
+        <Vdo
+          key={4}
+          src="/assets/서비스_비주얼/8_4"
+          className="rounded-2xl mx-auto"
+        />,
+        <Vdo
+          key={5}
+          src="/assets/서비스_비주얼/8_5"
+          className="rounded-2xl mx-auto"
+        />,
       ],
     },
     {
       h1: <>콘텐츠</>,
       src: [
-        <Vdo src="/assets/서비스_비주얼/9_1" className="rounded-2xl mx-auto" />,
-        <Vdo src="/assets/서비스_비주얼/9_2" className="rounded-2xl mx-auto" />,
-        <Vdo src="/assets/서비스_비주얼/9_3" className="rounded-2xl mx-auto" />,
-        <Vdo src="/assets/서비스_비주얼/9_4" className="rounded-2xl mx-auto" />,
-        <Vdo src="/assets/서비스_비주얼/9_5" className="rounded-2xl mx-auto" />,
+        <Vdo
+          key={1}
+          src="/assets/서비스_비주얼/9_1"
+          className="rounded-2xl mx-auto"
+        />,
+        <Vdo
+          key={2}
+          src="/assets/서비스_비주얼/9_2"
+          className="rounded-2xl mx-auto"
+        />,
+        <Vdo
+          key={3}
+          src="/assets/서비스_비주얼/9_3"
+          className="rounded-2xl mx-auto"
+        />,
+        <Vdo
+          key={4}
+          src="/assets/서비스_비주얼/9_4"
+          className="rounded-2xl mx-auto"
+        />,
+        <Vdo
+          key={5}
+          src="/assets/서비스_비주얼/9_5"
+          className="rounded-2xl mx-auto"
+        />,
       ],
     },
   ],
@@ -54,7 +114,7 @@ export default function App() {
             <br /> 시장 점유율 80%의 <br /> 1위 에이전시 입니다.
           </h1>
           <h2 className="mb-20">
-            "비주얼 인플루언서"는 <br />
+            “비주얼 인플루언서”는 <br />
             브랜디드·광고 콘텐츠 <br />
             제작 경력이 인증된 <br />
             최상위 콘텐츠 제작자로서
@@ -68,6 +128,7 @@ export default function App() {
           <ul className="center">
             {data1.contents.map((data1Val, data1Idx) => (
               <li
+                key={data1Idx}
                 className={`mx-3 text-lg font-bold cursor-pointer pb-1  transition duration-200 border-b-4 border-transparent ${
                   data1Idx === data1Tab
                     ? " text-blue-500 border-b-4 border-blue-500"
@@ -90,8 +151,19 @@ export default function App() {
           {data1.contents.map((data1Val, data1Idx) =>
             data1Idx === data1Tab ? (
               <Carowsel_ref>
-                {data1Val.src.map((data1ValSrc) => (
-                  <div className="w-full">{data1ValSrc}</div>
+                {data1Val.src.map((data1ValSrc, data1ValIdx) => (
+                  <div key={data1ValIdx} className="w-full">
+                    <div
+                      className="mx-auto"
+                      style={{
+                        maxWidth: "366px",
+                        height: "140vw",
+                        maxHeight: "595.838px",
+                      }}
+                    >
+                      {data1ValSrc}
+                    </div>
+                  </div>
                 ))}
               </Carowsel_ref>
             ) : (
@@ -113,7 +185,7 @@ export default function App() {
             <br /> 시장 점유율 80%의 1위 에이전시 입니다.
           </div>
           <div className="mb-20">
-            "비주얼 인플루언서"는 브랜디드·광고 콘텐츠 <br />
+            “비주얼 인플루언서”는 브랜디드·광고 콘텐츠 <br />
             제작 경력이 인증된 최상위 콘텐츠 제작자로서 <br />
             공급이 한정되어 있습니다
           </div>
@@ -123,6 +195,7 @@ export default function App() {
           <ul className="flex justify-center">
             {data1.contents.map((data1Val, data1Idx) => (
               <li
+                key={data1Idx}
                 className={`mx-9 text-xl font-bold cursor-pointer pb-1  transition duration-200 border-b-4 border-transparent ${
                   data1Idx === data1Tab
                     ? " text-blue-500 border-b-4 border-blue-500"
@@ -143,8 +216,15 @@ export default function App() {
           {data1.contents.map((data1Val, data1Idx) =>
             data1Idx === data1Tab ? (
               <Carowsel_ref>
-                {data1Val.src.map((data1ValSrc) => (
-                  <div className="flex justify-center">{data1ValSrc}</div>
+                {data1Val.src.map((data1ValSrc, data1Idx) => (
+                  <div key={data1Idx} className="flex justify-center w-full">
+                    <div
+                      className="mo-max"
+                      style={{ height: "657.062px", width: "384px" }}
+                    >
+                      {data1ValSrc}
+                    </div>
+                  </div>
                 ))}
               </Carowsel_ref>
             ) : (

@@ -16,7 +16,7 @@ const CustomCarousel: any = styled.div`
           props.isMobile ? "0" : "4rem"};
         font-family: "Font Awesome 5 Free";
         font-weight: 900;
-        color: grey;
+        color: #cccccc;
         content: "\f053";
       }
     }
@@ -30,7 +30,7 @@ const CustomCarousel: any = styled.div`
           props.isMobile ? "0" : "4rem"};
         font-family: "Font Awesome 5 Free";
         font-weight: 900;
-        color: grey;
+        color: #cccccc;
         content: "\f054";
       }
     }
@@ -63,7 +63,6 @@ export default function App({ children }: any) {
         slidesToScroll: 1,
         centerMode: true,
         centerPadding: "30px",
-        lazyLoad: "ondemand",
       }
     : {
         dots: true,
@@ -72,7 +71,6 @@ export default function App({ children }: any) {
         speed: 300,
         slidesToShow: 1,
         slidesToScroll: 1,
-        lazyLoad: "ondemand",
       };
   return (
     <CustomCarousel isMobile={isMobile}>

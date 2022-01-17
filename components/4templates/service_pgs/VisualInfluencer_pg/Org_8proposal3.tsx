@@ -12,6 +12,7 @@ export default function App() {
           <img
             src="assets/서비스_비주얼/아이콘/인기게시물.png"
             className="h-7 mr-2"
+            alt="인기게시물"
           />
           인기게시물
         </div>
@@ -31,14 +32,15 @@ export default function App() {
           평균 5개는 인기게시물에 노출됩니다.
         </h3>
 
-        <div className="grid gap-8">
+        <div className="mo-max grid gap-8">
           <div className="mb-4">
-            <div className="h-0 relative z-10 top-4 w-64 mx-auto">
+            <div className="h-0 relative z-10 top-4 w-64 mo-max px-4">
               <div className="">인기 게시물</div>
             </div>
             <img
               src="/assets/서비스_비주얼/5_1_mobile.png"
-              className="rounded-3xl relative mx-auto"
+              className="rounded-3xl relative mo-max"
+              alt="5_1_mobile"
             />
           </div>
         </div>
@@ -80,6 +82,7 @@ export default function App() {
           <img
             src="/assets/서비스_비주얼/아이콘/인기게시물.png"
             className="h-7 mr-2"
+            alt="인기게시물"
           />
           인기게시물
         </div>
@@ -102,6 +105,7 @@ export default function App() {
               src="/assets/서비스_비주얼/5_1.png"
               className="rounded-3xl relative mx-auto"
               style={{ width: "24rem" }}
+              alt="5_1"
             />
           </div>
         </div>

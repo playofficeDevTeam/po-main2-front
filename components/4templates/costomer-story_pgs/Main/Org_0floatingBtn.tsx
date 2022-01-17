@@ -1,20 +1,25 @@
 import { useEffect } from "react";
-import { headerFloatingBtnVar } from "../../../3organisms/Org_header";
+import { useRecoilState } from "recoil";
+import { headerFloatingBtnAtom } from "../../../3organisms/Org_header";
 import useIsMobile from "../../../hooks/useIsMobile";
 import Mol_goToServicePg_Btn from "./Mol_goToServicePg_Btn";
 
 export default function App({ trigger = false }) {
+  const [headerFloatingBtnState, setHeaderFloatingBtnState] = useRecoilState(
+    headerFloatingBtnAtom
+  );
+
   // 피씨헤더
   useEffect(() => {
-    headerFloatingBtnVar(
+    setHeaderFloatingBtnState(
       <>
         <Mol_goToServicePg_Btn />
       </>
     );
     return () => {
-      headerFloatingBtnVar(<></>);
+      setHeaderFloatingBtnState(<></>);
     };
-  }, []);
+  }, [setHeaderFloatingBtnState]);
 
   const isMobile = useIsMobile();
   return isMobile ? (

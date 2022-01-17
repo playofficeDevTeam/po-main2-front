@@ -4,11 +4,31 @@ import useIsMobile from "../../../hooks/useIsMobile";
 import Atm_autoCarousel1 from "./Atm_autoCarousel1";
 
 const defaultData = [
-  <Vdo src="/assets/고객반응/고객반응_운동기구/4_1" className=" mx-auto" />,
-  <Vdo src="/assets/고객반응/고객반응_운동기구/4_2" className=" mx-auto" />,
-  <Vdo src="/assets/고객반응/고객반응_운동기구/4_3" className=" mx-auto" />,
-  <Vdo src="/assets/고객반응/고객반응_운동기구/4_4" className=" mx-auto" />,
-  <Vdo src="/assets/고객반응/고객반응_운동기구/4_5" className=" mx-auto" />,
+  <Vdo
+    key={1}
+    src="/assets/고객반응/고객반응_운동기구/4_1"
+    className=" mx-auto"
+  />,
+  <Vdo
+    key={2}
+    src="/assets/고객반응/고객반응_운동기구/4_2"
+    className=" mx-auto"
+  />,
+  <Vdo
+    key={3}
+    src="/assets/고객반응/고객반응_운동기구/4_3"
+    className=" mx-auto"
+  />,
+  <Vdo
+    key={4}
+    src="/assets/고객반응/고객반응_운동기구/4_4"
+    className=" mx-auto"
+  />,
+  <Vdo
+    key={5}
+    src="/assets/고객반응/고객반응_운동기구/4_5"
+    className=" mx-auto"
+  />,
 ];
 
 export default function App({ data = defaultData }) {

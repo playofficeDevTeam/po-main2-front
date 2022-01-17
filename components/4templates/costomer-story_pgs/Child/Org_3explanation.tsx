@@ -8,7 +8,8 @@ export default function App() {
       <>
         아무리 안전하다고 <Br_mo />
         적어놔도
-        <Br_pc /> {"'안전한가요?'"}
+        <Br_pc />
+        ‘안전한가요?’
         <Br_mo />
         라는 문의가 끊이질 않았어요.
       </>

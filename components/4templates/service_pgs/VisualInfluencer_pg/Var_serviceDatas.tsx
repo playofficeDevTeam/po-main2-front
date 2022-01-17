@@ -1,4 +1,4 @@
-import { makeVar } from "@apollo/client";
+import { atom, selector } from "recoil";
 
 interface IItem {
   hightlighted: boolean;
@@ -37,6 +37,14 @@ export class ItemClass {
   public detailInfoText = this.input.detailInfo.map(
     (val: any) => val.title + " " + val.amountText
   );
+
+  public serviceClickToggle(id: number, setServiceDatasState: (a) => void) {
+    setServiceDatasState((setServiceDatas) =>
+      setServiceDatas.map((val, idx) =>
+        idx === id ? { ...val, isClicked: true } : { ...val, isClicked: false }
+      )
+    );
+  }
 }
 
 const serviceDatas = [
@@ -102,4 +110,16 @@ const serviceDatas = [
   },
 ];
 
-export const serviceDatasVar = makeVar(serviceDatas);
+export const serviceDatasAtom = atom({
+  key: "serviceDatasAtom",
+  default: serviceDatas,
+});
+
+export const serviceDatasClass = selector({
+  key: "serviceDatasClass",
+  get: ({ get }) => {
+    const serviceDatas = get(serviceDatasAtom);
+    const serviceDatasClass = serviceDatas.map((val) => new ItemClass(val));
+    return serviceDatasClass;
+  },
+});

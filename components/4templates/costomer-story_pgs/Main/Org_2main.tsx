@@ -121,7 +121,16 @@ function Main({ data = defaultData }) {
                 router.push(val.url);
               }}
             >
-              <div className="mb-7">{val.video}</div>
+              <div
+                className="mb-7"
+                style={{
+                  height: "103vw",
+                  maxWidth: "320px",
+                  maxHeight: "386.275px",
+                }}
+              >
+                {val.video}
+              </div>
               <div className="font-bold text-xl mb-3">{val.title}</div>
               <div className="text-gray-400">{val.hashtag}</div>
             </div>
@@ -132,14 +141,19 @@ function Main({ data = defaultData }) {
         // 피씨
         // 피씨
         <div>
-          <div className="pc-max mt-32 mb-20" style={{ height: "24rem" }}>
+          <div className="pc-max mt-32 mb-20">
             <div
-              className=" cursor-pointer flex transition duration-200 transform hover:-translate-y-3"
+              className=" cursor-pointer flex transition duration-200 transform hover:-translate-y-3 mb-32"
               onClick={() => {
                 router.push(data[0].url);
               }}
             >
-              <div className=" max-w-xl mr-12">{data[0].video}</div>
+              <div
+                className=" max-w-xl mr-12"
+                style={{ width: "576px", height: "326.950px" }}
+              >
+                {data[0].video}
+              </div>
               <div className="flex flex-col justify-center">
                 <div className="font-bold text-xl mb-3">{data[0].title}</div>
                 <div className="text-gray-400">{data[0].hashtag}</div>
@@ -157,7 +171,12 @@ function Main({ data = defaultData }) {
                     }}
                     style={{ height: "24rem" }}
                   >
-                    <div className="mb-10">{val.video}</div>
+                    <div
+                      className="mb-10"
+                      style={{ width: "480px", height: "287.462px" }}
+                    >
+                      {val.video}
+                    </div>
                     <div className=" font-bold text-xl mb-3">{val.title}</div>
                     <div className=" text-gray-400">{val.hashtag}</div>
                   </div>

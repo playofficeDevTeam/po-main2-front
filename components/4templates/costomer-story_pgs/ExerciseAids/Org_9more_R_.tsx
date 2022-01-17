@@ -58,10 +58,10 @@ export default function App({ data = defaultData }) {
           <h1 className="mo-h1 mb-10">{data.title}</h1>
           <ul>
             {data.contents.map((val, idx) => (
-              <Link href={val.url}>
+              <Link key={idx} href={val.url}>
                 <a href="" key={idx}>
                   <li className="bg-blue-50 rounded-md shadow-md p-2 text-center mb-10 max-w-xs mx-auto">
-                    <img src={val.src} className="mb-6" />
+                    <img src={val.src} alt={val.src} className="mb-6" />
                     <div className=" font-bold mb-3">{val.title}</div>
                     <div className="mb-1">{val.param}</div>
                     <div className="flex justify-end text-sm text-orange-500 ">
@@ -78,11 +78,11 @@ export default function App({ data = defaultData }) {
           <h1 className="pc-h1 mb-20">{data.title}</h1>
           <ul className="flex justify-center">
             {data.contents.map((val, idx) => (
-              <li className="mr-16 last:mr-0">
+              <li key={idx} className="mr-16 last:mr-0">
                 <Link href={val.url}>
                   <a className="" key={idx}>
                     <div className="bg-blue-50 rounded-md shadow-md p-2 text-center mb-10 max-w-xs mx-auto">
-                      <img src={val.src} className="mb-6" />
+                      <img src={val.src} alt={val.src} className="mb-6" />
                       <div className=" font-bold mb-3">{val.title}</div>
                       <div className="mb-1">{val.param}</div>
                       <div className="flex justify-end text-sm text-orange-500 ">

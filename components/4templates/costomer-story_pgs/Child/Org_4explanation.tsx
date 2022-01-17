@@ -3,7 +3,6 @@ import Br_mo from "../../../1atoms/Br_mo";
 import Org_2explanation_R_ from "../ExerciseAids/Org_2explanation_R_";
 import useIsMobile from "../../../hooks/useIsMobile";
 import Vdo from "../../../1atoms/Vdo";
-import Image from "next/image";
 
 export default function App() {
   const isMobile = useIsMobile();
@@ -46,8 +45,8 @@ export default function App() {
         )}
         {isMobile ? (
           <div className="mt-14">
-            고객은 안전에 대해 여전히 염려하고 있고, 그 부분은 '우리 아이가
-            사용했을 때 괜찮나' 라는 의심입니다, 그렇기에 더 임팩트 있게
+            고객은 안전에 대해 여전히 염려하고 있고, 그 부분은 ‘우리 아이가
+            사용했을 때 괜찮나’ 라는 의심입니다, 그렇기에 더 임팩트 있게
             안전하다는 걸 직접적으로 보여줘야 한다는 전략을 제안해 주셨어요.
             <br />
             <br />
@@ -58,10 +57,10 @@ export default function App() {
           </div>
         ) : (
           <div className="mt-14">
-            "고객은 안전에 대해 여전히 염려하고 있고, 그 부분은 '우리 아이가
-            사용했을 때 괜찮나' 라는 의심입니다, 그렇기에 더 임팩트 있게
-            안전하다는 걸 직접적으로 보여줘야 합니다." 라고 전략을 제안해
-            주셨어요. <br /> <br />
+            고객은 안전에 대해 여전히 염려하고 있고, 그 부분은 ‘우리 아이가
+            사용했을 때 괜찮나’ 라는 의심입니다, 그렇기에 더 임팩트 있게
+            안전하다는 걸 직접적으로 보여줘야 한다는 전략을 제안해 주셨어요.{" "}
+            <br /> <br />
             아이들이 직접 소독제를 사용하는 비주얼 인플루언서 영상 콘텐츠로
             상세페이지를 수정하고나서 제 하루 일과는 달라졌어요. <br />
             원래 종일 문의사항에 답변하고 택배 조금 싸다가 퇴근하고 그랬는데

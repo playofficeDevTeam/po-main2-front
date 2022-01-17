@@ -1,21 +1,9 @@
-import { useReactiveVar } from "@apollo/client";
 import Org_price_plan2 from "./Org_price_plan2";
-import { ItemClass, serviceDatasVar } from "./Var_serviceDatas";
 import Mol_goToPaymentPg_Btn from "./Mol_goToPaymentPg_Btn";
 import useIsMobile from "../../../hooks/useIsMobile";
 
-const menuClickToggle = (id: number) => {
-  const newServiceDatasVar = [...serviceDatasVar()];
-  const clickedNewServiceDatasVar = newServiceDatasVar.map((val, idx) =>
-    idx === id ? { ...val, isClicked: true } : { ...val, isClicked: false }
-  );
-  serviceDatasVar(clickedNewServiceDatasVar);
-};
-
 export default function App() {
   const isMobile = useIsMobile();
-  const serviceReactiveVar = useReactiveVar(serviceDatasVar);
-  const services = serviceReactiveVar.map((val, idx) => new ItemClass(val));
 
   return (
     <>

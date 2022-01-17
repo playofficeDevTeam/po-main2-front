@@ -1,8 +1,8 @@
-import { makeVar, useReactiveVar } from "@apollo/client";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useIsMobile from "../hooks/useIsMobile";
+import { atom, useRecoilState } from "recoil";
 
 const sitemapData = [
   { title: "서비스", url: "/service", selected: false },
@@ -10,13 +10,23 @@ const sitemapData = [
   { title: "포케팅이 일하는 법", url: "/introduce", selected: false },
 ];
 
-export const sitemapDataVar = makeVar(sitemapData);
-export const headerFloatingBtnVar = makeVar(<></>);
+export const sitemapDataAtom = atom({
+  key: "sitemapData",
+  default: sitemapData,
+});
+
+export const headerFloatingBtnAtom = atom({
+  key: "headerFloatingBtn",
+  default: <></>,
+});
 
 export default function App() {
   const isMobile = useIsMobile();
   const router = useRouter();
-  const headerFloatingBtn = useReactiveVar(headerFloatingBtnVar);
+
+  const [headerFloatingBtnState, setHeaderFloatingBtnState] = useRecoilState(
+    headerFloatingBtnAtom
+  );
 
   const [menuState, setMenuState] = useState(false);
   const menuToggle = () => {
@@ -24,18 +34,19 @@ export default function App() {
   };
   const isMenuOpened = menuState;
 
-  const sitemapDataReactiveVar = useReactiveVar(sitemapDataVar);
-  const [sitemapState, setSitemapState] = useState(sitemapDataReactiveVar);
+  const [sitemapDataState, setSitemapDataState] =
+    useRecoilState(sitemapDataAtom);
+
   const selectTab = useCallback(
     (id: number) => {
-      const newSitemapData = [...sitemapState];
-      const selectOne = newSitemapData.map((val, idx) => ({
-        ...val,
-        selected: id === idx ? true : false,
-      }));
-      sitemapDataVar(selectOne);
+      setSitemapDataState((SitemapData) =>
+        SitemapData.map((val, idx) => ({
+          ...val,
+          selected: id === idx ? true : false,
+        }))
+      );
     },
-    [sitemapState]
+    [setSitemapDataState]
   );
 
   useEffect(() => {
@@ -85,7 +96,7 @@ export default function App() {
             <div className="h-0">
               <nav className=" bg-white">
                 <ul className="py-4 border-b shadow-md">
-                  {sitemapDataReactiveVar.map((val, idx) => (
+                  {sitemapDataState.map((val, idx) => (
                     <Link href={val.url} key={idx}>
                       <a
                         className="center py-2 "
@@ -124,7 +135,7 @@ export default function App() {
 
               <nav className="w-8/12 h-full">
                 <ul className="center h-full">
-                  {sitemapDataReactiveVar.map((val, idx) => (
+                  {sitemapDataState.map((val, idx) => (
                     <Link href={val.url} key={idx}>
                       <a
                         className={`center px-3 pt-1 h-full hover:bg-gray-100 transition duration-200 ${
@@ -139,7 +150,9 @@ export default function App() {
                   ))}
                 </ul>
               </nav>
-              <div className="w-2/12 flex justify-end">{headerFloatingBtn}</div>
+              <div className="w-2/12 flex justify-end">
+                {headerFloatingBtnState}
+              </div>
             </div>
           </div>
         </header>

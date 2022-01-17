@@ -1,19 +1,13 @@
-import { useReactiveVar } from "@apollo/client";
-import { ItemClass, serviceDatasVar } from "./Var_serviceDatas";
+import { useRecoilState, useRecoilValue } from "recoil";
 import useIsMobile from "../../../hooks/useIsMobile";
-
-const menuClickToggle = (id: number) => {
-  const newServiceDatasVar = [...serviceDatasVar()];
-  const clickedNewServiceDatasVar = newServiceDatasVar.map((val, idx) =>
-    idx === id ? { ...val, isClicked: true } : { ...val, isClicked: false }
-  );
-  serviceDatasVar(clickedNewServiceDatasVar);
-};
+import { serviceDatasAtom, serviceDatasClass } from "./Var_serviceDatas";
 
 export default function App() {
   const isMobile = useIsMobile();
-  const serviceReactiveVar = useReactiveVar(serviceDatasVar);
-  const services = serviceReactiveVar.map((val, idx) => new ItemClass(val));
+
+  const [serviceDatasState, setServiceDatasState] =
+    useRecoilState(serviceDatasAtom);
+  const services = useRecoilValue(serviceDatasClass);
 
   return (
     <>
@@ -30,7 +24,10 @@ export default function App() {
                   key={serviceIdx}
                   className="my-4 ring-2 ring-indigo-400 rounded-md bg-white cursor-pointer pt-6"
                   onClick={() => {
-                    menuClickToggle(serviceIdx);
+                    service.serviceClickToggle(
+                      serviceIdx,
+                      setServiceDatasState
+                    );
                   }}
                 >
                   {service.input.hightlighted ? (
@@ -87,7 +84,10 @@ export default function App() {
                   key={serviceIdx}
                   className="my-4 ring-2 ring-gray-400 rounded-md bg-white cursor-pointer pt-6 opacity-50"
                   onClick={() => {
-                    menuClickToggle(serviceIdx);
+                    service.serviceClickToggle(
+                      serviceIdx,
+                      setServiceDatasState
+                    );
                   }}
                 >
                   {service.input.hightlighted ? (
@@ -159,7 +159,7 @@ export default function App() {
                     : "ring-gray-400 opacity-50"
                 }`}
                 onClick={() => {
-                  menuClickToggle(serviceIdx);
+                  service.serviceClickToggle(serviceIdx, setServiceDatasState);
                 }}
               >
                 {service.input.hightlighted ? (

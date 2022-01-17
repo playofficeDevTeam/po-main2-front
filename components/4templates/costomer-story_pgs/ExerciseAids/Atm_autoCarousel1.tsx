@@ -46,7 +46,11 @@ const CustomCarousel = styled.div`
   }
 `;
 
-const defaultData = [<div>1</div>, <div>2</div>, <div>3</div>];
+const defaultData = [
+  <div key={1}>1</div>,
+  <div key={2}>2</div>,
+  <div key={3}>3</div>,
+];
 
 const App = ({ children = defaultData }: any) => {
   const isMobile = useIsMobile();
@@ -69,7 +73,6 @@ const App = ({ children = defaultData }: any) => {
         className: "center",
         centerMode: true,
         centerPadding: "60px",
-        lazyLoad: "ondemand",
       }
     : //   피씨
       //   피씨
@@ -84,13 +87,12 @@ const App = ({ children = defaultData }: any) => {
         autoplaySpeed: 4000,
         draggable: false,
         pauseOnHover: false,
-        lazyLoad: "ondemand",
       };
   return (
     <CustomCarousel>
       <Slider {...settings}>
         {children.map((val, idx) => (
-          <div>{val}</div>
+          <div key={idx}>{val}</div>
         ))}
       </Slider>
     </CustomCarousel>

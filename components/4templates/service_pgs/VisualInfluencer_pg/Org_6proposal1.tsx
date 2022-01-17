@@ -20,6 +20,7 @@ export default function App() {
           <img
             src="/assets/서비스_비주얼/아이콘/상세페이지 활용.png"
             className="h-7 mr-2"
+            alt="상세페이지 활용"
           />
           상세페이지 강화
         </div>
@@ -35,20 +36,21 @@ export default function App() {
         </h3>
 
         <div className="mo-max grid gap-2">
-          <div
-            className="mb-52"
-            style={{ height: "50vw", maxHeight: "14rem", minHeight: "12rem" }}
-          >
-            <div className="h-0 relative z-10 top-4 w-64 mx-auto">
+          <div className="mb-6">
+            <div className="h-0 relative z-10 top-4 w-64 mo-max px-4">
               <div className="">강화된 상세페이지</div>
             </div>
             <div className="center">
-              <Vdo src="/assets/서비스_비주얼/3_1" className=" rounded-3xl" />
+              <Vdo
+                src="/assets/서비스_비주얼/3_1"
+                className=" rounded-3xl mo-max"
+                style={{ width: "", height: "92.19vw", maxHeight: "387.188px" }}
+              />
             </div>
           </div>
 
           <div className="mb-4">
-            <div className="h-0 relative z-10 top-4 w-64 mx-auto">
+            <div className="h-0 relative z-10 top-4 w-64 mo-max px-4">
               <h4 className="">
                 상세페이지
                 <br />
@@ -57,7 +59,8 @@ export default function App() {
             </div>
             <img
               src="/assets/서비스_비주얼/3_2.png"
-              className="rounded-3xl relative mx-auto"
+              className="rounded-3xl relative mo-max"
+              alt="3_2"
             />
           </div>
         </div>
@@ -103,6 +106,7 @@ export default function App() {
           <img
             src="assets/서비스_비주얼/아이콘/상세페이지 활용.png"
             className="h-7 mr-2"
+            alt="상세페이지 활용"
           />
           상세페이지 강화
         </div>
@@ -123,7 +127,7 @@ export default function App() {
             <Vdo
               src="/assets/서비스_비주얼/3_1"
               className="rounded-3xl"
-              style={{ height: "30rem" }}
+              style={{ width: "401.225px", height: "480px" }}
             />
           </div>
 
@@ -139,6 +143,7 @@ export default function App() {
               src="/assets/서비스_비주얼/3_2.png"
               className="rounded-3xl relative mx-auto h-full"
               style={{ width: "24rem" }}
+              alt="3_2"
             ></img>
           </div>
         </div>

@@ -1,7 +1,9 @@
+import Introduce_pg from "../../components/4templates/etc_pgs/Introduce_pg";
+
 export default function App() {
   return (
     <>
-      <div className=" text-orange-600 font-bold text-xl">소개</div>
+      <Introduce_pg />
     </>
   );
 }

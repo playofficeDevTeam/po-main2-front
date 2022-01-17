@@ -1,19 +1,21 @@
-import { useReactiveVar } from "@apollo/client";
 import { useRef, useState } from "react";
 import Modal from "react-modal";
+import { useRecoilState } from "recoil";
 import ScrollLock from "../../../effects/ScrollLock";
 import useIsMobile from "../../../hooks/useIsMobile";
-import { serviceDatasVar } from "./Var_serviceDatas";
+import { serviceDatasAtom } from "./Var_serviceDatas";
 
 const data1 = {
-  button: <span>포케팅 서비스 이용약관 동의</span>,
-  modal: <div>내용물</div>,
+  button: <></>,
+  modal: <></>,
 };
 
 export default function App({ data = data1 }) {
   const isMobile = useIsMobile();
   Modal.setAppElement("#__next");
-  const [modalIsOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setisModalOpen] = useState(false);
+  const [isModalAnimated, setIsModalAnimated] = useState(false);
+
   const customStyles = isMobile
     ? {
         content: {
@@ -21,13 +23,17 @@ export default function App({ data = data1 }) {
           left: "50%",
           right: "auto",
           marginRight: "-50%",
-          transform: "translate(-50%)",
           padding: 0,
           borderRadius: "0.5rem",
           borderBottomLeftRadius: "0",
           borderBottomRightRadius: "0",
           bottom: "-2px",
           zindex: 1000,
+          transform: isModalAnimated
+            ? "translate(-50%, 0%)"
+            : "translate(-50%, 40%)",
+          opacity: isModalAnimated ? 1 : 0,
+          transitionDuration: "0.2s",
         },
       }
     : {
@@ -37,38 +43,41 @@ export default function App({ data = data1 }) {
           right: "auto",
           bottom: "auto",
           marginRight: "-50%",
-          transform: "translate(-50%, -50%)",
           padding: 0,
           borderRadius: "0.5rem",
           zindex: 1000,
+          transform: isModalAnimated
+            ? "translate(-50%, -50%)"
+            : "translate(-50%, -48%)",
+          opacity: isModalAnimated ? 1 : 0,
+          transitionDuration: "0.2s",
         },
       };
 
   function openModal() {
-    setIsOpen(true);
+    setisModalOpen(true);
   }
 
-  function afterOpenModal() {}
+  function afterOpenModal() {
+    setIsModalAnimated((val) => true);
+  }
 
   function closeModal() {
-    setIsOpen(false);
+    setIsModalAnimated((val) => false);
+    setisModalOpen(false);
   }
 
   const element1: any = useRef();
 
-  const serviceReactiveVar = useReactiveVar(serviceDatasVar);
-  const indexOfServiceReactiveVar = serviceReactiveVar
+  const [serviceState, setServiceState] = useRecoilState(serviceDatasAtom);
+  const indexOfServiceState = serviceState
     .map((val, idx) => val.isClicked)
     .indexOf(true);
   const scrollToY =
-    indexOfServiceReactiveVar === 0
-      ? 0
-      : indexOfServiceReactiveVar === 1
-      ? 315
-      : 1000;
+    indexOfServiceState === 0 ? 0 : indexOfServiceState === 1 ? 315 : 1000;
 
   return isMobile ? (
-    <div className="relative z-40 ">
+    <div className={`relative z-40`}>
       <span
         onClick={async () => {
           await openModal();
@@ -79,11 +88,11 @@ export default function App({ data = data1 }) {
         {data.button}
       </span>
       <Modal
-        isOpen={modalIsOpen}
+        isOpen={isModalOpen}
         onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         style={customStyles}
-        contentLabel="Modal"
+        contentLabel="modal"
       >
         <div className="h-0 relative z-40">
           <div className="h-12 bg-gradient-to-b from-white"></div>
@@ -95,7 +104,7 @@ export default function App({ data = data1 }) {
         </div>
         <div
           ref={element1}
-          className="overflow-y-scroll "
+          className="mo-max overflow-y-scroll "
           style={{ height: "85vh", width: "94vw" }}
         >
           <div>
@@ -106,16 +115,16 @@ export default function App({ data = data1 }) {
       </Modal>
     </div>
   ) : (
-    <div className="relative z-40 ">
+    <div className={`relative z-40`}>
       <span onClick={openModal} className="z-30">
         {data.button}
       </span>
       <Modal
-        isOpen={modalIsOpen}
+        isOpen={isModalOpen}
         onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         style={customStyles}
-        contentLabel="Modal2"
+        contentLabel="modal"
       >
         <div className="h-0">
           <div className="h-20 bg-gradient-to-b from-white"></div>
@@ -125,7 +134,7 @@ export default function App({ data = data1 }) {
             <i className="far fa-times-circle text-xl text-gray-400"></i>
           </div>
         </div>
-        <div className=" " style={{ width: "65rem" }}>
+        <div className="pc-max">
           <div className="p-4">
             <ScrollLock />
             {data.modal}

@@ -32,9 +32,6 @@ export default function App({ data = defaultData, trigger = false }) {
     // 모바일
     // 모바일
     // 모바일
-    // 모바일
-    // 모바일
-    // 모바일
     <section className=" bg-gradient-to-br from-green-50  to-indigo-50">
       <div className="mo-max pt-20 pb-16">
         <div className="flex flex-col text-center">
@@ -45,13 +42,15 @@ export default function App({ data = defaultData, trigger = false }) {
               <li key={idx} className="mb-4">
                 <div className="text-lg font-bold ">{val.title}</div>
                 <div className="text-lg font-bold text-orange-500">
-                  {val.mainText.map((val, idx) =>
-                    typeof val === "number" ? (
-                      <AnimatedNumber value={val} trigger={trigger} />
-                    ) : (
-                      <span>{val}</span>
-                    )
-                  )}
+                  {val.mainText.map((val, idx) => (
+                    <span key={idx}>
+                      {typeof val === "number" ? (
+                        <AnimatedNumber value={val} trigger={trigger} />
+                      ) : (
+                        <span>{val}</span>
+                      )}
+                    </span>
+                  ))}
                 </div>
               </li>
             ))}
@@ -60,9 +59,6 @@ export default function App({ data = defaultData, trigger = false }) {
       </div>
     </section>
   ) : (
-    // 피씨
-    // 피씨
-    // 피씨
     // 피씨
     // 피씨
     // 피씨
@@ -76,13 +72,15 @@ export default function App({ data = defaultData, trigger = false }) {
               <li key={idx} className=" mr-14 last:mr-0">
                 <div className="text-xl mb-2 font-bold">{val.title}</div>
                 <div className="text-xl font-bold text-orange-500">
-                  {val.mainText.map((val, idx) =>
-                    typeof val === "number" ? (
-                      <AnimatedNumber value={val} trigger={trigger} />
-                    ) : (
-                      <span>{val}</span>
-                    )
-                  )}
+                  {val.mainText.map((val, idx) => (
+                    <span className="" key={idx}>
+                      {typeof val === "number" ? (
+                        <AnimatedNumber value={val} trigger={trigger} />
+                      ) : (
+                        <span>{val}</span>
+                      )}
+                    </span>
+                  ))}
                 </div>
               </li>
             ))}

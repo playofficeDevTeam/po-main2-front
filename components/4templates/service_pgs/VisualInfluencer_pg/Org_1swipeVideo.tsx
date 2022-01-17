@@ -72,13 +72,18 @@ export default function App({
                       <Vdo
                         src={val.src}
                         className="mo-max"
-                        style={{ width: "80vw" }}
+                        style={{
+                          width: "80vw",
+                          height: "90.43vw",
+                          maxHeight: "442.737px",
+                        }}
                       />
                     </div>
                     <div className="my-3 font-bold flex ">
                       <div>
                         <img
-                          src={"/assets/서비스_비주얼/아이콘/화살표 2 1.png"}
+                          src="/assets/서비스_비주얼/아이콘/화살표 2 1.png"
+                          alt="화살표"
                         ></img>
                       </div>
                       <div className="flex relative right-3 top-1">
@@ -108,12 +113,13 @@ export default function App({
                       <Vdo
                         src={val.src}
                         className="w-full rounded-3xl"
-                        style={{ height: "31rem" }}
+                        style={{ width: "448px", height: "496px" }}
                       />
                       <div className=" my-3 font-bold flex  ">
                         <div>
                           <img
                             src={"/assets/서비스_비주얼/아이콘/화살표 2 1.png"}
+                            alt="화살표"
                           ></img>
                         </div>
                         <div className="flex  relative right-3 top-1">

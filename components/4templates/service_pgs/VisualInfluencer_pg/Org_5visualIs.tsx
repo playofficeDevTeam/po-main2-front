@@ -37,8 +37,12 @@ export default function App({ data = defaultData }) {
         <h1 className="mo-h1 mb-7">{data.title}</h1>
         <div className="text-lg mb-7 w-9/12 mx-auto">{data.content}</div>
       </div>
-      <div className="mo-max">
-        <Vdo src="/assets/서비스_비주얼/2" className=" rounded-t-lg" />
+      <div className="">
+        <Vdo
+          src="/assets/서비스_비주얼/2"
+          className="rounded-t-lg mo-max"
+          style={{ width: "", height: "163.33vw", maxHeight: "695.125px" }}
+        />
       </div>
     </section>
   ) : (
@@ -50,7 +54,10 @@ export default function App({ data = defaultData }) {
         <h1 className="pc-h1 mb-7">{data.title}</h1>
         <div className="text-lg mb-7 w-9/12 mx-auto">{data.content}</div>
       </div>
-      <div className="mo-max flex items-end" style={{ height: "43rem" }}>
+      <div
+        className="mo-max flex items-end"
+        style={{ width: "384px", height: "688px" }}
+      >
         <Vdo src="/assets/서비스_비주얼/2" className=" rounded-t-lg" />
       </div>
     </section>

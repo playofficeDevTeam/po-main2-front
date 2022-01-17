@@ -13,6 +13,7 @@ export default function App() {
           <img
             src="assets/서비스_비주얼/아이콘/광고활용.png"
             className="h-7 mr-2"
+            alt="광고활용"
           />
           광고 개선
         </div>
@@ -29,24 +30,22 @@ export default function App() {
           평균 4배 높았습니다.
         </h3>
 
-        <div className="grid gap-2">
-          <div
-            className="mb-52"
-            style={{ height: "50vw", maxHeight: "13rem", minHeight: "12rem" }}
-          >
-            <div className="h-0 relative z-10 top-4 w-64 mx-auto">
+        <div className="mo-max grid gap-2">
+          <div className="mb-6">
+            <div className="h-0 relative z-10 top-4 w-64 mo-max px-4">
               <div className="">광고 개선</div>
             </div>
             <div className="center">
               <Vdo
                 src="/assets/서비스_비주얼/4_1_mobile"
-                className=" rounded-3xl"
+                className=" rounded-3xl mo-max"
+                style={{ width: "", height: "87.46vw", maxHeight: "368.725px" }}
               />
             </div>
           </div>
 
           <div className="mb-4">
-            <div className="h-0 relative z-10 top-4 w-64 mx-auto">
+            <div className="h-0 relative z-10 top-4 w-64 mo-max px-4">
               <div className="">
                 소재 유형별 ROAS 비교
                 <div className="text-sm font-bold text-gray-400">
@@ -56,7 +55,8 @@ export default function App() {
             </div>
             <img
               src="assets/서비스_비주얼/4_2.png"
-              className="rounded-3xl relative mx-auto"
+              className="rounded-3xl relative mo-max"
+              alt="4_2"
             />
           </div>
         </div>
@@ -97,6 +97,7 @@ export default function App() {
           <img
             src="assets/서비스_비주얼/아이콘/광고활용.png"
             className="h-7 mr-2"
+            alt="광고활용"
           />
           광고 개선
         </div>
@@ -118,7 +119,7 @@ export default function App() {
               <Vdo
                 src="/assets/서비스_비주얼/4_1"
                 className="rounded-3xl"
-                style={{ width: "24rem" }}
+                style={{ width: "384px", height: "459.375px" }}
               />
             </div>
           </div>
@@ -136,6 +137,7 @@ export default function App() {
               src="/assets/서비스_비주얼/4_2.png"
               className="rounded-3xl relative mx-auto"
               style={{ width: "24rem" }}
+              alt="4_2"
             />
           </div>
         </div>

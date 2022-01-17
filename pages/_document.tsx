@@ -40,6 +40,15 @@ class MyDocument extends Document {
             name="facebook-domain-verification"
             content="a3mioai8v7opoq5ucmqa9yg9ikjnsm"
           />
+
+          {/* 폰트어썸 */}
+          <link
+            rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+            integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
+            crossOrigin="anonymous"
+          />
+
           {/* 슬릭캐로셀 */}
           <link
             rel="stylesheet"
@@ -51,14 +60,6 @@ class MyDocument extends Document {
             rel="stylesheet"
             type="text/css"
             href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
-          />
-
-          {/* 폰트어썸 */}
-          <link
-            rel="stylesheet"
-            href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
-            integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
-            crossOrigin="anonymous"
           />
         </body>
       </Html>

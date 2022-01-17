@@ -84,17 +84,19 @@ export default function App({ data = defaultData }) {
               {data.map((val, idx) => (
                 <div className="px-2 " key={idx}>
                   <Link href={val.url}>
-                    <div className="bg-indigo-50 p-3 mb-2 rounded-lg shadow-md max-w-xs mx-auto cursor-pointer">
-                      <div className="mb-4 flex justify-center">
-                        <img src={val.src}></img>
-                      </div>
-                      <div className="mb-4 font-bold">{val.title}</div>
-                      <div className="mb-4">{val.subTitle}</div>
+                    <a>
+                      <div className="bg-indigo-50 p-3 mb-2 rounded-lg shadow-md max-w-xs mx-auto cursor-pointer">
+                        <div className="mb-4 flex justify-center">
+                          <img src={val.src} alt={val.src}></img>
+                        </div>
+                        <div className="mb-4 font-bold">{val.title}</div>
+                        <div className="mb-4">{val.subTitle}</div>
 
-                      <div className="flex justify-end mr-2 text-orange-500 font-bold">
-                        자세히 보기→
+                        <div className="flex justify-end mr-2 text-orange-500 font-bold">
+                          자세히 보기→
+                        </div>
                       </div>
-                    </div>
+                    </a>
                   </Link>
                 </div>
               ))}
@@ -123,18 +125,20 @@ export default function App({ data = defaultData }) {
         </div>
         <div className=" max-w-screen-lg mx-auto pb-10 ">
           <ul className="grid grid-cols-3 min-w-max gap-5">
-            {data.map((val) => (
-              <Link href={val.url}>
-                <li className="bg-indigo-50 p-3 mb-2 rounded-lg shadow-md cursor-pointer">
-                  <div className="mb-4">
-                    <img src={val.src}></img>
-                  </div>
-                  <div className="mb-4 font-bold">{val.title}</div>
-                  <div className="mb-3">{val.subTitle}</div>
-                  <div className="flex justify-end mr-2 text-orange-500 font-bold">
-                    자세히 보기→
-                  </div>
-                </li>
+            {data.map((val, idx) => (
+              <Link key={idx} href={val.url}>
+                <a>
+                  <li className="bg-indigo-50 p-3 mb-2 rounded-lg shadow-md cursor-pointer">
+                    <div className="mb-4">
+                      <img src={val.src} alt={val.src}></img>
+                    </div>
+                    <div className="mb-4 font-bold">{val.title}</div>
+                    <div className="mb-3">{val.subTitle}</div>
+                    <div className="flex justify-end mr-2 text-orange-500 font-bold">
+                      자세히 보기→
+                    </div>
+                  </li>
+                </a>
               </Link>
             ))}
           </ul>

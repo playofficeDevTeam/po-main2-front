@@ -37,7 +37,7 @@ export const useScrollEffect = (scrollChecks: Array<() => void>) => {
     };
     loadThrottle();
     return () => window.removeEventListener("scroll", throttleScrollYCheck);
-  }, []);
+  }, [throttleScrollYCheck]);
 };
 
 // 예시;

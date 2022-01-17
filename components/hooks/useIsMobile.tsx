@@ -1,7 +1,7 @@
-import { useReactiveVar } from "@apollo/client";
-import { isMobileVar } from "../common/Layout";
+import { useRecoilState } from "recoil";
+import { isMobileAtom } from "../common/DeviceDetect";
 
 export default function App() {
-  const isMobile = useReactiveVar(isMobileVar);
+  const [isMobile, setIsMobile] = useRecoilState(isMobileAtom);
   return isMobile;
 }

@@ -10,7 +10,7 @@ const CustomCarousel: any = styled.div`
     & .slick-prev {
       z-index: 10;
       left: ${(props: { isMobile: boolean }) =>
-        props.isMobile ? "0.5rem" : "-2.2rem"};
+        props.isMobile ? "0.1rem" : "-2.2rem"};
       padding-bottom: 1rem;
       &:before {
         font-size: 2rem;
@@ -23,7 +23,7 @@ const CustomCarousel: any = styled.div`
     & .slick-next {
       z-index: 10;
       right: ${(props: { isMobile: boolean }) =>
-        props.isMobile ? "0.5rem" : "-2.2rem"};
+        props.isMobile ? "0.1rem" : "-2.2rem"};
       padding-bottom: 1rem;
       &:before {
         font-size: 2rem;
@@ -58,7 +58,6 @@ export default function App({ children = [<></>] }) {
     speed: 300,
     slidesToShow: 1,
     slidesToScroll: 1,
-    lazyLoad: "ondemand",
   };
   return (
     <>
