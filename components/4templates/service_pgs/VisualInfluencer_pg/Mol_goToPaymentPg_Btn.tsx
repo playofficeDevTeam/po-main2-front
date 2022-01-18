@@ -1,11 +1,16 @@
+import { useRouter } from "next/router";
 import RoundedOrangeBtn from "../../../1atoms/RoundedOrangeBtn";
 
 export default function App() {
+  const router = useRouter();
   return (
     <>
       <RoundedOrangeBtn
         onClick={() => {
-          console.log("go to payment");
+          router.push("/order-sheet");
+          setTimeout(() => {
+            window.scrollTo(0, 0);
+          }, 0);
         }}
       >
         <>

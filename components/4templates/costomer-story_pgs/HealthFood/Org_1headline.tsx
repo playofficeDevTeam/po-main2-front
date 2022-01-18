@@ -9,7 +9,7 @@ export default function App() {
     src: isMobile
       ? "/assets/고객반응/고객반응_건강식품/1_mobile.png"
       : "/assets/고객반응/고객반응_건강식품/1.png",
-    height: isMobile ? "44rem" : "28rem",
+    height: isMobile ? "92vh" : "28rem",
     title: (
       <>
         상세페이지 강화하고, <br />

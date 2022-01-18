@@ -37,14 +37,6 @@ export class ItemClass {
   public detailInfoText = this.input.detailInfo.map(
     (val: any) => val.title + " " + val.amountText
   );
-
-  public serviceClickToggle(id: number, setServiceDatasState: (a) => void) {
-    setServiceDatasState((setServiceDatas) =>
-      setServiceDatas.map((val, idx) =>
-        idx === id ? { ...val, isClicked: true } : { ...val, isClicked: false }
-      )
-    );
-  }
 }
 
 const serviceDatas = [
@@ -110,6 +102,17 @@ const serviceDatas = [
   },
 ];
 
+export function serviceClickToggle(
+  id: number,
+  setServiceDatasState: (a) => void
+) {
+  setServiceDatasState((setServiceDatas) =>
+    setServiceDatas.map((val, idx) =>
+      idx === id ? { ...val, isClicked: true } : { ...val, isClicked: false }
+    )
+  );
+}
+
 export const serviceDatasAtom = atom({
   key: "serviceDatasAtom",
   default: serviceDatas,
@@ -121,5 +124,29 @@ export const serviceDatasClass = selector({
     const serviceDatas = get(serviceDatasAtom);
     const serviceDatasClass = serviceDatas.map((val) => new ItemClass(val));
     return serviceDatasClass;
+  },
+});
+
+export const clickedServiceData = selector({
+  key: "clickedServiceData",
+  get: ({ get }) => {
+    const serviceDatas = get(serviceDatasAtom);
+    const selectedServiceData = serviceDatas.find(
+      (val) => val.isClicked === true
+    );
+    return selectedServiceData;
+  },
+});
+
+export const clickedServiceDataClass = selector({
+  key: "clickedServiceDataClass",
+  get: ({ get }) => {
+    const serviceDatas = get(serviceDatasAtom);
+    const selectedServiceDatas = serviceDatas.find(
+      (val) => val.isClicked === true
+    );
+    const selectedServiceDatasClass =
+      selectedServiceDatas && new ItemClass(selectedServiceDatas);
+    return selectedServiceDatasClass;
   },
 });

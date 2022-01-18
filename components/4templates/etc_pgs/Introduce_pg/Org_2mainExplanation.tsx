@@ -47,7 +47,6 @@ export default function App({
             <Image src={data.src} alt="기호" width={288} height={288} />
           </div>
         </div>
-        ))
       </div>
     </>
   ) : (

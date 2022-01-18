@@ -16,7 +16,7 @@ const CustomCarousel: any = styled.div`
           props.isMobile ? "0" : "4rem"};
         font-family: "Font Awesome 5 Free";
         font-weight: 900;
-        color: #cccccc;
+        color: #dddddd;
         content: "\f053";
       }
     }
@@ -30,7 +30,7 @@ const CustomCarousel: any = styled.div`
           props.isMobile ? "0" : "4rem"};
         font-family: "Font Awesome 5 Free";
         font-weight: 900;
-        color: #cccccc;
+        color: #dddddd;
         content: "\f054";
       }
     }

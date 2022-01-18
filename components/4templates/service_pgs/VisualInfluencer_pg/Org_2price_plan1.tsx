@@ -1,7 +1,11 @@
 import { useRecoilState, useRecoilValue } from "recoil";
 import useIsMobile from "../../../hooks/useIsMobile";
 import Mol_goToPaymentPg_Btn from "./Mol_goToPaymentPg_Btn";
-import { serviceDatasAtom, serviceDatasClass } from "./Var_serviceDatas";
+import {
+  serviceClickToggle,
+  serviceDatasAtom,
+  serviceDatasClass,
+} from "./Var_serviceDatas";
 
 export default function App() {
   const isMobile = useIsMobile();
@@ -25,10 +29,7 @@ export default function App() {
                   key={serviceIdx}
                   className="my-4 ring-2 ring-indigo-400 rounded-md bg-white cursor-pointer pt-6"
                   onClick={() => {
-                    service.serviceClickToggle(
-                      serviceIdx,
-                      setServiceDatasState
-                    );
+                    serviceClickToggle(serviceIdx, setServiceDatasState);
                   }}
                 >
                   {service.input.hightlighted ? (
@@ -85,10 +86,7 @@ export default function App() {
                   key={serviceIdx}
                   className="my-4 ring-2 ring-gray-200 rounded-md px-4 py-6 bg-white cursor-pointer"
                   onClick={() => {
-                    service.serviceClickToggle(
-                      serviceIdx,
-                      setServiceDatasState
-                    );
+                    serviceClickToggle(serviceIdx, setServiceDatasState);
                   }}
                 >
                   <div className="  ">
@@ -133,10 +131,7 @@ export default function App() {
                   key={serviceIdx}
                   className="my-4 ring-2 ring-indigo-400 rounded-md bg-white cursor-pointer pt-6"
                   onClick={() => {
-                    service.serviceClickToggle(
-                      serviceIdx,
-                      setServiceDatasState
-                    );
+                    serviceClickToggle(serviceIdx, setServiceDatasState);
                   }}
                 >
                   {service.input.hightlighted ? (
@@ -193,10 +188,7 @@ export default function App() {
                   key={serviceIdx}
                   className="my-4 ring-2 ring-gray-200 rounded-md px-4 py-6 bg-white cursor-pointer"
                   onClick={() => {
-                    service.serviceClickToggle(
-                      serviceIdx,
-                      setServiceDatasState
-                    );
+                    serviceClickToggle(serviceIdx, setServiceDatasState);
                   }}
                 >
                   <div className="  ">

@@ -9,7 +9,7 @@ export default function App() {
     src: isMobile
       ? "/assets/고객반응/고객반응_운동보조/0_mobile.png"
       : "/assets/고객반응/고객반응_운동보조/0_pc.png",
-    height: isMobile ? "44rem" : "28rem",
+    height: isMobile ? "92vh" : "28rem",
     title: (
       <>
         한 달만에 신제품 <Br_mo /> 1억원치 판매한

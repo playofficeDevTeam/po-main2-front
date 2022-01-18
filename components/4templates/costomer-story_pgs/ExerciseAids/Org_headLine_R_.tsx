@@ -23,8 +23,6 @@ export default function App({ data = defaultData }) {
         // 모바일
         // 모바일
         // 모바일
-        // 모바일
-        // 모바일
         <div
           className=""
           style={{
@@ -57,8 +55,6 @@ export default function App({ data = defaultData }) {
           </div>
         </div>
       ) : (
-        // 피씨
-        // 피씨
         // 피씨
         // 피씨
         // 피씨

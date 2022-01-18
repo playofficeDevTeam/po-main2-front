@@ -22,7 +22,7 @@ export default function App() {
                 <Link href={val.url} key={idx}>
                   <a className="flex py-2 border-b ">
                     <div className="center text-base">{val.title}</div>
-                    <div className="center">
+                    <div className="center -z-10">
                       <i className="fas fa-chevron-right text-gray-500 pl-2 text-xs relative top-px "></i>
                     </div>
                   </a>

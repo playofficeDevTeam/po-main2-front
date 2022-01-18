@@ -68,6 +68,9 @@ const defaultData = [
 export default function App({ data = defaultData }) {
   const isMobile = useIsMobile();
   return isMobile ? (
+    // 모바일
+    // 모바일
+    // 모바일
     <section className="pt-20 pb-16">
       <div className="flex flex-col text-center">
         <div className="mo-max">
@@ -107,9 +110,6 @@ export default function App({ data = defaultData }) {
       <div className="mb-6"></div>
     </section>
   ) : (
-    // 피씨
-    // 피씨
-    // 피씨
     // 피씨
     // 피씨
     // 피씨

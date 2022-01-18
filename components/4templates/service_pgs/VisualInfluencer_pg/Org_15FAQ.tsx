@@ -11,7 +11,7 @@ export default function App() {
       answer: (
         <>
           A. 네, 어떻게 성과를 냈는지 직접 확인하실 수 있습니다.
-          <Link href="/costomer-story/visual-influencer">
+          <Link href="/costomer-story">
             <a className="">
               <span className="ml-2 text-blue-600">확인하러 가기 →</span>
             </a>

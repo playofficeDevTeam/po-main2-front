@@ -12,13 +12,14 @@
 .mo-max {
   @apply max-w-sm w-11/12 mx-auto;
 }
+
 .pc-max {
   @apply max-w-5xl mx-auto;
 }
 
 .mo-h1 {
-  @apply text-2xl font-bold;
+  @apply text-2xl font-bold leading-snug;
 }
 .pc-h1 {
-  @apply text-3xl font-bold leading-normal;
+  @apply text-3xl font-bold leading-snug;
 }

@@ -10,7 +10,7 @@ export default function App() {
     src: isMobile
       ? "/assets/고객반응/고객반응_유아/0_mobile.png"
       : "/assets/고객반응/고객반응_유아/0_pc.png",
-    height: isMobile ? "44rem" : "28rem",
+    height: isMobile ? "92vh" : "28rem",
     title: (
       <>
         B사, 상세페이지 강화

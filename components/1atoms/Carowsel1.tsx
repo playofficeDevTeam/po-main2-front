@@ -16,7 +16,7 @@ const CustomCarousel: any = styled.div`
         font-size: 2rem;
         font-family: "Font Awesome 5 Free";
         font-weight: 600;
-        color: grey;
+        color: #dddddd;
         content: "\f053";
       }
     }
@@ -29,7 +29,7 @@ const CustomCarousel: any = styled.div`
         font-size: 2rem;
         font-family: "Font Awesome 5 Free";
         font-weight: 600;
-        color: grey;
+        color: #dddddd;
         content: "\f054";
       }
     }
