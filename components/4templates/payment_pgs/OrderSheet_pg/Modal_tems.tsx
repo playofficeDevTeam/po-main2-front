@@ -1,16 +1,14 @@
 import { useRef, useState } from "react";
 import Modal from "react-modal";
-import { useRecoilState } from "recoil";
 import ScrollLock from "../../../effects/ScrollLock";
 import useIsMobile from "../../../hooks/useIsMobile";
-import { serviceDatasAtom } from "./Var_serviceDatas";
 
-const data1 = {
+const defaultData = {
   button: <></>,
   modal: <></>,
 };
 
-export default function App({ data = data1 }) {
+export default function App({ data = defaultData }) {
   const isMobile = useIsMobile();
   Modal.setAppElement("#__next");
   const [isModalOpen, setisModalOpen] = useState(false);
@@ -69,21 +67,11 @@ export default function App({ data = data1 }) {
 
   const element1: any = useRef();
 
-  const [serviceState, setServiceState] = useRecoilState(serviceDatasAtom);
-  const indexOfServiceState = serviceState
-    .map((val, idx) => val.isClicked)
-    .indexOf(true);
-  const scrollToY =
-    indexOfServiceState === 0 ? 0 : indexOfServiceState === 1 ? 315 : 1000;
-
   return isMobile ? (
     <div className={`relative z-40`}>
       <span
         onClick={async () => {
-          await openModal();
-          await setTimeout(() => {
-            element1.current.scrollTo({ top: scrollToY });
-          }, 0);
+          openModal();
         }}
         className="z-30"
       >
@@ -117,6 +105,9 @@ export default function App({ data = data1 }) {
       </Modal>
     </div>
   ) : (
+    // 피씨
+    // 피씨
+    // 피씨
     <div className={`relative z-40`}>
       <span onClick={openModal} className="z-30">
         {data.button}
@@ -136,7 +127,10 @@ export default function App({ data = data1 }) {
             <i className="far fa-times-circle text-xl text-gray-400"></i>
           </div>
         </div>
-        <div className="pc-max">
+        <div
+          className="pc-max overflow-y-scroll"
+          style={{ maxHeight: "30rem", width: "30rem" }}
+        >
           <div className="p-4">
             <ScrollLock />
             {data.modal}

@@ -12,7 +12,9 @@
 .mo-max {
   @apply max-w-sm w-11/12 mx-auto;
 }
-
+.xs-max {
+  @apply max-w-xs w-11/12 mx-auto;
+}
 .pc-max {
   @apply max-w-5xl mx-auto;
 }
@@ -22,4 +24,8 @@
 }
 .pc-h1 {
   @apply text-3xl font-bold leading-snug;
+}
+
+.input1 {
+  @apply w-full bg-gray-100 rounded-sm px-3 py-2;
 }

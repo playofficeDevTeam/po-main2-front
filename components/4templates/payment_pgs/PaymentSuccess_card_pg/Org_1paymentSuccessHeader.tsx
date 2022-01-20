@@ -3,9 +3,9 @@ import Detect from "../../../1atoms/IsMobile";
 import useIsMobile from "/home/app/components/hooks/useIsMobile";
 
 const defaultData = {
-  butten: <i className="fas fa-chevron-left"></i>,
-  title: "결제 진행",
-  page: "1/2",
+  butten: <></>,
+  title: "결제 / 진행정보 확인",
+  page: "2/2",
 };
 
 export default function App({ data = defaultData }) {

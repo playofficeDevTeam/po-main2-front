@@ -4,9 +4,9 @@ interface IItem {
   hightlighted: boolean;
   serviceName: string;
   itemName: string;
-  detailInfo: Array<object>;
+  detailInfo: Array<{ title: string; amountText: string; amount: number }>;
   price: number;
-  sale: boolean;
+  discount: boolean;
   discountRate: number;
   amountOfItems: number;
   isClicked: boolean;
@@ -34,9 +34,24 @@ export class ItemClass {
     Math.ceil((this.priceTotal * (100 - this.input.discountRate)) / 100 / 6)
   );
 
-  public detailInfoText = this.input.detailInfo.map(
-    (val: any) => val.title + " " + val.amountText
+  public priceRaw_won = this.numberToWon(
+    (this.input.price * this.input.amountOfItems) / 1.1
   );
+  public priceTax_won = this.numberToWon(
+    (this.input.price * this.input.amountOfItems) / 11
+  );
+  public discount_won = this.numberToWon(
+    Math.ceil((this.priceTotal * this.input.discountRate) / 100)
+  );
+
+  public detailInfoText = this.input.detailInfo.map(
+    (val) => val.title + " " + val.amountText
+  );
+
+  public multipleAmountText = (id) =>
+    id !== 3 && this.input.amountOfItems !== 1
+      ? `x${this.input.amountOfItems}`
+      : "";
 }
 
 const serviceDatas = [
@@ -55,7 +70,7 @@ const serviceDatas = [
       { title: "콘텐츠 활용 라이센스", amountText: "포함", amount: 1 },
     ],
     price: 1100000,
-    sale: false,
+    discount: false,
     discountRate: 0,
     amountOfItems: 1,
     isClicked: false,
@@ -75,7 +90,7 @@ const serviceDatas = [
       { title: "콘텐츠 활용 라이센스", amountText: "포함", amount: 1 },
     ],
     price: 2200000,
-    sale: true,
+    discount: true,
     discountRate: 5,
     amountOfItems: 1,
     isClicked: true,
@@ -95,7 +110,7 @@ const serviceDatas = [
       { title: "콘텐츠 활용 라이센스", amountText: "포함", amount: 1 },
     ],
     price: 3300000,
-    sale: true,
+    discount: true,
     discountRate: 10,
     amountOfItems: 1,
     isClicked: false,

@@ -56,7 +56,7 @@ export default function App() {
                   <div className="flex  justify-between  text-gray-600 mb-6  px-4">
                     <div className="flex items-end">총 서비스 금액</div>
                     <div className="flex flex-col justify-end items-end">
-                      {service.input.sale ? (
+                      {service.input.discount ? (
                         <div className="text-sm font-bold text-gray-400">
                           <span className=" ">
                             {"(" + service.input.discountRate + "% 할인) "}
@@ -158,7 +158,7 @@ export default function App() {
                   <div className="flex  justify-between  text-gray-600 mb-6  px-4">
                     <div className="flex items-end">총 서비스 금액</div>
                     <div className="flex flex-col justify-end items-end">
-                      {service.input.sale ? (
+                      {service.input.discount ? (
                         <div className="text-sm font-bold text-gray-400">
                           <span className=" ">
                             {"(" + service.input.discountRate + "% 할인) "}

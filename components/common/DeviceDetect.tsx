@@ -15,8 +15,11 @@ export default function DeviceDetect({ children }) {
   const [isMobile, setIsMolbile] = useRecoilState(isMobileAtom);
   const [deviceDetectSuccessed, setDeviceDetectSuccessed] = useState(false);
   useEffect(() => {
-    setIsMolbile(isMobile_lib);
-    setDeviceDetectSuccessed(true);
+    const asyncEffect = async () => {
+      await setIsMolbile(isMobile_lib);
+      await setDeviceDetectSuccessed(true);
+    };
+    asyncEffect();
   }, [setIsMolbile, setDeviceDetectSuccessed]);
   return deviceDetectSuccessed ? (
     <>
