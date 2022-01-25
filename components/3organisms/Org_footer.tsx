@@ -16,7 +16,7 @@ export default function App() {
         // 모바일
         <footer>
           {/* 사이트맵 */}
-          <div className="my-4 border-t-2 pt-1">
+          <div className="mb-4 border-t-2 pt-1">
             <div className="mo-max">
               {sitemapDataState.map((val, idx) => (
                 <Link href={val.url} key={idx}>

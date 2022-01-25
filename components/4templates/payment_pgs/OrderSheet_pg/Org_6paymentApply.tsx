@@ -10,11 +10,11 @@ import useIsMobile from "/home/app/components/hooks/useIsMobile";
 const defaultData = [
   <div className="flex">
     <Modal_tems data={modalTemplete(useTerms)} />
-    <div>동의</div>
+    <div className="ml-1">동의</div>
   </div>,
   <div className="flex">
     <Modal_tems data={modalTemplete(PrivacyTerms)} />
-    <div>동의</div>
+    <div className="ml-1">동의</div>
   </div>,
   <div className="flex">
     <div>구매확인 동의</div>

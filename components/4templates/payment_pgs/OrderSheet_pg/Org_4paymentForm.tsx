@@ -39,13 +39,13 @@ export default function App({ data = defaultData }) {
 
   return isMobile ? (
     <>
-      <div className="w-11/12 max-w-xs mx-auto my-10">
+      <div className="xs-max my-10">
         <div className=" text-xl font-bold mb-2 under">{data.title}</div>
         <div className=" underline mb-10">{data.subtitle}</div>
         <ul>
           {inputSettingState.map((val, idx) => (
             <li key={idx} className="mb-4">
-              <div className=" font-medium mb-1">{val.title}</div>
+              <div className=" font-medium mb-1 text-lg">{val.title}</div>
 
               <div className="h-0 relative z-30 flex justify-end">
                 <div className="h-10 w-max flex items-center mr-2">
@@ -88,7 +88,7 @@ export default function App({ data = defaultData }) {
         <ul>
           {inputSettingState.map((val, idx) => (
             <li key={idx} className="mb-5">
-              <div className=" font-medium mb-2">{val.title}</div>
+              <div className=" font-medium mb-2 text-lg">{val.title}</div>
 
               <div className="h-0 relative z-30 flex justify-end">
                 <div className="h-10 w-max flex items-center mr-2">

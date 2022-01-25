@@ -1,8 +1,9 @@
 import { useRouter } from "next/router";
 import { useRecoilState, useRecoilValue } from "recoil";
 import RoundedOrangeBtn from "../../../1atoms/RoundedOrangeBtn";
+import { userFormData } from "../../payment_pgs/OrderSheet_pg/Var_userFormData";
 import { serviceDatasAtom } from "../../service_pgs/VisualInfluencer_pg/Var_serviceDatas";
-import { userFormData } from "./Var_userFormData";
+import { userDetail1FormData } from "./Var_userDetail1FormData";
 
 export default function App({ trigger = false }) {
   const router = useRouter();
@@ -10,10 +11,11 @@ export default function App({ trigger = false }) {
     useRecoilState(serviceDatasAtom);
   const [userFormDataState, setUserFormDataState] =
     useRecoilState(userFormData);
+  const [userDetail1FormDataState, setUserDetail1FormDataState] =
+    useRecoilState(userDetail1FormData);
 
   return (
     <RoundedOrangeBtn
-      trigger={trigger}
       onClick={() => {
         window.localStorage.setItem(
           "serviceDataState",
@@ -23,10 +25,14 @@ export default function App({ trigger = false }) {
           "userFormDataState",
           JSON.stringify(userFormDataState)
         );
-        router.push("/order-sheet/payment-success-withoutBankbook");
+        window.localStorage.setItem(
+          "userDetail1FormDataState",
+          JSON.stringify(userDetail1FormDataState)
+        );
+        router.push("/question/complete");
       }}
     >
-      <div className="px-14 text-lg">결제하기</div>
+      <div className="px-4 text-lg">전문가 컨설팅 신청</div>
     </RoundedOrangeBtn>
   );
 }

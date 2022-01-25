@@ -49,7 +49,7 @@ export default function App() {
               6개월 할부 시 월 {clickedServiceData?.priceDivided_won}
             </div>
             <div className=" text-2xl font-bold text-blue-700">
-              {clickedServiceData?.priceTotal_won}
+              {clickedServiceData?.priceDiscounted_won}
             </div>
           </div>
         </div>
@@ -99,7 +99,7 @@ export default function App() {
               6개월 할부 시 월 {clickedServiceData?.priceDivided_won}
             </div>
             <div className=" text-2xl font-bold text-blue-700">
-              {clickedServiceData?.priceTotal_won}
+              {clickedServiceData?.priceDiscounted_won}
             </div>
           </div>
         </div>

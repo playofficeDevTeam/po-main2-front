@@ -16,7 +16,10 @@ export default function App() {
           }, 100);
           setTimeout(() => {
             window.scrollTo(0, 0);
-          }, 300);
+          }, 200);
+          setTimeout(() => {
+            window.scrollTo(0, 0);
+          }, 500);
         }}
       >
         <>

@@ -4,14 +4,12 @@ export default function App({ children, trigger, className = "" }) {
   return (
     <div className={`h-0 ${className}`}>
       <div
-        className={`bg-white border-2 relative ${
-          trigger ? "" : "-translate-y-3"
-        }`}
+        className={`bg-white relative ${trigger ? "" : "-translate-y-3"}`}
         style={
           trigger
             ? {
                 opacity: "100%",
-                bottom: "0.2rem",
+                bottom: "0rem",
                 transition:
                   "bottom ease 0s 0s, opacity ease 0.2s, transform ease 0.2s ",
               }

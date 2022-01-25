@@ -9,7 +9,12 @@ export const inputSetting = atom({
   key: "inputSetting",
   default: [
     {
-      title: "브랜드명 (상호명)*",
+      title: (
+        <>
+          브랜드명 (상호명)
+          <span className=" font-bold text-orange-500 ml-1">*</span>
+        </>
+      ),
       inputProps: {
         placehoder: "ex. 갤럭시 (삼성전자)",
         type: "text",
@@ -18,7 +23,12 @@ export const inputSetting = atom({
       validateError: "브랜드명(상호명)을 정확히 입력해주세요",
     },
     {
-      title: "담당자명 / 직급*",
+      title: (
+        <>
+          담당자명 / 직급
+          <span className=" font-bold text-orange-500 ml-1">*</span>
+        </>
+      ),
       inputProps: {
         placehoder: "ex. 홍길동 대리",
         type: "text",
@@ -27,7 +37,12 @@ export const inputSetting = atom({
       validateError: "담당자명/직급을 정확히 입력해주세요",
     },
     {
-      title: "담당자 연락처*",
+      title: (
+        <>
+          담당자 연락처
+          <span className=" font-bold text-orange-500  ml-1">*</span>
+        </>
+      ),
       inputProps: {
         placehoder: "ex. 010-1234-6789",
         type: "text",
@@ -36,7 +51,12 @@ export const inputSetting = atom({
       validateError: "담당자 연락처를 정확히 입력해주세요",
     },
     {
-      title: "담당자 이메일*",
+      title: (
+        <>
+          담당자 이메일
+          <span className=" font-bold text-orange-500 ml-1">*</span>
+        </>
+      ),
       inputProps: {
         placehoder: "ex. abcd@gmail.com",
         type: "email",

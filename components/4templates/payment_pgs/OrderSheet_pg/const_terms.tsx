@@ -1,7 +1,7 @@
 export const modalTemplete = (data) => ({
-  button: <span className="mr-2 underline cursor-pointer">{data.title}</span>,
+  button: <span className=" underline cursor-pointer">{data.title}</span>,
   modal: (
-    <div className="p-3">
+    <div className="p-3 py-6">
       <div className=" text-xl font-bold mb-4">{data.title}</div>
       <ul>
         {data.contents.map((val, idx) => (

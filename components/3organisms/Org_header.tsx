@@ -123,7 +123,7 @@ export default function App() {
         // 피씨
         <header className="sticky top-0" style={{ zIndex: 100 }}>
           {/* 메인메뉴 */}
-          <div className="h-16 bg-white border-b">
+          <div className="h-16 bg-white border-b ">
             <div className="pc-max center h-full">
               <Link href={"/"}>
                 <a className="w-2/12 flex items-center cursor-pointer">

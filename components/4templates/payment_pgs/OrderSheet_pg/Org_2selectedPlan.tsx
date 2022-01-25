@@ -4,6 +4,8 @@ import Ani_box from "../../../1atoms/Ani_box";
 import Br_mo from "../../../1atoms/Br_mo";
 import {
   clickedServiceDataClass,
+  decreaseServiceAmount,
+  increaseServiceAmount,
   serviceClickToggle,
   serviceDatasAtom,
   serviceDatasClass,
@@ -63,7 +65,7 @@ export default function App({ data = defaultData }) {
               </div>
               {/* 숨겨진박스 */}
               <Ani_box trigger={isServiceListOpened} className="mx-1">
-                <ul className="px-3 pt-3 pb-3">
+                <ul className="px-3 pt-3 pb-3 border-2 relative -top-1">
                   {serviceDataState.map((val, idx) => (
                     <li
                       key={idx}
@@ -85,15 +87,7 @@ export default function App({ data = defaultData }) {
                 <div
                   className="cursor-pointer"
                   onClick={() => {
-                    setServiceDataState((services) =>
-                      services.map((service) => ({
-                        ...service,
-                        amountOfItems:
-                          service.amountOfItems > 1
-                            ? service.amountOfItems - 1
-                            : service.amountOfItems,
-                      }))
-                    );
+                    decreaseServiceAmount(setServiceDataState);
                   }}
                 >
                   －
@@ -107,15 +101,7 @@ export default function App({ data = defaultData }) {
                 <div
                   className="cursor-pointer"
                   onClick={() => {
-                    setServiceDataState((services) =>
-                      services.map((service) => ({
-                        ...service,
-                        amountOfItems:
-                          service.amountOfItems < 10
-                            ? service.amountOfItems + 1
-                            : service.amountOfItems,
-                      }))
-                    );
+                    increaseServiceAmount(setServiceDataState);
                   }}
                 >
                   ＋
@@ -251,15 +237,7 @@ export default function App({ data = defaultData }) {
                   <div
                     className="cursor-pointer"
                     onClick={() => {
-                      setServiceDataState((services) =>
-                        services.map((service) => ({
-                          ...service,
-                          amountOfItems:
-                            service.amountOfItems > 1
-                              ? service.amountOfItems - 1
-                              : service.amountOfItems,
-                        }))
-                      );
+                      decreaseServiceAmount(setServiceDataState);
                     }}
                   >
                     －
@@ -273,15 +251,7 @@ export default function App({ data = defaultData }) {
                   <div
                     className="cursor-pointer"
                     onClick={() => {
-                      setServiceDataState((services) =>
-                        services.map((service) => ({
-                          ...service,
-                          amountOfItems:
-                            service.amountOfItems < 10
-                              ? service.amountOfItems + 1
-                              : service.amountOfItems,
-                        }))
-                      );
+                      increaseServiceAmount(setServiceDataState);
                     }}
                   >
                     ＋

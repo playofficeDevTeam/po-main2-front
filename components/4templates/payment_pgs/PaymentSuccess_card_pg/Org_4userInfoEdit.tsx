@@ -68,7 +68,7 @@ export default function App({ trigger = false }) {
                 )}
                 <div className="flex items-center">
                   <div
-                    className={` font-medium mb-1 mr-3 transition  ${
+                    className={` font-medium text-lg mb-1 mr-3 transition  ${
                       idx > 1 ? "text-blue-600" : ""
                     }`}
                   >
@@ -98,7 +98,7 @@ export default function App({ trigger = false }) {
             <ul>
               {inputSettingState.map((val, idx) => (
                 <li key={idx} className="mb-4">
-                  <div className=" font-medium mb-2">{val.title}</div>
+                  <div className=" font-medium text-lg mb-2">{val.title}</div>
 
                   <div className="h-0 relative z-30 flex justify-end">
                     <div className="h-10 w-max flex items-center mr-2">
@@ -187,7 +187,7 @@ export default function App({ trigger = false }) {
                 )}
                 <div className="flex items-center">
                   <div
-                    className={` font-medium mb-1 mr-3 transition  ${
+                    className={` font-medium text-lg mb-1 mr-3 transition  ${
                       idx > 1 ? "text-blue-600" : ""
                     }`}
                   >
@@ -217,7 +217,7 @@ export default function App({ trigger = false }) {
             <ul className="grid grid-cols-2 gap-x-6">
               {inputSettingState.map((val, idx) => (
                 <li key={idx} className="mb-4">
-                  <div className=" font-medium mb-2">{val.title}</div>
+                  <div className=" font-medium text-lg mb-2">{val.title}</div>
 
                   <div className="h-0 relative z-30 flex justify-end">
                     <div className="h-10 w-max flex items-center mr-2">

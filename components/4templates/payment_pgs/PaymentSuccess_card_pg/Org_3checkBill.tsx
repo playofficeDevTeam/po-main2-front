@@ -4,7 +4,8 @@ import { clickedServiceDataClass } from "../../service_pgs/VisualInfluencer_pg/V
 import useIsMobile from "/home/app/components/hooks/useIsMobile";
 
 const defaultData = {
-  title: <IsMobile mo={<>결제 정보</>} pc={<>결제 정보</>} />,
+  title: <>결제 정보</>,
+  serviceName: <>비주얼 인플루언서 콘텐츠 마케팅</>,
 };
 
 export default function App({ data = defaultData }) {
@@ -19,9 +20,7 @@ export default function App({ data = defaultData }) {
         <div className="pb-5 mb-6 border-b-2"></div>
 
         <div className="py-1">
-          <div className="font-bold text-lg mb-3">
-            비주얼 인플루언서 콘텐츠 마케팅
-          </div>
+          <div className="font-bold text-lg mb-3">{data.serviceName}</div>
           <div className="font-bold text-lg mb-2">
             <span className=" font-normal">📌</span>
             {clickedServiceData?.input.itemName}{" "}
@@ -52,9 +51,6 @@ export default function App({ data = defaultData }) {
 
         <div className="my-10">
           <div className=" text-xl font-bold mb-5">결제 금액</div>
-          <div className="flex justify-end text-orange-500 text-sm font-medium mb-px">
-            결제 완료
-          </div>
           <div className=" font-medium">
             <div className="flex justify-between">
               <div className=" text-gray-600">공급가액</div>
@@ -82,7 +78,7 @@ export default function App({ data = defaultData }) {
             </div>
             <div className="flex flex-col justify-end items-end">
               <div className=" text-2xl font-bold text-blue-700">
-                {clickedServiceData?.priceTotal_won}
+                {clickedServiceData?.priceDiscounted_won}
               </div>
             </div>
           </div>
@@ -95,15 +91,13 @@ export default function App({ data = defaultData }) {
     // 피씨
     // 피씨
     <>
-      <div className="pc-max border-2 px-10 py-8">
+      <div className="pc-max border-2 px-10 py-8 h-full">
         <div className="font-bold text-xl">{data.title}</div>
 
         <div className="pb-5 mb-6 border-b-2"></div>
 
         <div className="py-1">
-          <div className="font-bold text-lg mb-3">
-            비주얼 인플루언서 콘텐츠 마케팅
-          </div>
+          <div className="font-bold text-lg mb-3">{data.serviceName}</div>
           <div className="font-bold text-lg mb-2">
             <span className=" font-normal">📌</span>
             {clickedServiceData?.input.itemName}{" "}
@@ -133,7 +127,7 @@ export default function App({ data = defaultData }) {
         <div className="pb-6 mb-6 border-b-2"></div>
 
         <div className="mt-10 mb-2">
-          <div className=" text-xl font-bold ">결제 금액</div>
+          <div className=" text-xl font-bold mb-4 ">결제 금액</div>
           <div className="flex justify-between">
             <div className="w-1/2 mr-16 font-medium">
               <div className="flex justify-between mb-1">
@@ -161,7 +155,7 @@ export default function App({ data = defaultData }) {
               </div>
               <div className="flex flex-col justify-end items-end">
                 <div className=" text-2xl font-bold text-blue-700">
-                  {clickedServiceData?.priceTotal_won}
+                  {clickedServiceData?.priceDiscounted_won}
                 </div>
               </div>
             </div>

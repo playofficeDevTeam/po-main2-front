@@ -128,6 +128,30 @@ export function serviceClickToggle(
   );
 }
 
+export function decreaseServiceAmount(setServiceDataState: (a) => void) {
+  setServiceDataState((services) =>
+    services.map((service) => ({
+      ...service,
+      amountOfItems:
+        service.amountOfItems > 1
+          ? service.amountOfItems - 1
+          : service.amountOfItems,
+    }))
+  );
+}
+
+export function increaseServiceAmount(setServiceDataState: (a) => void) {
+  setServiceDataState((services) =>
+    services.map((service) => ({
+      ...service,
+      amountOfItems:
+        service.amountOfItems < 9
+          ? service.amountOfItems + 1
+          : service.amountOfItems,
+    }))
+  );
+}
+
 export const serviceDatasAtom = atom({
   key: "serviceDatasAtom",
   default: serviceDatas,
