@@ -129,7 +129,7 @@ export default function App() {
       <div className=" text-center mb-6">{temData.h2}</div>
       <div className=" max-w-xs mx-auto mb-6 bg-gray-50 rounded  px-4 pt-6 pb-3">
         {temData.detail.map((val, idx) => (
-          <div className="flex mb-4 items-end ">
+          <div key={idx} className="flex mb-4 items-end ">
             <div className="w-4/12 mr-1 text-gray-500 ">{val.title}</div>
             <div className="w-8/12">{val.data}</div>
           </div>
@@ -156,7 +156,7 @@ export default function App() {
       <div className=" text-center mb-6">{temData.h2}</div>
       <div className=" max-w-sm mx-auto mb-6 bg-gray-50 rounded  px-4 pt-6 pb-3">
         {temData.detail.map((val, idx) => (
-          <div className="flex mb-4 items-end ">
+          <div key={idx} className="flex mb-4 items-end ">
             <div className="w-4/12 mr-1 text-gray-500 ">{val.title}</div>
             <div className="w-8/12">{val.data}</div>
           </div>

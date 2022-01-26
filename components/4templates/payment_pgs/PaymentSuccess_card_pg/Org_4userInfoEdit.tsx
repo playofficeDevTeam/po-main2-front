@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRecoilState } from "recoil";
 import {
   inputSetting,
@@ -14,8 +14,6 @@ export default function App({ trigger = false }) {
   const [popupState, setPopupState] = useState(true);
   const [editState, setEditState] = useState(false);
 
-  const [inputSettingState, setInputSettingState] =
-    useRecoilState(inputSetting);
   const [userFormDataState, setUserFormDataState] =
     useRecoilState(userFormData);
   const inputOnChange = useUserFormDataOnChange();
@@ -31,7 +29,7 @@ export default function App({ trigger = false }) {
           // 스테틱모드
           <ul className="">
             {/* 인풋리스트 */}
-            {inputSettingState.map((val, idx) => (
+            {inputSetting.map((val, idx) => (
               <li key={idx} className="mb-4 last:mb-2">
                 {popupState && idx === 2 ? (
                   <div
@@ -96,7 +94,7 @@ export default function App({ trigger = false }) {
           // 수정모드
           <>
             <ul>
-              {inputSettingState.map((val, idx) => (
+              {inputSetting.map((val, idx) => (
                 <li key={idx} className="mb-4">
                   <div className=" font-medium text-lg mb-2">{val.title}</div>
 
@@ -150,7 +148,7 @@ export default function App({ trigger = false }) {
           // 스테틱모드
           <ul className=" grid grid-cols-2">
             {/* 인풋리스트 */}
-            {inputSettingState.map((val, idx) => (
+            {inputSetting.map((val, idx) => (
               <li key={idx} className="mb-8">
                 {popupState && idx === 3 ? (
                   <div
@@ -215,7 +213,7 @@ export default function App({ trigger = false }) {
           // 수정모드
           <>
             <ul className="grid grid-cols-2 gap-x-6">
-              {inputSettingState.map((val, idx) => (
+              {inputSetting.map((val, idx) => (
                 <li key={idx} className="mb-4">
                   <div className=" font-medium text-lg mb-2">{val.title}</div>
 

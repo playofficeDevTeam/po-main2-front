@@ -31,8 +31,6 @@ const defaultData = {
 
 export default function App({ data = defaultData }) {
   const isMobile = useIsMobile();
-  const [inputSettingState, setInputSettingState] =
-    useRecoilState(inputSetting);
   const [userFormDataState, setUserFormDataState] =
     useRecoilState(userFormData);
   const inputOnChange = useUserFormDataOnChange();
@@ -43,7 +41,7 @@ export default function App({ data = defaultData }) {
         <div className=" text-xl font-bold mb-2 under">{data.title}</div>
         <div className=" underline mb-10">{data.subtitle}</div>
         <ul>
-          {inputSettingState.map((val, idx) => (
+          {inputSetting.map((val, idx) => (
             <li key={idx} className="mb-4">
               <div className=" font-medium mb-1 text-lg">{val.title}</div>
 
@@ -86,7 +84,7 @@ export default function App({ data = defaultData }) {
         <div className=" text-xl font-bold mb-2 under">{data.title}</div>
         <div className=" underline mb-10">{data.subtitle}</div>
         <ul>
-          {inputSettingState.map((val, idx) => (
+          {inputSetting.map((val, idx) => (
             <li key={idx} className="mb-5">
               <div className=" font-medium mb-2 text-lg">{val.title}</div>
 

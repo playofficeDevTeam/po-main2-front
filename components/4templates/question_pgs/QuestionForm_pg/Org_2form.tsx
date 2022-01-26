@@ -3,18 +3,11 @@ import { useRecoilState } from "recoil";
 import Ani_box from "../../../1atoms/Ani_box";
 import Br_mo from "../../../1atoms/Br_mo";
 import {
-  modalTemplete,
-  PrivacyTerms,
-  useTerms,
-} from "../../payment_pgs/OrderSheet_pg/const_terms";
-import Modal_tems from "../../payment_pgs/OrderSheet_pg/Modal_tems";
-import {
   inputSetting,
   userFormData,
   userFormDataValidate,
   useUserFormDataOnChange,
 } from "../../payment_pgs/OrderSheet_pg/Var_userFormData";
-import Mol_formApplyBtn from "./Mol_formApplyBtn";
 import {
   inputDetail1Setting,
   userDetail1FormData,
@@ -37,19 +30,14 @@ const defaultTemData = {
 export default function App({ temData = defaultTemData }) {
   const isMobile = useIsMobile();
 
-  const [inputSettingState, setInputSettingState] =
-    useRecoilState(inputSetting);
   const [userFormDataState, setUserFormDataState] =
     useRecoilState(userFormData);
   const inputOnChange = useUserFormDataOnChange();
 
-  const [inputDetail1SettingState, setInputDetail1SettingState] =
-    useRecoilState(inputDetail1Setting);
   const [userDetail1FormDataState, setUserDetail1FormDataState] =
     useRecoilState(userDetail1FormData);
   const inputDetail1OnChange = useUserDetail1FormDataOnChange();
 
-  const [agreeCheckState, setAgreeCheckState] = useState(false);
   const [depositClickedState, setDepositClickedState] = useState(false);
   return (
     <>
@@ -62,7 +50,7 @@ export default function App({ temData = defaultTemData }) {
 
           {/* 기본정보 */}
           <ul className="xs-max">
-            {inputSettingState.map((val, idx) => (
+            {inputSetting.map((val, idx) => (
               <li key={idx} className="mb-4">
                 <div className=" font-medium mb-1 text-lg">{val.title}</div>
 
@@ -87,6 +75,7 @@ export default function App({ temData = defaultTemData }) {
                   className="input1 border-2"
                   value={userFormDataState[idx]}
                   onChange={(e) => {
+                    console.log("test");
                     inputOnChange(e, idx);
                   }}
                 />
@@ -96,10 +85,10 @@ export default function App({ temData = defaultTemData }) {
 
           {/* 추가정보 */}
           <ul className="xs-max">
-            {inputDetail1SettingState.map((val, idx) =>
+            {inputDetail1Setting.map((val, idx) =>
               // 예산
               idx === 0 ? (
-                <li className="mb-4 relative z-50">
+                <li key={idx} className="mb-4 relative z-40">
                   <div className="text-lg mb-1 font-medium">{val.title}</div>
                   <div
                     className=" bg-gray-100 px-4 py-2 text-gray-400 rounded border-2 flex justify-between  cursor-pointer"
@@ -203,14 +192,14 @@ export default function App({ temData = defaultTemData }) {
         // 피씨
         // 피씨
         <section className="pc-max ">
-          <div className="center-col text-center py-14">
+          <div className="center-col text-center ">
             <div className="pc-h1 mb-3">{temData.title}</div>
             <div className=" text-lg font-bold">{temData.subtitle}</div>
           </div>
 
           {/* 기본정보 */}
           <ul className="w-11/12 mx-auto grid grid-cols-2  gap-x-20">
-            {inputSettingState.map((val, idx) => (
+            {inputSetting.map((val, idx) => (
               <li key={idx} className="mb-4">
                 <div className=" font-medium mb-1 text-lg">{val.title}</div>
 
@@ -244,7 +233,7 @@ export default function App({ temData = defaultTemData }) {
 
           {/* 추가정보 */}
           <ul className="w-11/12 mx-auto  grid grid-cols-2  gap-x-20">
-            {inputDetail1SettingState.map((val, idx) =>
+            {inputDetail1Setting.map((val, idx) =>
               // 예산
               idx === 0 ? (
                 <li className="mb-4 relative z-50">
@@ -347,7 +336,7 @@ export default function App({ temData = defaultTemData }) {
           </ul>
 
           <ul className="w-11/12 mx-auto  mt-10">
-            {inputDetail1SettingState.map((val, idx) =>
+            {inputDetail1Setting.map((val, idx) =>
               // 3 번째
               idx === 2 ? (
                 <li key={idx} className="mb-4">

@@ -21,7 +21,7 @@ const defaultData = {
       이유를 찾고 목적을 정의합니다.
     </>
   ),
-  src: "/assets/소개/4번째 섹션_몰입.gif",
+  src: require("/home/app/public/assets/소개/4번째 섹션_몰입.gif").default,
 };
 export default function App({ data = defaultData, trigger = false }) {
   return <Org_3mainExplanation_reverse data={data} trigger={trigger} />;

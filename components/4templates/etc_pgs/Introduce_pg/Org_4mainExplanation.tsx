@@ -23,7 +23,7 @@ const defaultData = {
       다른 의미의 특별한 성공입니다.
     </>
   ),
-  src: "/assets/소개/3번째 섹션_가능성.gif",
+  src: require("/home/app/public/assets/소개/3번째 섹션_가능성.gif").default,
 };
 
 export default function App({ data = defaultData, trigger = false }) {

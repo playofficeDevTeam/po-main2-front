@@ -16,7 +16,10 @@ export default function App() {
           <Org_2confirmForm />
         </>
       ) : (
-        <></>
+        <>
+          <Org_1topMsg />
+          <Org_2confirmForm />
+        </>
       )}
     </>
   );

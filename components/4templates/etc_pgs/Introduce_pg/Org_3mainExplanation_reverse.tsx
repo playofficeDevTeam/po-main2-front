@@ -23,7 +23,7 @@ const defaultData = {
       결과는 ‘내’가 아닌 ‘우리’가 만들 수 있습니다.
     </>
   ),
-  src: "/assets/소개/2번째 섹션_가능성.gif",
+  src: require("/home/app/public/assets/소개/2번째 섹션_가능성.gif").default,
 };
 export default function App({
   data = defaultData,

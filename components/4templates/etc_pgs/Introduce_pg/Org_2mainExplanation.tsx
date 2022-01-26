@@ -22,7 +22,8 @@ const defaultData = {
       </div>
     </>
   ),
-  src: "/assets/소개/1번째 섹션_처음부터 다시.gif",
+  src: require("/home/app/public/assets/소개/1번째 섹션_처음부터 다시.gif")
+    .default,
 };
 export default function App({
   data = defaultData,

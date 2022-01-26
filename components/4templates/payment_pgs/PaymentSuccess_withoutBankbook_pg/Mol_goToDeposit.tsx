@@ -313,6 +313,7 @@ export default function App({ data = defaultData }) {
                       : bankList.find((val) => val.selected === true)?.iosLink
                   }
                   target="_blank"
+                  rel="noreferrer"
                   className=" bg-orange-500 rounded-md text-white text-shadow-sm font-bold mx-auto flex justify-center items-center py-2 text-lg mb-5 cursor-pointer"
                 >
                   선택완료
@@ -324,6 +325,7 @@ export default function App({ data = defaultData }) {
                 <a
                   href={bankList.find((val) => val.selected === true)?.link}
                   target="_blank"
+                  rel="noreferrer"
                   className=" bg-orange-500 rounded-md text-white text-shadow-sm font-bold mx-auto flex justify-center items-center py-2 mb-5 cursor-pointer"
                 >
                   선택완료

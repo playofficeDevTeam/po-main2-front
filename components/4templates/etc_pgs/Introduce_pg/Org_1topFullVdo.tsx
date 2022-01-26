@@ -22,7 +22,11 @@ export default function App({ data = defaultData }) {
   return isMobile ? (
     <>
       <div className="h-0 relative -z-10">
-        <Vdo src={data.src} style={{ height: "50vh" }} />
+        <Vdo
+          src={data.src}
+          className="h-full w-full"
+          style={{ height: "50vh" }}
+        />
       </div>
       <div className="mo-max flex items-center" style={{ height: "50vh" }}>
         <div className=" text-3xl font-bold leading-normal text-white text-shadow-md">
@@ -33,7 +37,11 @@ export default function App({ data = defaultData }) {
   ) : (
     <>
       <div className="h-0 relative -z-10">
-        <Vdo src={data.src} style={{ height: "32rem" }} />
+        <Vdo
+          src={data.src}
+          className="h-full w-full"
+          style={{ height: "32rem" }}
+        />
       </div>
       <div className="pc-max flex items-center" style={{ height: "32rem" }}>
         <div className="text-5xl font-bold leading-normal text-white text-shadow-md">

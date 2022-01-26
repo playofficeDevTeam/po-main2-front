@@ -1,7 +1,7 @@
+import Ue_loadingCookieData from "../QuestionComplete/Ue_loadingCookieData";
 import Org_1topMsg from "./Org_1topMsg";
 import Org_2form from "./Org_2form";
 import Org_3sendForm from "./Org_3sendForm";
-import Ue_loadingCookieData from "./Ue_loadingCookieData";
 import useIsMobile from "/home/app/components/hooks/useIsMobile";
 
 export default function App() {

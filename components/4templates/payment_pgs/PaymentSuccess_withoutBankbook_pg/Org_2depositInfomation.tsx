@@ -126,7 +126,7 @@ export default function App() {
           <div className="font-bold text-xl mb-10">{temData.title}</div>
           <div className="mb-8">
             {temData.detail.map((val, idx) => (
-              <div className="flex mb-4 items-end">
+              <div key={idx} className="flex mb-4 items-end">
                 <div className="w-4/12 mr-1 text-gray-500 ">{val.title}</div>
                 <div className="w-8/12">{val.data}</div>
               </div>
@@ -150,7 +150,7 @@ export default function App() {
             <div className="font-bold text-xl mb-8">{temData.title}</div>
             <div className="mb-5">
               {temData.detail.map((val, idx) => (
-                <div className="flex mb-4 items-end">
+                <div key={idx} className="flex mb-4 items-end">
                   <div className="w-4/12 mr-1 text-gray-500 ">{val.title}</div>
                   <div className="w-8/12">{val.data}</div>
                 </div>

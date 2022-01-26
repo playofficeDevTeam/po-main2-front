@@ -2,7 +2,6 @@ import Image from "next/image";
 import Br_mo from "../../../1atoms/Br_mo";
 import Br_pc from "../../../1atoms/Br_pc";
 import Org_2mainExplanation from "./Org_2mainExplanation";
-import useIsMobile from "/home/app/components/hooks/useIsMobile";
 
 const defaultData = {
   title: (
@@ -24,7 +23,7 @@ const defaultData = {
       대한 책임을 다합니다.
     </>
   ),
-  src: "/assets/소개/5번째 섹션_함께가다.gif",
+  src: require("/home/app/public/assets/소개/5번째 섹션_함께가다.gif").default,
 };
 
 export default function App({ data = defaultData, trigger = false }) {

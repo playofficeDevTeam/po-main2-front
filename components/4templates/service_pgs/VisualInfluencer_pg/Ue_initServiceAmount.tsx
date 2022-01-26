@@ -9,6 +9,6 @@ export default function App() {
     setServiceDatasState((services) =>
       services.map((service) => ({ ...service, amountOfItems: 1 }))
     );
-  }, []);
+  }, [setServiceDatasState]);
   return <></>;
 }

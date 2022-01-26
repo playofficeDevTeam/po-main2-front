@@ -17,19 +17,19 @@ export default function App() {
       window.localStorage.getItem("serviceDataState") ||
         JSON.stringify(serviceDataState)
     );
-    setServiceDataState(serviceData);
+    setServiceDataState(() => serviceData);
 
     const userFormData = JSON.parse(
       window.localStorage.getItem("userFormDataState") ||
         JSON.stringify(userFormDataState)
     );
-    setUserFormDataState(userFormData);
+    setUserFormDataState(() => userFormData);
 
     const userDetail1FormData = JSON.parse(
       window.localStorage.getItem("userDetail1FormDataState") ||
         JSON.stringify(userDetail1FormDataState)
     );
-    setUserDetail1FormDataState(userDetail1FormData);
+    setUserDetail1FormDataState(() => userDetail1FormData);
   }, []);
   return <></>;
 }
