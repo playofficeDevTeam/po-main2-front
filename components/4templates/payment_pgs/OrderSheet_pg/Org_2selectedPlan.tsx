@@ -215,7 +215,7 @@ export default function App({ data = defaultData }) {
                 </div>
                 {/* 숨겨진박스 */}
                 <Ani_box trigger={isServiceListOpened} className="mx-1">
-                  <ul className="px-3 pt-3 pb-3">
+                  <ul className="px-3 pt-3 pb-3 border-2 relative -top-1">
                     {serviceDataState.map((val, idx) => (
                       <li
                         key={idx}
