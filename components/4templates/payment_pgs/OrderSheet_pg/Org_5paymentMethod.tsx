@@ -11,10 +11,12 @@ export const paymentMethodAtom = atom({
   default: [
     {
       method: "카드 결제",
+      methodCode: "카드",
       selected: true,
     },
     {
       method: "무통장 입금",
+      methodCode: "가상계좌",
       selected: false,
     },
   ],

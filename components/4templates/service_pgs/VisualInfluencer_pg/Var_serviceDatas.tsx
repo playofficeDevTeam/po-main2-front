@@ -10,6 +10,7 @@ interface IItem {
   discountRate: number;
   amountOfItems: number;
   isClicked: boolean;
+  serviceDefault: boolean;
 }
 
 export class ItemClass {
@@ -20,7 +21,9 @@ export class ItemClass {
     const won = number.toLocaleString("ko-KR") + "원";
     return won;
   }
-  public priceTotal = this.input.price * this.input.amountOfItems;
+  public priceTotal =
+    this.input.price *
+    (this.input.serviceDefault ? 1 : this.input.amountOfItems);
 
   public priceTotal_won = this.numberToWon(
     this.input.price * this.input.amountOfItems
@@ -52,9 +55,11 @@ export class ItemClass {
     id !== 3 && this.input.amountOfItems !== 1
       ? `x${this.input.amountOfItems}`
       : "";
+
+  public fullName = this.input.serviceName + " " + this.input.itemName;
 }
 
-const serviceDatas = [
+const serviceDatas: IItem[] = [
   {
     hightlighted: false,
     serviceName: "비주얼 인플루언서 마케팅",
@@ -74,6 +79,7 @@ const serviceDatas = [
     discountRate: 0,
     amountOfItems: 1,
     isClicked: false,
+    serviceDefault: false,
   },
   {
     hightlighted: true,
@@ -94,6 +100,7 @@ const serviceDatas = [
     discountRate: 5,
     amountOfItems: 1,
     isClicked: true,
+    serviceDefault: false,
   },
   {
     hightlighted: false,
@@ -114,6 +121,7 @@ const serviceDatas = [
     discountRate: 10,
     amountOfItems: 1,
     isClicked: false,
+    serviceDefault: false,
   },
 ];
 

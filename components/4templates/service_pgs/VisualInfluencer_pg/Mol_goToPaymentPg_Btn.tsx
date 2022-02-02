@@ -1,8 +1,12 @@
 import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
 import RoundedOrangeBtn from "../../../1atoms/RoundedOrangeBtn";
+import { serviceDatasAtom } from "./Var_serviceDatas";
 
 export default function App() {
   const router = useRouter();
+  const [serviceDataState, setServiceDataState] =
+    useRecoilState(serviceDatasAtom);
   return (
     <>
       <RoundedOrangeBtn
@@ -20,6 +24,11 @@ export default function App() {
           setTimeout(() => {
             window.scrollTo(0, 0);
           }, 500);
+
+          window.localStorage.setItem(
+            "serviceDataState",
+            JSON.stringify(serviceDataState)
+          );
         }}
       >
         <>

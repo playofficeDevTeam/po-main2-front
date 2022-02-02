@@ -7,8 +7,13 @@ export default function App() {
     useRecoilState(serviceDatasAtom);
   useEffect(() => {
     setServiceDatasState((services) =>
-      services.map((service) => ({ ...service, amountOfItems: 1 }))
+      services.map((service) => ({ ...service, serviceDefault: true }))
     );
+    return () => {
+      setServiceDatasState((services) =>
+        services.map((service) => ({ ...service, serviceDefault: false }))
+      );
+    };
   }, [setServiceDatasState]);
   return <></>;
 }

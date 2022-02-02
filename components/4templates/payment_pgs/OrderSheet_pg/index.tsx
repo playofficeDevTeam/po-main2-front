@@ -4,12 +4,14 @@ import Org_3paymentInfo from "./Org_3paymentInfo";
 import Org_4paymentForm from "./Org_4paymentForm";
 import Org_5paymentMethod from "./Org_5paymentMethod";
 import Org_6paymentApply from "./Org_6paymentApply";
+import Ue_loadingCookieData from "./Ue_loadingCookieData";
 import useIsMobile from "/home/app/components/hooks/useIsMobile";
 
 export default function App() {
   const isMobile = useIsMobile();
   return (
     <>
+      <Ue_loadingCookieData />
       {isMobile ? (
         <>
           <Org_1orderSheetHeader />
