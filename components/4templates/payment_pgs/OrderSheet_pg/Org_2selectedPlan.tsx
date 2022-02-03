@@ -119,17 +119,10 @@ export default function App({ data = defaultData }) {
         <div className="mo-max bg-gray-50 rounded-t-xl px-3 pt-4 pb-8 ">
           <div className=" max-w-xs mx-auto">
             <ul>
-              {clickedServiceData?.input.detailInfo.map((val, idx) => (
+              {clickedServiceData?.detailInfoText.map((val, idx) => (
                 <li key={idx} className="flex justify-between py-2">
                   <div className=" font-medium text-gray-700 flex items-end pb-px">
-                    {val.title}
-                  </div>
-                  {/* 수량 */}
-                  <div className="text-gray-500">
-                    <span className="text-lg font-bold ">
-                      {val.amountText}{" "}
-                    </span>
-                    <span>{clickedServiceData.multipleAmountText(idx)}</span>
+                    {val}
                   </div>
                 </li>
               ))}
@@ -266,18 +259,13 @@ export default function App({ data = defaultData }) {
           <div className="">
             <div className="">
               <ul>
-                {clickedServiceData?.input.detailInfo.map((val, idx) => (
+                {clickedServiceData?.detailInfoText.map((val, idx) => (
                   <li key={idx} className="flex py-2">
                     <div className="mr-2 text-gray-300">
                       <i className="fas fa-check"></i>
                     </div>
                     <div className=" font-medium text-gray-600 flex items-end pb-px mr-2">
-                      {val.title}
-                    </div>
-                    {/* 수량 */}
-                    <div className="font-medium text-gray-600 ">
-                      <span className=" ">{val.amountText} </span>
-                      <span>{clickedServiceData.multipleAmountText(idx)}</span>
+                      {val}
                     </div>
                   </li>
                 ))}

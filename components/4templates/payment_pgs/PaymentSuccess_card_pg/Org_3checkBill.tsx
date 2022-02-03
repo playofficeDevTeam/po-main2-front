@@ -5,7 +5,7 @@ import useIsMobile from "/home/app/components/hooks/useIsMobile";
 
 const defaultData = {
   title: <>결제 정보</>,
-  serviceName: <>비주얼 인플루언서 콘텐츠 마케팅</>,
+  itemCategory1: <>비주얼 인플루언서 콘텐츠 마케팅</>,
 };
 
 export default function App({ data = defaultData }) {
@@ -20,7 +20,7 @@ export default function App({ data = defaultData }) {
         <div className="pb-5 mb-6 border-b-2"></div>
 
         <div className="py-1">
-          <div className="font-bold text-lg mb-3">{data.serviceName}</div>
+          <div className="font-bold text-lg mb-3">{data.itemCategory1}</div>
           <div className="font-bold text-lg mb-2">
             <span className=" font-normal">📌</span>
             {clickedServiceData?.input.itemName}{" "}
@@ -29,18 +29,13 @@ export default function App({ data = defaultData }) {
             </span>
           </div>
           <ul>
-            {clickedServiceData?.input.detailInfo.map((val, idx) => (
+            {clickedServiceData?.detailInfoText.map((val, idx) => (
               <li key={idx} className="flex mb-px">
                 <div className="mr-2 text-gray-300">
                   <i className="fas fa-check"></i>
                 </div>
                 <div className=" font-medium text-gray-600 flex items-end pb-px mr-2">
-                  {val.title}
-                </div>
-                {/* 수량 */}
-                <div className="font-medium text-gray-600 ">
-                  <span className=" ">{val.amountText} </span>
-                  <span>{clickedServiceData.multipleAmountText(idx)}</span>
+                  {val}
                 </div>
               </li>
             ))}
@@ -97,7 +92,7 @@ export default function App({ data = defaultData }) {
         <div className="pb-5 mb-6 border-b-2"></div>
 
         <div className="py-1">
-          <div className="font-bold text-lg mb-3">{data.serviceName}</div>
+          <div className="font-bold text-lg mb-3">{data.itemCategory1}</div>
           <div className="font-bold text-lg mb-2">
             <span className=" font-normal">📌</span>
             {clickedServiceData?.input.itemName}{" "}
@@ -106,18 +101,13 @@ export default function App({ data = defaultData }) {
             </span>
           </div>
           <ul className="grid grid-cols-2" style={{ width: "39rem" }}>
-            {clickedServiceData?.input.detailInfo.map((val, idx) => (
+            {clickedServiceData?.detailInfoText.map((val, idx) => (
               <li key={idx} className="flex mb-px">
                 <div className="mr-2 text-gray-300">
                   <i className="fas fa-check"></i>
                 </div>
                 <div className=" font-medium text-gray-600 flex items-end pb-px mr-2">
-                  {val.title}
-                </div>
-                {/* 수량 */}
-                <div className="font-medium text-gray-600 ">
-                  <span className=" ">{val.amountText} </span>
-                  <span>{clickedServiceData.multipleAmountText(idx)}</span>
+                  {val}
                 </div>
               </li>
             ))}

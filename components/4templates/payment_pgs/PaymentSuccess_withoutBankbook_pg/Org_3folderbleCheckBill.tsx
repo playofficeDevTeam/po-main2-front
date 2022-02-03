@@ -9,7 +9,7 @@ const defaultData = {
       항목을 확인하세요
     </>
   ),
-  serviceName: <>비주얼 인플루언서 콘텐츠 마케팅</>,
+  itemCategory1: <>비주얼 인플루언서 콘텐츠 마케팅</>,
 };
 export default function App({ data = defaultData }) {
   const isMobile = useIsMobile();

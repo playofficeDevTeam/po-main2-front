@@ -7,11 +7,11 @@ export default function App() {
     useRecoilState(serviceDatasAtom);
   useEffect(() => {
     setServiceDatasState((services) =>
-      services.map((service) => ({ ...service, serviceDefault: true }))
+      services.map((service) => ({ ...service, isAmountFix: true }))
     );
     return () => {
       setServiceDatasState((services) =>
-        services.map((service) => ({ ...service, serviceDefault: false }))
+        services.map((service) => ({ ...service, isAmountFix: false }))
       );
     };
   }, [setServiceDatasState]);

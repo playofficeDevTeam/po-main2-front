@@ -48,9 +48,11 @@ export default function App() {
                     </span>
                   </div>
                   <div className="mb-6 px-4">
-                    {service.detailInfoText.map((detailInfo, detailInfoIdx) => (
-                      <li key={detailInfoIdx}>{"✅" + detailInfo}</li>
-                    ))}
+                    {service.detailInfoText_check1.map(
+                      (detailInfo, detailInfoIdx) => (
+                        <li key={detailInfoIdx}>{detailInfo}</li>
+                      )
+                    )}
                   </div>
                   <div className="flex  justify-between  text-gray-600 mb-6  px-4">
                     <div className="flex items-end">총 서비스 금액</div>
@@ -105,9 +107,11 @@ export default function App() {
                     </span>
                   </div>
                   <div className="mb-6 px-4">
-                    {service.detailInfoText.map((detailInfo, detailInfoIdx) => (
-                      <li key={detailInfoIdx}>{"✅" + detailInfo}</li>
-                    ))}
+                    {service.detailInfoText_check1.map(
+                      (detailInfo, detailInfoIdx) => (
+                        <li key={detailInfoIdx}>{detailInfo}</li>
+                      )
+                    )}
                   </div>
                   <div className="flex  justify-between  text-gray-600 mb-6  px-4">
                     <div className="flex items-end">총 서비스 금액</div>
@@ -177,9 +181,11 @@ export default function App() {
                   </span>
                 </div>
                 <div className="mb-6 px-4">
-                  {service.detailInfoText.map((detailInfo, detailInfoIdx) => (
-                    <li key={detailInfoIdx}>{"✅" + detailInfo}</li>
-                  ))}
+                  {service.detailInfoText_check1.map(
+                    (detailInfo, detailInfoIdx) => (
+                      <li key={detailInfoIdx}>{detailInfo}</li>
+                    )
+                  )}
                 </div>
                 <div className="flex  justify-between  text-gray-600 mb-6  px-4 h-12">
                   <div className="flex items-end">총 서비스 금액</div>
