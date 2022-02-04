@@ -1,16 +1,20 @@
-import { useRouter } from "next/router";
 import { useRecoilState, useRecoilValue } from "recoil";
 import RoundedOrangeBtn from "../../../1atoms/RoundedOrangeBtn";
-import { useMailsend } from "../../../hooks/mail/useMailsend";
 import {
   clickedServiceDataClass,
   serviceDatasAtom,
 } from "../../service_pgs/VisualInfluencer_pg/Var_serviceDatas";
-import { mailText } from "./const_mailtext";
 import { userFormData } from "./Var_userFormData";
 import { v1 } from "uuid";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
 import { paymentMethodAtom } from "./Org_5paymentMethod";
+import { useMutation, useQuery } from "@apollo/client";
+import { CREATE_PAYMENT } from "./Gql_payment";
+import {
+  CreatePayment,
+  CreatePaymentVariables,
+} from "./__generated__/CreatePayment";
+import { FindPayment, FindPaymentVariables } from "./__generated__/FindPayment";
 
 export default function App({ trigger = false }) {
   const [serviceDataState, setServiceDataState] =
@@ -22,8 +26,9 @@ export default function App({ trigger = false }) {
   const clickedServiceClass = useRecoilValue(clickedServiceDataClass);
 
   const [paymentMethod, setPaymentMethod] = useRecoilState(paymentMethodAtom);
-
-  const mailSendMutation = useMailsend();
+  const clickedPaymentMethod = paymentMethod.find(
+    (val) => val.selected
+  )?.methodCode;
 
   const tossClientKey = process.env.NEXT_PUBLIC_TOSS_CLIENTKEY + "";
   const makeAPayment = async () => {
@@ -40,10 +45,6 @@ export default function App({ trigger = false }) {
       "paymentReqData",
       JSON.stringify(paymentReqData)
     );
-
-    const clickedPaymentMethod = paymentMethod.find(
-      (val) => val.selected
-    )?.methodCode;
 
     switch (clickedPaymentMethod) {
       case "카드":
@@ -71,28 +72,45 @@ export default function App({ trigger = false }) {
     }
   };
 
+  const [createPayment, { loading, data, error }] = useMutation<
+    CreatePayment,
+    CreatePaymentVariables
+  >(CREATE_PAYMENT);
+
   return (
-    <RoundedOrangeBtn
-      trigger={trigger}
-      onClick={() => {
-        window.localStorage.setItem(
-          "serviceDataState",
-          JSON.stringify(serviceDataState)
-        );
-        window.localStorage.setItem(
-          "userFormDataState",
-          JSON.stringify(userFormDataState)
-        );
-        // mailSendMutation.mutate({
-        //   from: "poketing_mail_server@poketing.com",
-        //   to: "mass@pokemaster.shop",
-        //   subject: "테스트 메일입니다",
-        //   html: mailText,
-        // });
-        makeAPayment();
-      }}
-    >
-      <div className="px-14 text-lg">결제하기</div>
-    </RoundedOrangeBtn>
+    <>
+      <RoundedOrangeBtn
+        trigger={trigger}
+        onClick={() => {
+          window.localStorage.setItem(
+            "serviceDataState",
+            JSON.stringify(serviceDataState)
+          );
+          window.localStorage.setItem(
+            "userFormDataState",
+            JSON.stringify(userFormDataState)
+          );
+          createPayment({
+            variables: {
+              input: {
+                brandName: "테스트브랜드",
+                name: "jongwon",
+                phoneNumber: "01027479085",
+                email: "leebllue@gmail.com",
+                itemId: 3,
+                paymentKey: "paymentkey123123",
+                orderId: "orderid123132",
+                amount: 10000,
+                paymentMethod: "카드",
+              },
+            },
+          });
+
+          // makeAPayment();
+        }}
+      >
+        <div className="px-14 text-lg">결제하기</div>
+      </RoundedOrangeBtn>
+    </>
   );
 }

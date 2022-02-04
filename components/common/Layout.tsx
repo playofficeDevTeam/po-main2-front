@@ -6,15 +6,15 @@ import { RecoilRoot } from "recoil";
 import DeviceDetect from "./DeviceDetect";
 
 const client = new ApolloClient({
-  uri: process.env.NEXT_PUBLIC_API_HOST,
+  uri: process.env.NEXT_PUBLIC_API_HOST + "/graphql",
   cache: new InMemoryCache(),
 });
 const queryClient = new QueryClient();
 
 export default function Layout({ children }: any) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ApolloProvider client={client}>
+    <ApolloProvider client={client}>
+      <QueryClientProvider client={queryClient}>
         <RecoilRoot>
           <DeviceDetect>
             <Org_header />
@@ -22,7 +22,7 @@ export default function Layout({ children }: any) {
             <Org_footer />
           </DeviceDetect>
         </RecoilRoot>
-      </ApolloProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </ApolloProvider>
   );
 }
