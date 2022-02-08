@@ -13,6 +13,7 @@ export interface CreatePayment_createPayment {
   __typename: "CreatePaymentOutput";
   ok: boolean;
   error: string | null;
+  paymentId: number | null;
 }
 
 export interface CreatePayment {
@@ -20,5 +21,5 @@ export interface CreatePayment {
 }
 
 export interface CreatePaymentVariables {
-  input?: CreatePaymentInput | null;
+  input: CreatePaymentInput;
 }

@@ -2,10 +2,10 @@ import axios from "axios";
 import { useMutation } from "react-query";
 
 type IPaymentApproval = {
-  paymentMethod: string;
+  paymentId: number;
   paymentKey: string;
   orderId: string;
-  amount: string;
+  amount: number;
 };
 
 export const usePaymentApproval = () => {

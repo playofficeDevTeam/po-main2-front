@@ -26,5 +26,5 @@ export interface FindPayment {
 }
 
 export interface FindPaymentVariables {
-  input?: FindPaymentInput | null;
+  input: FindPaymentInput;
 }

@@ -12,15 +12,20 @@ export interface CreatePaymentInput {
   name: string;
   phoneNumber: string;
   email: string;
-  itemId: number;
-  paymentKey: string;
+  paymentMethod: string;
   orderId: string;
   amount: number;
-  paymentMethod: string;
+  paymentKey?: string | null;
+  itemInfo: ItemIdAndAmount[];
 }
 
 export interface FindPaymentInput {
   paymentId: number;
+}
+
+export interface ItemIdAndAmount {
+  itemId: number;
+  amountOfItem: number;
 }
 
 //==============================================================

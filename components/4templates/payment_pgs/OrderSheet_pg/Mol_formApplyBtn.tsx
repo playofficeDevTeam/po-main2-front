@@ -14,7 +14,8 @@ import {
   CreatePayment,
   CreatePaymentVariables,
 } from "./__generated__/CreatePayment";
-import { FindPayment, FindPaymentVariables } from "./__generated__/FindPayment";
+import { useState } from "react";
+import ReactLoading from "react-loading";
 
 export default function App({ trigger = false }) {
   const [serviceDataState, setServiceDataState] =
@@ -30,21 +31,12 @@ export default function App({ trigger = false }) {
     (val) => val.selected
   )?.methodCode;
 
+  const amount = clickedServiceClass?.priceDiscounted ?? 0;
+  const [orderId, setOrderId] = useState(v1());
+
   const tossClientKey = process.env.NEXT_PUBLIC_TOSS_CLIENTKEY + "";
   const makeAPayment = async () => {
     const tossPayments = await loadTossPayments(tossClientKey);
-    const amount = clickedServiceClass?.priceTotal
-      ? clickedServiceClass?.priceTotal
-      : 0;
-    const orderId = v1();
-    const paymentReqData = {
-      amount,
-      orderId,
-    };
-    window.localStorage.setItem(
-      "paymentReqData",
-      JSON.stringify(paymentReqData)
-    );
 
     switch (clickedPaymentMethod) {
       case "카드":
@@ -75,42 +67,77 @@ export default function App({ trigger = false }) {
   const [createPayment, { loading, data, error }] = useMutation<
     CreatePayment,
     CreatePaymentVariables
-  >(CREATE_PAYMENT);
+  >(CREATE_PAYMENT, {
+    onCompleted: (data: CreatePayment) => {
+      const paymentId = data.createPayment.paymentId ?? 0;
+      window.localStorage.setItem("paymentId", paymentId.toString());
+      makeAPayment();
+      setOrderId(v1());
+    },
+  });
+
+  const [paymentClickThrottle, setPaymentClickThrottle] = useState(true);
+  const disabledPaymentClick = () => {
+    setPaymentClickThrottle(false);
+    setTimeout(() => {
+      setPaymentClickThrottle(true);
+    }, 3000);
+  };
 
   return (
     <>
-      <RoundedOrangeBtn
-        trigger={trigger}
-        onClick={() => {
-          window.localStorage.setItem(
-            "serviceDataState",
-            JSON.stringify(serviceDataState)
-          );
-          window.localStorage.setItem(
-            "userFormDataState",
-            JSON.stringify(userFormDataState)
-          );
-          createPayment({
-            variables: {
-              input: {
-                brandName: "테스트브랜드",
-                name: "jongwon",
-                phoneNumber: "01027479085",
-                email: "leebllue@gmail.com",
-                itemId: 3,
-                paymentKey: "paymentkey123123",
-                orderId: "orderid123132",
-                amount: 10000,
-                paymentMethod: "카드",
+      {paymentClickThrottle ? (
+        <RoundedOrangeBtn
+          trigger={trigger}
+          onClick={async () => {
+            window.localStorage.setItem(
+              "serviceDataState",
+              JSON.stringify(serviceDataState)
+            );
+            window.localStorage.setItem(
+              "userFormDataState",
+              JSON.stringify(userFormDataState)
+            );
+            disabledPaymentClick();
+            createPayment({
+              variables: {
+                input: {
+                  brandName: userFormDataState[0].trim(),
+                  name: userFormDataState[1].trim(),
+                  phoneNumber: userFormDataState[2].trim(),
+                  email: userFormDataState[3].trim(),
+                  paymentMethod: clickedPaymentMethod ?? "오류",
+                  amount,
+                  orderId,
+                  itemInfo: [
+                    {
+                      itemId: clickedServiceClass?.input.itemId ?? 0,
+                      amountOfItem:
+                        clickedServiceClass?.input.amountOfItems ?? 0,
+                    },
+                  ],
+                },
               },
-            },
-          });
-
-          // makeAPayment();
-        }}
-      >
-        <div className="px-14 text-lg">결제하기</div>
-      </RoundedOrangeBtn>
+            });
+          }}
+        >
+          <div className=" w-40 center text-lg">결제하기</div>
+        </RoundedOrangeBtn>
+      ) : (
+        <RoundedOrangeBtn>
+          <div className=" w-40 center text-lg">
+            결제요청중
+            <div className="ml-2">
+              <ReactLoading
+                type={"spokes"}
+                color={"white"}
+                height={"1.2rem"}
+                width={"1.2rem"}
+              />
+            </div>
+          </div>
+        </RoundedOrangeBtn>
+      )}
     </>
   );
 }

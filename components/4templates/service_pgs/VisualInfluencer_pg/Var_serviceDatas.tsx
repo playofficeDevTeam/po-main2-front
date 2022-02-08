@@ -29,6 +29,10 @@ export class ItemClass {
 
   public priceTotal_won = this.numberToWon(this.priceTotal);
 
+  public priceDiscounted = Math.ceil(
+    (this.priceTotal * (100 - this.input.discountRate)) / 100
+  );
+
   public priceDiscounted_won = this.numberToWon(
     Math.ceil((this.priceTotal * (100 - this.input.discountRate)) / 100)
   );

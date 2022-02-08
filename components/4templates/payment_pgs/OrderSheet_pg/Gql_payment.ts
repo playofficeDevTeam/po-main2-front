@@ -5,6 +5,7 @@ export const CREATE_PAYMENT = gql`
     createPayment(input: $input) {
       ok
       error
+      paymentId
     }
   }
 `;
