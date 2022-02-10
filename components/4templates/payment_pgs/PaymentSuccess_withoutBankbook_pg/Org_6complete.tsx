@@ -4,46 +4,13 @@ import toast, { Toaster } from "react-hot-toast";
 import { useRecoilValue } from "recoil";
 import { clickedServiceDataClass } from "../../service_pgs/VisualInfluencer_pg/Var_serviceDatas";
 import Mol_goToDeposit from "./Mol_goToDeposit";
+import { paymentResponse } from "./Org_2depositInfomation";
 
-const depositWithoutBankRes = {
-  mId: "poketinfg1",
-  paymentKey: "p5EnNZRJGvaBX7zk2yd8yvqDQYzx03x9POLqKQjmAw4b0e1Y",
-  orderId: "a3155170-7cde-11ec-846c-5934994c86e2",
-  method: "가상계좌",
-  status: "WAITING_FOR_DEPOSIT",
-  requestedAt: "2022-01-24T15:26:59+09:00",
-  approvedAt: null,
-  useEscrow: false,
-  card: null,
-  virtualAccount: {
-    accountNumber: "56349073891630",
-    accountType: "일반",
-    bank: "국민",
-    customerName: "이종원",
-    dueDate: "2022-01-27T15:26:59+09:00",
-    expired: false,
-    settlementStatus: "INCOMPLETED",
-    refundStatus: "NONE",
-  },
-  mobilePhone: null,
-  giftCertificate: null,
-  cashReceipt: null,
-  discount: null,
-  cancels: null,
-  secret: null,
-  useDiscount: false,
-  discountAmount: null,
-  useCashReceipt: false,
-  currency: "KRW",
-  totalAmount: 2090000,
-  balanceAmount: 2090000,
-  statusCode: 200,
-};
 export default function App() {
   const isMobile = useIsMobile();
   const notify = () => toast("복사되었습니다.");
 
-  const dueDate = new Date(depositWithoutBankRes.virtualAccount.dueDate);
+  const dueDate = new Date(paymentResponse.virtualAccount.dueDate);
   const clickedServiceData = useRecoilValue(clickedServiceDataClass);
   const temData = {
     icon: (
@@ -64,11 +31,11 @@ export default function App() {
         data: (
           <div className="flex" onClick={notify}>
             <CopyToClipboard
-              text={depositWithoutBankRes.virtualAccount.accountNumber}
+              text={paymentResponse.virtualAccount.accountNumber}
             >
               <button className="flex items-center">
                 <span className=" underline">
-                  {depositWithoutBankRes.virtualAccount.accountNumber}
+                  {paymentResponse.virtualAccount.accountNumber}
                 </span>
                 <div className="ml-2 border border-gray-400 rounded text-sm text-gray-500 px-1 ">
                   <button>복사</button>
@@ -87,7 +54,7 @@ export default function App() {
           </div>
         ),
       },
-      { title: "은행", data: <>{depositWithoutBankRes.virtualAccount.bank}</> },
+      { title: "은행", data: <>{paymentResponse.virtualAccount.bank}</> },
       {
         title: "예금주",
         data: <>5일의휴일</>,

@@ -38,6 +38,11 @@ export default function App({ trigger = false }) {
   const makeAPayment = async () => {
     const tossPayments = await loadTossPayments(tossClientKey);
 
+    window.localStorage.setItem(
+      "clickedPaymentMethod",
+      clickedPaymentMethod ?? ""
+    );
+
     switch (clickedPaymentMethod) {
       case "카드":
         tossPayments.requestPayment("카드", {

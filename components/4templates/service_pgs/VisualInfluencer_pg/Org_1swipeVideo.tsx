@@ -65,7 +65,7 @@ export default function App({
           </div>
           <div className="">
             <XscrollDiv>
-              <ul className="grid grid-cols-3 gap-3 px-5 pb-2 min-w-max">
+              <ul className="grid grid-cols-3 gap-3 px-5 pb-2 min-w-max pc-max">
                 {videoData.map((val, idx) => (
                   <li key={idx}>
                     <div className="">

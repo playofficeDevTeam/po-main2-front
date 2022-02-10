@@ -1,6 +1,10 @@
-import { useRecoilValue } from "recoil";
+import { useEffect } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import IsMobile from "../../../1atoms/IsMobile";
-import { clickedServiceDataClass } from "../../service_pgs/VisualInfluencer_pg/Var_serviceDatas";
+import {
+  clickedServiceDataClass,
+  serviceDatasAtom,
+} from "../../service_pgs/VisualInfluencer_pg/Var_serviceDatas";
 import useIsMobile from "/home/app/components/hooks/useIsMobile";
 
 const defaultData = {
@@ -10,6 +14,7 @@ const defaultData = {
 
 export default function App({ data = defaultData }) {
   const isMobile = useIsMobile();
+
   const clickedServiceData = useRecoilValue(clickedServiceDataClass);
   return isMobile ? (
     <>

@@ -1,14 +1,23 @@
 import Link from "next/link";
-import { useRecoilState } from "recoil";
+import { atom, useRecoilState } from "recoil";
 import useIsMobile from "../hooks/useIsMobile";
-import { sitemapDataAtom } from "./Org_header";
+import { isVisibleHeaderAtom, sitemapDataAtom } from "./Org_header";
+
+export const isVisibleFooterAtom = atom({
+  key: "isVisibleFooterAtom",
+  default: true,
+});
 
 export default function App() {
   const isMobile = useIsMobile();
+
   const [sitemapDataState, setSitemapDataState] =
     useRecoilState(sitemapDataAtom);
 
-  return (
+  const [isVisibleFooter, setIsBisibleFooter] =
+    useRecoilState(isVisibleFooterAtom);
+
+  return isVisibleFooter ? (
     <>
       {isMobile ? (
         // 모바일
@@ -100,5 +109,7 @@ export default function App() {
         </footer>
       )}
     </>
+  ) : (
+    <></>
   );
 }

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import useIsMobile from "../hooks/useIsMobile";
 import { atom, useRecoilState } from "recoil";
+import Ani_box from "../1atoms/Ani_box";
 
 const sitemapData = [
   { title: "서비스", url: "/service", selected: false },
@@ -11,13 +12,18 @@ const sitemapData = [
 ];
 
 export const sitemapDataAtom = atom({
-  key: "sitemapData",
+  key: "sitemapDataAtom",
   default: sitemapData,
 });
 
 export const headerFloatingBtnAtom = atom({
-  key: "headerFloatingBtn",
+  key: "headerFloatingBtnAtom",
   default: <></>,
+});
+
+export const isVisibleHeaderAtom = atom({
+  key: "isVisibleHeaderAtom",
+  default: true,
 });
 
 export default function App() {
@@ -27,6 +33,9 @@ export default function App() {
   const [headerFloatingBtnState, setHeaderFloatingBtnState] = useRecoilState(
     headerFloatingBtnAtom
   );
+
+  const [isVisibleHeader, setIsBisibleHeader] =
+    useRecoilState(isVisibleHeaderAtom);
 
   const [menuState, setMenuState] = useState(false);
   const menuToggle = () => {
@@ -58,7 +67,7 @@ export default function App() {
     selectTab(nowPathIndex);
   }, [router, selectTab]);
 
-  return (
+  return isVisibleHeader ? (
     <>
       {isMobile ? (
         // 모바일
@@ -66,7 +75,7 @@ export default function App() {
         // 모바일
         <header className=" sticky top-0" style={{ zIndex: 100 }}>
           {/* 메인메뉴 */}
-          <div className="h-12 bg-white border-b">
+          <div className="h-12 bg-white border-b relative z-50">
             <div className="mo-max center h-full">
               <div
                 className="w-2/12 center cursor-pointer"
@@ -92,7 +101,30 @@ export default function App() {
             </div>
           </div>
           {/* 서브메뉴 */}
-          {isMenuOpened ? (
+          <Ani_box trigger={isMenuOpened}>
+            <div className="h-0 z-40">
+              <nav className=" bg-white">
+                <ul className="py-4 border-b shadow-md">
+                  {sitemapDataState.map((val, idx) => (
+                    <Link href={val.url} key={idx}>
+                      <a
+                        className="center py-2 "
+                        onClick={() => {
+                          setMenuState(false);
+                        }}
+                      >
+                        <div className="center text-base">{val.title}</div>
+
+                        <i className="fas fa-chevron-right text-gray-500 pl-2   text-xs center relative top-px "></i>
+                      </a>
+                    </Link>
+                  ))}
+                </ul>
+              </nav>
+            </div>
+          </Ani_box>
+          {/* 서브메뉴 */}
+          {/* {isMenuOpened ? (
             <div className="h-0">
               <nav className=" bg-white">
                 <ul className="py-4 border-b shadow-md">
@@ -115,7 +147,7 @@ export default function App() {
             </div>
           ) : (
             <></>
-          )}
+          )} */}
         </header>
       ) : (
         // 피씨
@@ -158,5 +190,7 @@ export default function App() {
         </header>
       )}
     </>
+  ) : (
+    <></>
   );
 }
