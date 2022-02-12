@@ -26,21 +26,14 @@ export class ItemClass {
   public amountFixCheck = this.input.isAmountFix ? 1 : this.input.amountOfItems;
 
   public priceTotal = this.input.price * this.amountFixCheck;
-
   public priceTotal_won = this.numberToWon(this.priceTotal);
-
   public priceDiscounted = Math.ceil(
     (this.priceTotal * (100 - this.input.discountRate)) / 100
   );
-
-  public priceDiscounted_won = this.numberToWon(
-    Math.ceil((this.priceTotal * (100 - this.input.discountRate)) / 100)
-  );
-
+  public priceDiscounted_won = this.numberToWon(this.priceDiscounted);
   public priceDivided_won = this.numberToWon(
     Math.ceil((this.priceTotal * (100 - this.input.discountRate)) / 100 / 6)
   );
-
   public priceRaw_won = this.numberToWon(this.priceTotal / 1.1);
   public priceTax_won = this.numberToWon(this.priceTotal / 11);
   public discount_won = this.numberToWon(
