@@ -19,6 +19,14 @@ export interface CreatePaymentInput {
   itemInfo: ItemIdAndAmount[];
 }
 
+export interface EditPaymentFormDataInput {
+  id: number;
+  brandName: string;
+  name: string;
+  phoneNumber: string;
+  email: string;
+}
+
 export interface FindPaymentInput {
   paymentId: number;
 }

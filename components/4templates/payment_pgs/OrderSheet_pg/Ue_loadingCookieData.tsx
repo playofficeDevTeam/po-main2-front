@@ -11,6 +11,12 @@ export default function App() {
     useRecoilState(userFormData);
 
   useEffect(() => {
+    const serviceData = JSON.parse(
+      window.localStorage.getItem("serviceDataState") ||
+        JSON.stringify(serviceDataState)
+    );
+    setServiceDataState(serviceData);
+
     const userFormData = JSON.parse(
       window.localStorage.getItem("userFormDataState") ||
         JSON.stringify(userFormDataState)

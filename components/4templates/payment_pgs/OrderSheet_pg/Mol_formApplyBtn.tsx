@@ -69,17 +69,17 @@ export default function App({ trigger = false }) {
     }
   };
 
-  const [createPayment, { loading, data, error }] = useMutation<
-    CreatePayment,
-    CreatePaymentVariables
-  >(CREATE_PAYMENT, {
-    onCompleted: (data: CreatePayment) => {
-      const paymentId = data.createPayment.paymentId ?? 0;
-      window.localStorage.setItem("paymentId", paymentId.toString());
-      makeAPayment();
-      setOrderId(v1());
-    },
-  });
+  const [createPayment] = useMutation<CreatePayment, CreatePaymentVariables>(
+    CREATE_PAYMENT,
+    {
+      onCompleted: (data: CreatePayment) => {
+        const paymentId = data.createPayment.paymentId ?? 0;
+        window.localStorage.setItem("paymentId", paymentId.toString());
+        makeAPayment();
+        setOrderId(v1());
+      },
+    }
+  );
 
   const [paymentClickThrottle, setPaymentClickThrottle] = useState(true);
   const disabledPaymentClick = () => {

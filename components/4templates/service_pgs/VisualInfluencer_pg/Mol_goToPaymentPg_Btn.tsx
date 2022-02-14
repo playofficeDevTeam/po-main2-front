@@ -5,10 +5,19 @@ import { serviceDatasAtom } from "./Var_serviceDatas";
 
 export default function App() {
   const router = useRouter();
+  const [serviceDataState, setServiceDataState] =
+    useRecoilState(serviceDatasAtom);
+
   return (
     <>
       <RoundedOrangeBtn
         onClick={() => {
+          window.localStorage.setItem(
+            "serviceDataState",
+            JSON.stringify(
+              serviceDataState.map((val) => ({ ...val, isAmountFix: false }))
+            )
+          );
           router.push("/order-sheet");
           setTimeout(() => {
             window.scrollTo(0, 0);
