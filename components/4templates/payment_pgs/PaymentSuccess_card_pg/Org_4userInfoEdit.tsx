@@ -100,7 +100,9 @@ export default function App({ trigger = false }) {
 
                   <div className="h-0 relative z-30 flex justify-end">
                     <div className="h-10 w-max flex items-center mr-2">
-                      {userFormDataValidate[idx](userFormDataState[idx]) ? (
+                      {userFormDataValidate[idx].validateFunction(
+                        userFormDataState[idx]
+                      ) ? (
                         <>
                           <i className="fas fa-check-circle text-lg"></i>
                         </>
@@ -219,7 +221,9 @@ export default function App({ trigger = false }) {
 
                   <div className="h-0 relative z-30 flex justify-end">
                     <div className="h-10 w-max flex items-center mr-2">
-                      {userFormDataValidate[idx](userFormDataState[idx]) ? (
+                      {userFormDataValidate[idx].validateFunction(
+                        userFormDataState[idx]
+                      ) ? (
                         <>
                           <i className="fas fa-check-circle text-lg"></i>
                         </>

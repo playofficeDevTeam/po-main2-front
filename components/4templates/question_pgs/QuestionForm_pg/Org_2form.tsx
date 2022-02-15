@@ -59,7 +59,9 @@ export default function App({ temData = defaultTemData }) {
                     className="h-10 w-max flex items-center mr-2"
                     style={{ marginTop: "2px" }}
                   >
-                    {userFormDataValidate[idx](userFormDataState[idx]) ? (
+                    {userFormDataValidate[idx].validateFunction(
+                      userFormDataState[idx]
+                    ) ? (
                       <>
                         <i className="fas fa-check-circle text-lg"></i>
                       </>
@@ -143,20 +145,24 @@ export default function App({ temData = defaultTemData }) {
                   <div className=" font-medium mb-1  text-lg">{val.title}</div>
 
                   <div className="h-0 relative z-30 flex justify-end">
-                    <div
-                      className="h-10 w-max flex items-center mr-2"
-                      style={{ marginTop: "2px" }}
-                    >
-                      {userDetail1FormDataValidate[idx](
-                        userDetail1FormDataState[idx]
-                      ) ? (
-                        <>
-                          <i className="fas fa-check-circle text-lg"></i>
-                        </>
-                      ) : (
-                        <></>
-                      )}
-                    </div>
+                    {idx === 1 ? (
+                      <div
+                        className="h-10 w-max flex items-center mr-2"
+                        style={{ marginTop: "2px" }}
+                      >
+                        {userDetail1FormDataValidate[idx].validateFunction(
+                          userDetail1FormDataState[idx]
+                        ) ? (
+                          <>
+                            <i className="fas fa-check-circle text-lg"></i>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                   {val.inputProps?.type === "textarea" ? (
                     <textarea
@@ -208,7 +214,9 @@ export default function App({ temData = defaultTemData }) {
                     className="h-10 w-max flex items-center mr-2"
                     style={{ marginTop: "2px" }}
                   >
-                    {userFormDataValidate[idx](userFormDataState[idx]) ? (
+                    {userFormDataValidate[idx].validateFunction(
+                      userFormDataState[idx]
+                    ) ? (
                       <>
                         <i className="fas fa-check-circle text-lg"></i>
                       </>
@@ -295,7 +303,7 @@ export default function App({ temData = defaultTemData }) {
                       className="h-10 w-max flex items-center mr-2"
                       style={{ marginTop: "2px" }}
                     >
-                      {userDetail1FormDataValidate[idx](
+                      {userDetail1FormDataValidate[idx].validateFunction(
                         userDetail1FormDataState[idx]
                       ) ? (
                         <>
@@ -342,22 +350,7 @@ export default function App({ temData = defaultTemData }) {
                 <li key={idx} className="mb-4">
                   <div className=" font-medium mb-1  text-lg">{val.title}</div>
 
-                  <div className="h-0 relative z-30 flex justify-end">
-                    <div
-                      className="h-10 w-max flex items-center mr-2"
-                      style={{ marginTop: "2px" }}
-                    >
-                      {userDetail1FormDataValidate[idx](
-                        userDetail1FormDataState[idx]
-                      ) ? (
-                        <>
-                          <i className="fas fa-check-circle text-lg"></i>
-                        </>
-                      ) : (
-                        <></>
-                      )}
-                    </div>
-                  </div>
+                  <div className="h-0 relative z-30 flex justify-end"></div>
                   {val.inputProps?.type === "textarea" ? (
                     <textarea
                       placeholder={val.inputProps?.placehoder}

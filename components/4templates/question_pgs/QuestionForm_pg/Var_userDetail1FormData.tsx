@@ -21,7 +21,6 @@ export const inputDetail1Setting = [
       "500만원~",
     ],
     required: true,
-    validateError: "예산을 선택해주세요",
   },
   {
     title: (
@@ -36,7 +35,6 @@ export const inputDetail1Setting = [
       name: "link",
     },
     required: true,
-    validateError: "링크를 입력해주세요",
   },
   {
     title: "특이사항",
@@ -46,25 +44,38 @@ export const inputDetail1Setting = [
       name: "etc",
     },
     required: false,
-    validateError: "",
   },
   {
     title: "대행사여부",
     required: false,
-    validateError: "",
   },
 ];
 
 export const userDetail1FormDataValidate = [
   // 예산
-  (val) => {
-    return val !== "선택";
+  {
+    validateFunction: (val) => {
+      return val !== "선택";
+    },
+    validateError: "예산을 선택해주세요",
   },
-  (val) => {
-    return val.length > 0;
+  {
+    validateFunction: (val) => {
+      return val.length > 0;
+    },
+    validateError: "링크를 입력해주세요",
   },
-  (val) => {
-    return val.length > 0;
+  {
+    validateFunction: (val) => {
+      return true;
+    },
+    validateError: "",
+  },
+  {
+    validateFunction: (val) => {
+      return true;
+    },
+    validateError: "",
   },
 ];
 

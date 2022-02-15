@@ -18,7 +18,6 @@ export const inputSetting = [
       type: "text",
       name: "brandName",
     },
-    validateError: "브랜드명(상호명)을 정확히 입력해주세요",
   },
   {
     title: (
@@ -32,7 +31,6 @@ export const inputSetting = [
       type: "text",
       name: "name",
     },
-    validateError: "담당자명/직급을 정확히 입력해주세요",
   },
   {
     title: (
@@ -46,7 +44,6 @@ export const inputSetting = [
       type: "text",
       name: "phoneNumer",
     },
-    validateError: "담당자 연락처를 정확히 입력해주세요",
   },
   {
     title: (
@@ -60,24 +57,35 @@ export const inputSetting = [
       type: "email",
       name: "email",
     },
-    validateError: "담당자 이메일을 정확히 입력해주세요",
   },
 ];
 
 export const userFormDataValidate = [
-  (val) => {
-    return val.length > 0;
+  {
+    validateFunction: (val) => {
+      return val.length > 0;
+    },
+    validateError: "브랜드명(상호명)을 정확히 입력해주세요",
   },
-  (val) => {
-    return val.length > 1;
+  {
+    validateFunction: (val) => {
+      return val.length > 1;
+    },
+    validateError: "담당자명/직급을 정확히 입력해주세요",
   },
-  (val) => {
-    return val.length > 10;
+  {
+    validateFunction: (val) => {
+      return val.length > 10;
+    },
+    validateError: "담당자 연락처를 정확히 입력해주세요",
   },
-  (val) => {
-    return val.match(
-      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i
-    );
+  {
+    validateFunction: (val) => {
+      return val.match(
+        /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i
+      );
+    },
+    validateError: "담당자 이메일을 정확히 입력해주세요",
   },
 ];
 

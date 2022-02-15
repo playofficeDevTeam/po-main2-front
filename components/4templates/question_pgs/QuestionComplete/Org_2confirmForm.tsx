@@ -19,6 +19,7 @@ import useIsMobile from "/home/app/components/hooks/useIsMobile";
 
 export default function App() {
   const isMobile = useIsMobile();
+  const [editState, setEditState] = useState(false);
   const temData = {
     title: (
       <div className={`center ${isMobile ? "" : "mb-6"}`}>
@@ -27,18 +28,18 @@ export default function App() {
           <Br_mo />
           확인 부탁드립니다
         </div>
-        {isMobile ? (
-          <></>
-        ) : (
+        {!isMobile && !editState ? (
           <div
             className="text-orange-500 border-2 border-orange-500 rounded-md bg-white
-               text-sm  font-bold cursor-pointer ml-6 mt-px relative px-4 py-1"
+             text-sm  font-bold cursor-pointer ml-6 mt-px relative px-4 py-1"
             onClick={() => {
               setEditState(true);
             }}
           >
             수정하기
           </div>
+        ) : (
+          <></>
         )}
       </div>
     ),
@@ -47,14 +48,9 @@ export default function App() {
 
   const [userFormDataState, setUserFormDataState] =
     useRecoilState(userFormData);
-  const inputOnChange = useUserFormDataOnChange();
 
   const [userDetail1FormDataState, setUserDetail1FormDataState] =
     useRecoilState(userDetail1FormData);
-  const inputDetail1OnChange = useUserDetail1FormDataOnChange();
-
-  const [depositClickedState, setDepositClickedState] = useState(false);
-  const [editState, setEditState] = useState(false);
 
   return isMobile ? (
     <>

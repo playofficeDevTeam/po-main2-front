@@ -19,12 +19,35 @@ export interface CreatePaymentInput {
   itemInfo: ItemIdAndAmount[];
 }
 
+export interface CreateQuestionInput {
+  brandName: string;
+  name: string;
+  phoneNumber: string;
+  email: string;
+  budget: string;
+  productLink: string;
+  uniqueness?: string | null;
+  isAgency: boolean;
+}
+
 export interface EditPaymentFormDataInput {
   id: number;
   brandName: string;
   name: string;
   phoneNumber: string;
   email: string;
+}
+
+export interface EditQuestionInput {
+  brandName?: string | null;
+  name?: string | null;
+  phoneNumber?: string | null;
+  email?: string | null;
+  budget?: string | null;
+  productLink?: string | null;
+  uniqueness?: string | null;
+  isAgency?: boolean | null;
+  id: number;
 }
 
 export interface FindPaymentInput {

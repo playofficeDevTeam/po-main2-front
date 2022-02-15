@@ -4,11 +4,11 @@ import {
   clickedServiceDataClass,
   serviceDatasAtom,
 } from "../../service_pgs/VisualInfluencer_pg/Var_serviceDatas";
-import { userFormData } from "./Var_userFormData";
+import { userFormData, userFormDataValidate } from "./Var_userFormData";
 import { v1 } from "uuid";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
 import { paymentMethodAtom } from "./Org_5paymentMethod";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { CREATE_PAYMENT } from "./Gql_payment";
 import {
   CreatePayment,
@@ -94,36 +94,46 @@ export default function App({ trigger = false }) {
       {paymentClickThrottle ? (
         <RoundedOrangeBtn
           trigger={trigger}
-          onClick={async () => {
-            window.localStorage.setItem(
-              "serviceDataState",
-              JSON.stringify(serviceDataState)
-            );
-            window.localStorage.setItem(
-              "userFormDataState",
-              JSON.stringify(userFormDataState)
-            );
-            disabledPaymentClick();
-            createPayment({
-              variables: {
-                input: {
-                  brandName: userFormDataState[0].trim(),
-                  name: userFormDataState[1].trim(),
-                  phoneNumber: userFormDataState[2].trim(),
-                  email: userFormDataState[3].trim(),
-                  paymentMethod: clickedPaymentMethod ?? "오류",
-                  amount,
-                  orderId,
-                  itemInfo: [
-                    {
-                      itemId: clickedServiceClass?.input.itemId ?? 0,
-                      amountOfItem:
-                        clickedServiceClass?.input.amountOfItems ?? 0,
-                    },
-                  ],
+          onClick={() => {
+            try {
+              userFormDataValidate.forEach((val, idx) => {
+                if (!val.validateFunction(userFormDataState[idx])) {
+                  const error = val.validateError;
+                  throw error;
+                }
+              });
+              window.localStorage.setItem(
+                "serviceDataState",
+                JSON.stringify(serviceDataState)
+              );
+              window.localStorage.setItem(
+                "userFormDataState",
+                JSON.stringify(userFormDataState)
+              );
+              disabledPaymentClick();
+              createPayment({
+                variables: {
+                  input: {
+                    brandName: userFormDataState[0].trim(),
+                    name: userFormDataState[1].trim(),
+                    phoneNumber: userFormDataState[2].trim(),
+                    email: userFormDataState[3].trim(),
+                    paymentMethod: clickedPaymentMethod ?? "오류",
+                    amount,
+                    orderId,
+                    itemInfo: [
+                      {
+                        itemId: clickedServiceClass?.input.itemId ?? 0,
+                        amountOfItem:
+                          clickedServiceClass?.input.amountOfItems ?? 0,
+                      },
+                    ],
+                  },
                 },
-              },
-            });
+              });
+            } catch (error) {
+              alert(error);
+            }
           }}
         >
           <div className=" w-40 center text-lg">결제하기</div>
