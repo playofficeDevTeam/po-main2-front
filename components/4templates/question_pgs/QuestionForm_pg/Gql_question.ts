@@ -5,7 +5,6 @@ export const CREATE_QUESTION = gql`
     createQuestion(input: $input) {
       ok
       error
-      questionId
     }
   }
 `;

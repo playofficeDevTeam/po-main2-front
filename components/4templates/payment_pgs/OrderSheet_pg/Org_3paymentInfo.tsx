@@ -18,7 +18,14 @@ export default function App() {
     // 모바일
     <>
       <div className=" max-w-xs w-11/12 mx-auto my-10">
-        <div className=" text-xl font-bold mb-5">결제 안내</div>
+        <div
+          className=" text-xl font-bold mb-5"
+          onClick={() => {
+            console.log(clickedServiceData);
+          }}
+        >
+          결제 안내
+        </div>
         <div className=" font-medium">
           <div className="flex justify-between">
             <div className=" text-gray-600">공급가액</div>

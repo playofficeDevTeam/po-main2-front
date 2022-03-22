@@ -61,7 +61,7 @@ const serviceDatas: IItem[] = [
   {
     itemId: 1,
     hightlighted: false,
-    itemCategory1: "비주얼 인플루언서 마케팅",
+    itemCategory1: "비주얼 인플루언서 콘텐츠 마케팅",
     itemName: "크리에이티브 5",
     detailInfo: [
       "브랜드 제품 소개 영상 5개",
@@ -79,7 +79,7 @@ const serviceDatas: IItem[] = [
   {
     itemId: 2,
     hightlighted: true,
-    itemCategory1: "비주얼 인플루언서 마케팅",
+    itemCategory1: "비주얼 인플루언서 콘텐츠 마케팅",
     itemName: "크리에이티브 10",
     detailInfo: [
       "브랜드 제품 소개 영상 10개",
@@ -97,7 +97,7 @@ const serviceDatas: IItem[] = [
   {
     itemId: 3,
     hightlighted: false,
-    itemCategory1: "비주얼 인플루언서 마케팅",
+    itemCategory1: "비주얼 인플루언서 콘텐츠 마케팅",
     itemName: "크리에이티브 20",
     detailInfo: [
       "브랜드 제품 소개 영상 20개",

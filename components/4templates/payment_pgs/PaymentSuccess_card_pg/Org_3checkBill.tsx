@@ -1,21 +1,15 @@
-import { useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import IsMobile from "../../../1atoms/IsMobile";
-import {
-  clickedServiceDataClass,
-  serviceDatasAtom,
-} from "../../service_pgs/VisualInfluencer_pg/Var_serviceDatas";
+import { useRecoilValue } from "recoil";
+import { clickedServiceDataClass } from "../../service_pgs/VisualInfluencer_pg/Var_serviceDatas";
 import useIsMobile from "/home/app/components/hooks/useIsMobile";
 
 const defaultData = {
   title: <>결제 정보</>,
-  itemCategory1: <>비주얼 인플루언서 콘텐츠 마케팅</>,
 };
 
 export default function App({ data = defaultData }) {
   const isMobile = useIsMobile();
-
   const clickedServiceData = useRecoilValue(clickedServiceDataClass);
+
   return isMobile ? (
     <>
       <div className="xs-max">
@@ -25,7 +19,9 @@ export default function App({ data = defaultData }) {
         <div className="pb-5 mb-6 border-b-2"></div>
 
         <div className="py-1">
-          <div className="font-bold text-lg mb-3">{data.itemCategory1}</div>
+          <div className="font-bold text-lg mb-3">
+            {clickedServiceData?.input.itemCategory1}
+          </div>
           <div className="font-bold text-lg mb-2">
             <span className=" font-normal">📌</span>
             {clickedServiceData?.input.itemName}{" "}
@@ -97,7 +93,9 @@ export default function App({ data = defaultData }) {
         <div className="pb-5 mb-6 border-b-2"></div>
 
         <div className="py-1">
-          <div className="font-bold text-lg mb-3">{data.itemCategory1}</div>
+          <div className="font-bold text-lg mb-3">
+            {clickedServiceData?.input.itemCategory1}
+          </div>
           <div className="font-bold text-lg mb-2">
             <span className=" font-normal">📌</span>
             {clickedServiceData?.input.itemName}{" "}

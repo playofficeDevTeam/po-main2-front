@@ -13,7 +13,6 @@ export interface CreateQuestion_createQuestion {
   __typename: "CreateQuestionOutput";
   ok: boolean;
   error: string | null;
-  questionId: number | null;
 }
 
 export interface CreateQuestion {

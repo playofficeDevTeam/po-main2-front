@@ -11,7 +11,7 @@ import { FindPaymentInput } from "./../../../../../__generated__/globalTypes";
 
 export interface FindPayment_findPayment_payment {
   __typename: "Payment";
-  brandName: string;
+  brandName: string | null;
 }
 
 export interface FindPayment_findPayment {

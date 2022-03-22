@@ -20,6 +20,9 @@ const defaultData = {
 export default function App({ data = defaultData }) {
   const isMobile = useIsMobile();
   return isMobile ? (
+    // 모바일
+    // 모바일
+    // 모바일
     <>
       <div className="h-0 relative -z-10">
         <Vdo
@@ -35,6 +38,9 @@ export default function App({ data = defaultData }) {
       </div>
     </>
   ) : (
+    // 피씨
+    // 피씨
+    // 피씨
     <>
       <div className="h-0 relative -z-10">
         <Vdo

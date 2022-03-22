@@ -14,7 +14,6 @@ import useIsMobile from "/home/app/components/hooks/useIsMobile";
 
 const defaultData = {
   title: <>선택한 플랜</>,
-  subtitle: <>비주얼 인플루언서 콘텐츠 마케팅</>,
   notice: (
     <>
       선택한 플랜 1개는
@@ -39,7 +38,9 @@ export default function App({ data = defaultData }) {
       <div className="mo-max pt-10 pb-4">
         <div className=" max-w-xs mx-auto">
           <div className=" font-bold text-xl mb-7">{data.title}</div>
-          <div className=" font-semibold text-xl mb-4">{data.subtitle}</div>
+          <div className=" font-semibold text-xl mb-4">
+            {clickedServiceData?.input.itemCategory1}
+          </div>
           <div className="flex">
             {/* 왼쪽 */}
             <div className="w-8/12 mr-3">
@@ -182,7 +183,9 @@ export default function App({ data = defaultData }) {
         <div className="">
           <div className="  mx-auto">
             <div className=" font-bold text-xl mb-7">{data.title}</div>
-            <div className=" font-semibold text-xl mb-4">{data.subtitle}</div>
+            <div className=" font-semibold text-xl mb-4">
+              {clickedServiceData?.input.itemCategory1}
+            </div>
             <div className="flex w-7/12">
               {/* 왼쪽 */}
               <div className="w-8/12 mr-3">
