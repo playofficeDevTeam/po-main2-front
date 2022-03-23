@@ -46,7 +46,7 @@ export default function App() {
           itemName: urlParams.itemName as string,
           detailInfo: [urlParams.detailInfo as string],
           price: +(urlParams.price as string),
-          discount: !!(urlParams.discount as string),
+          discount: JSON.parse(urlParams.discount as string),
           discountRate: +(urlParams.discountRate as string),
         };
         setServiceDataState((serviceData) => [
@@ -74,7 +74,7 @@ export default function App() {
             itemName: urlParams.itemName as string,
             detailInfo: [urlParams.detailInfo as string],
             price: +(urlParams.price as string),
-            discount: !!(urlParams.discount as string),
+            discount: JSON.parse(urlParams.discount as string),
             discountRate: +(urlParams.discountRate as string),
             type: "CUSTOM",
           },
