@@ -1,7 +1,15 @@
+import { useMutation } from "@apollo/client";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { serviceDatasAtom } from "../../service_pgs/VisualInfluencer_pg/Var_serviceDatas";
+import {
+  IItem,
+  serviceDatas,
+  serviceDatasAtom,
+} from "../../service_pgs/VisualInfluencer_pg/Var_serviceDatas";
 import { userFormData } from "../OrderSheet_pg/Var_userFormData";
+import { CREATE_ITEM } from "./Gql_Item";
+import { CreateItem, CreateItemVariables } from "./__generated__/CreateItem";
 
 export default function App() {
   const [serviceDataState, setServiceDataState] =
@@ -10,29 +18,69 @@ export default function App() {
   const [userFormDataState, setUserFormDataState] =
     useRecoilState(userFormData);
 
-  useEffect(() => {
-    const serviceData = [
-      {
-        itemId: 1,
-        hightlighted: false,
-        itemCategory1: "커스텀 카테고리",
-        itemName: "커스텀 아이템 이름",
-        detailInfo: ["브랜드 제품 소개 영상 5개"],
-        price: 1100000,
-        discount: false,
-        discountRate: 0,
-        amountOfItems: 1,
-        isClicked: true,
-        isAmountFix: false,
-      },
-    ];
-    setServiceDataState(serviceData);
+  const router = useRouter();
+  const urlParams = router.query;
 
-    const userFormData = JSON.parse(
-      window.localStorage.getItem("userFormDataState") ||
-        JSON.stringify(userFormDataState)
-    );
-    setUserFormDataState(userFormData);
-  }, []);
+  const customServiceData: IItem = {
+    itemId: 0,
+    hightlighted: false,
+    itemCategory1: "",
+    itemName: "",
+    detailInfo: [""],
+    price: 0,
+    discount: false,
+    discountRate: 0,
+    amountOfItems: 1,
+    isClicked: true,
+  };
+
+  const [createItem] = useMutation<CreateItem, CreateItemVariables>(
+    CREATE_ITEM,
+    {
+      onCompleted: (data: CreateItem) => {
+        const itemId = data.createItem.itemId ?? 0;
+        const customServiceDataIncludeId = {
+          ...customServiceData,
+          itemId,
+          itemCategory1: urlParams.itemCategory1 as string,
+          itemName: urlParams.itemName as string,
+          detailInfo: [urlParams.detailInfo as string],
+          price: +(urlParams.price as string),
+          discount: !!(urlParams.discount as string),
+          discountRate: +(urlParams.discountRate as string),
+        };
+        setServiceDataState((serviceData) => [
+          ...serviceDatas.map((val) => ({ ...val, isClicked: false })),
+          customServiceDataIncludeId,
+        ]);
+      },
+    }
+  );
+
+  useEffect(() => {
+    if (urlParams.itemCategory1) {
+      console.log(urlParams);
+
+      const userFormData = JSON.parse(
+        window.localStorage.getItem("userFormDataState") ||
+          JSON.stringify(userFormDataState)
+      );
+      setUserFormDataState(userFormData);
+
+      createItem({
+        variables: {
+          input: {
+            itemCategory1: urlParams.itemCategory1 as string,
+            itemName: urlParams.itemName as string,
+            detailInfo: [urlParams.detailInfo as string],
+            price: +(urlParams.price as string),
+            discount: !!(urlParams.discount as string),
+            discountRate: +(urlParams.discountRate as string),
+            type: "CUSTOM",
+          },
+        },
+      });
+    }
+  }, [router]);
   return <></>;
 }

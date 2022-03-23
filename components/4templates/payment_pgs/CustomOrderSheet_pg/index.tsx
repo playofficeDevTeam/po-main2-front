@@ -1,10 +1,10 @@
 import useIsMobile from "../../../hooks/useIsMobile";
 import Org_1orderSheetHeader from "../OrderSheet_pg/Org_1orderSheetHeader";
-import Org_2selectedPlan from "../OrderSheet_pg/Org_2selectedPlan";
 import Org_3paymentInfo from "../OrderSheet_pg/Org_3paymentInfo";
 import Org_4paymentForm from "../OrderSheet_pg/Org_4paymentForm";
 import Org_5paymentMethod from "../OrderSheet_pg/Org_5paymentMethod";
 import Org_6paymentApply from "../OrderSheet_pg/Org_6paymentApply";
+import Org_selectedCustomPlan from "./Org_selectedCustomPlan";
 import Ue_loadingUrlData from "./Ue_loadingUrlData";
 
 export default function App() {
@@ -15,7 +15,7 @@ export default function App() {
       {isMobile ? (
         <>
           <Org_1orderSheetHeader />
-          <Org_2selectedPlan />
+          <Org_selectedCustomPlan />
           <Org_3paymentInfo />
           <Org_4paymentForm />
           <Org_5paymentMethod />
@@ -26,7 +26,7 @@ export default function App() {
           <Org_1orderSheetHeader />
           <div className="flex w-full">
             <div className="w-7/12 mr-3">
-              <Org_2selectedPlan />
+              <Org_selectedCustomPlan />
               <div className="mb-3"></div>
               <Org_4paymentForm />
               <div className="mb-16"></div>

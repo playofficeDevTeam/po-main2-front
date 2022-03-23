@@ -13,19 +13,12 @@ import {
 import useIsMobile from "/home/app/components/hooks/useIsMobile";
 
 const defaultData = {
-  title: <>선택한 플랜</>,
-  notice: (
-    <>
-      선택한 플랜 1개는
-      <Br_mo />
-      제품 1개를 기준으로 진행됩니다.
-    </>
-  ),
+  title: <>맞춤 플랜</>,
+  notice: <></>,
 };
 
 export default function App({ data = defaultData }) {
   const isMobile = useIsMobile();
-  const [isServiceListOpened, setIsServiceListOpened] = useState(false);
   const [serviceDataState, setServiceDataState] =
     useRecoilState(serviceDatasAtom);
   const clickedServiceData = useRecoilValue(clickedServiceDataClass);
@@ -43,73 +36,13 @@ export default function App({ data = defaultData }) {
           </div>
           <div className="flex">
             {/* 왼쪽 */}
-            <div className="w-8/12 mr-3">
-              <div
-                className=" bg-gray-50 border-2 border-gray-300 rounded-md px-3 py-1 relative z-10 flex justify-between cursor-pointer "
-                onClick={() => {
-                  setIsServiceListOpened((val) => !val);
-                }}
-              >
+            <div className="w-full">
+              <div className=" bg-gray-50 border-2 border-gray-300 rounded-md px-3 py-1 relative z-10 flex justify-between ">
                 <div className="">
                   <span className=" relative bottom-px mr-1">📌</span>
                   <span className=" font-bold">
                     {clickedServiceData?.input.itemName}
                   </span>
-                </div>
-                <span>
-                  {isServiceListOpened ? (
-                    <i className="fas fa-angle-up"></i>
-                  ) : (
-                    <i className="fas fa-angle-down"></i>
-                  )}
-                </span>
-              </div>
-              {/* 숨겨진박스 */}
-              <Ani_box trigger={isServiceListOpened} className="mx-1">
-                <ul className="px-3 pt-3 pb-3 border-2 relative -top-1">
-                  {serviceDataState.map((val, idx) =>
-                    idx >= 0 && idx < 3 ? (
-                      <li
-                        key={idx}
-                        className=" font-bold py-1 center cursor-pointer"
-                        onClick={() => {
-                          serviceClickToggle(idx, setServiceDataState);
-                          setIsServiceListOpened(false);
-                        }}
-                      >
-                        {val.itemName}
-                      </li>
-                    ) : (
-                      <></>
-                    )
-                  )}
-                </ul>
-              </Ani_box>
-            </div>
-            {/* 오른쪽 */}
-            <div className="w-4/12">
-              <div className="bg-gray-50 border-2 border-gray-300 rounded-md px-2 py-1 relative z-10 flex justify-between ">
-                <div
-                  className="cursor-pointer"
-                  onClick={() => {
-                    decreaseServiceAmount(setServiceDataState);
-                  }}
-                >
-                  －
-                </div>
-
-                <div className=" font-bold">
-                  <span>{clickedServiceData?.input.amountOfItems}</span>
-                  <span>개</span>
-                </div>
-
-                <div
-                  className="cursor-pointer"
-                  onClick={() => {
-                    increaseServiceAmount(setServiceDataState);
-                  }}
-                >
-                  ＋
                 </div>
               </div>
             </div>
@@ -192,73 +125,13 @@ export default function App({ data = defaultData }) {
             </div>
             <div className="flex ">
               {/* 왼쪽 */}
-              <div className="w-60 mr-3">
-                <div
-                  className=" bg-gray-50 border-2 border-gray-300 rounded-md  px-3 py-1 relative z-10 flex justify-between cursor-pointer "
-                  onClick={() => {
-                    setIsServiceListOpened((val) => !val);
-                  }}
-                >
+              <div className="">
+                <div className=" bg-gray-50 border-2 border-gray-300 rounded-md  px-3 pr-4 py-1 relative z-10 flex justify-between  ">
                   <div className="">
                     <span className=" relative bottom-px mr-1">📌</span>
                     <span className=" font-bold">
                       {clickedServiceData?.input.itemName}
                     </span>
-                  </div>
-                  <span>
-                    {isServiceListOpened ? (
-                      <i className="fas fa-angle-up"></i>
-                    ) : (
-                      <i className="fas fa-angle-down"></i>
-                    )}
-                  </span>
-                </div>
-                {/* 숨겨진박스 */}
-                <Ani_box trigger={isServiceListOpened} className="mx-1">
-                  <ul className="px-3 pt-3 pb-3 border-2 relative -top-1">
-                    {serviceDataState.map((val, idx) =>
-                      idx >= 0 && idx < 3 ? (
-                        <li
-                          key={idx}
-                          className=" font-bold py-1 center cursor-pointer"
-                          onClick={() => {
-                            serviceClickToggle(idx, setServiceDataState);
-                            setIsServiceListOpened(false);
-                          }}
-                        >
-                          {val.itemName}
-                        </li>
-                      ) : (
-                        <></>
-                      )
-                    )}
-                  </ul>
-                </Ani_box>
-              </div>
-              {/* 오른쪽 */}
-              <div className="w-28">
-                <div className="bg-gray-50 border-2 border-gray-300 rounded-md px-2 py-1 relative z-10 flex justify-between ">
-                  <div
-                    className="cursor-pointer"
-                    onClick={() => {
-                      decreaseServiceAmount(setServiceDataState);
-                    }}
-                  >
-                    －
-                  </div>
-
-                  <div className=" font-bold">
-                    <span>{clickedServiceData?.input.amountOfItems}</span>
-                    <span>개</span>
-                  </div>
-
-                  <div
-                    className="cursor-pointer"
-                    onClick={() => {
-                      increaseServiceAmount(setServiceDataState);
-                    }}
-                  >
-                    ＋
                   </div>
                 </div>
               </div>
@@ -284,10 +157,6 @@ export default function App({ data = defaultData }) {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="text-gray-500 py-6 px-10 bg-gray-50 border-t-2">
-        {data.notice}
       </div>
     </div>
   );

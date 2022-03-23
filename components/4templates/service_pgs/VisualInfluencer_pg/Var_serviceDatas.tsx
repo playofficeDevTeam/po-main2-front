@@ -1,6 +1,6 @@
 import { atom, selector } from "recoil";
 
-interface IItem {
+export interface IItem {
   itemId: number;
   hightlighted: boolean;
   itemCategory1: string;
@@ -11,7 +11,6 @@ interface IItem {
   discountRate: number;
   amountOfItems: number;
   isClicked: boolean;
-  isAmountFix: boolean;
 }
 
 export class ItemClass {
@@ -23,9 +22,7 @@ export class ItemClass {
     return won;
   }
 
-  public amountFixCheck = this.input.isAmountFix ? 1 : this.input.amountOfItems;
-
-  public priceTotal = this.input.price * this.amountFixCheck;
+  public priceTotal = this.input.price * this.input.amountOfItems;
   public priceTotal_won = this.numberToWon(this.priceTotal);
   public priceDiscounted = Math.ceil(
     (this.priceTotal * (100 - this.input.discountRate)) / 100
@@ -34,14 +31,16 @@ export class ItemClass {
   public priceDivided_won = this.numberToWon(
     Math.ceil((this.priceTotal * (100 - this.input.discountRate)) / 100 / 6)
   );
-  public priceRaw_won = this.numberToWon(this.priceTotal / 1.1);
-  public priceTax_won = this.numberToWon(this.priceTotal / 11);
+  public priceRaw_won = this.numberToWon(Math.round(this.priceTotal / 1.1));
+  public priceTax_won = this.numberToWon(Math.round(this.priceTotal / 11));
   public discount_won = this.numberToWon(
     Math.ceil((this.priceTotal * this.input.discountRate) / 100)
   );
 
   public multipleAmountText = (id) =>
-    id !== 3 && this.amountFixCheck !== 1 ? `x${this.amountFixCheck}` : "";
+    id !== 3 && this.input.amountOfItems !== 1
+      ? `x${this.input.amountOfItems}`
+      : "";
 
   public detailInfoText = this.input.detailInfo.map(
     (val, idx) => val + " " + this.multipleAmountText(idx)
@@ -57,7 +56,7 @@ export class ItemClass {
   public fullName = this.input.itemCategory1 + " " + this.input.itemName;
 }
 
-const serviceDatas: IItem[] = [
+export const serviceDatas: IItem[] = [
   {
     itemId: 1,
     hightlighted: false,
@@ -74,7 +73,6 @@ const serviceDatas: IItem[] = [
     discountRate: 0,
     amountOfItems: 1,
     isClicked: false,
-    isAmountFix: false,
   },
   {
     itemId: 2,
@@ -92,7 +90,6 @@ const serviceDatas: IItem[] = [
     discountRate: 5,
     amountOfItems: 1,
     isClicked: true,
-    isAmountFix: false,
   },
   {
     itemId: 3,
@@ -110,7 +107,6 @@ const serviceDatas: IItem[] = [
     discountRate: 10,
     amountOfItems: 1,
     isClicked: false,
-    isAmountFix: false,
   },
 ];
 
@@ -118,8 +114,8 @@ export function serviceClickToggle(
   id: number,
   setServiceDatasState: (a) => void
 ) {
-  setServiceDatasState((setServiceDatas) =>
-    setServiceDatas.map((val, idx) =>
+  setServiceDatasState((serviceDatas) =>
+    serviceDatas.map((val, idx) =>
       idx === id ? { ...val, isClicked: true } : { ...val, isClicked: false }
     )
   );

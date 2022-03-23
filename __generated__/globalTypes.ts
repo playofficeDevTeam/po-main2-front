@@ -71,6 +71,20 @@ export interface CampaignUploadLinkType {
   campaignParticipation: CampaignParticipationInput;
 }
 
+export interface CreateItemInput {
+  id?: number | null;
+  createdAt?: any | null;
+  updatedAt?: any | null;
+  itemCategory1?: string | null;
+  itemName?: string | null;
+  detailInfo?: string[] | null;
+  price?: number | null;
+  discount?: boolean | null;
+  discountRate?: number | null;
+  type?: string | null;
+  carts?: cartInputType[] | null;
+}
+
 export interface CreatePaymentInput {
   brandName?: string | null;
   name?: string | null;
@@ -153,6 +167,7 @@ export interface itemInputType {
   price?: number | null;
   discount?: boolean | null;
   discountRate?: number | null;
+  type?: string | null;
   carts?: cartInputType[] | null;
 }
 

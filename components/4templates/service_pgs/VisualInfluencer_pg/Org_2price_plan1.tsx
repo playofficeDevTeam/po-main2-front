@@ -2,7 +2,9 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import useIsMobile from "../../../hooks/useIsMobile";
 import Mol_goToPaymentPg_Btn from "./Mol_goToPaymentPg_Btn";
 import {
+  ItemClass,
   serviceClickToggle,
+  serviceDatas,
   serviceDatasAtom,
   serviceDatasClass,
 } from "./Var_serviceDatas";
@@ -13,6 +15,12 @@ export default function App() {
   const [serviceDatasState, setServiceDatasState] =
     useRecoilState(serviceDatasAtom);
   const services = useRecoilValue(serviceDatasClass);
+  const indexOfClickedService = services.findIndex(
+    (val) => val.input.isClicked
+  );
+
+  const rawServices = serviceDatas;
+  const rawServicesClass = rawServices.map((val) => new ItemClass(val));
 
   return (
     <>
@@ -22,8 +30,10 @@ export default function App() {
         // 모바일
         <section className="mo-max my-16" style={{ height: "530px" }}>
           <ul className="">
-            {services.map((service, serviceIdx) =>
-              service.input.isClicked ? (
+            {rawServicesClass.map((service, serviceIdx) =>
+              serviceIdx >= 0 &&
+              serviceIdx < 3 &&
+              serviceIdx === indexOfClickedService ? (
                 // 선택시
                 <li
                   key={serviceIdx}
@@ -126,8 +136,10 @@ export default function App() {
         // 피씨
         <section className="mo-max">
           <ul className="">
-            {services.map((service, serviceIdx) =>
-              service.input.isClicked ? (
+            {rawServicesClass.map((service, serviceIdx) =>
+              serviceIdx >= 0 &&
+              serviceIdx < 3 &&
+              serviceIdx === indexOfClickedService ? (
                 // 선택시
                 <li
                   key={serviceIdx}
