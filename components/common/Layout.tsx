@@ -4,6 +4,9 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
 import DeviceDetect from "./DeviceDetect";
+import { useEffect } from "react";
+import TagManager from "react-gtm-module";
+import { useGtmScroll } from "../hooks/useGtmScroll";
 
 const client = new ApolloClient({
   uri: process.env.NEXT_PUBLIC_API_HOST + "/graphql",
@@ -12,6 +15,16 @@ const client = new ApolloClient({
 const queryClient = new QueryClient();
 
 export default function Layout({ children }: any) {
+  useGtmScroll();
+
+  useEffect(() => {
+    const tagManagerArgs = {
+      gtmId:
+        process.env.NEXT_PUBLIC_TYPE === "prod" ? "GTM-WTBKCZ8" : "GTM-TCF867Z",
+    };
+    TagManager.initialize(tagManagerArgs);
+  }, []);
+
   return (
     <ApolloProvider client={client}>
       <QueryClientProvider client={queryClient}>

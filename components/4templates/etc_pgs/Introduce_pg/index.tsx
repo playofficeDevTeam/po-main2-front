@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useScroll, useScrollEffect } from "../../../hooks/useScroll";
 import Org_1topFullVdo from "./Org_1topFullVdo";
 import Org_2mainExplanation from "./Org_2mainExplanation";
@@ -7,6 +8,7 @@ import Org_5mainExplanation from "./Org_5mainExplanation";
 import Org_6mainExplanation from "./Org_6mainExplanation";
 import Org_7lastMessage from "./Org_7lastMessage";
 import useIsMobile from "/home/app/components/hooks/useIsMobile";
+import ShutdownChanneltalk from "../../../2molecules/ShutdownChanneltalk";
 
 export default function App() {
   const isMobile = useIsMobile();
@@ -31,6 +33,7 @@ export default function App() {
 
   return (
     <>
+      <ShutdownChanneltalk />
       {isMobile ? (
         <>
           <Org_1topFullVdo />

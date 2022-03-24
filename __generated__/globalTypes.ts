@@ -79,7 +79,6 @@ export interface CreateItemInput {
   itemName?: string | null;
   detailInfo?: string[] | null;
   price?: number | null;
-  discount?: boolean | null;
   discountRate?: number | null;
   type?: string | null;
   carts?: cartInputType[] | null;
@@ -165,7 +164,6 @@ export interface itemInputType {
   itemName?: string | null;
   detailInfo?: string[] | null;
   price?: number | null;
-  discount?: boolean | null;
   discountRate?: number | null;
   type?: string | null;
   carts?: cartInputType[] | null;

@@ -7,7 +7,6 @@ export interface IItem {
   itemName: string;
   detailInfo: Array<string>;
   price: number;
-  discount: boolean;
   discountRate: number;
   amountOfItems: number;
   isClicked: boolean;
@@ -36,6 +35,8 @@ export class ItemClass {
   public discount_won = this.numberToWon(
     Math.ceil((this.priceTotal * this.input.discountRate) / 100)
   );
+
+  public isDiscount = this.input.discountRate === 0 ? false : true;
 
   public multipleAmountText = (id) =>
     id !== 3 && this.input.amountOfItems !== 1
@@ -69,7 +70,6 @@ export const serviceDatas: IItem[] = [
       "콘텐츠 활용 라이센스 포함",
     ],
     price: 1100000,
-    discount: false,
     discountRate: 0,
     amountOfItems: 1,
     isClicked: false,
@@ -86,7 +86,6 @@ export const serviceDatas: IItem[] = [
       "콘텐츠 활용 라이센스 포함",
     ],
     price: 2200000,
-    discount: true,
     discountRate: 5,
     amountOfItems: 1,
     isClicked: true,
@@ -103,7 +102,6 @@ export const serviceDatas: IItem[] = [
       "콘텐츠 활용 라이센스 포함",
     ],
     price: 4400000,
-    discount: true,
     discountRate: 10,
     amountOfItems: 1,
     isClicked: false,

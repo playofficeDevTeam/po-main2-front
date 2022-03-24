@@ -56,7 +56,7 @@ export default function App({ data = defaultData }) {
               <div className=" text-gray-700">부가세</div>
               <div className="">{clickedServiceData?.priceTax_won}</div>
             </div>
-            {clickedServiceData?.input.discount ? (
+            {clickedServiceData?.isDiscount ? (
               <div className="flex justify-between text-orange-500">
                 <div className=" ">
                   할인액 {`(-${clickedServiceData.input.discountRate}%)`}
@@ -131,7 +131,7 @@ export default function App({ data = defaultData }) {
                 <div className=" text-gray-700 mb-1">부가세</div>
                 <div className="">{clickedServiceData?.priceTax_won}</div>
               </div>
-              {clickedServiceData?.input.discount ? (
+              {clickedServiceData?.isDiscount ? (
                 <div className="flex justify-between text-orange-500">
                   <div className="">
                     할인액 {`(-${clickedServiceData.input.discountRate}%)`}

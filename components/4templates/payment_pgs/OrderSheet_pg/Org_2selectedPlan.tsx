@@ -146,7 +146,7 @@ export default function App({ data = defaultData }) {
               서비스 금액
             </div>
             <div className="flex flex-col items-end">
-              {clickedServiceData?.input.discount ? (
+              {clickedServiceData?.isDiscount ? (
                 <div className=" text-sm">
                   <span>
                     {`(${clickedServiceData?.input.discountRate}% 할인) `}

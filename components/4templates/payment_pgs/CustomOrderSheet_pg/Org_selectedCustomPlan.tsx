@@ -1,14 +1,7 @@
-import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import Ani_box from "../../../1atoms/Ani_box";
-import Br_mo from "../../../1atoms/Br_mo";
 import {
   clickedServiceDataClass,
-  decreaseServiceAmount,
-  increaseServiceAmount,
-  serviceClickToggle,
   serviceDatasAtom,
-  serviceDatasClass,
 } from "../../service_pgs/VisualInfluencer_pg/Var_serviceDatas";
 import useIsMobile from "/home/app/components/hooks/useIsMobile";
 
@@ -19,8 +12,6 @@ const defaultData = {
 
 export default function App({ data = defaultData }) {
   const isMobile = useIsMobile();
-  const [serviceDataState, setServiceDataState] =
-    useRecoilState(serviceDatasAtom);
   const clickedServiceData = useRecoilValue(clickedServiceDataClass);
 
   return isMobile ? (
@@ -79,7 +70,7 @@ export default function App({ data = defaultData }) {
               서비스 금액
             </div>
             <div className="flex flex-col items-end">
-              {clickedServiceData?.input.discount ? (
+              {clickedServiceData?.isDiscount ? (
                 <div className=" text-sm">
                   <span>
                     {`(${clickedServiceData?.input.discountRate}% 할인) `}
