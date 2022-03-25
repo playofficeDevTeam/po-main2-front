@@ -21,7 +21,7 @@ export default function Layout({ children }: any) {
   useEffect(() => {
     const tagManagerArgs = {
       gtmId:
-        process.env.NEXT_PUBLIC_TYPE === "prod" ? "GTM-WTBKCZ8" : "GTM-TCF867Z",
+        process.env.NEXT_PUBLIC_TYPE !== "prod" ? "GTM-WTBKCZ8" : "GTM-TCF867Z",
     };
     TagManager.initialize(tagManagerArgs);
 
