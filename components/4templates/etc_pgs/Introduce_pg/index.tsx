@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useScroll, useScrollEffect } from "../../../hooks/useScroll";
 import Org_1topFullVdo from "./Org_1topFullVdo";
 import Org_2mainExplanation from "./Org_2mainExplanation";
@@ -33,7 +32,6 @@ export default function App() {
 
   return (
     <>
-      <ShutdownChanneltalk />
       {isMobile ? (
         <>
           <Org_1topFullVdo />

@@ -1,3 +1,4 @@
+import { useGtm } from "../../../hooks/useGtm";
 import useIsMobile from "../../../hooks/useIsMobile";
 import useGotoService_Hk from "./useGotoService_Hk";
 
@@ -9,6 +10,12 @@ const defaultData = {
 export default function App({ data = defaultData, trigger = false }) {
   const isMobile = useIsMobile();
   const goToService = useGotoService_Hk();
+  const moreGtm = useGtm({
+    event: "More",
+    eventModel: {
+      content_name: "to service page",
+    },
+  });
   return (
     <section className=" bg-gray-900">
       {isMobile ? (
@@ -22,7 +29,10 @@ export default function App({ data = defaultData, trigger = false }) {
                 ? " text-white text-shadow-md bg-orange-500"
                 : "text-orange-500 "
             }`}
-            onClick={goToService}
+            onClick={() => {
+              goToService();
+              moreGtm();
+            }}
           >
             {data.btn}
           </div>
@@ -38,7 +48,10 @@ export default function App({ data = defaultData, trigger = false }) {
                 ? " text-white text-shadow-md bg-orange-500"
                 : "text-orange-500 "
             }`}
-            onClick={goToService}
+            onClick={() => {
+              goToService();
+              moreGtm();
+            }}
           >
             {data.btn}
           </div>

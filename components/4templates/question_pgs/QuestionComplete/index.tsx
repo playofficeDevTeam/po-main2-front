@@ -1,6 +1,6 @@
 import Org_1topMsg from "./Org_1topMsg";
 import Org_2confirmForm from "./Org_2confirmForm";
-import Org_3goToHome from "./Mol_goToHome";
+import Ue_Gtm from "./Ue_Gtm";
 import Ue_loadingCookieData from "./Ue_loadingCookieData";
 import useIsMobile from "/home/app/components/hooks/useIsMobile";
 
@@ -10,6 +10,7 @@ export default function App() {
   return (
     <>
       <Ue_loadingCookieData />
+      <Ue_Gtm />
       {isMobile ? (
         <>
           <Org_1topMsg />

@@ -18,7 +18,6 @@ import Org_16lastMessage from "./Org_16lastMessage";
 import Org_0floatingBtn from "./Org_0floatingBtn";
 import useIsMobile from "../../../hooks/useIsMobile";
 import Ue_initServiceAmount from "./Ue_initServiceAmount";
-import { useGtmScroll } from "../../../hooks/useGtmScroll";
 
 export default function App() {
   const isMobile = useIsMobile();

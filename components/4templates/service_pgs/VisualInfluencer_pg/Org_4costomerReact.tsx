@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Carowsel1 from "../../../1atoms/Carowsel1";
+import { useGtm } from "../../../hooks/useGtm";
 import useIsMobile from "../../../hooks/useIsMobile";
 
 const defaultData = [
@@ -67,6 +68,14 @@ const defaultData = [
 
 export default function App({ data = defaultData }) {
   const isMobile = useIsMobile();
+
+  const moreGtm = useGtm({
+    event: "More",
+    eventModel: {
+      content_name: "to customer-story page",
+    },
+  });
+
   return isMobile ? (
     // 모바일
     // 모바일
@@ -87,7 +96,11 @@ export default function App({ data = defaultData }) {
               {data.map((val, idx) => (
                 <div className="px-2 " key={idx}>
                   <Link href={val.url}>
-                    <a>
+                    <a
+                      onClick={() => {
+                        moreGtm();
+                      }}
+                    >
                       <div className="bg-indigo-50 p-3 mb-2 rounded-lg shadow-md max-w-xs mx-auto cursor-pointer">
                         <div className="mb-4 flex justify-center">
                           <img src={val.src} alt={val.src}></img>
@@ -127,7 +140,11 @@ export default function App({ data = defaultData }) {
           <ul className="grid grid-cols-3 min-w-max gap-5">
             {data.map((val, idx) => (
               <Link key={idx} href={val.url}>
-                <a>
+                <a
+                  onClick={() => {
+                    moreGtm();
+                  }}
+                >
                   <li className="bg-indigo-50 p-3 mb-2 rounded-lg shadow-md cursor-pointer">
                     <div className="mb-4">
                       <img src={val.src} alt={val.src}></img>

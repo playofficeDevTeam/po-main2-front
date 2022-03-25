@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Br_mo from "../../../1atoms/Br_mo";
 import Br_pc from "../../../1atoms/Br_pc";
+import { useGtm } from "../../../hooks/useGtm";
 import useIsMobile from "../../../hooks/useIsMobile";
 import Org_2explanation_R_ from "./Org_2explanation_R_";
 
@@ -15,6 +16,12 @@ const defaultData = {
 
 export default function App({ data = defaultData }) {
   const isMobile = useIsMobile();
+  const moreGtm = useGtm({
+    event: "More",
+    eventModel: {
+      content_name: "to service page",
+    },
+  });
   return (
     <>
       <Org_2explanation_R_ data={data} />
@@ -29,7 +36,13 @@ export default function App({ data = defaultData }) {
             />
           </div>
           <Link href={data.linkData.url}>
-            <a>{data.linkData.title}</a>
+            <a
+              onClick={() => {
+                moreGtm();
+              }}
+            >
+              {data.linkData.title}
+            </a>
           </Link>
         </div>
       ) : (
@@ -41,7 +54,13 @@ export default function App({ data = defaultData }) {
             />
           </div>
           <Link href={data.linkData.url}>
-            <a>{data.linkData.title}</a>
+            <a
+              onClick={() => {
+                moreGtm();
+              }}
+            >
+              {data.linkData.title}
+            </a>
           </Link>
         </div>
       )}

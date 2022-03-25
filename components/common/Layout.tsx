@@ -7,6 +7,7 @@ import DeviceDetect from "./DeviceDetect";
 import { useEffect } from "react";
 import TagManager from "react-gtm-module";
 import { useGtmScroll } from "../hooks/useGtmScroll";
+import GoToTopArrow from "../2molecules/GoToTopArrow";
 
 const client = new ApolloClient({
   uri: process.env.NEXT_PUBLIC_API_HOST + "/graphql",
@@ -23,6 +24,8 @@ export default function Layout({ children }: any) {
         process.env.NEXT_PUBLIC_TYPE === "prod" ? "GTM-WTBKCZ8" : "GTM-TCF867Z",
     };
     TagManager.initialize(tagManagerArgs);
+
+    return () => {};
   }, []);
 
   return (
@@ -31,6 +34,7 @@ export default function Layout({ children }: any) {
         <RecoilRoot>
           <DeviceDetect>
             <Org_header />
+            <GoToTopArrow />
             <>{children}</>
             <Org_footer />
           </DeviceDetect>

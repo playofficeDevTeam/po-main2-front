@@ -1,17 +1,14 @@
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import Br_mo from "../../../1atoms/Br_mo";
-import IsMobile from "../../../1atoms/IsMobile";
 import {
   inputSetting,
   userFormData,
-  useUserFormDataOnChange,
 } from "../../payment_pgs/OrderSheet_pg/Var_userFormData";
 import Org_2form from "../QuestionForm_pg/Org_2form";
 import {
   inputDetail1Setting,
   userDetail1FormData,
-  useUserDetail1FormDataOnChange,
 } from "../QuestionForm_pg/Var_userDetail1FormData";
 import Mol_formApplyBtn from "./Mol_formApplyBtn";
 import Mol_goToHome from "./Mol_goToHome";

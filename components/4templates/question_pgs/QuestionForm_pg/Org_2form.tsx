@@ -77,7 +77,6 @@ export default function App({ temData = defaultTemData }) {
                   className="input1 border-2"
                   value={userFormDataState[idx]}
                   onChange={(e) => {
-                    console.log("test");
                     inputOnChange(e, idx);
                   }}
                 />

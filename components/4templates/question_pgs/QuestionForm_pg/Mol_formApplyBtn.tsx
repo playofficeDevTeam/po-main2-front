@@ -3,14 +3,12 @@ import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import RoundedOrangeBtn from "../../../1atoms/RoundedOrangeBtn";
 import {
-  inputSetting,
   userFormData,
   userFormDataValidate,
 } from "../../payment_pgs/OrderSheet_pg/Var_userFormData";
 import { serviceDatasAtom } from "../../service_pgs/VisualInfluencer_pg/Var_serviceDatas";
 import { CREATE_QUESTION } from "./Gql_question";
 import {
-  inputDetail1Setting,
   userDetail1FormData,
   userDetail1FormDataValidate,
 } from "./Var_userDetail1FormData";

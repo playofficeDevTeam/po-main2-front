@@ -48,6 +48,10 @@ class ChannelService {
   shutdown() {
     window.ChannelIO("shutdown");
   }
+
+  show() {
+    window.ChannelIO("show");
+  }
 }
 
 export default new ChannelService();

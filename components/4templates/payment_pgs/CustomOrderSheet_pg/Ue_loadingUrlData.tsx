@@ -57,8 +57,6 @@ export default function App() {
 
   useEffect(() => {
     if (urlParams.itemCategory1) {
-      console.log(urlParams);
-
       const userFormData = JSON.parse(
         window.localStorage.getItem("userFormDataState") ||
           JSON.stringify(userFormDataState)

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useGtm } from "../../../hooks/useGtm";
 import useIsMobile from "../../../hooks/useIsMobile";
 
 const defaultData = {
@@ -51,6 +52,14 @@ const defaultData = {
 
 export default function App({ data = defaultData }) {
   const isMobile = useIsMobile();
+
+  const moreGtm = useGtm({
+    event: "More",
+    eventModel: {
+      content_name: "to customer-story page",
+    },
+  });
+
   return (
     <section className="">
       {isMobile ? (
@@ -59,7 +68,12 @@ export default function App({ data = defaultData }) {
           <ul>
             {data.contents.map((val, idx) => (
               <Link key={idx} href={val.url}>
-                <a href="" key={idx}>
+                <a
+                  key={idx}
+                  onClick={() => {
+                    moreGtm();
+                  }}
+                >
                   <li className="bg-blue-50 rounded-md shadow-md p-2 text-center mb-10 max-w-xs mx-auto">
                     <img src={val.src} alt={val.src} className="mb-6" />
                     <div className=" font-bold mb-3">{val.title}</div>
@@ -80,7 +94,12 @@ export default function App({ data = defaultData }) {
             {data.contents.map((val, idx) => (
               <li key={idx} className="mr-16 last:mr-0">
                 <Link href={val.url}>
-                  <a className="" key={idx}>
+                  <a
+                    key={idx}
+                    onClick={() => {
+                      moreGtm();
+                    }}
+                  >
                     <div className="bg-blue-50 rounded-md shadow-md p-2 text-center mb-10 max-w-xs mx-auto">
                       <img src={val.src} alt={val.src} className="mb-6" />
                       <div className=" font-bold mb-3">{val.title}</div>

@@ -26,12 +26,7 @@ export default function App({ trigger = true }) {
     subtitle: (
       <div>
         지난 일주일 상담 신청 수 :{" "}
-        <span
-          className="underline font-bold"
-          onClick={() => {
-            console.log(ApplicantsNum);
-          }}
-        >
+        <span className="underline font-bold">
           <AnimatedNumber
             trigger={trigger}
             value={ApplicantsNum}

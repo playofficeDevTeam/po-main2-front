@@ -1,7 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { useRecoilState } from "recoil";
 import {
-  inputSetting,
   userFormData,
   userFormDataValidate,
 } from "../../payment_pgs/OrderSheet_pg/Var_userFormData";
