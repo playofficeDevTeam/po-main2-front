@@ -1,3 +1,4 @@
+import ShutdownChanneltalk from "../../../2molecules/ShutdownChanneltalk";
 import Org_1orderSheetHeader from "./Org_1orderSheetHeader";
 import Org_2selectedPlan from "./Org_2selectedPlan";
 import Org_3paymentInfo from "./Org_3paymentInfo";
@@ -11,6 +12,7 @@ export default function App() {
   const isMobile = useIsMobile();
   return (
     <>
+      <ShutdownChanneltalk />
       <Ue_loadingCookieData />
       {isMobile ? (
         <>

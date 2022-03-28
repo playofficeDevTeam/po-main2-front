@@ -17,7 +17,6 @@ import Org_15FAQ from "./Org_15FAQ";
 import Org_16lastMessage from "./Org_16lastMessage";
 import Org_0floatingBtn from "./Org_0floatingBtn";
 import useIsMobile from "../../../hooks/useIsMobile";
-import Ue_initServiceAmount from "./Ue_initServiceAmount";
 
 export default function App() {
   const isMobile = useIsMobile();
@@ -40,7 +39,6 @@ export default function App() {
 
   return (
     <>
-      <Ue_initServiceAmount />
       {isMobile ? (
         // 모바일
         // 모바일

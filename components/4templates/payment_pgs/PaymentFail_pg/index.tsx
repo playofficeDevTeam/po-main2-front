@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import RoundedOrangeBtn from "../../../1atoms/RoundedOrangeBtn";
+import ShutdownChanneltalk from "../../../2molecules/ShutdownChanneltalk";
 import { isVisibleFooterAtom } from "../../../3organisms/Org_footer";
 import { isVisibleHeaderAtom } from "../../../3organisms/Org_header";
 import ScrollLock from "../../../effects/ScrollLock";
@@ -43,6 +44,7 @@ export default function App() {
   };
   return (
     <>
+      <ShutdownChanneltalk />
       <ScrollLock />
       {isMobile ? (
         // 모바일

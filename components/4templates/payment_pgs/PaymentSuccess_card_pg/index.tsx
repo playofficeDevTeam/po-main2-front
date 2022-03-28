@@ -1,3 +1,4 @@
+import ShutdownChanneltalk from "../../../2molecules/ShutdownChanneltalk";
 import { useScroll, useScrollEffect } from "../../../hooks/useScroll";
 import Org_1paymentSuccessHeader from "./Org_1paymentSuccessHeader";
 import Org_2orangeBox from "./Org_2orangeBox";
@@ -20,6 +21,7 @@ export default function App() {
 
   return (
     <>
+      <ShutdownChanneltalk />
       <Ue_loadingCookieData />
       {isMobile ? (
         <>

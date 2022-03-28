@@ -13,7 +13,7 @@ import Org_6proposal1 from "../../service_pgs/VisualInfluencer_pg/Org_6proposal1
 import Org_7proposal2 from "../../service_pgs/VisualInfluencer_pg/Org_7proposal2";
 import Org_8proposal3 from "../../service_pgs/VisualInfluencer_pg/Org_8proposal3";
 import Org_9ref1 from "../../service_pgs/VisualInfluencer_pg/Org_9ref1";
-import Ue_initServiceAmount from "../../service_pgs/VisualInfluencer_pg/Ue_initServiceAmount";
+
 import Ue_loadingCookieData from "../QuestionComplete/Ue_loadingCookieData";
 import Org_1topMsg from "../QuestionForm_pg/Org_1topMsg";
 import Org_2form from "../QuestionForm_pg/Org_2form";
@@ -42,7 +42,6 @@ export default function App() {
   );
   return (
     <>
-      <Ue_initServiceAmount />
       <Ue_loadingCookieData />
       {isMobile ? (
         // 모바일

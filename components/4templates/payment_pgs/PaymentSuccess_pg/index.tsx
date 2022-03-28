@@ -5,6 +5,7 @@ import ReactLoading from "react-loading";
 import { useRecoilState } from "recoil";
 import { isVisibleHeaderAtom } from "../../../3organisms/Org_header";
 import { isVisibleFooterAtom } from "../../../3organisms/Org_footer";
+import ShutdownChanneltalk from "../../../2molecules/ShutdownChanneltalk";
 
 export default function App() {
   const router = useRouter();
@@ -63,6 +64,7 @@ export default function App() {
 
   return (
     <>
+      <ShutdownChanneltalk />
       <div className="fixed center" style={{ width: "100vw", height: "100vh" }}>
         <ReactLoading
           type={"spokes"}
