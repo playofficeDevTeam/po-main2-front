@@ -19,9 +19,11 @@ export default function Layout({ children }: any) {
   useGtmScroll();
 
   useEffect(() => {
+    const prodGtmId = "GTM-WTBKCZ8";
+    const devGtmId = "GTM-TCF867Z";
+
     const tagManagerArgs = {
-      gtmId:
-        process.env.NEXT_PUBLIC_TYPE === "prod" ? "GTM-WTBKCZ8" : "GTM-TCF867Z",
+      gtmId: process.env.NEXT_PUBLIC_TYPE === "prod" ? prodGtmId : devGtmId,
     };
     TagManager.initialize(tagManagerArgs);
 

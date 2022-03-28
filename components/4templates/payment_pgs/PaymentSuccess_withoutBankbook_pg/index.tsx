@@ -1,4 +1,5 @@
-import ShutdownChanneltalk from "../../../2molecules/ShutdownChanneltalk";
+import dynamic from "next/dynamic";
+// import ShutdownChanneltalk from "../../../2molecules/ShutdownChanneltalk";
 import { useScroll, useScrollEffect } from "../../../hooks/useScroll";
 import Org_1paymentSuccessHeader from "./Org_1paymentSuccessHeader";
 import Org_2depositInfomation from "./Org_2depositInfomation";
@@ -8,6 +9,10 @@ import Org_5process from "./Org_5process";
 import Org_6complete from "./Org_6complete";
 import Ue_loadingCookieData from "./Ue_loadingCookieData";
 import useIsMobile from "/home/app/components/hooks/useIsMobile";
+
+const ShutdownChanneltalk = dynamic(
+  () => import("/home/app/components/2molecules/ShutdownChanneltalk")
+);
 
 export default function App() {
   const isMobile = useIsMobile();
