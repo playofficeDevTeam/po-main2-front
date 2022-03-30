@@ -3,5 +3,5 @@ import useIsMobile from "/home/app/components/hooks/useIsMobile";
 export default function App() {
   const isMobile = useIsMobile();
 
-  return <></>;
+  return <>결제 페이지</>;
 }

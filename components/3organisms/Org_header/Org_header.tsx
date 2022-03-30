@@ -34,9 +34,6 @@ export default function App() {
     headerFloatingBtnAtom
   );
 
-  const [isVisibleHeader, setIsBisibleHeader] =
-    useRecoilState(isVisibleHeaderAtom);
-
   const [menuState, setMenuState] = useState(false);
   const menuToggle = () => {
     setMenuState(!menuState);
@@ -67,7 +64,7 @@ export default function App() {
     selectTab(nowPathIndex);
   }, [router, selectTab]);
 
-  return isVisibleHeader ? (
+  return (
     <>
       {isMobile ? (
         // 모바일
@@ -190,7 +187,5 @@ export default function App() {
         </header>
       )}
     </>
-  ) : (
-    <></>
   );
 }

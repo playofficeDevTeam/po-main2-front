@@ -94,7 +94,7 @@ export default function App({ data = defaultData }) {
         </div>
         <div
           ref={element1}
-          className="mo-max overflow-y-scroll "
+          className="mo-max overflow-y-auto "
           style={{ height: "85vh", width: "94vw" }}
         >
           <div>
@@ -128,7 +128,7 @@ export default function App({ data = defaultData }) {
           </div>
         </div>
         <div
-          className="pc-max overflow-y-scroll"
+          className="pc-max overflow-y-auto"
           style={{ maxHeight: "30rem", width: "30rem" }}
         >
           <div className="p-4">

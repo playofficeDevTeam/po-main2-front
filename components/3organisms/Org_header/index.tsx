@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { isAdminAtom } from "../../common/AdminDetect";
 import Org_adminSidebar from "./Org_adminSidebar";
-import Org_header from "./Org_header";
+import Org_header, { isVisibleHeaderAtom } from "./Org_header";
 
 export default function App() {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useRecoilState(isAdminAtom);
+
+  const [isVisibleHeader, setIsBisibleHeader] =
+    useRecoilState(isVisibleHeaderAtom);
 
   useEffect(() => {
     const pathname = window.location.pathname;
@@ -14,11 +19,19 @@ export default function App() {
       setIsAdmin(false);
     }
   }, []);
-  return isAdmin ? (
-    <>
-      <Org_adminSidebar />
-    </>
-  ) : (
+
+  if (!isVisibleHeader) {
+    return <></>;
+  }
+
+  if (isAdmin) {
+    return (
+      <>
+        <Org_adminSidebar />
+      </>
+    );
+  }
+  return (
     <>
       <Org_header />
     </>

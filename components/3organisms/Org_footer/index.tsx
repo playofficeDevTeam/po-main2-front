@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { isAdminAtom } from "../../common/AdminDetect";
 import Org_footer from "./Org_footer";
 export default function App() {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useRecoilState(isAdminAtom);
 
   useEffect(() => {
     const pathname = window.location.pathname;
