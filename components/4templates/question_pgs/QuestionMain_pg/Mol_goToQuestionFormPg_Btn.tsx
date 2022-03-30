@@ -14,7 +14,7 @@ export default function App() {
     <>
       <RoundedOrangeBtn
         onClick={() => {
-          router.push("/question/form");
+          router.push("/consulting/form");
           startContactGtm();
         }}
       >

@@ -58,6 +58,7 @@ export default function App({ children = [<></>] }) {
     speed: 300,
     slidesToShow: 1,
     slidesToScroll: 1,
+    lazyLoad: "ondemand",
   };
   return (
     <>

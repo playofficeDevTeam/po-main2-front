@@ -36,7 +36,7 @@ export default function App({ trigger = false }) {
               "questionId",
               (data.createQuestion.questionId ?? -1).toString()
             );
-            router.push("/question/complete");
+            router.push("/consulting/complete");
           } else {
             throw "일시적인 오류로 문의사항을 제출하지 못했습니다. 우측하단 채널톡버튼으로 문의해주세요";
           }

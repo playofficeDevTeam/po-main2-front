@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { headerFloatingBtnAtom } from "../../../3organisms/Org_header";
+import { headerFloatingBtnAtom } from "/home/app/components/3organisms/Org_header/Org_header";
 import useIsMobile from "../../../hooks/useIsMobile";
 import Mol_pricePlan_popup_Btn from "./Mol_pricePlan_popup_Btn";
 

@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import useIsMobile from "../hooks/useIsMobile";
 import { atom, useRecoilState } from "recoil";
-import Ani_box from "../1atoms/Ani_box";
+import Ani_box from "../../1atoms/Ani_box";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const sitemapData = [
   { title: "서비스", url: "/service", selected: false },
