@@ -2,7 +2,7 @@ import Org_footer from "../3organisms/Org_footer";
 import Org_header from "../3organisms/Org_header";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { RecoilRoot } from "recoil";
+import { atom, RecoilRoot, useRecoilState } from "recoil";
 import DeviceDetect from "./DeviceDetect";
 import { useEffect } from "react";
 import TagManager from "react-gtm-module";
@@ -14,6 +14,11 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 const queryClient = new QueryClient();
+
+// export const isAdminAtom = atom({
+//   key: "isAdmin",
+//   default: false,
+// });
 
 export default function Layout({ children }: any) {
   useGtmScroll();
@@ -29,6 +34,17 @@ export default function Layout({ children }: any) {
 
     return () => {};
   }, []);
+
+  // const [isAdmin, setIsAmin] = useRecoilState(isAdminAtom);
+  // useEffect(() => {
+  //   const pathname = window.location.pathname;
+  //   const pathnameFirst = pathname.split("/")[1];
+  //   if (pathnameFirst === "admin") {
+  //     setIsAmin(true);
+  //   } else {
+  //     setIsAmin(false);
+  //   }
+  // }, []);
 
   return (
     <ApolloProvider client={client}>

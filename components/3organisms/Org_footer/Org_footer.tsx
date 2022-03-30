@@ -1,10 +1,7 @@
 import Link from "next/link";
 import { atom, useRecoilState } from "recoil";
-import useIsMobile from "../hooks/useIsMobile";
-import {
-  isVisibleHeaderAtom,
-  sitemapDataAtom,
-} from "/home/app/components/3organisms/Org_header/Org_header";
+import useIsMobile from "../../hooks/useIsMobile";
+import { sitemapDataAtom } from "/home/app/components/3organisms/Org_header/Org_header";
 
 export const isVisibleFooterAtom = atom({
   key: "isVisibleFooterAtom",

@@ -1,7 +1,5 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Modal from "react-modal";
-import { useRecoilState } from "recoil";
-import { serviceDatasAtom } from "../4templates/service_pgs/VisualInfluencer_pg/Var_serviceDatas";
 import ScrollLock from "../effects/ScrollLock";
 import useIsMobile from "../hooks/useIsMobile";
 

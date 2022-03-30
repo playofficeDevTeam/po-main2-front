@@ -4,7 +4,7 @@ import { usePaymentApproval } from "./usePaymentApproval_Hk";
 import ReactLoading from "react-loading";
 import { useRecoilState } from "recoil";
 import { isVisibleHeaderAtom } from "/home/app/components/3organisms/Org_header/Org_header";
-import { isVisibleFooterAtom } from "../../../3organisms/Org_footer";
+import { isVisibleFooterAtom } from "/home/app/components/3organisms/Org_footer/Org_footer";
 import ShutdownChanneltalk from "../../../2molecules/ShutdownChanneltalk";
 
 export default function App() {

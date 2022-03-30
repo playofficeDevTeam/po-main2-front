@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import Org_adminSidebar from "./Org_adminSidebar";
-import Org_header from "./Org_header";
-
+import Org_footer from "./Org_footer";
 export default function App() {
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -15,12 +13,10 @@ export default function App() {
     }
   }, []);
   return isAdmin ? (
-    <>
-      <Org_adminSidebar />
-    </>
+    <></>
   ) : (
     <>
-      <Org_header />
+      <Org_footer />
     </>
   );
 }

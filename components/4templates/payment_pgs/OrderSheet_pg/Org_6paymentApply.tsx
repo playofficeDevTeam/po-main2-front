@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import RoundedOrangeBtn from "../../../1atoms/RoundedOrangeBtn";
 import { modalTemplete, PrivacyTerms, useTerms } from "./const_terms";
 import Modal_tems from "./Modal_tems";
 import Mol_formApplyBtn from "./Mol_formApplyBtn";
