@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
+import { adminLogedInAtom } from "../../4templates/admin_pgs/Login/Var_loginData";
 
 const listsData = [
   {
@@ -41,27 +44,52 @@ const listsData = [
 export default function App() {
   const pathname = window.location.pathname;
 
+  const router = useRouter();
+  // 로그인상태
+  const [adminLogedInState, setAdminLogedInState] =
+    useRecoilState(adminLogedInAtom);
+  const logout = () => {
+    setAdminLogedInState(false);
+    router.push("/admin/log-in");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+  };
+
   return (
     <>
-      <div className=" w-48 border-r shadow-md overflow-y-auto ">
-        <div className="text-xl font-black text-orange-600 p-3 pl-4 mb-3">
-          POKETING
+      <div className=" w-48 border-r shadow-md overflow-y-auto h-full flex flex-col justify-between">
+        <div className="">
+          <div className="text-xl font-black text-orange-600 p-3 pl-4 mb-3">
+            POKETING
+          </div>
+          <ul>
+            {listsData.map((val, idx) => (
+              <li className="px-1 pb-1" key={idx}>
+                <Link href={val.url}>
+                  <a
+                    className={`flex items-center p-2 pl-4 cursor-pointer  rounded-md hover:bg-gray-100 ${
+                      pathname === val.url ? "bg-gray-100" : ""
+                    } `}
+                  >
+                    <div className="w-5 mr-3 text-gray-700">{val.icon}</div>
+                    {val.title}
+                  </a>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
         <ul>
-          {listsData.map((val, idx) => (
-            <li className="px-1 pb-1" key={idx}>
-              <Link href={val.url}>
-                <a
-                  className={`flex items-center p-2 pl-4 cursor-pointer  rounded-md hover:bg-gray-100 ${
-                    pathname === val.url ? "bg-gray-100" : ""
-                  } `}
-                >
-                  <div className="w-5 mr-3 text-gray-700">{val.icon}</div>
-                  {val.title}
-                </a>
-              </Link>
-            </li>
-          ))}
+          <li>
+            <div
+              className="center p-2 cursor-pointer  rounded-md hover:bg-gray-100"
+              onClick={() => {
+                logout();
+              }}
+            >
+              로그아웃
+            </div>
+          </li>
         </ul>
       </div>
     </>

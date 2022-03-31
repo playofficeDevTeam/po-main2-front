@@ -140,6 +140,15 @@ export interface ItemIdAndAmount {
   amountOfItem?: number | null;
 }
 
+export interface LoginAdminInput {
+  email: string;
+  password: string;
+}
+
+export interface RenewalAdminAccessTokenInput {
+  refreshToken: string;
+}
+
 export interface UserInputType {
   tags?: string | null;
   email: string;
