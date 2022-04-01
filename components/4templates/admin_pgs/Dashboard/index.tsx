@@ -1,7 +1,12 @@
+import TestMyPage from "./TestMyPage";
 import useIsMobile from "/home/app/components/hooks/useIsMobile";
 
 export default function App() {
   const isMobile = useIsMobile();
 
-  return <>대시보드 페이지</>;
+  return (
+    <>
+      <TestMyPage />
+    </>
+  );
 }

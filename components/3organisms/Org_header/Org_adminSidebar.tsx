@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
-import { adminLogedInAtom } from "../../4templates/admin_pgs/Login/Var_loginData";
+import { adminLoggedInVar } from "../../common/apollo";
 
 const listsData = [
   {
@@ -45,12 +44,13 @@ export default function App() {
   const pathname = window.location.pathname;
 
   const router = useRouter();
-  // 로그인상태
-  const [adminLogedInState, setAdminLogedInState] =
-    useRecoilState(adminLogedInAtom);
+
   const logout = () => {
-    setAdminLogedInState(false);
+    adminLoggedInVar(false);
     router.push("/admin/log-in");
+
+    sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("refreshToken");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
   };

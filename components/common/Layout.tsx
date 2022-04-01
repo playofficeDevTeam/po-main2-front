@@ -4,16 +4,13 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
 import DeviceDetect from "./DeviceDetect";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import TagManager from "react-gtm-module";
 import { useGtmScroll } from "../hooks/useGtmScroll";
 import GoToTopArrow from "../2molecules/GoToTopArrow";
-import AdminDetect from "./AdminDetect";
+import UserDetect from "./UserDetect";
+import { client } from "./apollo";
 
-const client = new ApolloClient({
-  uri: process.env.NEXT_PUBLIC_API_HOST + "/graphql",
-  cache: new InMemoryCache(),
-});
 const queryClient = new QueryClient();
 
 export default function Layout({ children }: any) {
@@ -34,12 +31,12 @@ export default function Layout({ children }: any) {
       <QueryClientProvider client={queryClient}>
         <RecoilRoot>
           <DeviceDetect>
-            <AdminDetect>
+            <UserDetect>
               <Org_header />
               <GoToTopArrow />
               <>{children}</>
               <Org_footer />
-            </AdminDetect>
+            </UserDetect>
           </DeviceDetect>
         </RecoilRoot>
       </QueryClientProvider>

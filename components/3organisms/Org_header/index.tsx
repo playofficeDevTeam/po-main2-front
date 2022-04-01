@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { isAdminAtom } from "../../common/AdminDetect";
+import { isAdminAtom } from "../../common/UserDetect";
 import Org_adminSidebar from "./Org_adminSidebar";
 import Org_header, { isVisibleHeaderAtom } from "./Org_header";
 

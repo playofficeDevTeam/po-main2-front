@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { atom, useRecoilState } from "recoil";
 import styled from "styled-components";
 import { isMobile as isMobile_lib } from "react-device-detect";
-import { isAdminAtom } from "./AdminDetect";
+import { isAdminAtom } from "./UserDetect";
 
 export const isMobileAtom = atom({
   key: "isMobileAtom",

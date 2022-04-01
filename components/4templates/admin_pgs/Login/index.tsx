@@ -1,13 +1,11 @@
-import { useRecoilState } from "recoil";
+import { useReactiveVar } from "@apollo/client";
+import { adminLoggedInVar } from "../../../common/apollo";
 import LogedIn from "./LogedIn";
 import LogedOut from "./LogedOut";
-import { adminLogedInAtom } from "./Var_loginData";
 
 export default function App() {
-  // 로그인상태
-  const [adminLogedInState, setAdminLogedInState] =
-    useRecoilState(adminLogedInAtom);
-  if (adminLogedInState) {
+  const adminLoggedInState = useReactiveVar(adminLoggedInVar);
+  if (adminLoggedInState) {
     return (
       <>
         <LogedIn />

@@ -2,9 +2,13 @@ import { useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { isVisibleHeaderAtom } from "../../../3organisms/Org_header/Org_header";
+import {
+  accessTokenVar,
+  adminLoggedInVar,
+  refreshTokenVar,
+} from "../../../common/apollo";
 import { LOGIN_ADMIN } from "./Gql_login";
 import {
-  adminLogedInAtom,
   loginFormDataAtom,
   loginFormDataValidate,
   loginFormInputSetting,
@@ -36,19 +40,27 @@ export default function App() {
           loginAdmin: { ok, error, accessToken, refreshToken },
         } = data;
         if (ok && accessToken && refreshToken) {
-          localStorage.setItem("accessToken", accessToken);
-          localStorage.setItem("refreshToken", refreshToken);
-          setAdminLogedInState(true);
+          sessionStorage.removeItem("accessToken");
+          sessionStorage.removeItem("refreshToken");
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+
+          if (staySignedIn) {
+            localStorage.setItem("accessToken", accessToken);
+            localStorage.setItem("refreshToken", refreshToken);
+          } else {
+            sessionStorage.setItem("accessToken", accessToken);
+            sessionStorage.setItem("refreshToken", refreshToken);
+          }
+          accessTokenVar(accessToken);
+          refreshTokenVar(refreshToken);
+          adminLoggedInVar(true);
         } else if (error) {
           alert(error);
         }
       },
     }
   );
-
-  // 로그인상태
-  const [adminLogedInState, setAdminLogedInState] =
-    useRecoilState(adminLogedInAtom);
 
   return (
     <>

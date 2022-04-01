@@ -43,8 +43,3 @@ export const useLoginFormDataOnChange = () => {
     );
   return onChange;
 };
-
-export const adminLogedInAtom = atom({
-  key: "adminLogedInAtom",
-  default: false,
-});

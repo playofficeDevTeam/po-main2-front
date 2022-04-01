@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { throttle } from "throttle-debounce";
-import { isAdminAtom } from "../common/AdminDetect";
+import { isAdminAtom } from "../common/UserDetect";
 import useIsMobile from "../hooks/useIsMobile";
 
 export default function App() {

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { isAdminAtom } from "../../common/AdminDetect";
+import { isAdminAtom } from "../../common/UserDetect";
 import Org_footer from "./Org_footer";
 export default function App() {
   const [isAdmin, setIsAdmin] = useRecoilState(isAdminAtom);
