@@ -1,6 +1,11 @@
+import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { FIND_ME_FOR_ADMIN } from "../../4templates/admin_pgs/Dashboard/Gql_admin";
+import { findMeforAdmin } from "../../4templates/admin_pgs/Dashboard/__generated__/findMeforAdmin";
 import { adminLoggedInVar } from "../../common/apollo";
+import { useTokenCheck } from "../../hooks/useTokenCheck";
 
 const listsData = [
   {
@@ -55,6 +60,13 @@ export default function App() {
     localStorage.removeItem("refreshToken");
   };
 
+  const { loading, error, data, refetch } =
+    useQuery<findMeforAdmin>(FIND_ME_FOR_ADMIN);
+  const tokenCheck = useTokenCheck();
+  useEffect(() => {
+    tokenCheck(refetch);
+  }, [loading]);
+
   return (
     <>
       <div className=" w-48 border-r shadow-md overflow-y-auto h-full flex flex-col justify-between">
@@ -80,6 +92,7 @@ export default function App() {
           </ul>
         </div>
         <ul>
+          <li className="center">{data?.findMeforAdmin.admin?.email}</li>
           <li>
             <div
               className="center p-2 cursor-pointer  rounded-md hover:bg-gray-100"

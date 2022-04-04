@@ -135,6 +135,11 @@ export interface FindPaymentInput {
   id: number;
 }
 
+export interface FindQuestionsInput {
+  fromDate: any;
+  toDate: any;
+}
+
 export interface ItemIdAndAmount {
   itemId?: number | null;
   amountOfItem?: number | null;

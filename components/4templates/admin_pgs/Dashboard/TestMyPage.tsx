@@ -17,7 +17,6 @@ export default function App() {
   if (error) {
     return (
       <>
-        {error.toString()}
         <div className="">권한이 없습니다</div>
       </>
     );
@@ -25,14 +24,6 @@ export default function App() {
   return (
     <>
       <div className="">접속한 계정 : {data?.findMeforAdmin.admin?.email}</div>
-      <div
-        className=""
-        onClick={() => {
-          refetch();
-        }}
-      >
-        리패치
-      </div>
     </>
   );
 }

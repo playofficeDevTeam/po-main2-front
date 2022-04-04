@@ -1,21 +1,13 @@
 import { gql, useMutation } from "@apollo/client";
 import * as jwt from "jsonwebtoken";
 import { useRouter } from "next/router";
+import { RENEWAL_ADMIN_ACCESS_TOKEN } from "../4templates/admin_pgs/Login/Gql_login";
 import {
   RenewalAdminAccessToken,
   RenewalAdminAccessTokenVariables,
 } from "../4templates/admin_pgs/Login/__generated__/RenewalAdminAccessToken";
 import { accessTokenVar, adminLoggedInVar } from "../common/apollo";
 
-const RENEWAL_ADMIN_ACCESS_TOKEN = gql`
-  mutation RenewalAdminAccessToken($input: RenewalAdminAccessTokenInput!) {
-    renewalAdminAccessToken(input: $input) {
-      ok
-      error
-      accessToken
-    }
-  }
-`;
 export const useTokenCheck = () => {
   //어드민 토큰 리프레쉬
   const router = useRouter();
@@ -36,7 +28,7 @@ export const useTokenCheck = () => {
         accessTokenVar(accessToken);
         adminLoggedInVar(true);
       } else if (error) {
-        throw "자동로그인 유효기한(1주)이 만료되었습니다. 다시 로그인해주세요.";
+        throw "오류가 생겼습니다. 다시 로그인해주세요.";
       }
     },
   });
@@ -73,7 +65,6 @@ export const useTokenCheck = () => {
 
       if (["Super", "General"].includes(accessTokentokenRole)) {
         if (accessTokenExpired - nowTime < marginTime) {
-          console.log("만료");
           await renewalAdminAccessToken({
             variables: {
               input: {
@@ -83,8 +74,6 @@ export const useTokenCheck = () => {
           });
           callback();
         } else {
-          console.log("유지");
-
           adminLoggedInVar(true);
         }
       } else if (["Partner", "Creator"].includes(accessTokentokenRole)) {
