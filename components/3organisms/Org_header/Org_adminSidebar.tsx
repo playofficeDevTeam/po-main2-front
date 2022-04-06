@@ -69,7 +69,10 @@ export default function App() {
 
   return (
     <>
-      <div className=" w-48 border-r shadow-md overflow-y-auto h-full flex flex-col justify-between">
+      <div
+        className="w-48 border-r shadow-md overflow-y-auto h-full flex flex-col justify-between"
+        style={{ minWidth: "12rem" }}
+      >
         <div className="">
           <div className="text-xl font-black text-orange-600 p-3 pl-4 mb-3">
             POKETING
