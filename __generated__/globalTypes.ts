@@ -96,6 +96,19 @@ export interface CreatePaymentInput {
   itemInfo?: ItemIdAndAmount[] | null;
 }
 
+export interface CreateQuestionForAdminInput {
+  tags?: string | null;
+  brandName?: string | null;
+  name?: string | null;
+  phoneNumber?: string | null;
+  email?: string | null;
+  budget?: string | null;
+  productLink?: string | null;
+  uniqueness?: string | null;
+  isAgency?: boolean | null;
+  user?: UserInputType | null;
+}
+
 export interface CreateQuestionInput {
   tags?: string | null;
   brandName?: string | null;
@@ -107,6 +120,10 @@ export interface CreateQuestionInput {
   uniqueness?: string | null;
   isAgency?: boolean | null;
   user?: UserInputType | null;
+}
+
+export interface DeleteQuestionInput {
+  id: number;
 }
 
 export interface EditPaymentFormDataInput {

@@ -68,9 +68,9 @@ export default function App() {
   }, [loading]);
 
   return (
-    <>
+    <div className=" z-50">
       <div
-        className="w-48 border-r shadow-md overflow-y-auto h-full flex flex-col justify-between"
+        className="fixed w-48 border-r shadow-md overflow-y-auto h-full flex flex-col justify-between bg-white"
         style={{ minWidth: "12rem" }}
       >
         <div className="">
@@ -108,6 +108,8 @@ export default function App() {
           </li>
         </ul>
       </div>
-    </>
+
+      <div className="w-48 h-full"></div>
+    </div>
   );
 }

@@ -33,7 +33,10 @@ export const useTokenCheck = () => {
     },
   });
 
-  const tokenDecode = async (callback: () => void) => {
+  const tokenDecode = async (
+    type: "query" | "mutation",
+    callback: () => void
+  ) => {
     try {
       // 토큰디코드
       const accessToken =
@@ -74,6 +77,9 @@ export const useTokenCheck = () => {
           });
           callback();
         } else {
+          if (type === "mutation") {
+            callback();
+          }
           adminLoggedInVar(true);
         }
       } else if (["Partner", "Creator"].includes(accessTokentokenRole)) {

@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { useEffect, useMemo } from "react";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import {
@@ -8,6 +8,18 @@ import {
 import Org_adminTable, {
   SelectColumnFilter,
 } from "../../../3organisms/Org_adminTable";
+import {
+  editQuestionForAdmin,
+  editQuestionForAdminVariables,
+} from "./__generated__/editQuestionForAdmin";
+import {
+  createQuestionForAdmin,
+  createQuestionForAdminVariables,
+} from "./__generated__/createQuestionForAdmin";
+import {
+  deleteQuestionForAdmin,
+  deleteQuestionForAdminVariables,
+} from "./__generated__/deleteQuestionForAdmin";
 
 export const FIND_QUESTIONS_FOR_ADMIN = gql`
   query findQuestionsForAdmin($input: FindQuestionsInput!) {
@@ -25,6 +37,34 @@ export const FIND_QUESTIONS_FOR_ADMIN = gql`
         uniqueness
         isAgency
       }
+    }
+  }
+`;
+
+export const CREATE_QUESTION_FOR_ADMIN = gql`
+  mutation createQuestionForAdmin($input: CreateQuestionForAdminInput!) {
+    createQuestionForAdmin(input: $input) {
+      ok
+      error
+      questionId
+    }
+  }
+`;
+
+export const EDIT_QUESTION_FOR_ADMIN = gql`
+  mutation editQuestionForAdmin($input: EditQuestionInput!) {
+    editQuestionForAdmin(input: $input) {
+      ok
+      error
+    }
+  }
+`;
+
+export const DELETE_QUESTION_FOR_ADMIN = gql`
+  mutation deleteQuestionForAdmin($input: DeleteQuestionInput!) {
+    deleteQuestionForAdmin(input: $input) {
+      ok
+      error
     }
   }
 `;
@@ -58,37 +98,111 @@ export default function App() {
     []
   );
 
-  const { loading, error, data, refetch } = useQuery<
-    findQuestionsForAdmin,
-    findQuestionsForAdminVariables
-  >(FIND_QUESTIONS_FOR_ADMIN, {
-    variables: {
-      input: {
-        fromDate,
-        toDate,
-      },
-    },
-  });
-
+  //토큰체크
   const tokenCheck = useTokenCheck();
-  useEffect(() => {
-    tokenCheck(refetch);
-  }, [loading]);
 
+  //쿼리
+  const {
+    loading: findQuestionsForAdminLoading,
+    error: findQuestionsForAdminError,
+    data: findQuestionsForAdminData,
+    refetch,
+  } = useQuery<findQuestionsForAdmin, findQuestionsForAdminVariables>(
+    FIND_QUESTIONS_FOR_ADMIN,
+    {
+      variables: {
+        input: {
+          fromDate,
+          toDate,
+        },
+      },
+    }
+  );
+  useEffect(() => {
+    tokenCheck("query", refetch);
+  }, [findQuestionsForAdminData]);
   const questionsData = useMemo(
-    () => data?.findQuestionsForAdmin.questions,
-    [loading]
+    () => findQuestionsForAdminData?.findQuestionsForAdmin.questions,
+    [findQuestionsForAdminData]
   );
 
-  if (error) {
+  //뮤테이션
+  const [
+    createQuestionForAdminMutation,
+    {
+      loading: createQuestionForAdminLoading,
+      data: createQuestionForAdminData,
+    },
+  ] = useMutation<createQuestionForAdmin, createQuestionForAdminVariables>(
+    CREATE_QUESTION_FOR_ADMIN,
+    {
+      onCompleted: () => {
+        console.log("complete");
+        refetch();
+      },
+    }
+  );
+
+  const [
+    editQuestionForAdminMutation,
+    { loading: editQuestionForAdminLoading, data: editQuestionForAdminData },
+  ] = useMutation<editQuestionForAdmin, editQuestionForAdminVariables>(
+    EDIT_QUESTION_FOR_ADMIN,
+    {
+      onCompleted: () => {
+        refetch();
+      },
+    }
+  );
+
+  const [
+    deleteQuestionForAdminMutation,
+    {
+      loading: deleteQuestionForAdminLoading,
+      data: deleteQuestionForAdminData,
+    },
+  ] = useMutation<deleteQuestionForAdmin, deleteQuestionForAdminVariables>(
+    DELETE_QUESTION_FOR_ADMIN,
+    {
+      onCompleted: () => {
+        refetch();
+      },
+    }
+  );
+
+  if (findQuestionsForAdminError) {
     return <>권한이 없습니다.</>;
   }
-  if (loading) {
+  if (findQuestionsForAdminLoading) {
     return <>로딩중</>;
   }
   return (
     <>
-      <Org_adminTable columns={columns} data={questionsData} />
+      <div
+        className=""
+        onClick={() => {
+          tokenCheck("mutation", () => {
+            createQuestionForAdminMutation({
+              variables: {
+                input: {
+                  brandName: "test name",
+                },
+              },
+            });
+          });
+        }}
+      >
+        테스트 입력버튼
+      </div>
+      <Org_adminTable
+        columns={columns}
+        data={questionsData?.map((val, idx) => ({
+          ...val,
+          isAgency: val.isAgency?.toString(),
+        }))}
+        createForm={<>123123</>}
+        editForm={<></>}
+      />
     </>
   );
 }

@@ -1,5 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import styled from "styled-components";
 import {
   useTable,
@@ -8,31 +7,6 @@ import {
   useGlobalFilter,
   useAsyncDebounce,
 } from "react-table";
-import {
-  findQuestionsForAdmin,
-  findQuestionsForAdminVariables,
-} from "../../4templates/admin_pgs/Question/__generated__/findQuestionsForAdmin";
-import { useTokenCheck } from "../../hooks/useTokenCheck";
-
-export const FIND_QUESTIONS_FOR_ADMIN = gql`
-  query findQuestionsForAdmin($input: FindQuestionsInput!) {
-    findQuestionsForAdmin(input: $input) {
-      ok
-      error
-      questions {
-        brandName
-        tags
-        name
-        phoneNumber
-        email
-        budget
-        productLink
-        uniqueness
-        isAgency
-      }
-    }
-  }
-`;
 
 export const TableStyles = styled.div`
   padding: 1rem;
@@ -241,10 +215,30 @@ function Table({ columns, data }) {
   );
 }
 
-export default function App({ columns, data }) {
+export default function App({ columns, data, createForm, editForm }) {
+  const [createBtnState, setCreateBtnState] = useState(true);
+
   return (
     <>
       <TableStyles>
+        <div className="mb-2 relative z-40">
+          <div
+            className="px-3 py-1 border-2 rounded-sm w-max cursor-pointer"
+            onClick={() => {
+              setCreateBtnState((state) => !state);
+            }}
+          >
+            생성
+          </div>
+
+          {createBtnState && (
+            <div className="h-0">
+              <div className="w-max h-max pt-2 ">
+                <div className="bg-red-100 p-4">{createForm}</div>
+              </div>
+            </div>
+          )}
+        </div>
         <Table columns={columns} data={data} />
       </TableStyles>
     </>
