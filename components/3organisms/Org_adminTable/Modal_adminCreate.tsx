@@ -1,17 +1,25 @@
 import { useState } from "react";
 import Modal from "react-modal";
-import ScrollLock from "../effects/ScrollLock";
-import useIsMobile from "../hooks/useIsMobile";
+import { atom, useRecoilState } from "recoil";
+import ScrollLock from "../../effects/ScrollLock";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const data1 = {
   button: <></>,
   modal: <></>,
 };
 
+export const isModal_adminCreateOpenAtom = atom({
+  key: "isModal_adminCreateOpenAtom",
+  default: false,
+});
+
 export default function App({ data = data1 }) {
   const isMobile = useIsMobile();
   Modal.setAppElement("#__next");
-  const [isModalOpen, setisModalOpen] = useState(false);
+  const [isModalOpen, setisModalOpen] = useRecoilState(
+    isModal_adminCreateOpenAtom
+  );
   const [isModalAnimated, setIsModalAnimated] = useState(false);
 
   const customStyles = isMobile

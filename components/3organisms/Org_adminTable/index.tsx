@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import {
   useTable,
@@ -6,13 +6,17 @@ import {
   useFilters,
   useGlobalFilter,
   useAsyncDebounce,
+  useBlockLayout,
 } from "react-table";
+import { FixedSizeList } from "react-window";
+import Modal_adminCreate from "./Modal_adminCreate";
+import { throttle } from "throttle-debounce";
+import Modal_adminEdit, { isModal_adminEditOpenAtom } from "./Modal_adminEdit";
+import { useRecoilState } from "recoil";
 
 export const TableStyles = styled.div`
-  padding: 1rem;
-  width: 100vw;
-  overflow-x: scroll;
-
+  width: max-content;
+  margin: 0 1rem;
   table {
     border-spacing: 0;
     border: 1px solid #c2410c;
@@ -52,7 +56,7 @@ function GlobalFilter({
   }, 200);
 
   return (
-    <div className="flex">
+    <div className="flex items-center">
       <div className="w-max mr-2">전체 검색: </div>
       <input
         value={value || ""}
@@ -61,11 +65,11 @@ function GlobalFilter({
           onChange(e.target.value);
         }}
         placeholder={``}
+        className="border rounded-sm"
         style={{
+          width: "50rem",
           fontSize: "1.1rem",
-          border: "0",
         }}
-        className="w-11/12"
       />
     </div>
   );
@@ -120,14 +124,29 @@ export function SelectColumnFilter({
   );
 }
 
-function Table({ columns, data }) {
+function Table({ columns, data, cellHoverOption, setEditFormState }) {
   const defaultColumn = useMemo(
     () => ({
       // Let's set up our default Filter UI
+      width: 150,
       Filter: DefaultColumnFilter,
     }),
     []
   );
+
+  const scrollbarWidth = () => {
+    // thanks too https://davidwalsh.name/detect-scrollbar-width
+    const scrollDiv = document.createElement("div");
+    scrollDiv.setAttribute(
+      "style",
+      "width: 100px; height: 100px; overflow: scroll; position:absolute; top:-9999px;"
+    );
+    document.body.appendChild(scrollDiv);
+    const scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+    document.body.removeChild(scrollDiv);
+    return scrollbarWidth;
+  };
+  const scrollBarSize = useMemo(() => scrollbarWidth(), []);
 
   const {
     getTableProps,
@@ -139,6 +158,7 @@ function Table({ columns, data }) {
     visibleColumns,
     preGlobalFilteredRows,
     setGlobalFilter,
+    totalColumnsWidth,
   } = useTable(
     {
       columns,
@@ -147,11 +167,62 @@ function Table({ columns, data }) {
     },
     useFilters,
     useGlobalFilter,
-    useSortBy
+    useSortBy,
+    useBlockLayout
   );
 
+  const RenderRow = useCallback(
+    ({ index, style }) => {
+      const row = rows[index];
+      prepareRow(row);
+      return (
+        <div
+          {...row.getRowProps({
+            style,
+          })}
+          className="tr"
+        >
+          {row.cells.map((cell) => {
+            return (
+              <div {...cell.getCellProps()} className="td group">
+                <div className="flex items-center ">
+                  <div className="mr-1">{cell.render("Cell")}</div>
+                  <div
+                    className=" hidden group-hover:block"
+                    onClick={() => {
+                      const cellValues = cell.row.allCells.map(
+                        (val, idx) => val.value
+                      );
+                      setEditFormState(cellValues);
+                    }}
+                  >
+                    {cellHoverOption}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
+    },
+    [prepareRow, rows]
+  );
+
+  const [windowHeightState, setWindowHeightState] = useState(
+    window.innerHeight - 300
+  );
+
+  const heightCheck = () => {
+    setWindowHeightState(window.innerHeight - 300);
+  };
+  const throttleheightCheck = throttle(150, heightCheck);
+  useEffect(() => {
+    window.addEventListener("resize", throttleheightCheck);
+    return () => window.removeEventListener("resize", throttleheightCheck);
+  }, [throttleheightCheck]);
+
   return (
-    <table {...getTableProps()}>
+    <table {...getTableProps()} className="bg-white">
       <thead>
         <tr>
           <th
@@ -174,7 +245,6 @@ function Table({ columns, data }) {
                 <div
                   {...column.getSortByToggleProps()}
                   className="mb-1 flex cursor-pointer"
-                  style={{ width: `${column.columnWidth}rem` }}
                 >
                   {column.render("Header")}
                   <span>
@@ -196,51 +266,63 @@ function Table({ columns, data }) {
         ))}
       </thead>
       <tbody {...getTableBodyProps()}>
-        {rows.map((row, i) => {
-          prepareRow(row);
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map((cell) => {
-                return (
-                  <td {...cell.getCellProps()} className="">
-                    {cell.render("Cell")}
-                  </td>
-                );
-              })}
-            </tr>
-          );
-        })}
+        <FixedSizeList
+          height={windowHeightState}
+          itemCount={rows.length}
+          itemSize={35}
+          width={totalColumnsWidth + scrollBarSize}
+        >
+          {RenderRow}
+        </FixedSizeList>
       </tbody>
     </table>
   );
 }
 
-export default function App({ columns, data, createForm, editForm }) {
-  const [createBtnState, setCreateBtnState] = useState(true);
-
+export default function App({
+  columns,
+  data,
+  createForm,
+  editForm,
+  setEditFormState,
+}) {
+  const [isModalOpen, setisModalOpen] = useRecoilState(
+    isModal_adminEditOpenAtom
+  );
   return (
-    <>
+    <div className="bg-gray-50 w-full  overflow-x-scroll ">
       <TableStyles>
-        <div className="mb-2 relative z-40">
-          <div
-            className="px-3 py-1 border-2 rounded-sm w-max cursor-pointer"
-            onClick={() => {
-              setCreateBtnState((state) => !state);
-            }}
-          >
-            생성
+        <div className="">
+          <div className="flex">
+            <div className="mr-2 my-3">
+              <Modal_adminCreate
+                data={{ button: <>생성</>, modal: createForm }}
+              />
+            </div>
+            <div className="">
+              <Modal_adminEdit data={{ button: <></>, modal: editForm }} />
+            </div>
           </div>
 
-          {createBtnState && (
-            <div className="h-0">
-              <div className="w-max h-max pt-2 ">
-                <div className="bg-red-100 p-4">{createForm}</div>
-              </div>
-            </div>
-          )}
+          <Table
+            columns={columns}
+            data={data}
+            setEditFormState={setEditFormState}
+            cellHoverOption={
+              <>
+                <div
+                  className=""
+                  onClick={() => {
+                    setisModalOpen(true);
+                  }}
+                >
+                  수정
+                </div>
+              </>
+            }
+          />
         </div>
-        <Table columns={columns} data={data} />
       </TableStyles>
-    </>
+    </div>
   );
 }

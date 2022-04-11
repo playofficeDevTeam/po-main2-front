@@ -64,14 +64,14 @@ export default function App() {
     useQuery<findMeforAdmin>(FIND_ME_FOR_ADMIN);
   const tokenCheck = useTokenCheck();
   useEffect(() => {
-    tokenCheck(refetch);
+    tokenCheck("query", refetch);
   }, [loading]);
 
   return (
     <div className=" z-50">
       <div
-        className="fixed w-48 border-r shadow-md overflow-y-auto h-full flex flex-col justify-between bg-white"
-        style={{ minWidth: "12rem" }}
+        className="fixed w-40 border-r shadow-md overflow-y-auto h-full flex flex-col justify-between bg-white"
+        style={{ minWidth: "8rem" }}
       >
         <div className="">
           <div className="text-xl font-black text-orange-600 p-3 pl-4 mb-3">
@@ -109,7 +109,7 @@ export default function App() {
         </ul>
       </div>
 
-      <div className="w-48 h-full"></div>
+      <div className="w-40 h-full"></div>
     </div>
   );
 }

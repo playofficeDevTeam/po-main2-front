@@ -22,13 +22,8 @@ export default function App({ children }) {
     }
   }, []);
 
-  const tokenCheck = useTokenCheck();
-  useEffect(() => {
-    tokenCheck(() => {});
-  }, []);
-
   return (
-    <div className={isAdmin ? "flex h-screen" : ""}>
+    <div className={isAdmin ? "flex h-screen overflow-x-auto" : ""}>
       {isAdmin && <ShutdownChanneltalk />}
       {children}
     </div>

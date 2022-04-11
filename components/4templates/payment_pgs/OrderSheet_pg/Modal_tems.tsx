@@ -36,7 +36,7 @@ export default function App({ data = defaultData }) {
       }
     : {
         content: {
-          top: "51%",
+          top: "45%",
           left: "50%",
           right: "auto",
           bottom: "auto",
