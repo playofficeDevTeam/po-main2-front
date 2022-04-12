@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import {
   useTable,
@@ -282,50 +282,41 @@ function Table({ columns, data, cellHoverOption, setEditForm }) {
   );
 }
 
-export default function App({
-  columns,
-  data,
-  createForm,
-  editForm,
-  setEditForm,
-}) {
+function App({ columns, data, setEditForm, createForm, editForm }) {
   const [isModalOpen, setisModalOpen] = useRecoilState(
     isModal_adminEditOpenAtom
   );
   return (
     <div className="bg-gray-50 w-full  overflow-x-scroll ">
-      <TableStyles>
-        <div className="">
-          <div className="flex">
-            <div className="mr-2 my-3">
-              <Modal_adminCreate
-                data={{ button: <>생성</>, modal: createForm }}
-              />
-            </div>
-            <div className="">
-              <Modal_adminEdit data={{ button: <></>, modal: editForm }} />
-            </div>
-          </div>
-
-          <Table
-            columns={columns}
-            data={data}
-            setEditForm={setEditForm}
-            cellHoverOption={
-              <>
-                <div
-                  className=""
-                  onClick={() => {
-                    setisModalOpen(true);
-                  }}
-                >
-                  수정
-                </div>
-              </>
-            }
-          />
+      <div className="flex">
+        <div className="mr-2 my-3 mx-4">
+          <Modal_adminCreate data={{ button: <>생성</>, modal: createForm }} />
         </div>
+        <div className="">
+          <Modal_adminEdit data={{ button: <></>, modal: editForm }} />
+        </div>
+      </div>
+      <TableStyles>
+        <Table
+          columns={columns}
+          data={data}
+          setEditForm={setEditForm}
+          cellHoverOption={
+            <>
+              <div
+                className=""
+                onClick={() => {
+                  setisModalOpen(true);
+                }}
+              >
+                수정
+              </div>
+            </>
+          }
+        />
       </TableStyles>
     </div>
   );
 }
+
+export default memo(App);

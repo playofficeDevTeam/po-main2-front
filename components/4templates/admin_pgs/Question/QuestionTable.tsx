@@ -1,13 +1,10 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import {
   findQuestionsForAdmin,
   findQuestionsForAdminVariables,
 } from "./__generated__/findQuestionsForAdmin";
-import Org_adminTable, {
-  SelectColumnFilter,
-} from "../../../3organisms/Org_adminTable";
 import {
   editQuestionForAdmin,
   editQuestionForAdminVariables,
@@ -27,6 +24,9 @@ import {
 } from "./Var_questionForm";
 import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
 import fn_DatePrettier from "./fn_DatePrettier";
+import Org_adminTable, {
+  SelectColumnFilter,
+} from "../../../3organisms/Org_adminTable";
 
 export const FIND_QUESTIONS_FOR_ADMIN = gql`
   query findQuestionsForAdmin($input: FindQuestionsInput!) {
@@ -83,6 +83,8 @@ fromDate.setDate(fromDate.getDate() - 10);
 let toDate = new Date();
 export default function App() {
   const [questionForm, setQuestionForm] = useRecoilState(questionFormData);
+  const memoSetQuestionForm = useCallback(setQuestionForm, []);
+
   const questionFormOnChange = useQuestionFormDataOnChange();
 
   const columns = useMemo(
@@ -266,7 +268,7 @@ export default function App() {
             </div>
           </>
         }
-        setEditForm={setQuestionForm}
+        setEditForm={memoSetQuestionForm}
         editForm={
           <>
             <div className="">
