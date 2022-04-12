@@ -11,6 +11,8 @@ import { FindQuestionsInput } from "./../../../../../__generated__/globalTypes";
 
 export interface findQuestionsForAdmin_findQuestionsForAdmin_questions {
   __typename: "Question";
+  id: number;
+  createdAt: any;
   brandName: string | null;
   tags: string | null;
   name: string | null;

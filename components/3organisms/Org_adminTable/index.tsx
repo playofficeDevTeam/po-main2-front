@@ -124,7 +124,7 @@ export function SelectColumnFilter({
   );
 }
 
-function Table({ columns, data, cellHoverOption, setEditFormState }) {
+function Table({ columns, data, cellHoverOption, setEditForm }) {
   const defaultColumn = useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -182,9 +182,9 @@ function Table({ columns, data, cellHoverOption, setEditFormState }) {
           })}
           className="tr"
         >
-          {row.cells.map((cell) => {
+          {row.cells.map((cell, idx) => {
             return (
-              <div {...cell.getCellProps()} className="td group">
+              <div {...cell.getCellProps()} className="td group" key={idx}>
                 <div className="flex items-center ">
                   <div className="mr-1">{cell.render("Cell")}</div>
                   <div
@@ -193,7 +193,7 @@ function Table({ columns, data, cellHoverOption, setEditFormState }) {
                       const cellValues = cell.row.allCells.map(
                         (val, idx) => val.value
                       );
-                      setEditFormState(cellValues);
+                      setEditForm(cellValues);
                     }}
                   >
                     {cellHoverOption}
@@ -238,10 +238,10 @@ function Table({ columns, data, cellHoverOption, setEditFormState }) {
             />
           </th>
         </tr>
-        {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <th {...column.getHeaderProps()} className="">
+        {headerGroups.map((headerGroup, idx) => (
+          <tr {...headerGroup.getHeaderGroupProps()} key={idx}>
+            {headerGroup.headers.map((column, idx) => (
+              <th {...column.getHeaderProps()} className="" key={idx}>
                 <div
                   {...column.getSortByToggleProps()}
                   className="mb-1 flex cursor-pointer"
@@ -284,7 +284,7 @@ export default function App({
   data,
   createForm,
   editForm,
-  setEditFormState,
+  setEditForm,
 }) {
   const [isModalOpen, setisModalOpen] = useRecoilState(
     isModal_adminEditOpenAtom
@@ -307,7 +307,7 @@ export default function App({
           <Table
             columns={columns}
             data={data}
-            setEditFormState={setEditFormState}
+            setEditForm={setEditForm}
             cellHoverOption={
               <>
                 <div

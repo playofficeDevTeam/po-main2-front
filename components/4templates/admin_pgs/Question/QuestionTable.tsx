@@ -26,6 +26,7 @@ import {
   useQuestionFormDataOnChange,
 } from "./Var_questionForm";
 import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
+import fn_DatePrettier from "./fn_DatePrettier";
 
 export const FIND_QUESTIONS_FOR_ADMIN = gql`
   query findQuestionsForAdmin($input: FindQuestionsInput!) {
@@ -33,6 +34,8 @@ export const FIND_QUESTIONS_FOR_ADMIN = gql`
       ok
       error
       questions {
+        id
+        createdAt
         brandName
         tags
         name
@@ -84,6 +87,7 @@ export default function App() {
 
   const columns = useMemo(
     () => [
+      { Header: "생성일", accessor: "createdAt", width: 150 },
       { Header: "브랜드명", accessor: "brandName", width: 150 },
       { Header: "이름", accessor: "name", width: 150 },
       { Header: "연락처", accessor: "phoneNumber", width: 150 },
@@ -99,10 +103,11 @@ export default function App() {
       {
         Header: "대행사",
         accessor: "isAgency",
-        width: 150,
+        width: 100,
         Filter: SelectColumnFilter,
       },
       { Header: "태그", accessor: "tags", width: 150 },
+      { Header: "dataId", accessor: "id", width: 100 },
     ],
     []
   );
@@ -130,8 +135,12 @@ export default function App() {
   useEffect(() => {
     tokenCheck("query", refetch);
   }, [findQuestionsForAdminData]);
+
   const questionsData = useMemo(
-    () => findQuestionsForAdminData?.findQuestionsForAdmin.questions,
+    () =>
+      findQuestionsForAdminData?.findQuestionsForAdmin.questions?.map(
+        (val, idx) => ({ ...val, createdAt: fn_DatePrettier(val.createdAt) })
+      ),
     [findQuestionsForAdminData]
   );
 
@@ -146,7 +155,6 @@ export default function App() {
     CREATE_QUESTION_FOR_ADMIN,
     {
       onCompleted: () => {
-        console.log("complete");
         refetch();
       },
     }
@@ -187,7 +195,7 @@ export default function App() {
     return <>권한이 없습니다.</>;
   }
   if (findQuestionsForAdminLoading) {
-    return <>로딩중</>;
+    return <div className="">로딩중</div>;
   }
 
   return (
@@ -202,12 +210,12 @@ export default function App() {
           <>
             <div className="">
               <ul>
-                {columns.map((val, idx) => (
+                {questionForm.map((val, idx) => (
                   <li key={idx}>
                     <input
                       className="border p-1 m-1"
                       type="text"
-                      value={questionForm[idx]}
+                      value={val}
                       onChange={(e) => {
                         questionFormOnChange(e, idx);
                       }}
@@ -222,15 +230,15 @@ export default function App() {
                     createQuestionForAdminMutation({
                       variables: {
                         input: {
-                          brandName: questionForm[0],
-                          name: questionForm[1],
-                          phoneNumber: questionForm[2],
-                          email: questionForm[3],
-                          budget: questionForm[4],
-                          productLink: questionForm[5],
-                          uniqueness: questionForm[6],
-                          isAgency: questionForm[7] === "true" ? true : false,
-                          tags: questionForm[8],
+                          brandName: questionForm[1],
+                          name: questionForm[2],
+                          phoneNumber: questionForm[3],
+                          email: questionForm[4],
+                          budget: questionForm[5],
+                          productLink: questionForm[6],
+                          uniqueness: questionForm[7],
+                          isAgency: questionForm[8] === "true" ? true : false,
+                          tags: questionForm[9],
                         },
                       },
                     });
@@ -252,40 +260,45 @@ export default function App() {
             </div>
           </>
         }
-        setEditFormState={setQuestionForm}
+        setEditForm={setQuestionForm}
         editForm={
           <>
             <div className="">
               <ul>
-                {columns.map((val, idx) => (
-                  <li key={idx}>
-                    <input
-                      className="border p-1 m-1"
-                      type="text"
-                      value={questionForm[idx]}
-                      onChange={(e) => {
-                        questionFormOnChange(e, idx);
-                      }}
-                    />
-                  </li>
-                ))}
+                {questionForm.map(
+                  (val, idx) =>
+                    idx !== questionForm.length - 1 && (
+                      <li key={idx}>
+                        <input
+                          className="border p-1 m-1"
+                          type="text"
+                          value={val}
+                          onChange={(e) => {
+                            questionFormOnChange(e, idx);
+                          }}
+                        />
+                      </li>
+                    )
+                )}
               </ul>
               <div
                 className="p-1 m-1 border cursor-pointer"
                 onClick={() => {
                   tokenCheck("mutation", () => {
-                    createQuestionForAdminMutation({
+                    editQuestionForAdminMutation({
                       variables: {
                         input: {
-                          brandName: questionForm[0],
-                          name: questionForm[1],
-                          phoneNumber: questionForm[2],
-                          email: questionForm[3],
-                          budget: questionForm[4],
-                          productLink: questionForm[5],
-                          uniqueness: questionForm[6],
-                          isAgency: questionForm[7] === "true" ? true : false,
-                          tags: questionForm[8],
+                          createdAt: questionForm[0],
+                          brandName: questionForm[1],
+                          name: questionForm[2],
+                          phoneNumber: questionForm[3],
+                          email: questionForm[4],
+                          budget: questionForm[5],
+                          productLink: questionForm[6],
+                          uniqueness: questionForm[7],
+                          isAgency: questionForm[8] === "true" ? true : false,
+                          tags: questionForm[9],
+                          id: +questionForm[10],
                         },
                       },
                     });

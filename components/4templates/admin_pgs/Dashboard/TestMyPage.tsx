@@ -11,7 +11,7 @@ export default function App() {
     useQuery<findMeforAdmin>(FIND_ME_FOR_ADMIN);
   const tokenCheck = useTokenCheck();
   useEffect(() => {
-    tokenCheck(refetch);
+    tokenCheck("query", refetch);
   }, [loading]);
 
   if (error) {

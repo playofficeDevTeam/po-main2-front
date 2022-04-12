@@ -135,6 +135,9 @@ export interface EditPaymentFormDataInput {
 }
 
 export interface EditQuestionInput {
+  id: number;
+  createdAt?: any | null;
+  updatedAt?: any | null;
   tags?: string | null;
   brandName?: string | null;
   name?: string | null;
@@ -145,7 +148,6 @@ export interface EditQuestionInput {
   uniqueness?: string | null;
   isAgency?: boolean | null;
   user?: UserInputType | null;
-  id: number;
 }
 
 export interface FindPaymentInput {
