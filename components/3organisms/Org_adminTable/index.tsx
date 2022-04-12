@@ -190,9 +190,12 @@ function Table({ columns, data, cellHoverOption, setEditForm }) {
                   <div
                     className=" hidden group-hover:block"
                     onClick={() => {
-                      const cellValues = cell.row.allCells.map(
-                        (val, idx) => val.value
-                      );
+                      const cellValues = cell.row.allCells.map((val, idx) => ({
+                        Header: val.column.Header,
+                        accessor: val.column.id,
+                        value: val.value,
+                      }));
+                      console.log(cell);
                       setEditForm(cellValues);
                     }}
                   >

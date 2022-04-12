@@ -31,7 +31,9 @@ export const useQuestionFormDataOnChange = () => {
 
   const onChange = (e, id) =>
     setQuestionFormDataState((formData) =>
-      formData.map((val, idx) => (idx === id ? e.target.value : val))
+      formData.map((val, idx) =>
+        idx === id ? { ...val, value: e.target.value } : val
+      )
     );
   return onChange;
 };

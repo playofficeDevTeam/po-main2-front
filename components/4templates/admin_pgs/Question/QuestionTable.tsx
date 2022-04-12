@@ -211,11 +211,12 @@ export default function App() {
             <div className="">
               <ul>
                 {questionForm.map((val, idx) => (
-                  <li key={idx}>
+                  <li key={idx} className="flex">
+                    <div className="w-40">{val.Header}</div>
                     <input
                       className="border p-1 m-1"
                       type="text"
-                      value={val}
+                      value={val.value}
                       onChange={(e) => {
                         questionFormOnChange(e, idx);
                       }}
@@ -230,20 +231,23 @@ export default function App() {
                     createQuestionForAdminMutation({
                       variables: {
                         input: {
-                          brandName: questionForm[1],
-                          name: questionForm[2],
-                          phoneNumber: questionForm[3],
-                          email: questionForm[4],
-                          budget: questionForm[5],
-                          productLink: questionForm[6],
-                          uniqueness: questionForm[7],
-                          isAgency: questionForm[8] === "true" ? true : false,
-                          tags: questionForm[9],
+                          brandName: questionForm[1].value,
+                          name: questionForm[2].value,
+                          phoneNumber: questionForm[3].value,
+                          email: questionForm[4].value,
+                          budget: questionForm[5].value,
+                          productLink: questionForm[6].value,
+                          uniqueness: questionForm[7].value,
+                          isAgency:
+                            questionForm[8].value === "true" ? true : false,
+                          tags: questionForm[9].value,
                         },
                       },
                     });
                   });
-                  setQuestionForm((val) => val.map((val2) => ""));
+                  setQuestionForm((val) =>
+                    val.map((val2) => ({ ...val2, value: "" }))
+                  );
                   setisModalOpen(false);
                 }}
               >
@@ -252,7 +256,9 @@ export default function App() {
               <div
                 className=""
                 onClick={() => {
-                  setQuestionForm((val) => val.map((val2) => ""));
+                  setQuestionForm((val) =>
+                    val.map((val2) => ({ ...val2, value: "" }))
+                  );
                 }}
               >
                 초기화
@@ -265,21 +271,19 @@ export default function App() {
           <>
             <div className="">
               <ul>
-                {questionForm.map(
-                  (val, idx) =>
-                    idx !== questionForm.length - 1 && (
-                      <li key={idx}>
-                        <input
-                          className="border p-1 m-1"
-                          type="text"
-                          value={val}
-                          onChange={(e) => {
-                            questionFormOnChange(e, idx);
-                          }}
-                        />
-                      </li>
-                    )
-                )}
+                {questionForm.map((val, idx) => (
+                  <li key={idx} className="flex">
+                    <div className="w-40">{val.Header}</div>
+                    <input
+                      className="border p-1 m-1"
+                      type="text"
+                      value={val.value}
+                      onChange={(e) => {
+                        questionFormOnChange(e, idx);
+                      }}
+                    />
+                  </li>
+                ))}
               </ul>
               <div
                 className="p-1 m-1 border cursor-pointer"
@@ -288,22 +292,25 @@ export default function App() {
                     editQuestionForAdminMutation({
                       variables: {
                         input: {
-                          createdAt: questionForm[0],
-                          brandName: questionForm[1],
-                          name: questionForm[2],
-                          phoneNumber: questionForm[3],
-                          email: questionForm[4],
-                          budget: questionForm[5],
-                          productLink: questionForm[6],
-                          uniqueness: questionForm[7],
-                          isAgency: questionForm[8] === "true" ? true : false,
-                          tags: questionForm[9],
-                          id: +questionForm[10],
+                          createdAt: questionForm[0].value,
+                          brandName: questionForm[1].value,
+                          name: questionForm[2].value,
+                          phoneNumber: questionForm[3].value,
+                          email: questionForm[4].value,
+                          budget: questionForm[5].value,
+                          productLink: questionForm[6].value,
+                          uniqueness: questionForm[7].value,
+                          isAgency:
+                            questionForm[8].value === "true" ? true : false,
+                          tags: questionForm[9].value,
+                          id: +questionForm[10].value,
                         },
                       },
                     });
                   });
-                  setQuestionForm((val) => val.map((val2) => ""));
+                  setQuestionForm((val) =>
+                    val.map((val2) => ({ ...val2, value: "" }))
+                  );
                   setisModalOpen(false);
                 }}
               >
