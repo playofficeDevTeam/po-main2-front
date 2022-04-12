@@ -141,7 +141,11 @@ export default function App() {
   const questionsData = useMemo(
     () =>
       findQuestionsForAdminData?.findQuestionsForAdmin.questions?.map(
-        (val, idx) => ({ ...val, createdAt: fn_DatePrettier(val.createdAt) })
+        (val, idx) => ({
+          ...val,
+          createdAt: fn_DatePrettier(val.createdAt),
+          isAgency: val.isAgency?.toString(),
+        })
       ),
     [findQuestionsForAdminData]
   );
@@ -204,10 +208,7 @@ export default function App() {
     <>
       <Org_adminTable
         columns={columns}
-        data={questionsData?.map((val, idx) => ({
-          ...val,
-          isAgency: val.isAgency?.toString(),
-        }))}
+        data={questionsData}
         createForm={
           <>
             <div className="">
@@ -268,7 +269,7 @@ export default function App() {
             </div>
           </>
         }
-        setEditForm={memoSetQuestionForm}
+        setEditForm={setQuestionForm}
         editForm={
           <>
             <div className="">
