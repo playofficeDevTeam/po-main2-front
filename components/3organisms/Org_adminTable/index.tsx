@@ -1,4 +1,12 @@
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import {
+  forwardRef,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import styled from "styled-components";
 import {
   useTable,
@@ -7,6 +15,8 @@ import {
   useGlobalFilter,
   useAsyncDebounce,
   useBlockLayout,
+  initialState,
+  useRowSelect,
 } from "react-table";
 import { FixedSizeList } from "react-window";
 import Modal_adminCreate from "./Modal_adminCreate";
@@ -124,7 +134,37 @@ export function SelectColumnFilter({
   );
 }
 
-function Table({ columns, data, cellHoverOption, setEditForm }) {
+const IndeterminateCheckbox = forwardRef(
+  ({ indeterminate, ...rest }: any, ref) => {
+    const defaultRef: any = useRef();
+    const resolvedRef: any = ref || defaultRef;
+
+    useEffect(() => {
+      resolvedRef.current.indeterminate = indeterminate;
+    }, [resolvedRef, indeterminate]);
+
+    return (
+      <>
+        <input
+          className="w-5 h-5"
+          type="checkbox"
+          ref={resolvedRef}
+          {...rest}
+        />
+      </>
+    );
+  }
+);
+
+function Table({
+  columns,
+  data,
+  cellHoverOption,
+  setEditForm,
+  deleteMutation,
+  editForm,
+  createForm,
+}) {
   const defaultColumn = useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -159,16 +199,53 @@ function Table({ columns, data, cellHoverOption, setEditForm }) {
     preGlobalFilteredRows,
     setGlobalFilter,
     totalColumnsWidth,
+    selectedFlatRows,
+    state: { selectedRowIds },
   } = useTable(
     {
       columns,
       data,
       defaultColumn,
+      autoResetGlobalFilter: false,
+      autoResetPage: false,
+      autoResetExpanded: false,
+      autoResetGroupBy: false,
+      autoResetSortBy: false,
+      autoResetFilters: false,
+      autoResetRowState: false,
+      initialState: {
+        sortBy: useMemo(() => [{ id: "createdAt", desc: true }], []),
+      },
     },
     useFilters,
     useGlobalFilter,
     useSortBy,
-    useBlockLayout
+    useBlockLayout,
+    useRowSelect,
+    (hooks) => {
+      hooks.visibleColumns.push((columns) => [
+        // Let's make a column for selection
+        {
+          id: "selection",
+          width: 50,
+          // The header can use the table's getToggleAllRowsSelectedProps method
+          // to render a checkbox
+          Header: ({ getToggleAllRowsSelectedProps }) => (
+            <div>
+              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+            </div>
+          ),
+          // The cell can use the individual row's getToggleRowSelectedProps method
+          // to the render a checkbox
+          Cell: ({ row }) => (
+            <div className="center w-full h-full">
+              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+            </div>
+          ),
+        },
+        ...columns,
+      ]);
+    }
   );
 
   const RenderRow = useCallback(
@@ -185,8 +262,8 @@ function Table({ columns, data, cellHoverOption, setEditForm }) {
           {row.cells.map((cell, idx) => {
             return (
               <div {...cell.getCellProps()} className="td group" key={idx}>
-                <div className="flex items-center ">
-                  <div className="mr-1">{cell.render("Cell")}</div>
+                <div className="flex">
+                  <div className="">{cell.render("Cell")}</div>
                   <div
                     className=" hidden group-hover:block"
                     onClick={() => {
@@ -195,11 +272,14 @@ function Table({ columns, data, cellHoverOption, setEditForm }) {
                         accessor: val.column.id,
                         value: val.value,
                       }));
+                      const filteredCellValues = cellValues.filter(
+                        (e) => !["selection"].includes(e.accessor)
+                      );
+                      setEditForm(filteredCellValues);
                       console.log(cell);
-                      setEditForm(cellValues);
                     }}
                   >
-                    {cellHoverOption}
+                    {!["selection"].includes(cell.column.id) && cellHoverOption}
                   </div>
                 </div>
               </div>
@@ -208,7 +288,7 @@ function Table({ columns, data, cellHoverOption, setEditForm }) {
         </div>
       );
     },
-    [prepareRow, rows]
+    [prepareRow, rows, selectedFlatRows]
   );
 
   const [windowHeightState, setWindowHeightState] = useState(
@@ -225,86 +305,125 @@ function Table({ columns, data, cellHoverOption, setEditForm }) {
   }, [throttleheightCheck]);
 
   return (
-    <table {...getTableProps()} className="bg-white">
-      <thead>
-        <tr>
-          <th
-            colSpan={visibleColumns.length}
-            style={{
-              textAlign: "left",
-            }}
-          >
-            <GlobalFilter
-              preGlobalFilteredRows={preGlobalFilteredRows}
-              globalFilter={state.globalFilter}
-              setGlobalFilter={setGlobalFilter}
-            />
-          </th>
-        </tr>
-        {headerGroups.map((headerGroup, idx) => (
-          <tr {...headerGroup.getHeaderGroupProps()} key={idx}>
-            {headerGroup.headers.map((column, idx) => (
-              <th {...column.getHeaderProps()} className="" key={idx}>
-                <div
-                  {...column.getSortByToggleProps()}
-                  className="mb-1 flex cursor-pointer"
-                >
-                  {column.render("Header")}
-                  <span>
-                    {column.isSorted ? (
-                      column.isSortedDesc ? (
-                        <i className="fas fa-caret-down ml-2"></i>
-                      ) : (
-                        <i className="fas fa-caret-up ml-2"></i>
-                      )
-                    ) : (
-                      <i className="fas fa-sort ml-2"></i>
-                    )}
-                  </span>
-                </div>
-                <div>{column.canFilter ? column.render("Filter") : null}</div>
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        <FixedSizeList
-          height={windowHeightState}
-          itemCount={rows.length}
-          itemSize={35}
-          width={totalColumnsWidth + scrollBarSize}
-        >
-          {RenderRow}
-        </FixedSizeList>
-      </tbody>
-    </table>
-  );
-}
-
-function App({ columns, data, setEditForm, createForm, editForm }) {
-  const [isModalOpen, setisModalOpen] = useRecoilState(
-    isModal_adminEditOpenAtom
-  );
-  return (
-    <div className="bg-gray-50 w-full  overflow-x-scroll ">
-      <div className="flex">
-        <div className="mr-2 my-3 mx-4">
+    <>
+      <div className="flex p-2">
+        <div className="mr-2">
           <Modal_adminCreate data={{ button: <>생성</>, modal: createForm }} />
         </div>
         <div className="">
           <Modal_adminEdit data={{ button: <></>, modal: editForm }} />
         </div>
+        <div
+          className=""
+          onClick={() => {
+            selectedFlatRows.forEach((e) => deleteMutation(e.original.id));
+          }}
+        >
+          삭제{" "}
+        </div>
       </div>
+
+      <table {...getTableProps()} className="bg-white">
+        <thead>
+          <tr>
+            <th
+              colSpan={visibleColumns.length}
+              style={{
+                textAlign: "left",
+              }}
+            >
+              <GlobalFilter
+                preGlobalFilteredRows={preGlobalFilteredRows}
+                globalFilter={state.globalFilter}
+                setGlobalFilter={setGlobalFilter}
+              />
+            </th>
+          </tr>
+          {headerGroups.map((headerGroup, idx) => (
+            <tr {...headerGroup.getHeaderGroupProps()} key={idx}>
+              {headerGroup.headers.map((column, idx) => (
+                <th
+                  {...column.getHeaderProps()}
+                  className={`${!["id"].includes(column.id) ? "" : "hidden"}`}
+                  key={idx}
+                >
+                  <div
+                    {...column.getSortByToggleProps()}
+                    className="mb-1 flex cursor-pointer"
+                  >
+                    {column.render("Header")}
+                    <span>
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          <i className="fas fa-caret-down ml-2"></i>
+                        ) : (
+                          <i className="fas fa-caret-up ml-2"></i>
+                        )
+                      ) : (
+                        <></>
+                      )}
+                    </span>
+                  </div>
+                  <div>{column.canFilter ? column.render("Filter") : null}</div>
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          <FixedSizeList
+            height={windowHeightState}
+            itemCount={rows.length}
+            itemSize={35}
+            width={totalColumnsWidth + scrollBarSize}
+          >
+            {RenderRow}
+          </FixedSizeList>
+        </tbody>
+      </table>
+      <pre>
+        <code>
+          {JSON.stringify(
+            {
+              selectedRowIds: selectedRowIds,
+              "selectedFlatRows[].original": selectedFlatRows.map(
+                (d) => d.original
+              ),
+            },
+            null,
+            2
+          )}
+        </code>
+      </pre>
+    </>
+  );
+}
+
+function App({
+  columns,
+  data,
+  createForm,
+  editForm,
+  setEditForm,
+  deleteMutation,
+}) {
+  const [isModalOpen, setisModalOpen] = useRecoilState(
+    isModal_adminEditOpenAtom
+  );
+  return (
+    <div className="bg-gray-50 w-full  overflow-x-scroll ">
       <TableStyles>
         <Table
           columns={columns}
           data={data}
+          createForm={createForm}
           setEditForm={setEditForm}
+          editForm={editForm}
+          deleteMutation={deleteMutation}
           cellHoverOption={
             <>
               <div
-                className=""
+                className="ml-1"
                 onClick={() => {
                   setisModalOpen(true);
                 }}

@@ -27,6 +27,8 @@ import fn_DatePrettier from "./fn_DatePrettier";
 import Org_adminTable, {
   SelectColumnFilter,
 } from "../../../3organisms/Org_adminTable";
+import { isModal_adminEditOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
+import { formSelector } from "./fn_formSelector";
 
 export const FIND_QUESTIONS_FOR_ADMIN = gql`
   query findQuestionsForAdmin($input: FindQuestionsInput!) {
@@ -89,27 +91,59 @@ export default function App() {
 
   const columns = useMemo(
     () => [
-      { Header: "생성일", accessor: "createdAt", width: 150 },
-      { Header: "브랜드명", accessor: "brandName", width: 150 },
-      { Header: "이름", accessor: "name", width: 150 },
-      { Header: "연락처", accessor: "phoneNumber", width: 150 },
-      { Header: "이메일", accessor: "email", width: 150 },
+      {
+        Header: "생성일",
+        accessor: "createdAt",
+        width: 150,
+        sortDescFirst: true,
+      },
+      {
+        Header: "브랜드명",
+        accessor: "brandName",
+        width: 150,
+        sortDescFirst: true,
+      },
+      { Header: "이름", accessor: "name", width: 150, sortDescFirst: true },
+      {
+        Header: "연락처",
+        accessor: "phoneNumber",
+        width: 150,
+
+        sortDescFirst: true,
+      },
+      { Header: "이메일", accessor: "email", width: 150, sortDescFirst: true },
       {
         Header: "예산",
         accessor: "budget",
         width: 150,
         Filter: SelectColumnFilter,
+
+        sortDescFirst: true,
       },
-      { Header: "제품 링크", accessor: "productLink", width: 150 },
-      { Header: "특이사항", accessor: "uniqueness", width: 150 },
+      {
+        Header: "제품 링크",
+        accessor: "productLink",
+        width: 150,
+
+        sortDescFirst: true,
+      },
+      {
+        Header: "특이사항",
+        accessor: "uniqueness",
+        width: 150,
+
+        sortDescFirst: true,
+      },
       {
         Header: "대행사",
         accessor: "isAgency",
         width: 100,
         Filter: SelectColumnFilter,
+
+        sortDescFirst: true,
       },
-      { Header: "태그", accessor: "tags", width: 150 },
-      { Header: "dataId", accessor: "id", width: 100 },
+      { Header: "태그", accessor: "tags", width: 150, sortDescFirst: true },
+      { Header: "dataId", accessor: "id", width: 100, sortDescFirst: true },
     ],
     []
   );
@@ -197,6 +231,10 @@ export default function App() {
     isModal_adminCreateOpenAtom
   );
 
+  const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
+    isModal_adminEditOpenAtom
+  );
+
   if (findQuestionsForAdminError) {
     return <>권한이 없습니다.</>;
   }
@@ -209,23 +247,35 @@ export default function App() {
       <Org_adminTable
         columns={columns}
         data={questionsData}
+        deleteMutation={(id) => {
+          deleteQuestionForAdminMutation({
+            variables: {
+              input: {
+                id,
+              },
+            },
+          });
+        }}
         createForm={
           <>
             <div className="">
               <ul>
-                {questionForm.map((val, idx) => (
-                  <li key={idx} className="flex">
-                    <div className="w-40">{val.Header}</div>
-                    <input
-                      className="border p-1 m-1"
-                      type="text"
-                      value={val.value}
-                      onChange={(e) => {
-                        questionFormOnChange(e, idx);
-                      }}
-                    />
-                  </li>
-                ))}
+                {questionForm.map(
+                  (val, idx) =>
+                    !["id", "createdAt"].includes(val.accessor) && (
+                      <li key={idx} className="flex">
+                        <div className="w-40">{val.Header}</div>
+                        <input
+                          className="border p-1 m-1"
+                          type="text"
+                          value={val.value}
+                          onChange={(e) => {
+                            questionFormOnChange(e, idx);
+                          }}
+                        />
+                      </li>
+                    )
+                )}
               </ul>
               <div
                 className="p-1 m-1 border cursor-pointer"
@@ -234,16 +284,24 @@ export default function App() {
                     createQuestionForAdminMutation({
                       variables: {
                         input: {
-                          brandName: questionForm[1].value,
-                          name: questionForm[2].value,
-                          phoneNumber: questionForm[3].value,
-                          email: questionForm[4].value,
-                          budget: questionForm[5].value,
-                          productLink: questionForm[6].value,
-                          uniqueness: questionForm[7].value,
+                          brandName: formSelector("brandName", questionForm),
+                          name: formSelector("name", questionForm),
+                          phoneNumber: formSelector(
+                            "phoneNumber",
+                            questionForm
+                          ),
+                          email: formSelector("email", questionForm),
+                          budget: formSelector("budget", questionForm),
+                          productLink: formSelector(
+                            "productLink",
+                            questionForm
+                          ),
+                          uniqueness: formSelector("uniqueness", questionForm),
                           isAgency:
-                            questionForm[8].value === "true" ? true : false,
-                          tags: questionForm[9].value,
+                            formSelector("isAgency", questionForm) === "true"
+                              ? true
+                              : false,
+                          tags: formSelector("tags", questionForm),
                         },
                       },
                     });
@@ -274,19 +332,22 @@ export default function App() {
           <>
             <div className="">
               <ul>
-                {questionForm.map((val, idx) => (
-                  <li key={idx} className="flex">
-                    <div className="w-40">{val.Header}</div>
-                    <input
-                      className="border p-1 m-1"
-                      type="text"
-                      value={val.value}
-                      onChange={(e) => {
-                        questionFormOnChange(e, idx);
-                      }}
-                    />
-                  </li>
-                ))}
+                {questionForm.map(
+                  (val, idx) =>
+                    !["id", "createdAt"].includes(val.accessor) && (
+                      <li key={idx} className="flex">
+                        <div className="w-40">{val.Header}</div>
+                        <input
+                          className="border p-1 m-1"
+                          type="text"
+                          value={val.value}
+                          onChange={(e) => {
+                            questionFormOnChange(e, idx);
+                          }}
+                        />
+                      </li>
+                    )
+                )}
               </ul>
               <div
                 className="p-1 m-1 border cursor-pointer"
@@ -295,18 +356,25 @@ export default function App() {
                     editQuestionForAdminMutation({
                       variables: {
                         input: {
-                          createdAt: questionForm[0].value,
-                          brandName: questionForm[1].value,
-                          name: questionForm[2].value,
-                          phoneNumber: questionForm[3].value,
-                          email: questionForm[4].value,
-                          budget: questionForm[5].value,
-                          productLink: questionForm[6].value,
-                          uniqueness: questionForm[7].value,
+                          brandName: formSelector("brandName", questionForm),
+                          name: formSelector("name", questionForm),
+                          phoneNumber: formSelector(
+                            "phoneNumber",
+                            questionForm
+                          ),
+                          email: formSelector("email", questionForm),
+                          budget: formSelector("budget", questionForm),
+                          productLink: formSelector(
+                            "productLink",
+                            questionForm
+                          ),
+                          uniqueness: formSelector("uniqueness", questionForm),
                           isAgency:
-                            questionForm[8].value === "true" ? true : false,
-                          tags: questionForm[9].value,
-                          id: +questionForm[10].value,
+                            formSelector("isAgency", questionForm) === "true"
+                              ? true
+                              : false,
+                          tags: formSelector("tags", questionForm),
+                          id: +formSelector("id", questionForm),
                         },
                       },
                     });
@@ -314,7 +382,7 @@ export default function App() {
                   setQuestionForm((val) =>
                     val.map((val2) => ({ ...val2, value: "" }))
                   );
-                  setisModalOpen(false);
+                  setisEditModalOpen(false);
                 }}
               >
                 확인
