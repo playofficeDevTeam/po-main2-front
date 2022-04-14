@@ -143,7 +143,7 @@ export default function App() {
         sortDescFirst: true,
       },
       { Header: "태그", accessor: "tags", width: 150, sortDescFirst: true },
-      { Header: "dataId", accessor: "id", width: 100, sortDescFirst: true },
+      { Header: "dataId", accessor: "id", width: 50, sortDescFirst: true },
     ],
     []
   );

@@ -227,7 +227,7 @@ function Table({
         // Let's make a column for selection
         {
           id: "selection",
-          width: 50,
+          width: 40,
           // The header can use the table's getToggleAllRowsSelectedProps method
           // to render a checkbox
           Header: ({ getToggleAllRowsSelectedProps }) => (
@@ -262,10 +262,16 @@ function Table({
           {row.cells.map((cell, idx) => {
             return (
               <div {...cell.getCellProps()} className="td group" key={idx}>
-                <div className="flex">
+                <div
+                  className={` ${
+                    !["selection"].includes(cell.column.id)
+                      ? "flex items-center h-full"
+                      : "center h-full"
+                  }`}
+                >
                   <div className="">{cell.render("Cell")}</div>
                   <div
-                    className=" hidden group-hover:block"
+                    className="hidden group-hover:block"
                     onClick={() => {
                       const cellValues = cell.row.allCells.map((val, idx) => ({
                         Header: val.column.Header,
@@ -279,7 +285,8 @@ function Table({
                       console.log(cell);
                     }}
                   >
-                    {!["selection"].includes(cell.column.id) && cellHoverOption}
+                    {!["selection", "id"].includes(cell.column.id) &&
+                      cellHoverOption}
                   </div>
                 </div>
               </div>
@@ -306,6 +313,7 @@ function Table({
 
   return (
     <>
+      {/* 메뉴 */}
       <div className="flex p-2">
         <div className="mr-2">
           <Modal_adminCreate data={{ button: <>생성</>, modal: createForm }} />
@@ -344,12 +352,14 @@ function Table({
               {headerGroup.headers.map((column, idx) => (
                 <th
                   {...column.getHeaderProps()}
-                  className={`${!["id"].includes(column.id) ? "" : "hidden"}`}
+                  className={`${!["id"].includes(column.id) ? "" : ""} `}
                   key={idx}
                 >
                   <div
                     {...column.getSortByToggleProps()}
-                    className="mb-1 flex cursor-pointer"
+                    className={`mb-1 flex cursor-pointer ${
+                      !["selection"].includes(column.id) ? "" : "center pt-5"
+                    }`}
                   >
                     {column.render("Header")}
                     <span>
