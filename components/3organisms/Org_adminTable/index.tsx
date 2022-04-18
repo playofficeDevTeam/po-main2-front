@@ -29,8 +29,7 @@ export const TableStyles = styled.div`
   margin: 0 1rem;
   table {
     border-spacing: 0;
-    border: 1px solid #c2410c;
-
+    border: 1px solid #d1d5db;
     tr {
       :last-child {
         td {
@@ -38,15 +37,12 @@ export const TableStyles = styled.div`
         }
       }
     }
-
-    th,
-    td {
+    th {
       text-align: start;
       margin: 0;
       padding: 0.5rem;
-      border-bottom: 1px solid #c2410c;
-      border-right: 1px solid #c2410c;
-
+      border-bottom: 1px solid #d1d5db;
+      border-right: 1px solid #d1d5db;
       :last-child {
         border-right: 0;
       }
@@ -77,7 +73,7 @@ function GlobalFilter({
         placeholder={``}
         className="border rounded-sm"
         style={{
-          width: "50rem",
+          width: "30rem",
           fontSize: "1.1rem",
         }}
       />
@@ -97,7 +93,7 @@ function DefaultColumnFilter({
         setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
       }}
       placeholder={`검색 필터`}
-      className="border rounded-sm w-full"
+      className="border rounded-sm w-full text-base px-1"
     />
   );
 }
@@ -156,6 +152,21 @@ const IndeterminateCheckbox = forwardRef(
   }
 );
 
+const ColumnIndeterminateCheckbox = forwardRef(
+  ({ indeterminate, ...rest }: any, ref) => {
+    const defaultRef: any = useRef();
+    const resolvedRef: any = ref || defaultRef;
+
+    useEffect(() => {
+      resolvedRef.current.indeterminate = indeterminate;
+    }, [resolvedRef, indeterminate]);
+
+    return (
+      <input className="w-4 h-4" type="checkbox" ref={resolvedRef} {...rest} />
+    );
+  }
+);
+
 function Table({
   columns,
   data,
@@ -201,6 +212,8 @@ function Table({
     totalColumnsWidth,
     selectedFlatRows,
     state: { selectedRowIds },
+    getToggleHideAllColumnsProps,
+    allColumns,
   } = useTable(
     {
       columns,
@@ -248,56 +261,6 @@ function Table({
     }
   );
 
-  const RenderRow = useCallback(
-    ({ index, style }) => {
-      const row = rows[index];
-      prepareRow(row);
-      return (
-        <div
-          {...row.getRowProps({
-            style,
-          })}
-          className="tr"
-        >
-          {row.cells.map((cell, idx) => {
-            return (
-              <div {...cell.getCellProps()} className="td group" key={idx}>
-                <div
-                  className={` ${
-                    !["selection"].includes(cell.column.id)
-                      ? "flex items-center h-full"
-                      : "center h-full"
-                  }`}
-                >
-                  <div className="">{cell.render("Cell")}</div>
-                  <div
-                    className="hidden group-hover:block"
-                    onClick={() => {
-                      const cellValues = cell.row.allCells.map((val, idx) => ({
-                        Header: val.column.Header,
-                        accessor: val.column.id,
-                        value: val.value,
-                      }));
-                      const filteredCellValues = cellValues.filter(
-                        (e) => !["selection"].includes(e.accessor)
-                      );
-                      setEditForm(filteredCellValues);
-                      console.log(cell);
-                    }}
-                  >
-                    {!["selection", "id"].includes(cell.column.id) &&
-                      cellHoverOption}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      );
-    },
-    [prepareRow, rows, selectedFlatRows]
-  );
-
   const [windowHeightState, setWindowHeightState] = useState(
     window.innerHeight - 300
   );
@@ -311,24 +274,159 @@ function Table({
     return () => window.removeEventListener("resize", throttleheightCheck);
   }, [throttleheightCheck]);
 
+  //테이블 스타일
+  //테이블 스타일
+  //테이블 스타일
+  //테이블 스타일
+  //테이블 스타일
+  //테이블 스타일
+  const RenderRow = useCallback(
+    ({ index, style }) => {
+      const row = rows[index];
+      prepareRow(row);
+      return (
+        <div
+          {...row.getRowProps({
+            style,
+          })}
+          className={`tr hover:bg-gray-200 ${
+            index % 2 === 1 ? "bg-white" : "bg-gray-50"
+          }`}
+        >
+          {row.cells.map((cell, idx) => {
+            return (
+              !["id"].includes(cell.column.id) && (
+                <div
+                  {...cell.getCellProps()}
+                  className={`td group border-r px-2 border-gray-300  `}
+                  key={idx}
+                >
+                  <div
+                    className={`    ${
+                      !["selection"].includes(cell.column.id)
+                        ? "flex items-center h-full "
+                        : "center h-full"
+                    }`}
+                  >
+                    {!["createdAt"].includes(cell.column.id) ? (
+                      <div className="">{cell.render("Cell")}</div>
+                    ) : (
+                      <>
+                        <div className="text-sm">{cell.render("Cell")}</div>
+                      </>
+                    )}
+                    <div
+                      className="hidden group-hover:block"
+                      onClick={() => {
+                        const cellValues = cell.row.allCells.map(
+                          (val, idx) => ({
+                            Header: val.column.Header,
+                            accessor: val.column.id,
+                            value: val.value,
+                          })
+                        );
+                        const filteredCellValues = cellValues.filter(
+                          (e) => !["selection"].includes(e.accessor)
+                        );
+                        setEditForm(filteredCellValues);
+                      }}
+                    >
+                      {!["selection", "id", "createdAt"].includes(
+                        cell.column.id
+                      ) && cellHoverOption}
+                    </div>
+                  </div>
+                </div>
+              )
+            );
+          })}
+        </div>
+      );
+    },
+    [prepareRow, rows, selectedFlatRows]
+  );
+
+  const [columnPopupState, setColumnPopupState] = useState(false);
   return (
     <>
       {/* 메뉴 */}
-      <div className="flex p-2">
-        <div className="mr-2">
-          <Modal_adminCreate data={{ button: <>생성</>, modal: createForm }} />
+      <div className="flex py-2">
+        {/* 수정 */}
+        <div className="mr-3 cursor-pointer">
+          <Modal_adminCreate
+            data={{
+              button: (
+                <>
+                  <div className="center w-20 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500">
+                    <i className="fas fa-plus mr-2 text-sm"></i> 생성
+                  </div>
+                </>
+              ),
+              modal: createForm,
+            }}
+          />
         </div>
         <div className="">
           <Modal_adminEdit data={{ button: <></>, modal: editForm }} />
         </div>
-        <div
-          className=""
-          onClick={() => {
-            selectedFlatRows.forEach((e) => deleteMutation(e.original.id));
-          }}
-        >
-          삭제{" "}
+
+        {/* 열선택 */}
+        <div className="mr-3">
+          <div
+            className="center w-20 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300 cursor-pointer"
+            onClick={() => {
+              setColumnPopupState((state) => !state);
+            }}
+          >
+            <i className="fas fa-columns mr-2"></i>
+            <span className="mr-2">열</span>
+            {columnPopupState ? (
+              <i className="fas fa-caret-up"></i>
+            ) : (
+              <i className="fas fa-caret-down"></i>
+            )}
+          </div>
+
+          {columnPopupState && (
+            <div className="h-0 w-0 relative z-50 top-1">
+              <div className="w-36 p-3 px-4 bg-white border rounded-md shadow-md">
+                <div className="py-1 flex items-center">
+                  <ColumnIndeterminateCheckbox
+                    {...getToggleHideAllColumnsProps()}
+                  />{" "}
+                  <span className="ml-2">전체 선택</span>
+                </div>
+                {allColumns.map(
+                  (column) =>
+                    !["selection", "id"].includes(column.id) && (
+                      <div key={column.id} className="py-1">
+                        <label className="flex items-center cursor-pointer">
+                          <input
+                            className="w-4 h-4 mr-2"
+                            type="checkbox"
+                            {...column.getToggleHiddenProps()}
+                          />{" "}
+                          {column.Header}
+                        </label>
+                      </div>
+                    )
+                )}
+              </div>
+            </div>
+          )}
         </div>
+
+        {/* 삭제 */}
+        {selectedFlatRows.length !== 0 && (
+          <div
+            className=" cursor-pointer center w-14 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300 "
+            onClick={() => {
+              selectedFlatRows.forEach((e) => deleteMutation(e.original.id));
+            }}
+          >
+            <i className="fas fa-trash-alt"></i>
+          </div>
+        )}
       </div>
 
       <table {...getTableProps()} className="bg-white">
@@ -349,43 +447,53 @@ function Table({
           </tr>
           {headerGroups.map((headerGroup, idx) => (
             <tr {...headerGroup.getHeaderGroupProps()} key={idx}>
-              {headerGroup.headers.map((column, idx) => (
-                <th
-                  {...column.getHeaderProps()}
-                  className={`${!["id"].includes(column.id) ? "" : ""} `}
-                  key={idx}
-                >
-                  <div
-                    {...column.getSortByToggleProps()}
-                    className={`mb-1 flex cursor-pointer ${
-                      !["selection"].includes(column.id) ? "" : "center pt-5"
-                    }`}
-                  >
-                    {column.render("Header")}
-                    <span>
-                      {column.isSorted ? (
-                        column.isSortedDesc ? (
-                          <i className="fas fa-caret-down ml-2"></i>
-                        ) : (
-                          <i className="fas fa-caret-up ml-2"></i>
-                        )
-                      ) : (
-                        <></>
-                      )}
-                    </span>
-                  </div>
-                  <div>{column.canFilter ? column.render("Filter") : null}</div>
-                </th>
-              ))}
+              {headerGroup.headers.map(
+                (column, idx) =>
+                  !["id"].includes(column.id) && (
+                    <th
+                      {...column.getHeaderProps()}
+                      className={`${!["id"].includes(column.id) ? "" : ""} `}
+                      key={idx}
+                    >
+                      <div
+                        {...column.getSortByToggleProps()}
+                        className={`mb-1 flex cursor-pointer ${
+                          !["selection"].includes(column.id)
+                            ? ""
+                            : "center pt-5"
+                        }`}
+                      >
+                        {column.render("Header")}
+                        <span>
+                          {column.isSorted ? (
+                            column.isSortedDesc ? (
+                              <i className="fas fa-caret-down ml-2"></i>
+                            ) : (
+                              <i className="fas fa-caret-up ml-2"></i>
+                            )
+                          ) : (
+                            <></>
+                          )}
+                        </span>
+                      </div>
+                      <div>
+                        {column.canFilter ? column.render("Filter") : null}
+                      </div>
+                    </th>
+                  )
+              )}
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()}>
+        <tbody {...getTableBodyProps()} className="overfl">
           <FixedSizeList
             height={windowHeightState}
             itemCount={rows.length}
-            itemSize={35}
+            itemSize={40}
             width={totalColumnsWidth + scrollBarSize}
+            style={{
+              overflowY: "scroll",
+            }}
           >
             {RenderRow}
           </FixedSizeList>
@@ -438,7 +546,7 @@ function App({
                   setisModalOpen(true);
                 }}
               >
-                수정
+                <i className="fas fa-pen cursor-pointer  text-gray-400 hover:text-gray-900  text-xs flex pb-1"></i>
               </div>
             </>
           }

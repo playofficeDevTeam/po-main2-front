@@ -85,7 +85,6 @@ fromDate.setDate(fromDate.getDate() - 10);
 let toDate = new Date();
 export default function App() {
   const [questionForm, setQuestionForm] = useRecoilState(questionFormData);
-  const memoSetQuestionForm = useCallback(setQuestionForm, []);
 
   const questionFormOnChange = useQuestionFormDataOnChange();
 
@@ -94,8 +93,9 @@ export default function App() {
       {
         Header: "생성일",
         accessor: "createdAt",
-        width: 150,
+        width: 90,
         sortDescFirst: true,
+        Footer: "생성일",
       },
       {
         Header: "브랜드명",
@@ -143,7 +143,7 @@ export default function App() {
         sortDescFirst: true,
       },
       { Header: "태그", accessor: "tags", width: 150, sortDescFirst: true },
-      { Header: "dataId", accessor: "id", width: 50, sortDescFirst: true },
+      { Header: "dataId", accessor: "id", width: 0 },
     ],
     []
   );
@@ -248,12 +248,14 @@ export default function App() {
         columns={columns}
         data={questionsData}
         deleteMutation={(id) => {
-          deleteQuestionForAdminMutation({
-            variables: {
-              input: {
-                id,
+          tokenCheck("mutation", () => {
+            deleteQuestionForAdminMutation({
+              variables: {
+                input: {
+                  id,
+                },
               },
-            },
+            });
           });
         }}
         createForm={

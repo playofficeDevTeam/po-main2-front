@@ -44,7 +44,7 @@ export default function App({ data = data1 }) {
       }
     : {
         content: {
-          top: "42%",
+          top: "49%",
           left: "50%",
           right: "auto",
           bottom: "auto",
@@ -124,13 +124,12 @@ export default function App({ data = data1 }) {
         style={customStyles}
         contentLabel="modal"
       >
-        <div className="h-0">
-          <div className="h-20 bg-gradient-to-b from-white"></div>
-        </div>
-
-        <div className="h-0 relative z-50 flex justify-end mr-2 mt-2 cursor-pointer">
-          <div onClick={closeModal} className="h-10 cursor-pointer">
-            <i className="far fa-times-circle text-xl text-gray-400"></i>
+        <div className="relative z-50 flex justify-end mr-2 mt-2 ">
+          <div className="h-6">
+            <i
+              className="cursor-pointer far fa-times-circle text-xl text-gray-400"
+              onClick={closeModal}
+            ></i>
           </div>
         </div>
         <div className="pc-max overflow-y-auto" style={{ maxHeight: "80vh" }}>

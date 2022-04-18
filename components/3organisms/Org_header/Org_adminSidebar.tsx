@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FIND_ME_FOR_ADMIN } from "../../4templates/admin_pgs/Dashboard/Gql_admin";
 import { findMeforAdmin } from "../../4templates/admin_pgs/Dashboard/__generated__/findMeforAdmin";
 import { adminLoggedInVar } from "../../common/apollo";
@@ -67,49 +67,74 @@ export default function App() {
     tokenCheck("query", refetch);
   }, [loading]);
 
+  const [sideBarOpenState, setSideBarOpenState] = useState(true);
+
   return (
-    <div className=" z-50">
+    <div className=" relative z-50">
       <div
-        className="fixed w-40 border-r shadow-md overflow-y-auto h-full flex flex-col justify-between bg-white"
-        style={{ minWidth: "8rem" }}
+        className={`fixed  border-r shadow-md overflow-y-auto h-full flex flex-col justify-between bg-white ${
+          sideBarOpenState ? "w-44" : "w-14"
+        }`}
       >
         <div className="">
-          <div className="text-xl font-black text-orange-600 p-3 pl-4 mb-3">
-            POKETING
+          <div
+            className="px-1 py-1 "
+            onClick={() => {
+              setSideBarOpenState((state) => !state);
+            }}
+          >
+            <div
+              className={`flex items-center p-2  cursor-pointer  rounded-md hover:bg-gray-100 ${
+                sideBarOpenState ? "pl-4" : " justify-center"
+              }`}
+            >
+              <div className="">
+                <i className="fas fa-bars w-5 text-center"></i>
+              </div>
+              {sideBarOpenState && (
+                <div className=" font-black text-orange-600 ml-3">POKETING</div>
+              )}
+            </div>
           </div>
           <ul>
             {listsData.map((val, idx) => (
               <li className="px-1 pb-1" key={idx}>
                 <Link href={val.url}>
                   <a
-                    className={`flex items-center p-2 pl-4 cursor-pointer  rounded-md hover:bg-gray-100 ${
+                    className={`flex items-center p-2 cursor-pointer  rounded-md hover:bg-gray-100 ${
                       pathname === val.url ? "bg-gray-100" : ""
-                    } `}
+                    } ${sideBarOpenState ? "pl-4 " : " justify-center"}`}
                   >
-                    <div className="w-5 mr-3 text-gray-700">{val.icon}</div>
-                    {val.title}
+                    <div className="w-5 text-center text-gray-700">
+                      {val.icon}
+                    </div>
+                    {sideBarOpenState && (
+                      <div className="ml-3">{val.title}</div>
+                    )}
                   </a>
                 </Link>
               </li>
             ))}
           </ul>
         </div>
-        <ul>
-          <li className="center">{data?.findMeforAdmin.admin?.email}</li>
-          <li>
-            <div
-              className="center p-2 cursor-pointer  rounded-md hover:bg-gray-100"
-              onClick={() => {
-                logout();
-              }}
-            >
-              로그아웃
-            </div>
-          </li>
-        </ul>
+        {sideBarOpenState && (
+          <ul>
+            <li className="center">{data?.findMeforAdmin.admin?.email}</li>
+            <li>
+              <div
+                className="center p-2 cursor-pointer  rounded-md hover:bg-gray-100"
+                onClick={() => {
+                  logout();
+                }}
+              >
+                로그아웃
+              </div>
+            </li>
+          </ul>
+        )}
       </div>
 
-      <div className="w-40 h-full"></div>
+      <div className={`h-full ${sideBarOpenState ? "w-44" : "w-14"}`}></div>
     </div>
   );
 }
