@@ -314,51 +314,49 @@ function Table({
         >
           {row.cells.map((cell, idx) => {
             return (
-              !["id"].includes(cell.column.id) && (
-                <div
-                  {...cell.getCellProps()}
-                  className={`td group border-r px-2 border-gray-300  overflow-y-hidden ${
-                    !["createdAt"].includes(cell.column.id)
-                      ? "overflow-x-auto"
-                      : "overflow-x-hidden"
-                  }`}
-                  key={idx}
-                >
+              <>
+                {!["id"].includes(cell.column.id) && (
                   <div
-                    className={`w-max  items-center   ${
-                      !["selection"].includes(cell.column.id)
-                        ? "flex items-center h-full "
-                        : "center h-full"
+                    {...cell.getCellProps()}
+                    className={`thin-scroll  td group border-r px-2 border-gray-300  ${
+                      !["createdAt"].includes(cell.column.id)
+                        ? "overflow-x-auto"
+                        : "overflow-x-hidden"
                     }`}
+                    key={idx}
                   >
-                    {!["createdAt"].includes(cell.column.id) ? (
-                      <div className="">{cell.render("Cell")}</div>
-                    ) : (
-                      <div className="">{cell.render("Cell")}</div>
-                    )}
                     <div
-                      className="hidden group-hover:block"
-                      onClick={() => {
-                        const cellValues = cell.row.allCells.map(
-                          (val, idx) => ({
-                            Header: val.column.Header ?? "",
-                            accessor: val.column.id ?? "",
-                            value: val.value ?? "",
-                          })
-                        );
-                        const filteredCellValues = cellValues.filter(
-                          (e) => !["selection"].includes(e.accessor)
-                        );
-                        setEditForm(filteredCellValues);
-                      }}
+                      className={`w-max  items-center   ${
+                        !["selection"].includes(cell.column.id)
+                          ? "flex items-center h-full "
+                          : "center h-full"
+                      }`}
                     >
-                      {!["selection", "id", "createdAt"].includes(
-                        cell.column.id
-                      ) && cellHoverOption}
+                      <div className="">{cell.render("Cell")}</div>
+                      <div
+                        className="hidden group-hover:block"
+                        onClick={() => {
+                          const cellValues = cell.row.allCells.map(
+                            (val, idx) => ({
+                              Header: val.column.Header ?? "",
+                              accessor: val.column.id ?? "",
+                              value: val.value ?? "",
+                            })
+                          );
+                          const filteredCellValues = cellValues.filter(
+                            (e) => !["selection"].includes(e.accessor)
+                          );
+                          setEditForm(filteredCellValues);
+                        }}
+                      >
+                        {!["selection", "id", "createdAt"].includes(
+                          cell.column.id
+                        ) && cellHoverOption}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )
+                )}
+              </>
             );
           })}
         </div>
