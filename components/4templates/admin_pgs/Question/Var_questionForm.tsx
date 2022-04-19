@@ -29,11 +29,12 @@ export const useQuestionFormDataOnChange = () => {
   const [questionFormDataState, setQuestionFormDataState] =
     useRecoilState(questionFormData);
 
-  const onChange = (e, id) =>
+  const onChange = (e, id) => {
     setQuestionFormDataState((formData) =>
       formData.map((val, idx) =>
         idx === id ? { ...val, value: e.target.value } : val
       )
     );
+  };
   return onChange;
 };

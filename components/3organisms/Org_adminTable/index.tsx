@@ -23,6 +23,14 @@ import Modal_adminCreate from "./Modal_adminCreate";
 import { throttle } from "throttle-debounce";
 import Modal_adminEdit, { isModal_adminEditOpenAtom } from "./Modal_adminEdit";
 import { useRecoilState } from "recoil";
+import {
+  rawTableFromDate,
+  rawTableToDate,
+  tableFromDate,
+  tableToDate,
+} from "./Var_tableInputDate";
+import { dateToInput } from "./fn_dateToInput";
+import dayjs from "dayjs";
 
 export const TableStyles = styled.div`
   width: max-content;
@@ -81,7 +89,7 @@ function GlobalFilter({
   );
 }
 
-function DefaultColumnFilter({
+export function DefaultColumnFilter({
   column: { filterValue, preFilteredRows, setFilter },
 }) {
   const count = preFilteredRows.length;
@@ -262,17 +270,28 @@ function Table({
   );
 
   const [windowHeightState, setWindowHeightState] = useState(
-    window.innerHeight - 300
+    window.innerHeight - 200
   );
 
   const heightCheck = () => {
-    setWindowHeightState(window.innerHeight - 300);
+    setWindowHeightState(window.innerHeight - 200);
   };
   const throttleheightCheck = throttle(150, heightCheck);
   useEffect(() => {
     window.addEventListener("resize", throttleheightCheck);
     return () => window.removeEventListener("resize", throttleheightCheck);
   }, [throttleheightCheck]);
+
+  const [columnPopupState, setColumnPopupState] = useState(false);
+
+  const [rawTableFromDateState, setRawTableFromDateState] =
+    useRecoilState(rawTableFromDate);
+  const [rawTableToDateState, setRawTableToDateState] =
+    useRecoilState(rawTableToDate);
+
+  const [tableFromDateState, setTableFromDateState] =
+    useRecoilState(tableFromDate);
+  const [tableToDateState, setTableToDateState] = useRecoilState(tableToDate);
 
   //테이블 스타일
   //테이블 스타일
@@ -298,11 +317,15 @@ function Table({
               !["id"].includes(cell.column.id) && (
                 <div
                   {...cell.getCellProps()}
-                  className={`td group border-r px-2 border-gray-300  `}
+                  className={`td group border-r px-2 border-gray-300  overflow-y-hidden ${
+                    !["createdAt"].includes(cell.column.id)
+                      ? "overflow-x-auto"
+                      : "overflow-x-hidden"
+                  }`}
                   key={idx}
                 >
                   <div
-                    className={`    ${
+                    className={`w-max  items-center   ${
                       !["selection"].includes(cell.column.id)
                         ? "flex items-center h-full "
                         : "center h-full"
@@ -311,18 +334,16 @@ function Table({
                     {!["createdAt"].includes(cell.column.id) ? (
                       <div className="">{cell.render("Cell")}</div>
                     ) : (
-                      <>
-                        <div className="text-sm">{cell.render("Cell")}</div>
-                      </>
+                      <div className="">{cell.render("Cell")}</div>
                     )}
                     <div
                       className="hidden group-hover:block"
                       onClick={() => {
                         const cellValues = cell.row.allCells.map(
                           (val, idx) => ({
-                            Header: val.column.Header,
-                            accessor: val.column.id,
-                            value: val.value,
+                            Header: val.column.Header ?? "",
+                            accessor: val.column.id ?? "",
+                            value: val.value ?? "",
                           })
                         );
                         const filteredCellValues = cellValues.filter(
@@ -346,7 +367,6 @@ function Table({
     [prepareRow, rows, selectedFlatRows]
   );
 
-  const [columnPopupState, setColumnPopupState] = useState(false);
   return (
     <>
       {/* 메뉴 */}
@@ -421,7 +441,10 @@ function Table({
           <div
             className=" cursor-pointer center w-14 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300 "
             onClick={() => {
-              selectedFlatRows.forEach((e) => deleteMutation(e.original.id));
+              const returnValue = confirm("정말로 삭제하시겠습니까?");
+              if (returnValue) {
+                selectedFlatRows.forEach((e) => deleteMutation(e.original.id));
+              }
             }}
           >
             <i className="fas fa-trash-alt"></i>
@@ -433,6 +456,7 @@ function Table({
         <thead>
           <tr>
             <th
+              className="flex"
               colSpan={visibleColumns.length}
               style={{
                 textAlign: "left",
@@ -443,6 +467,48 @@ function Table({
                 globalFilter={state.globalFilter}
                 setGlobalFilter={setGlobalFilter}
               />
+              <div className="ml-2 flex  px-4">
+                <div className="h-full center mr-2">기한: </div>
+                <input
+                  className="border rounded-sm pl-1"
+                  type="date"
+                  value={dateToInput(rawTableFromDateState)}
+                  onChange={(e) => {
+                    setRawTableFromDateState((state) => dayjs(e.target.value));
+                  }}
+                />
+                <div className="mx-2">~</div>
+                <input
+                  className="border rounded-sm pl-1"
+                  type="date"
+                  value={dateToInput(rawTableToDateState)}
+                  onChange={(e) => {
+                    setRawTableToDateState((state) => dayjs(e.target.value));
+                  }}
+                />
+                <div
+                  className=""
+                  onClick={() => {
+                    try {
+                      if (
+                        dayjs(rawTableFromDateState).get("date") &&
+                        dayjs(rawTableToDateState).get("date")
+                      ) {
+                        setTableFromDateState(rawTableFromDateState);
+                        setTableToDateState(rawTableToDateState);
+                      } else {
+                        throw "날짜를 입력해주세요";
+                      }
+                    } catch (error) {
+                      alert(error);
+                    }
+                  }}
+                >
+                  <div className="ml-2 bg-orange-400 hover:bg-orange-500 h-full center text-white text-sm px-2 rounded-md cursor-pointer">
+                    업데이트
+                  </div>
+                </div>
+              </div>
             </th>
           </tr>
           {headerGroups.map((headerGroup, idx) => (
@@ -477,7 +543,9 @@ function Table({
                         </span>
                       </div>
                       <div>
-                        {column.canFilter ? column.render("Filter") : null}
+                        {column.canFilter && !["selection"].includes(column.id)
+                          ? column.render("Filter")
+                          : null}
                       </div>
                     </th>
                   )
@@ -485,7 +553,7 @@ function Table({
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()} className="overfl">
+        <tbody {...getTableBodyProps()} className="">
           <FixedSizeList
             height={windowHeightState}
             itemCount={rows.length}
@@ -499,20 +567,6 @@ function Table({
           </FixedSizeList>
         </tbody>
       </table>
-      <pre>
-        <code>
-          {JSON.stringify(
-            {
-              selectedRowIds: selectedRowIds,
-              "selectedFlatRows[].original": selectedFlatRows.map(
-                (d) => d.original
-              ),
-            },
-            null,
-            2
-          )}
-        </code>
-      </pre>
     </>
   );
 }

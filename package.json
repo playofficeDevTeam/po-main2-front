@@ -20,6 +20,7 @@
     "@types/throttle-debounce": "^2.1.0",
     "animated-number-react": "^0.1.2",
     "axios": "^0.25.0",
+    "dayjs": "^1.11.1",
     "graphql": "^16.2.0",
     "jsonwebtoken": "^8.5.1",
     "namor": "^2.0.3",

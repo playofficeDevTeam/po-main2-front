@@ -23,12 +23,18 @@ import {
   useQuestionFormDataOnChange,
 } from "./Var_questionForm";
 import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
-import fn_DatePrettier from "./fn_DatePrettier";
 import Org_adminTable, {
+  DefaultColumnFilter,
   SelectColumnFilter,
 } from "../../../3organisms/Org_adminTable";
 import { isModal_adminEditOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
 import { formSelector } from "./fn_formSelector";
+import { datePrettier } from "./fn_DatePrettier";
+import {
+  tableFromDate,
+  tableToDate,
+} from "../../../3organisms/Org_adminTable/Var_tableInputDate";
+import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
 
 export const FIND_QUESTIONS_FOR_ADMIN = gql`
   query findQuestionsForAdmin($input: FindQuestionsInput!) {
@@ -80,13 +86,14 @@ export const DELETE_QUESTION_FOR_ADMIN = gql`
   }
 `;
 
-let fromDate = new Date();
-fromDate.setDate(fromDate.getDate() - 10);
-let toDate = new Date();
 export default function App() {
   const [questionForm, setQuestionForm] = useRecoilState(questionFormData);
 
   const questionFormOnChange = useQuestionFormDataOnChange();
+
+  const [tableFromDateState, setTableFromDateState] =
+    useRecoilState(tableFromDate);
+  const [tableToDateState, setTableToDateState] = useRecoilState(tableToDate);
 
   const columns = useMemo(
     () => [
@@ -95,7 +102,6 @@ export default function App() {
         accessor: "createdAt",
         width: 90,
         sortDescFirst: true,
-        Footer: "생성일",
       },
       {
         Header: "브랜드명",
@@ -108,7 +114,6 @@ export default function App() {
         Header: "연락처",
         accessor: "phoneNumber",
         width: 150,
-
         sortDescFirst: true,
       },
       { Header: "이메일", accessor: "email", width: 150, sortDescFirst: true },
@@ -142,8 +147,17 @@ export default function App() {
 
         sortDescFirst: true,
       },
-      { Header: "태그", accessor: "tags", width: 150, sortDescFirst: true },
-      { Header: "dataId", accessor: "id", width: 0 },
+      {
+        Header: "태그",
+        accessor: "tags",
+        width: 150,
+        sortDescFirst: true,
+      },
+      {
+        Header: "dataId",
+        accessor: "id",
+        width: 0,
+      },
     ],
     []
   );
@@ -162,8 +176,8 @@ export default function App() {
     {
       variables: {
         input: {
-          fromDate,
-          toDate,
+          fromDate: dateToInput(tableFromDateState),
+          toDate: dateToInput(tableToDateState),
         },
       },
     }
@@ -177,7 +191,7 @@ export default function App() {
       findQuestionsForAdminData?.findQuestionsForAdmin.questions?.map(
         (val, idx) => ({
           ...val,
-          createdAt: fn_DatePrettier(val.createdAt),
+          createdAt: datePrettier(val.createdAt),
           isAgency: val.isAgency?.toString(),
         })
       ),
@@ -265,8 +279,8 @@ export default function App() {
                 {questionForm.map(
                   (val, idx) =>
                     !["id", "createdAt"].includes(val.accessor) && (
-                      <li key={idx} className="flex">
-                        <div className="w-40">{val.Header}</div>
+                      <li key={idx} className="flex items-center">
+                        <div className="w-28 flex pl-1">{val.Header}</div>
                         <input
                           className="border p-1 m-1"
                           type="text"
@@ -279,52 +293,65 @@ export default function App() {
                     )
                 )}
               </ul>
-              <div
-                className="p-1 m-1 border cursor-pointer"
-                onClick={() => {
-                  tokenCheck("mutation", () => {
-                    createQuestionForAdminMutation({
-                      variables: {
-                        input: {
-                          brandName: formSelector("brandName", questionForm),
-                          name: formSelector("name", questionForm),
-                          phoneNumber: formSelector(
-                            "phoneNumber",
-                            questionForm
-                          ),
-                          email: formSelector("email", questionForm),
-                          budget: formSelector("budget", questionForm),
-                          productLink: formSelector(
-                            "productLink",
-                            questionForm
-                          ),
-                          uniqueness: formSelector("uniqueness", questionForm),
-                          isAgency:
-                            formSelector("isAgency", questionForm) === "true"
-                              ? true
-                              : false,
-                          tags: formSelector("tags", questionForm),
+              <div className="flex justify-end mt-2">
+                <div
+                  className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                  onClick={() => {
+                    setQuestionForm((val) =>
+                      val.map((val2) => ({ ...val2, value: "" }))
+                    );
+                  }}
+                >
+                  초기화
+                </div>
+                <div
+                  className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                  onClick={() => {
+                    setisModalOpen(false);
+                  }}
+                >
+                  취소
+                </div>
+                <div
+                  className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer"
+                  onClick={() => {
+                    tokenCheck("mutation", () => {
+                      createQuestionForAdminMutation({
+                        variables: {
+                          input: {
+                            brandName: formSelector("brandName", questionForm),
+                            name: formSelector("name", questionForm),
+                            phoneNumber: formSelector(
+                              "phoneNumber",
+                              questionForm
+                            ),
+                            email: formSelector("email", questionForm),
+                            budget: formSelector("budget", questionForm),
+                            productLink: formSelector(
+                              "productLink",
+                              questionForm
+                            ),
+                            uniqueness: formSelector(
+                              "uniqueness",
+                              questionForm
+                            ),
+                            isAgency:
+                              formSelector("isAgency", questionForm) === "true"
+                                ? true
+                                : false,
+                            tags: formSelector("tags", questionForm),
+                          },
                         },
-                      },
+                      });
                     });
-                  });
-                  setQuestionForm((val) =>
-                    val.map((val2) => ({ ...val2, value: "" }))
-                  );
-                  setisModalOpen(false);
-                }}
-              >
-                확인
-              </div>
-              <div
-                className=""
-                onClick={() => {
-                  setQuestionForm((val) =>
-                    val.map((val2) => ({ ...val2, value: "" }))
-                  );
-                }}
-              >
-                초기화
+                    setQuestionForm((val) =>
+                      val.map((val2) => ({ ...val2, value: "" }))
+                    );
+                    setisModalOpen(false);
+                  }}
+                >
+                  확인
+                </div>
               </div>
             </div>
           </>
@@ -337,8 +364,8 @@ export default function App() {
                 {questionForm.map(
                   (val, idx) =>
                     !["id", "createdAt"].includes(val.accessor) && (
-                      <li key={idx} className="flex">
-                        <div className="w-40">{val.Header}</div>
+                      <li key={idx} className="flex items-center">
+                        <div className="w-28 flex pl-1">{val.Header}</div>
                         <input
                           className="border p-1 m-1"
                           type="text"
@@ -351,43 +378,56 @@ export default function App() {
                     )
                 )}
               </ul>
-              <div
-                className="p-1 m-1 border cursor-pointer"
-                onClick={() => {
-                  tokenCheck("mutation", () => {
-                    editQuestionForAdminMutation({
-                      variables: {
-                        input: {
-                          brandName: formSelector("brandName", questionForm),
-                          name: formSelector("name", questionForm),
-                          phoneNumber: formSelector(
-                            "phoneNumber",
-                            questionForm
-                          ),
-                          email: formSelector("email", questionForm),
-                          budget: formSelector("budget", questionForm),
-                          productLink: formSelector(
-                            "productLink",
-                            questionForm
-                          ),
-                          uniqueness: formSelector("uniqueness", questionForm),
-                          isAgency:
-                            formSelector("isAgency", questionForm) === "true"
-                              ? true
-                              : false,
-                          tags: formSelector("tags", questionForm),
-                          id: +formSelector("id", questionForm),
+              <div className="flex justify-end mt-2">
+                <div
+                  className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                  onClick={() => {
+                    setisEditModalOpen(false);
+                  }}
+                >
+                  취소
+                </div>
+                <div
+                  className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer"
+                  onClick={() => {
+                    tokenCheck("mutation", () => {
+                      editQuestionForAdminMutation({
+                        variables: {
+                          input: {
+                            brandName: formSelector("brandName", questionForm),
+                            name: formSelector("name", questionForm),
+                            phoneNumber: formSelector(
+                              "phoneNumber",
+                              questionForm
+                            ),
+                            email: formSelector("email", questionForm),
+                            budget: formSelector("budget", questionForm),
+                            productLink: formSelector(
+                              "productLink",
+                              questionForm
+                            ),
+                            uniqueness: formSelector(
+                              "uniqueness",
+                              questionForm
+                            ),
+                            isAgency:
+                              formSelector("isAgency", questionForm) === "true"
+                                ? true
+                                : false,
+                            tags: formSelector("tags", questionForm),
+                            id: +formSelector("id", questionForm),
+                          },
                         },
-                      },
+                      });
                     });
-                  });
-                  setQuestionForm((val) =>
-                    val.map((val2) => ({ ...val2, value: "" }))
-                  );
-                  setisEditModalOpen(false);
-                }}
-              >
-                확인
+                    setQuestionForm((val) =>
+                      val.map((val2) => ({ ...val2, value: "" }))
+                    );
+                    setisEditModalOpen(false);
+                  }}
+                >
+                  확인
+                </div>
               </div>
             </div>
           </>
