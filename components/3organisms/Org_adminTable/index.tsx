@@ -15,7 +15,6 @@ import {
   useGlobalFilter,
   useAsyncDebounce,
   useBlockLayout,
-  initialState,
   useRowSelect,
 } from "react-table";
 import { FixedSizeList } from "react-window";
@@ -138,7 +137,7 @@ export function SelectColumnFilter({
   );
 }
 
-const IndeterminateCheckbox = forwardRef(
+const IndeterminateCheckbox = forwardRef<HTMLInputElement>(
   ({ indeterminate, ...rest }: any, ref) => {
     const defaultRef: any = useRef();
     const resolvedRef: any = ref || defaultRef;
@@ -160,7 +159,9 @@ const IndeterminateCheckbox = forwardRef(
   }
 );
 
-const ColumnIndeterminateCheckbox = forwardRef(
+IndeterminateCheckbox.displayName = "IndeterminateCheckbox";
+
+const ColumnIndeterminateCheckbox = forwardRef<HTMLInputElement>(
   ({ indeterminate, ...rest }: any, ref) => {
     const defaultRef: any = useRef();
     const resolvedRef: any = ref || defaultRef;
@@ -174,6 +175,7 @@ const ColumnIndeterminateCheckbox = forwardRef(
     );
   }
 );
+ColumnIndeterminateCheckbox.displayName = "ColumnIndeterminateCheckbox";
 
 function Table({
   columns,
@@ -346,7 +348,17 @@ function Table({
                           const filteredCellValues = cellValues.filter(
                             (e) => !["selection"].includes(e.accessor)
                           );
-                          setEditForm(filteredCellValues);
+
+                          setEditForm.setRecoil(filteredCellValues);
+                          setEditForm.setReset(
+                            filteredCellValues.reduce(
+                              (pre, cur) => ({
+                                ...pre,
+                                [cur.accessor]: cur.value,
+                              }),
+                              {}
+                            )
+                          );
                         }}
                       >
                         {!["selection", "id", "createdAt"].includes(

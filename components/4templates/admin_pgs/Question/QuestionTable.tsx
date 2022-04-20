@@ -20,6 +20,7 @@ import {
 import { atom, useRecoilState } from "recoil";
 import {
   questionFormData,
+  questionFormDefalut,
   useQuestionFormDataOnChange,
 } from "./Var_questionForm";
 import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
@@ -35,6 +36,7 @@ import {
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
+import { useForm } from "react-hook-form";
 
 export const FIND_QUESTIONS_FOR_ADMIN = gql`
   query findQuestionsForAdmin($input: FindQuestionsInput!) {
@@ -249,13 +251,82 @@ export default function App() {
     isModal_adminEditOpenAtom
   );
 
+  const {
+    register: register_create,
+    handleSubmit: handleSubmit_create,
+    reset: reset_create,
+    formState: { errors: errors_create },
+  } = useForm();
+
+  const onSubmit_create = (data) => {
+    tokenCheck("mutation", () => {
+      createQuestionForAdminMutation({
+        variables: {
+          input: {
+            brandName: data.brandName,
+            name: data.name,
+            phoneNumber: data.phoneNumber,
+            email: data.email,
+            budget: data.budget,
+            productLink: data.productLink,
+            uniqueness: data.uniqueness,
+            isAgency: data.isAgency === "true" ? true : false,
+            tags: data.tags,
+          },
+        },
+      });
+    });
+    reset_create(
+      questionFormDefalut.reduce(
+        (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
+        {}
+      )
+    );
+    setisModalOpen(false);
+  };
+
+  const {
+    register: register_edit,
+    handleSubmit: handleSubmit_edit,
+    reset: reset_edit,
+    formState: { errors: errors_edit },
+  } = useForm();
+
+  const onSubmit_edit = (data) => {
+    tokenCheck("mutation", () => {
+      console.log(data);
+      editQuestionForAdminMutation({
+        variables: {
+          input: {
+            brandName: data.brandName,
+            name: data.name,
+            phoneNumber: data.phoneNumber,
+            email: data.email,
+            budget: data.budget,
+            productLink: data.productLink,
+            uniqueness: data.uniqueness,
+            isAgency: data.isAgency === "true" ? true : false,
+            tags: data.tags,
+            id: +formSelector("id", questionForm),
+          },
+        },
+      });
+    });
+    reset_edit(
+      questionFormDefalut.reduce(
+        (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
+        {}
+      )
+    );
+    setisEditModalOpen(false);
+  };
+
   if (findQuestionsForAdminError) {
     return <>권한이 없습니다.</>;
   }
   if (findQuestionsForAdminLoading) {
     return <div className="">로딩중</div>;
   }
-
   return (
     <>
       <Org_adminTable
@@ -274,7 +345,7 @@ export default function App() {
         }}
         createForm={
           <>
-            <div className="">
+            <form onSubmit={handleSubmit_create(onSubmit_create)}>
               <ul>
                 {questionForm.map(
                   (val, idx) =>
@@ -282,12 +353,10 @@ export default function App() {
                       <li key={idx} className="flex items-center">
                         <div className="w-28 flex pl-1">{val.Header}</div>
                         <input
+                          defaultValue={val.value}
+                          {...register_create(val.accessor)}
                           className="border p-1 m-1"
                           type="text"
-                          value={val.value}
-                          onChange={(e) => {
-                            questionFormOnChange(e, idx);
-                          }}
                         />
                       </li>
                     )
@@ -297,8 +366,11 @@ export default function App() {
                 <div
                   className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
                   onClick={() => {
-                    setQuestionForm((val) =>
-                      val.map((val2) => ({ ...val2, value: "" }))
+                    reset_create(
+                      questionFormDefalut.reduce(
+                        (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
+                        {}
+                      )
                     );
                   }}
                 >
@@ -312,54 +384,17 @@ export default function App() {
                 >
                   취소
                 </div>
-                <div
-                  className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer"
-                  onClick={() => {
-                    tokenCheck("mutation", () => {
-                      createQuestionForAdminMutation({
-                        variables: {
-                          input: {
-                            brandName: formSelector("brandName", questionForm),
-                            name: formSelector("name", questionForm),
-                            phoneNumber: formSelector(
-                              "phoneNumber",
-                              questionForm
-                            ),
-                            email: formSelector("email", questionForm),
-                            budget: formSelector("budget", questionForm),
-                            productLink: formSelector(
-                              "productLink",
-                              questionForm
-                            ),
-                            uniqueness: formSelector(
-                              "uniqueness",
-                              questionForm
-                            ),
-                            isAgency:
-                              formSelector("isAgency", questionForm) === "true"
-                                ? true
-                                : false,
-                            tags: formSelector("tags", questionForm),
-                          },
-                        },
-                      });
-                    });
-                    setQuestionForm((val) =>
-                      val.map((val2) => ({ ...val2, value: "" }))
-                    );
-                    setisModalOpen(false);
-                  }}
-                >
+                <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
                   확인
-                </div>
+                </button>
               </div>
-            </div>
+            </form>
           </>
         }
-        setEditForm={setQuestionForm}
+        setEditForm={{ setRecoil: setQuestionForm, setReset: reset_edit }}
         editForm={
           <>
-            <div className="">
+            <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
               <ul>
                 {questionForm.map(
                   (val, idx) =>
@@ -367,12 +402,10 @@ export default function App() {
                       <li key={idx} className="flex items-center">
                         <div className="w-28 flex pl-1">{val.Header}</div>
                         <input
+                          defaultValue={val.value}
+                          {...register_edit(val.accessor)}
                           className="border p-1 m-1"
                           type="text"
-                          value={val.value}
-                          onChange={(e) => {
-                            questionFormOnChange(e, idx);
-                          }}
                         />
                       </li>
                     )
@@ -387,49 +420,11 @@ export default function App() {
                 >
                   취소
                 </div>
-                <div
-                  className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer"
-                  onClick={() => {
-                    tokenCheck("mutation", () => {
-                      editQuestionForAdminMutation({
-                        variables: {
-                          input: {
-                            brandName: formSelector("brandName", questionForm),
-                            name: formSelector("name", questionForm),
-                            phoneNumber: formSelector(
-                              "phoneNumber",
-                              questionForm
-                            ),
-                            email: formSelector("email", questionForm),
-                            budget: formSelector("budget", questionForm),
-                            productLink: formSelector(
-                              "productLink",
-                              questionForm
-                            ),
-                            uniqueness: formSelector(
-                              "uniqueness",
-                              questionForm
-                            ),
-                            isAgency:
-                              formSelector("isAgency", questionForm) === "true"
-                                ? true
-                                : false,
-                            tags: formSelector("tags", questionForm),
-                            id: +formSelector("id", questionForm),
-                          },
-                        },
-                      });
-                    });
-                    setQuestionForm((val) =>
-                      val.map((val2) => ({ ...val2, value: "" }))
-                    );
-                    setisEditModalOpen(false);
-                  }}
-                >
+                <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
                   확인
-                </div>
+                </button>
               </div>
-            </div>
+            </form>
           </>
         }
       />

@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { FIND_ME_FOR_ADMIN } from "../../4templates/admin_pgs/Dashboard/Gql_admin";
 import { findMeforAdmin } from "../../4templates/admin_pgs/Dashboard/__generated__/findMeforAdmin";
 import { adminLoggedInVar } from "../../common/apollo";
@@ -45,7 +45,7 @@ const listsData = [
   },
 ];
 
-export default function App() {
+function App() {
   const pathname = window.location.pathname;
 
   const router = useRouter();
@@ -138,3 +138,5 @@ export default function App() {
     </div>
   );
 }
+
+export default memo(App);
