@@ -28,3 +28,15 @@ body {
 .thin-scroll::-webkit-scrollbar-track {
   background-color: transparent;
 }
+
+.middle-scroll::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.middle-scroll::-webkit-scrollbar-thumb {
+  background-color: rgb(185, 185, 185);
+  border-radius: 3px;
+}
+.middle-scroll::-webkit-scrollbar-track {
+  background-color: #FAFAFA ;
+}

@@ -180,11 +180,11 @@ ColumnIndeterminateCheckbox.displayName = "ColumnIndeterminateCheckbox";
 function Table({
   columns,
   data,
-  cellHoverOption,
-  setEditForm,
-  deleteMutation,
-  editForm,
+  setCreateForm,
   createForm,
+  setEditForm,
+  editForm,
+  deleteMutation,
 }) {
   const defaultColumn = useMemo(
     () => ({
@@ -200,7 +200,7 @@ function Table({
     const scrollDiv = document.createElement("div");
     scrollDiv.setAttribute(
       "style",
-      "width: 100px; height: 100px; overflow: scroll; position:absolute; top:-9999px;"
+      "width: 8px; height: 8px; overflow: scroll; position:absolute; top:-9999px;"
     );
     document.body.appendChild(scrollDiv);
     const scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
@@ -295,6 +295,10 @@ function Table({
     useRecoilState(tableFromDate);
   const [tableToDateState, setTableToDateState] = useRecoilState(tableToDate);
 
+  const [isModalOpen, setisModalOpen] = useRecoilState(
+    isModal_adminEditOpenAtom
+  );
+
   //테이블 스타일
   //테이블 스타일
   //테이블 스타일
@@ -335,36 +339,46 @@ function Table({
                       }`}
                     >
                       <div className="">{cell.render("Cell")}</div>
-                      <div
-                        className="hidden group-hover:block"
-                        onClick={() => {
-                          const cellValues = cell.row.allCells.map(
-                            (val, idx) => ({
-                              Header: val.column.Header ?? "",
-                              accessor: val.column.id ?? "",
-                              value: val.value ?? "",
-                            })
-                          );
-                          const filteredCellValues = cellValues.filter(
-                            (e) => !["selection"].includes(e.accessor)
-                          );
 
-                          setEditForm.setRecoil(filteredCellValues);
-                          setEditForm.setReset(
-                            filteredCellValues.reduce(
-                              (pre, cur) => ({
-                                ...pre,
-                                [cur.accessor]: cur.value,
-                              }),
-                              {}
-                            )
-                          );
-                        }}
-                      >
-                        {!["selection", "id", "createdAt"].includes(
-                          cell.column.id
-                        ) && cellHoverOption}
-                      </div>
+                      {/* 수정버튼 */}
+                      {!["selection", "id", "createdAt"].includes(
+                        cell.column.id
+                      ) && (
+                        <div
+                          className="hidden group-hover:block"
+                          onClick={() => {
+                            const cellValues = cell.row.allCells.map(
+                              (val, idx) => ({
+                                Header: val.column.Header ?? "",
+                                accessor: val.column.id ?? "",
+                                value: val.value ?? "",
+                              })
+                            );
+                            const filteredCellValues = cellValues.filter(
+                              (e) => !["selection"].includes(e.accessor)
+                            );
+
+                            setEditForm.setRecoil(filteredCellValues);
+                            setEditForm.setReset(
+                              filteredCellValues.reduce(
+                                (pre, cur) => ({
+                                  ...pre,
+                                  [cur.accessor]: cur.value,
+                                }),
+                                {}
+                              )
+                            );
+                            setisModalOpen(true);
+                            setTimeout(() => {
+                              setEditForm.setFocus(cell.column.id);
+                            }, 100);
+                          }}
+                        >
+                          <div className="ml-1">
+                            <i className="fas fa-pen cursor-pointer  text-gray-400 hover:text-gray-900  text-xs flex pb-1"></i>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -381,13 +395,20 @@ function Table({
     <>
       {/* 메뉴 */}
       <div className="flex py-2">
-        {/* 수정 */}
+        {/* 생성 */}
         <div className="mr-3 cursor-pointer">
           <Modal_adminCreate
             data={{
               button: (
                 <>
-                  <div className="center w-20 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500">
+                  <div
+                    className="center w-20 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500"
+                    onClick={() => {
+                      setTimeout(() => {
+                        setCreateForm.setFocus("brandName");
+                      }, 100);
+                    }}
+                  >
                     <i className="fas fa-plus mr-2 text-sm"></i> 생성
                   </div>
                 </>
@@ -572,6 +593,7 @@ function Table({
             style={{
               overflowY: "scroll",
             }}
+            className="middle-scroll"
           >
             {RenderRow}
           </FixedSizeList>
@@ -584,36 +606,23 @@ function Table({
 function App({
   columns,
   data,
+  setCreateForm,
   createForm,
-  editForm,
   setEditForm,
+  editForm,
   deleteMutation,
 }) {
-  const [isModalOpen, setisModalOpen] = useRecoilState(
-    isModal_adminEditOpenAtom
-  );
   return (
-    <div className="bg-gray-50 w-full  overflow-x-scroll ">
+    <div className="bg-gray-50 w-full  overflow-x-scroll middle-scroll ">
       <TableStyles>
         <Table
           columns={columns}
           data={data}
+          setCreateForm={setCreateForm}
           createForm={createForm}
           setEditForm={setEditForm}
           editForm={editForm}
           deleteMutation={deleteMutation}
-          cellHoverOption={
-            <>
-              <div
-                className="ml-1"
-                onClick={() => {
-                  setisModalOpen(true);
-                }}
-              >
-                <i className="fas fa-pen cursor-pointer  text-gray-400 hover:text-gray-900  text-xs flex pb-1"></i>
-              </div>
-            </>
-          }
         />
       </TableStyles>
     </div>

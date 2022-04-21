@@ -255,6 +255,7 @@ export default function App() {
     register: register_create,
     handleSubmit: handleSubmit_create,
     reset: reset_create,
+    setFocus: setFocus_create,
     formState: { errors: errors_create },
   } = useForm();
 
@@ -289,12 +290,12 @@ export default function App() {
     register: register_edit,
     handleSubmit: handleSubmit_edit,
     reset: reset_edit,
+    setFocus: setFocus_edit,
     formState: { errors: errors_edit },
   } = useForm();
 
   const onSubmit_edit = (data) => {
     tokenCheck("mutation", () => {
-      console.log(data);
       editQuestionForAdminMutation({
         variables: {
           input: {
@@ -343,6 +344,7 @@ export default function App() {
             });
           });
         }}
+        setCreateForm={{ setFocus: setFocus_create }}
         createForm={
           <>
             <form onSubmit={handleSubmit_create(onSubmit_create)}>
@@ -352,12 +354,20 @@ export default function App() {
                     !["id", "createdAt"].includes(val.accessor) && (
                       <li key={idx} className="flex items-center">
                         <div className="w-28 flex pl-1">{val.Header}</div>
-                        <input
-                          defaultValue={val.value}
-                          {...register_create(val.accessor)}
-                          className="border p-1 m-1"
-                          type="text"
-                        />
+                        {!["uniqueness"].includes(val.accessor) ? (
+                          <input
+                            defaultValue={val.value}
+                            {...register_create(val.accessor)}
+                            className="border w-60 p-1 m-1"
+                            type={`text`}
+                          />
+                        ) : (
+                          <textarea
+                            defaultValue={val.value}
+                            {...register_create(val.accessor)}
+                            className="border w-60 p-1 m-1"
+                          ></textarea>
+                        )}
                       </li>
                     )
                 )}
@@ -372,6 +382,10 @@ export default function App() {
                         {}
                       )
                     );
+
+                    setTimeout(() => {
+                      setFocus_create("brandName");
+                    }, 0);
                   }}
                 >
                   초기화
@@ -391,7 +405,11 @@ export default function App() {
             </form>
           </>
         }
-        setEditForm={{ setRecoil: setQuestionForm, setReset: reset_edit }}
+        setEditForm={{
+          setRecoil: setQuestionForm,
+          setReset: reset_edit,
+          setFocus: setFocus_edit,
+        }}
         editForm={
           <>
             <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
@@ -401,12 +419,20 @@ export default function App() {
                     !["id", "createdAt"].includes(val.accessor) && (
                       <li key={idx} className="flex items-center">
                         <div className="w-28 flex pl-1">{val.Header}</div>
-                        <input
-                          defaultValue={val.value}
-                          {...register_edit(val.accessor)}
-                          className="border p-1 m-1"
-                          type="text"
-                        />
+                        {!["uniqueness"].includes(val.accessor) ? (
+                          <input
+                            defaultValue={val.value}
+                            {...register_edit(val.accessor)}
+                            className="border w-60 p-1 m-1"
+                            type={`text`}
+                          />
+                        ) : (
+                          <textarea
+                            defaultValue={val.value}
+                            {...register_edit(val.accessor)}
+                            className="border w-60 p-1 m-1"
+                          ></textarea>
+                        )}
                       </li>
                     )
                 )}

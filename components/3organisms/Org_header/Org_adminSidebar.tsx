@@ -72,7 +72,7 @@ function App() {
   return (
     <div className=" relative z-50">
       <div
-        className={`fixed  border-r shadow-md overflow-y-auto h-full flex flex-col justify-between bg-white ${
+        className={`fixed  border-r shadow-md overflow-y-auto middle-scroll h-full flex flex-col justify-between bg-white ${
           sideBarOpenState ? "w-44" : "w-14"
         }`}
       >
