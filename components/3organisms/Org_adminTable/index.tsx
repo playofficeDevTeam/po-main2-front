@@ -18,7 +18,9 @@ import {
   useRowSelect,
 } from "react-table";
 import { FixedSizeList } from "react-window";
-import Modal_adminCreate from "./Modal_adminCreate";
+import Modal_adminCreate, {
+  isModal_adminCreateOpenAtom,
+} from "./Modal_adminCreate";
 import { throttle } from "throttle-debounce";
 import Modal_adminEdit, { isModal_adminEditOpenAtom } from "./Modal_adminEdit";
 import { useRecoilState } from "recoil";
@@ -295,7 +297,10 @@ function Table({
     useRecoilState(tableFromDate);
   const [tableToDateState, setTableToDateState] = useRecoilState(tableToDate);
 
-  const [isModalOpen, setisModalOpen] = useRecoilState(
+  const [isModalOpen_create, setisModalOpen_create] = useRecoilState(
+    isModal_adminCreateOpenAtom
+  );
+  const [isModalOpen_edit, setisModalOpen_edit] = useRecoilState(
     isModal_adminEditOpenAtom
   );
 
@@ -368,7 +373,7 @@ function Table({
                                 {}
                               )
                             );
-                            setisModalOpen(true);
+                            setisModalOpen_edit(true);
                             setTimeout(() => {
                               setEditForm.setFocus(cell.column.id);
                             }, 100);
@@ -390,6 +395,24 @@ function Table({
     },
     [prepareRow, rows, selectedFlatRows]
   );
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.shiftKey) {
+        if (["c", "C"].includes(e.key)) {
+          console.log(e);
+          setisModalOpen_create(true);
+          setTimeout(() => {
+            setCreateForm.setFocus("brandName");
+          }, 100);
+        }
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, []);
 
   return (
     <>
