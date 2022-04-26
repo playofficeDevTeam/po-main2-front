@@ -122,7 +122,30 @@ export interface CreateQuestionInput {
   user?: UserInputType | null;
 }
 
+export interface CreateUserForAdminInput {
+  id?: number | null;
+  createdAt?: any | null;
+  updatedAt?: any | null;
+  email?: string | null;
+  password?: string | null;
+  refreshToken?: string | null;
+  role?: UserRole | null;
+  name?: string | null;
+  nameId?: string | null;
+  phoneNumber?: string | null;
+  brandName?: string | null;
+  residentRegistrationNumber?: string | null;
+  tags?: string | null;
+  campaignParticipations?: CampaignParticipationInput[] | null;
+  payments?: paymentInputType[] | null;
+  questions?: questionInputType[] | null;
+}
+
 export interface DeleteQuestionInput {
+  id: number;
+}
+
+export interface DeleteUserInput {
   id: number;
 }
 
@@ -150,6 +173,24 @@ export interface EditQuestionInput {
   user?: UserInputType | null;
 }
 
+export interface EditUserInput {
+  createdAt?: any | null;
+  updatedAt?: any | null;
+  password?: string | null;
+  refreshToken?: string | null;
+  role?: UserRole | null;
+  name?: string | null;
+  nameId?: string | null;
+  phoneNumber?: string | null;
+  brandName?: string | null;
+  residentRegistrationNumber?: string | null;
+  tags?: string | null;
+  campaignParticipations?: CampaignParticipationInput[] | null;
+  payments?: paymentInputType[] | null;
+  questions?: questionInputType[] | null;
+  id: number;
+}
+
 export interface FindPaymentInput {
   id: number;
 }
@@ -157,6 +198,12 @@ export interface FindPaymentInput {
 export interface FindQuestionsInput {
   fromDate: any;
   toDate: any;
+}
+
+export interface FindUsersInput {
+  fromDate: any;
+  toDate: any;
+  userRole: UserRole;
 }
 
 export interface ItemIdAndAmount {
@@ -174,14 +221,19 @@ export interface RenewalAdminAccessTokenInput {
 }
 
 export interface UserInputType {
-  tags?: string | null;
   email: string;
   password: string;
   refreshToken: string;
   role: UserRole;
-  campaignParticipations: CampaignParticipationInput[];
-  payments: paymentInputType[];
-  questions: questionInputType[];
+  name?: string | null;
+  nameId?: string | null;
+  phoneNumber?: string | null;
+  brandName?: string | null;
+  residentRegistrationNumber?: string | null;
+  tags?: string | null;
+  campaignParticipations?: CampaignParticipationInput[] | null;
+  payments?: paymentInputType[] | null;
+  questions?: questionInputType[] | null;
 }
 
 export interface cartInputType {

@@ -1,91 +1,94 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { useEffect, useMemo } from "react";
-import { useTokenCheck } from "../../../hooks/useTokenCheck";
-import {
-  findQuestionsForAdmin,
-  findQuestionsForAdminVariables,
-} from "./__generated__/findQuestionsForAdmin";
-import {
-  editQuestionForAdmin,
-  editQuestionForAdminVariables,
-} from "./__generated__/editQuestionForAdmin";
-import {
-  createQuestionForAdmin,
-  createQuestionForAdminVariables,
-} from "./__generated__/createQuestionForAdmin";
-import {
-  deleteQuestionForAdmin,
-  deleteQuestionForAdminVariables,
-} from "./__generated__/deleteQuestionForAdmin";
+import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import { questionFormData, questionFormDefalut } from "./Var_questionForm";
+import { UserRole } from "../../../../__generated__/globalTypes";
+import Org_adminTable from "../../../3organisms/Org_adminTable";
+import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
 import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
-import Org_adminTable, {
-  SelectColumnFilter,
-} from "../../../3organisms/Org_adminTable";
 import { isModal_adminEditOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
-import { formSelector } from "./fn_formSelector";
-import { datePrettier } from "./fn_DatePrettier";
 import {
   tableFromDate,
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
-import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
-import { useForm } from "react-hook-form";
+import { useTokenCheck } from "../../../hooks/useTokenCheck";
+import { datePrettier } from "../Question/fn_DatePrettier";
+import { formSelector } from "../Question/fn_formSelector";
+import {
+  deleteQuestionForAdmin,
+  deleteQuestionForAdminVariables,
+} from "../Question/__generated__/deleteQuestionForAdmin";
+import {
+  editQuestionForAdmin,
+  editQuestionForAdminVariables,
+} from "../Question/__generated__/editQuestionForAdmin";
+import { partnerFormData, partnerFormDefault } from "./Var_PartnerForm";
+import {
+  createUserForAdmin,
+  createUserForAdminVariables,
+} from "./__generated__/createUserForAdmin";
+import { deleteUser, deleteUserVariables } from "./__generated__/deleteUser";
+import { editUser, editUserVariables } from "./__generated__/editUser";
+import { findUsers, findUsersVariables } from "./__generated__/findUsers";
 
-export const FIND_QUESTIONS_FOR_ADMIN = gql`
-  query findQuestionsForAdmin($input: FindQuestionsInput!) {
-    findQuestionsForAdmin(input: $input) {
+export const FIND_USERS = gql`
+  query findUsers($input: FindUsersInput!) {
+    findUsers(input: $input) {
       ok
       error
-      questions {
-        id
+      users {
         createdAt
-        brandName
         tags
+        email
+        role
         name
         phoneNumber
-        email
-        budget
-        productLink
-        uniqueness
-        isAgency
+        brandName
+        residentRegistrationNumber
+        nameId
+        campaignParticipations {
+          id
+        }
+        payments {
+          id
+        }
+        questions {
+          id
+        }
       }
     }
   }
 `;
 
-export const CREATE_QUESTION_FOR_ADMIN = gql`
-  mutation createQuestionForAdmin($input: CreateQuestionForAdminInput!) {
-    createQuestionForAdmin(input: $input) {
-      ok
-      error
-      questionId
-    }
-  }
-`;
-
-export const EDIT_QUESTION_FOR_ADMIN = gql`
-  mutation editQuestionForAdmin($input: EditQuestionInput!) {
-    editQuestionForAdmin(input: $input) {
+export const CREATE_USER_FOR_ADMIN = gql`
+  mutation createUserForAdmin($input: CreateUserForAdminInput!) {
+    createUserForAdmin(input: $input) {
       ok
       error
     }
   }
 `;
 
-export const DELETE_QUESTION_FOR_ADMIN = gql`
-  mutation deleteQuestionForAdmin($input: DeleteQuestionInput!) {
-    deleteQuestionForAdmin(input: $input) {
+export const EDIT_USER = gql`
+  mutation editUser($input: EditUserInput!) {
+    editUser(input: $input) {
       ok
       error
     }
   }
 `;
 
-export default function App() {
-  const [questionForm, setQuestionForm] = useRecoilState(questionFormData);
+export const DELETE_USER = gql`
+  mutation deleteUser($input: DeleteUserInput!) {
+    deleteUser(input: $input) {
+      ok
+      error
+    }
+  }
+`;
 
+const App = () => {
+  const [partnerForm, setPartnerForm] = useRecoilState(partnerFormData);
   const [tableFromDateState, setTableFromDateState] =
     useRecoilState(tableFromDate);
   const [tableToDateState, setTableToDateState] = useRecoilState(tableToDate);
@@ -98,61 +101,35 @@ export default function App() {
         width: 90,
         sortDescFirst: true,
       },
+      { Header: "이메일", accessor: "email", width: 150, sortDescFirst: true },
+      { Header: "이름", accessor: "name", width: 150, sortDescFirst: true },
       {
-        Header: "브랜드명",
-        accessor: "brandName",
+        Header: "이름(ID)",
+        accessor: "nameId",
         width: 150,
         sortDescFirst: true,
       },
-      { Header: "이름", accessor: "name", width: 150, sortDescFirst: true },
       {
         Header: "연락처",
         accessor: "phoneNumber",
         width: 150,
         sortDescFirst: true,
       },
-      { Header: "이메일", accessor: "email", width: 150, sortDescFirst: true },
       {
-        Header: "예산",
-        accessor: "budget",
-        width: 150,
-        Filter: SelectColumnFilter,
-
-        sortDescFirst: true,
-      },
-      {
-        Header: "제품 링크",
-        accessor: "productLink",
-        width: 150,
-
-        sortDescFirst: true,
-      },
-      {
-        Header: "특이사항",
-        accessor: "uniqueness",
-        width: 150,
-
-        sortDescFirst: true,
-      },
-      {
-        Header: "대행사",
-        accessor: "isAgency",
-        width: 100,
-        Filter: SelectColumnFilter,
-
-        sortDescFirst: true,
-      },
-      {
-        Header: "태그",
-        accessor: "tags",
+        Header: "브랜드명",
+        accessor: "brandName",
         width: 150,
         sortDescFirst: true,
       },
       {
-        Header: "dataId",
-        accessor: "id",
-        width: 0,
+        Header: "주민등록번호",
+        accessor: "residentRegistrationNumber",
+        width: 150,
+        sortDescFirst: true,
       },
+      { Header: "역할", accessor: "role", width: 150, sortDescFirst: true },
+      { Header: "태그", accessor: "tags", width: 150, sortDescFirst: true },
+      { Header: "dataId", accessor: "id", width: 0 },
     ],
     []
   );
@@ -162,47 +139,42 @@ export default function App() {
 
   //쿼리
   const {
-    loading: findQuestionsForAdminLoading,
-    error: findQuestionsForAdminError,
-    data: findQuestionsForAdminData,
+    loading: findUsersLoading,
+    error: findUsersError,
+    data: findUsersData,
     refetch,
-  } = useQuery<findQuestionsForAdmin, findQuestionsForAdminVariables>(
-    FIND_QUESTIONS_FOR_ADMIN,
-    {
-      variables: {
-        input: {
-          fromDate: dateToInput(tableFromDateState),
-          toDate: dateToInput(tableToDateState),
-        },
+  } = useQuery<findUsers, findUsersVariables>(FIND_USERS, {
+    variables: {
+      input: {
+        fromDate: dateToInput(tableFromDateState),
+        toDate: dateToInput(tableToDateState),
+        userRole: UserRole.Partner,
       },
-    }
-  );
+    },
+  });
   useEffect(() => {
     tokenCheck("query", refetch);
-  }, [findQuestionsForAdminData]);
+  }, [findUsersData]);
 
-  const questionsData = useMemo(
+  const usersData = useMemo(
     () =>
-      findQuestionsForAdminData?.findQuestionsForAdmin.questions?.map(
-        (val, idx) => ({
-          ...val,
-          createdAt: datePrettier(val.createdAt),
-          isAgency: val.isAgency?.toString(),
-        })
-      ),
-    [findQuestionsForAdminData]
+      findUsersData?.findUsers.users?.map((val, idx) => ({
+        ...val,
+        createdAt: datePrettier(val.createdAt),
+      })),
+    [findUsersData]
   );
 
   //뮤테이션
   const [
-    createQuestionForAdminMutation,
+    createUserForAdminMutation,
     {
-      loading: createQuestionForAdminLoading,
-      error: createQuestionForAdminError,
-      data: createQuestionForAdminData,
+      loading: createUserForAdminLoading,
+      error: createUserForAdminError,
+      data: createUserForAdminData,
     },
-  ] = useMutation<createQuestionForAdmin, createQuestionForAdminVariables>(
-    CREATE_QUESTION_FOR_ADMIN,
+  ] = useMutation<createUserForAdmin, createUserForAdminVariables>(
+    CREATE_USER_FOR_ADMIN,
     {
       onCompleted: () => {
         refetch();
@@ -210,32 +182,21 @@ export default function App() {
     }
   );
 
-  const [
-    editQuestionForAdminMutation,
-    { loading: editQuestionForAdminLoading, data: editQuestionForAdminData },
-  ] = useMutation<editQuestionForAdmin, editQuestionForAdminVariables>(
-    EDIT_QUESTION_FOR_ADMIN,
-    {
+  const [editUserMutation, { loading: editUserLoading, data: editUserData }] =
+    useMutation<editUser, editUserVariables>(EDIT_USER, {
       onCompleted: () => {
         refetch();
       },
-    }
-  );
+    });
 
   const [
-    deleteQuestionForAdminMutation,
-    {
-      loading: deleteQuestionForAdminLoading,
-      data: deleteQuestionForAdminData,
+    deleteUserMutation,
+    { loading: deleteUserLoading, data: deleteUserData },
+  ] = useMutation<deleteUser, deleteUserVariables>(DELETE_USER, {
+    onCompleted: () => {
+      refetch();
     },
-  ] = useMutation<deleteQuestionForAdmin, deleteQuestionForAdminVariables>(
-    DELETE_QUESTION_FOR_ADMIN,
-    {
-      onCompleted: () => {
-        refetch();
-      },
-    }
-  );
+  });
 
   const [isModalOpen, setisModalOpen] = useRecoilState(
     isModal_adminCreateOpenAtom
@@ -256,23 +217,27 @@ export default function App() {
   const onSubmit_create = (data) => {
     tokenCheck("mutation", async () => {
       try {
-        await createQuestionForAdminMutation({
+        await createUserForAdminMutation({
           variables: {
             input: {
-              brandName: data.brandName,
+              role: UserRole.Partner,
+              email: data.email === "" ? null : data.email,
+              password: data.password,
               name: data.name,
+              nameId: data.nameId === "" ? null : data.nameId,
               phoneNumber: data.phoneNumber,
-              email: data.email,
-              budget: data.budget,
-              productLink: data.productLink,
-              uniqueness: data.uniqueness,
-              isAgency: data.isAgency === "true" ? true : false,
+              brandName: data.brandName,
+              residentRegistrationNumber: data.residentRegistrationNumber,
               tags: data.tags,
             },
           },
         });
+        console.log(createUserForAdminLoading);
+        console.log(createUserForAdminError);
+        console.log(createUserForAdminData);
+
         reset_create(
-          questionFormDefalut.reduce(
+          partnerFormDefault.reduce(
             (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
             {}
           )
@@ -280,13 +245,14 @@ export default function App() {
         setisModalOpen(false);
       } catch (error) {
         const errorString: string = error + "";
-        if (
-          errorString.indexOf(
-            "duplicate key value violates unique constraint"
-          ) !== -1
-        ) {
-          alert("(ID)가 중복됩니다.");
-        }
+        // if (
+        //   errorString.indexOf(
+        //     "duplicate key value violates unique constraint"
+        //   ) !== -1
+        // ) {
+        //   alert(`(ID)가 중복됩니다. ${errorString}`);
+        // }
+        alert(errorString);
       }
     });
   };
@@ -301,25 +267,23 @@ export default function App() {
 
   const onSubmit_edit = (data) => {
     tokenCheck("mutation", () => {
-      editQuestionForAdminMutation({
+      editUserMutation({
         variables: {
           input: {
-            brandName: data.brandName,
+            password: data.password,
             name: data.name,
+            nameId: data.nameId === "" ? null : data.nameId,
             phoneNumber: data.phoneNumber,
-            email: data.email,
-            budget: data.budget,
-            productLink: data.productLink,
-            uniqueness: data.uniqueness,
-            isAgency: data.isAgency === "true" ? true : false,
+            brandName: data.brandName,
+            residentRegistrationNumber: data.residentRegistrationNumber,
             tags: data.tags,
-            id: +formSelector("id", questionForm),
+            id: +formSelector("id", partnerForm),
           },
         },
       });
     });
     reset_edit(
-      questionFormDefalut.reduce(
+      partnerFormDefault.reduce(
         (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
         {}
       )
@@ -327,20 +291,25 @@ export default function App() {
     setisEditModalOpen(false);
   };
 
-  if (findQuestionsForAdminError) {
-    return <>권한이 없습니다.</>;
+  if (findUsersError) {
+    return (
+      <>
+        권한이 없습니다.
+        {/* <div className="">{findUsersError.toString()}</div> */}
+      </>
+    );
   }
-  if (findQuestionsForAdminLoading) {
+  if (findUsersLoading) {
     return <div className="">로딩중</div>;
   }
   return (
     <>
       <Org_adminTable
         columns={columns}
-        data={questionsData}
+        data={usersData}
         deleteMutation={(id) => {
           tokenCheck("mutation", () => {
-            deleteQuestionForAdminMutation({
+            deleteUserMutation({
               variables: {
                 input: {
                   id,
@@ -351,14 +320,14 @@ export default function App() {
         }}
         setCreateForm={{
           setFocus: () => {
-            setFocus_create("brandName");
+            setFocus_create("email");
           },
         }}
         createForm={
           <>
             <form onSubmit={handleSubmit_create(onSubmit_create)}>
               <ul>
-                {questionForm.map(
+                {partnerForm.map(
                   (val, idx) =>
                     !["id", "createdAt"].includes(val.accessor) && (
                       <li key={idx} className="flex items-center">
@@ -386,7 +355,7 @@ export default function App() {
                   className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
                   onClick={() => {
                     reset_create(
-                      questionFormDefalut.reduce(
+                      partnerFormDefault.reduce(
                         (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
                         {}
                       )
@@ -415,7 +384,7 @@ export default function App() {
           </>
         }
         setEditForm={{
-          setRecoil: setQuestionForm,
+          setRecoil: setPartnerForm,
           setReset: reset_edit,
           setFocus: setFocus_edit,
         }}
@@ -423,7 +392,7 @@ export default function App() {
           <>
             <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
               <ul>
-                {questionForm.map(
+                {partnerForm.map(
                   (val, idx) =>
                     !["id", "createdAt"].includes(val.accessor) && (
                       <li key={idx} className="flex items-center">
@@ -465,4 +434,6 @@ export default function App() {
       />
     </>
   );
-}
+};
+
+export default App;

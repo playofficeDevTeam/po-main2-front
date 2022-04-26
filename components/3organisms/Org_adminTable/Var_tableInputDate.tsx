@@ -3,7 +3,7 @@ import { atom, useRecoilState } from "recoil";
 
 export const rawTableFromDate = atom({
   key: "rawTableFromDate",
-  default: dayjs().add(-1, "month"),
+  default: dayjs().add(-1, "year"),
 });
 
 export const rawTableToDate = atom({
@@ -13,7 +13,7 @@ export const rawTableToDate = atom({
 
 export const tableFromDate = atom({
   key: "tableFromDate",
-  default: dayjs().add(-1, "month"),
+  default: dayjs().add(-1, "year"),
 });
 
 export const tableToDate = atom({

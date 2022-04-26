@@ -400,7 +400,6 @@ function Table({
     const handler = (e) => {
       if (e.shiftKey) {
         if (["c", "C"].includes(e.key)) {
-          console.log(e);
           setisModalOpen_create(true);
           setTimeout(() => {
             setCreateForm.setFocus("brandName");
@@ -428,7 +427,7 @@ function Table({
                     className="center w-20 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500"
                     onClick={() => {
                       setTimeout(() => {
-                        setCreateForm.setFocus("brandName");
+                        setCreateForm.setFocus();
                       }, 100);
                     }}
                   >

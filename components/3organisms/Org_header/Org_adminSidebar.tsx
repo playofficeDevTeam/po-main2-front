@@ -24,6 +24,11 @@ const listsData = [
     url: "/admin/user",
   },
   {
+    icon: <i className="fas fa-user-tie"></i>,
+    title: "파트너사",
+    url: "/admin/partner",
+  },
+  {
     icon: <i className="fas fa-tasks"></i>,
     title: "캠페인",
     url: "/admin/campaign",
