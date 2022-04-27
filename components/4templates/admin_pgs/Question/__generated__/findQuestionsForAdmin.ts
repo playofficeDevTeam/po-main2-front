@@ -9,6 +9,11 @@ import { FindQuestionsInput } from "./../../../../../__generated__/globalTypes";
 // GraphQL query operation: findQuestionsForAdmin
 // ====================================================
 
+export interface findQuestionsForAdmin_findQuestionsForAdmin_questions_user {
+  __typename: "User";
+  nameId: string | null;
+}
+
 export interface findQuestionsForAdmin_findQuestionsForAdmin_questions {
   __typename: "Question";
   id: number;
@@ -22,6 +27,7 @@ export interface findQuestionsForAdmin_findQuestionsForAdmin_questions {
   productLink: string | null;
   uniqueness: string | null;
   isAgency: boolean | null;
+  user: findQuestionsForAdmin_findQuestionsForAdmin_questions_user | null;
 }
 
 export interface findQuestionsForAdmin_findQuestionsForAdmin {

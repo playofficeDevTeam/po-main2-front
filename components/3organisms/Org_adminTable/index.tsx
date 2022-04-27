@@ -187,6 +187,7 @@ function Table({
   setEditForm,
   editForm,
   deleteMutation,
+  refetch,
 }) {
   const defaultColumn = useMemo(
     () => ({
@@ -462,7 +463,7 @@ function Table({
 
           {columnPopupState && (
             <div className="h-0 w-0 relative z-50 top-1">
-              <div className="w-36 p-3 px-4 bg-white border rounded-md shadow-md">
+              <div className="w-48 p-3 px-4 bg-white border rounded-md shadow-md">
                 <div className="py-1 flex items-center">
                   <ColumnIndeterminateCheckbox
                     {...getToggleHideAllColumnsProps()}
@@ -549,6 +550,7 @@ function Table({
                       ) {
                         setTableFromDateState(rawTableFromDateState);
                         setTableToDateState(rawTableToDateState);
+                        refetch();
                       } else {
                         throw "날짜를 입력해주세요";
                       }
@@ -633,6 +635,7 @@ function App({
   setEditForm,
   editForm,
   deleteMutation,
+  refetch,
 }) {
   return (
     <div className="bg-gray-50 w-full  overflow-x-scroll middle-scroll ">
@@ -645,6 +648,7 @@ function App({
           setEditForm={setEditForm}
           editForm={editForm}
           deleteMutation={deleteMutation}
+          refetch={refetch}
         />
       </TableStyles>
     </div>

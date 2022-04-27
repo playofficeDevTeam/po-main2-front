@@ -50,6 +50,9 @@ export const FIND_QUESTIONS_FOR_ADMIN = gql`
         productLink
         uniqueness
         isAgency
+        user {
+          nameId
+        }
       }
     }
   }
@@ -96,6 +99,12 @@ export default function App() {
         Header: "생성일",
         accessor: "createdAt",
         width: 90,
+        sortDescFirst: true,
+      },
+      {
+        Header: "브랜드명(R)",
+        accessor: "brandName_partner",
+        width: 150,
         sortDescFirst: true,
       },
       {
@@ -188,6 +197,7 @@ export default function App() {
           ...val,
           createdAt: datePrettier(val.createdAt),
           isAgency: val.isAgency?.toString(),
+          brandName_partner: val.user?.nameId,
         })
       ),
     [findQuestionsForAdminData]
@@ -260,6 +270,7 @@ export default function App() {
           variables: {
             input: {
               brandName: data.brandName,
+              brandName_partner: data.brandName_partner,
               name: data.name,
               phoneNumber: data.phoneNumber,
               email: data.email,
@@ -280,13 +291,8 @@ export default function App() {
         setisModalOpen(false);
       } catch (error) {
         const errorString: string = error + "";
-        if (
-          errorString.indexOf(
-            "duplicate key value violates unique constraint"
-          ) !== -1
-        ) {
-          alert("(ID)가 중복됩니다.");
-        }
+        const pureError = errorString.replace("Error: ", "");
+        alert(pureError);
       }
     });
   };
@@ -300,31 +306,38 @@ export default function App() {
   } = useForm();
 
   const onSubmit_edit = (data) => {
-    tokenCheck("mutation", () => {
-      editQuestionForAdminMutation({
-        variables: {
-          input: {
-            brandName: data.brandName,
-            name: data.name,
-            phoneNumber: data.phoneNumber,
-            email: data.email,
-            budget: data.budget,
-            productLink: data.productLink,
-            uniqueness: data.uniqueness,
-            isAgency: data.isAgency === "true" ? true : false,
-            tags: data.tags,
-            id: +formSelector("id", questionForm),
+    tokenCheck("mutation", async () => {
+      try {
+        await editQuestionForAdminMutation({
+          variables: {
+            input: {
+              brandName: data.brandName,
+              brandName_partner: data.brandName_partner,
+              name: data.name,
+              phoneNumber: data.phoneNumber,
+              email: data.email,
+              budget: data.budget,
+              productLink: data.productLink,
+              uniqueness: data.uniqueness,
+              isAgency: data.isAgency === "true" ? true : false,
+              tags: data.tags,
+              id: +formSelector("id", questionForm),
+            },
           },
-        },
-      });
+        });
+        reset_edit(
+          questionFormDefalut.reduce(
+            (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
+            {}
+          )
+        );
+        setisEditModalOpen(false);
+      } catch (error) {
+        const errorString: string = error + "";
+        const pureError = errorString.replace("Error: ", "");
+        alert(pureError);
+      }
     });
-    reset_edit(
-      questionFormDefalut.reduce(
-        (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-        {}
-      )
-    );
-    setisEditModalOpen(false);
   };
 
   if (findQuestionsForAdminError) {
@@ -349,6 +362,7 @@ export default function App() {
             });
           });
         }}
+        refetch={refetch}
         setCreateForm={{
           setFocus: () => {
             setFocus_create("brandName");

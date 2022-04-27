@@ -1,5 +1,5 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { UserRole } from "../../../../__generated__/globalTypes";
@@ -37,6 +37,7 @@ export const FIND_USERS = gql`
       ok
       error
       users {
+        id
         createdAt
         tags
         email
@@ -101,17 +102,15 @@ const App = () => {
         width: 90,
         sortDescFirst: true,
       },
-      { Header: "이메일", accessor: "email", width: 150, sortDescFirst: true },
-      { Header: "이름", accessor: "name", width: 150, sortDescFirst: true },
       {
-        Header: "이름(ID)",
-        accessor: "nameId",
+        Header: "이메일(ID)",
+        accessor: "email",
         width: 150,
         sortDescFirst: true,
       },
       {
-        Header: "연락처",
-        accessor: "phoneNumber",
+        Header: "브랜드명(ID)",
+        accessor: "nameId",
         width: 150,
         sortDescFirst: true,
       },
@@ -121,13 +120,20 @@ const App = () => {
         width: 150,
         sortDescFirst: true,
       },
+      { Header: "이름", accessor: "name", width: 150, sortDescFirst: true },
+
+      {
+        Header: "연락처",
+        accessor: "phoneNumber",
+        width: 150,
+        sortDescFirst: true,
+      },
       {
         Header: "주민등록번호",
         accessor: "residentRegistrationNumber",
         width: 150,
         sortDescFirst: true,
       },
-      { Header: "역할", accessor: "role", width: 150, sortDescFirst: true },
       { Header: "태그", accessor: "tags", width: 150, sortDescFirst: true },
       { Header: "dataId", accessor: "id", width: 0 },
     ],
@@ -222,7 +228,7 @@ const App = () => {
             input: {
               role: UserRole.Partner,
               email: data.email === "" ? null : data.email,
-              password: data.password,
+              password: data.password === "" ? null : data.password,
               name: data.name,
               nameId: data.nameId === "" ? null : data.nameId,
               phoneNumber: data.phoneNumber,
@@ -232,9 +238,6 @@ const App = () => {
             },
           },
         });
-        console.log(createUserForAdminLoading);
-        console.log(createUserForAdminError);
-        console.log(createUserForAdminData);
 
         reset_create(
           partnerFormDefault.reduce(
@@ -245,14 +248,13 @@ const App = () => {
         setisModalOpen(false);
       } catch (error) {
         const errorString: string = error + "";
-        // if (
-        //   errorString.indexOf(
-        //     "duplicate key value violates unique constraint"
-        //   ) !== -1
-        // ) {
-        //   alert(`(ID)가 중복됩니다. ${errorString}`);
-        // }
-        alert(errorString);
+        if (errorString.indexOf("UQ_e12875dfb3b1d92d7d7c5377e22") !== -1) {
+          alert(`이메일(ID)이 중복됩니다.`);
+        } else if (
+          errorString.indexOf("UQ_1db0f40d9ff5904789eb33dc031") !== -1
+        ) {
+          alert(`브랜드명(ID)이 중복됩니다.`);
+        }
       }
     });
   };
@@ -266,29 +268,41 @@ const App = () => {
   } = useForm();
 
   const onSubmit_edit = (data) => {
-    tokenCheck("mutation", () => {
-      editUserMutation({
-        variables: {
-          input: {
-            password: data.password,
-            name: data.name,
-            nameId: data.nameId === "" ? null : data.nameId,
-            phoneNumber: data.phoneNumber,
-            brandName: data.brandName,
-            residentRegistrationNumber: data.residentRegistrationNumber,
-            tags: data.tags,
-            id: +formSelector("id", partnerForm),
+    tokenCheck("mutation", async () => {
+      try {
+        await editUserMutation({
+          variables: {
+            input: {
+              email: data.email === "" ? null : data.email,
+              password: data.password === "" ? null : data.password,
+              name: data.name,
+              nameId: data.nameId === "" ? null : data.nameId,
+              phoneNumber: data.phoneNumber,
+              brandName: data.brandName,
+              residentRegistrationNumber: data.residentRegistrationNumber,
+              tags: data.tags,
+              id: +formSelector("id", partnerForm),
+            },
           },
-        },
-      });
+        });
+        reset_edit(
+          partnerFormDefault.reduce(
+            (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
+            {}
+          )
+        );
+        setisEditModalOpen(false);
+      } catch (error) {
+        const errorString: string = error + "";
+        if (errorString.indexOf("UQ_e12875dfb3b1d92d7d7c5377e22") !== -1) {
+          alert(`이메일(ID)이 중복됩니다.`);
+        } else if (
+          errorString.indexOf("UQ_1db0f40d9ff5904789eb33dc031") !== -1
+        ) {
+          alert(`브랜드명(ID)이 중복됩니다.`);
+        }
+      }
     });
-    reset_edit(
-      partnerFormDefault.reduce(
-        (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-        {}
-      )
-    );
-    setisEditModalOpen(false);
   };
 
   if (findUsersError) {
@@ -318,6 +332,7 @@ const App = () => {
             });
           });
         }}
+        refetch={refetch}
         setCreateForm={{
           setFocus: () => {
             setFocus_create("email");
@@ -330,23 +345,36 @@ const App = () => {
                 {partnerForm.map(
                   (val, idx) =>
                     !["id", "createdAt"].includes(val.accessor) && (
-                      <li key={idx} className="flex items-center">
-                        <div className="w-28 flex pl-1">{val.Header}</div>
-                        {!["uniqueness"].includes(val.accessor) ? (
-                          <input
-                            defaultValue={val.value}
-                            {...register_create(val.accessor)}
-                            className="border w-60 p-1 m-1"
-                            type={`text`}
-                          />
-                        ) : (
-                          <textarea
-                            defaultValue={val.value}
-                            {...register_create(val.accessor)}
-                            className="border w-60 p-1 m-1"
-                          ></textarea>
+                      <>
+                        <li key={idx} className="flex items-center">
+                          <div className="w-28 flex pl-1">{val.Header}</div>
+                          {!["uniqueness"].includes(val.accessor) ? (
+                            <input
+                              defaultValue={val.value}
+                              {...register_create(val.accessor)}
+                              className="border w-60 p-1 m-1"
+                              type={`text`}
+                            />
+                          ) : (
+                            <textarea
+                              defaultValue={val.value}
+                              {...register_create(val.accessor)}
+                              className="border w-60 p-1 m-1"
+                            ></textarea>
+                          )}
+                        </li>
+                        {["email"].includes(val.accessor) && (
+                          <li className="flex items-center">
+                            <div className="w-28 flex pl-1">{"패스워드"}</div>
+                            <input
+                              defaultValue={""}
+                              {...register_create("password")}
+                              className="border w-60 p-1 m-1"
+                              type={`text`}
+                            />
+                          </li>
                         )}
-                      </li>
+                      </>
                     )
                 )}
               </ul>
@@ -357,12 +385,12 @@ const App = () => {
                     reset_create(
                       partnerFormDefault.reduce(
                         (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-                        {}
+                        { password: "" }
                       )
                     );
 
                     setTimeout(() => {
-                      setFocus_create("brandName");
+                      setFocus_create("email");
                     }, 0);
                   }}
                 >
@@ -395,23 +423,36 @@ const App = () => {
                 {partnerForm.map(
                   (val, idx) =>
                     !["id", "createdAt"].includes(val.accessor) && (
-                      <li key={idx} className="flex items-center">
-                        <div className="w-28 flex pl-1">{val.Header}</div>
-                        {!["uniqueness"].includes(val.accessor) ? (
-                          <input
-                            defaultValue={val.value}
-                            {...register_edit(val.accessor)}
-                            className="border w-60 p-1 m-1"
-                            type={`text`}
-                          />
-                        ) : (
-                          <textarea
-                            defaultValue={val.value}
-                            {...register_edit(val.accessor)}
-                            className="border w-60 p-1 m-1"
-                          ></textarea>
+                      <>
+                        <li key={idx} className="flex items-center">
+                          <div className="w-28 flex pl-1">{val.Header}</div>
+                          {!["uniqueness"].includes(val.accessor) ? (
+                            <input
+                              defaultValue={val.value}
+                              {...register_edit(val.accessor)}
+                              className="border w-60 p-1 m-1"
+                              type={`text`}
+                            />
+                          ) : (
+                            <textarea
+                              defaultValue={val.value}
+                              {...register_edit(val.accessor)}
+                              className="border w-60 p-1 m-1"
+                            ></textarea>
+                          )}
+                        </li>
+                        {["email"].includes(val.accessor) && (
+                          <li className="flex items-center">
+                            <div className="w-28 flex pl-1">{"패스워드"}</div>
+                            <input
+                              defaultValue={""}
+                              {...register_edit("password")}
+                              className="border w-60 p-1 m-1"
+                              type={`text`}
+                            />
+                          </li>
                         )}
-                      </li>
+                      </>
                     )
                 )}
               </ul>

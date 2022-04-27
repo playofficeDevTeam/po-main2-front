@@ -26,9 +26,10 @@ export interface findUsers_findUsers_users_questions {
 
 export interface findUsers_findUsers_users {
   __typename: "User";
+  id: number;
   createdAt: any;
   tags: string | null;
-  email: string;
+  email: string | null;
   role: UserRole;
   name: string | null;
   phoneNumber: string | null;

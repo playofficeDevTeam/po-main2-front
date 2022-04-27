@@ -2,6 +2,7 @@ import { atom, useRecoilState } from "recoil";
 
 export const questionFormDefalut = [
   { Header: "생성일", accessor: "createdAt", value: "" },
+  { Header: "브랜드명(R)", accessor: "brandName_partner", value: "" },
   { Header: "브랜드명", accessor: "brandName", value: "" },
   { Header: "이름", accessor: "name", value: "" },
   { Header: "연락처", accessor: "phoneNumber", value: "" },

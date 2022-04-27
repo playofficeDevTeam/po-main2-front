@@ -107,6 +107,7 @@ export interface CreateQuestionForAdminInput {
   uniqueness?: string | null;
   isAgency?: boolean | null;
   user?: UserInputType | null;
+  brandName_partner?: string | null;
 }
 
 export interface CreateQuestionInput {
@@ -171,11 +172,13 @@ export interface EditQuestionInput {
   uniqueness?: string | null;
   isAgency?: boolean | null;
   user?: UserInputType | null;
+  brandName_partner?: string | null;
 }
 
 export interface EditUserInput {
   createdAt?: any | null;
   updatedAt?: any | null;
+  email?: string | null;
   password?: string | null;
   refreshToken?: string | null;
   role?: UserRole | null;
@@ -221,8 +224,8 @@ export interface RenewalAdminAccessTokenInput {
 }
 
 export interface UserInputType {
-  email: string;
-  password: string;
+  email?: string | null;
+  password?: string | null;
   refreshToken: string;
   role: UserRole;
   name?: string | null;
