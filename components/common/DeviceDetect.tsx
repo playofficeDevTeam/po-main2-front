@@ -22,11 +22,8 @@ export default function DeviceDetect({ children }) {
 
   const [isAdmin, setIsAdmin] = useRecoilState(isAdminAtom);
   useEffect(() => {
-    const asyncEffect = async () => {
-      await setIsMolbile(isMobile_lib);
-      await setDeviceDetectSuccessed(true);
-    };
-    asyncEffect();
+    setIsMolbile(isMobile_lib);
+    setDeviceDetectSuccessed(true);
   }, [setIsMolbile, setDeviceDetectSuccessed]);
   return deviceDetectSuccessed ? (
     <>

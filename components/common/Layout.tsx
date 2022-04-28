@@ -1,6 +1,6 @@
 import Org_footer from "../3organisms/Org_footer";
 import Org_header from "../3organisms/Org_header";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
 import DeviceDetect from "./DeviceDetect";
@@ -17,12 +17,15 @@ export default function Layout({ children }: any) {
   useGtmScroll();
 
   useEffect(() => {
-    const prodGtmId = "GTM-WTBKCZ8";
-    const devGtmId = "GTM-TCF867Z";
-    const tagManagerArgs = {
-      gtmId: process.env.NEXT_PUBLIC_TYPE === "prod" ? prodGtmId : devGtmId,
+    const asyncEffect = async () => {
+      const prodGtmId = "GTM-WTBKCZ8";
+      const devGtmId = "GTM-TCF867Z";
+      const tagManagerArgs = {
+        gtmId: process.env.NEXT_PUBLIC_TYPE === "prod" ? prodGtmId : devGtmId,
+      };
+      TagManager.initialize(tagManagerArgs);
     };
-    TagManager.initialize(tagManagerArgs);
+    asyncEffect();
     return () => {};
   }, []);
 
