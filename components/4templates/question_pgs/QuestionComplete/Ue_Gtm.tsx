@@ -11,7 +11,7 @@ export default function App() {
   useEffect(() => {
     setTimeout(() => {
       contactGtm();
-    }, 0);
+    }, 100);
   }, []);
   return <></>;
 }

@@ -51,7 +51,7 @@ export default function App() {
     if (isServiceDataLoad) {
       setTimeout(() => {
         begin_checkoutGtm();
-      }, 0);
+      }, 100);
     }
   }, [clickedServiceData]);
 

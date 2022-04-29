@@ -14,13 +14,25 @@ export const useGtm = (data = data1) => {
     });
   };
 
+  function waitForFbq(callback) {
+    if (typeof window.fbq !== "undefined") {
+      callback();
+    } else {
+      setTimeout(function () {
+        waitForFbq(callback);
+      }, 100);
+    }
+  }
+
   const onClick = () => {
     checkToggle();
     const gtmArgs = {
       dataLayer: data,
     };
     if (!isSent) {
-      TagManager.dataLayer(gtmArgs);
+      waitForFbq(() => {
+        TagManager.dataLayer(gtmArgs);
+      });
     }
   };
   return onClick;

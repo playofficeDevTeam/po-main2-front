@@ -16,13 +16,13 @@ const queryClient = new QueryClient();
 export default function Layout({ children }: any) {
   useGtmScroll();
 
+  const prodGtmId = "GTM-WTBKCZ8";
+  const devGtmId = "GTM-TCF867Z";
+  const tagManagerArgs = {
+    gtmId: process.env.NEXT_PUBLIC_TYPE === "prod" ? prodGtmId : devGtmId,
+  };
   useEffect(() => {
     const asyncEffect = async () => {
-      const prodGtmId = "GTM-WTBKCZ8";
-      const devGtmId = "GTM-TCF867Z";
-      const tagManagerArgs = {
-        gtmId: process.env.NEXT_PUBLIC_TYPE === "prod" ? prodGtmId : devGtmId,
-      };
       TagManager.initialize(tagManagerArgs);
     };
     asyncEffect();

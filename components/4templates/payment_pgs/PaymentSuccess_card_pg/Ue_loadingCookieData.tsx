@@ -54,7 +54,7 @@ export default function App() {
     if (isServiceDataLoad) {
       setTimeout(() => {
         purchaseGtm();
-      }, 0);
+      }, 100);
     }
   }, [clickedServiceData]);
 
