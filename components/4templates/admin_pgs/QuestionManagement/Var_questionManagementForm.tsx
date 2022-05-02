@@ -1,6 +1,6 @@
 import { atom, useRecoilState } from "recoil";
 
-export const questionFormDefalut = [
+export const questionManagementFormDefalut = [
   { Header: "생성일", accessor: "createdAt", value: "" },
   { Header: "브랜드명(R)", accessor: "brandName_partner", value: "" },
   { Header: "브랜드명", accessor: "brandName", value: "" },
@@ -29,17 +29,17 @@ export const questionFormDefalut = [
   { Header: "dataId", accessor: "id", value: "" },
 ];
 
-export const questionFormData = atom({
+export const questionManagementFormData = atom({
   key: "questionFormData",
-  default: questionFormDefalut,
+  default: questionManagementFormDefalut,
 });
 
-export const useQuestionFormDataOnChange = () => {
-  const [questionFormDataState, setQuestionFormDataState] =
-    useRecoilState(questionFormData);
+export const useQuestionManagementFormDataOnChange = () => {
+  const [questionManagementFormDataState, setQuestionManagementFormDataState] =
+    useRecoilState(questionManagementFormData);
 
   const onChange = (e, id) => {
-    setQuestionFormDataState((formData) =>
+    setQuestionManagementFormDataState((formData) =>
       formData.map((val, idx) =>
         idx === id ? { ...val, value: e.target.value } : val
       )

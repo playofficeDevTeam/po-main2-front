@@ -1,87 +1,102 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { useEffect, useMemo } from "react";
-import { useTokenCheck } from "../../../hooks/useTokenCheck";
-import {
-  findQuestionsForAdmin,
-  findQuestionsForAdminVariables,
-} from "./__generated__/findQuestionsForAdmin";
-import {
-  editQuestionForAdmin,
-  editQuestionForAdminVariables,
-} from "./__generated__/editQuestionForAdmin";
-import {
-  createQuestionForAdmin,
-  createQuestionForAdminVariables,
-} from "./__generated__/createQuestionForAdmin";
-import {
-  deleteQuestionForAdmin,
-  deleteQuestionForAdminVariables,
-} from "./__generated__/deleteQuestionForAdmin";
+import { useMemo, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import { questionFormData, questionFormDefalut } from "./Var_questionForm";
-import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
 import Org_adminTable, {
   SelectColumnFilter,
 } from "../../../3organisms/Org_adminTable";
+import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
+import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
 import { isModal_adminEditOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
-import { formSelector } from "./fn_formSelector";
-import { datePrettier } from "./fn_DatePrettier";
 import {
   tableFromDate,
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
-import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
-import { useForm } from "react-hook-form";
+import { useTokenCheck } from "../../../hooks/useTokenCheck";
+import { datePrettier } from "../Question/fn_DatePrettier";
+import { formSelector } from "../Question/fn_formSelector";
+import {
+  FIND_QUESTIONS_FOR_ADMIN,
+  CREATE_QUESTION_FOR_ADMIN,
+  EDIT_QUESTION_FOR_ADMIN,
+  DELETE_QUESTION_FOR_ADMIN,
+} from "../Question/QuestionTable";
+import { questionFormDefalut } from "../Question/Var_questionForm";
+import {
+  createQuestionForAdmin,
+  createQuestionForAdminVariables,
+} from "../Question/__generated__/createQuestionForAdmin";
+import {
+  deleteQuestionForAdmin,
+  deleteQuestionForAdminVariables,
+} from "../Question/__generated__/deleteQuestionForAdmin";
+import {
+  editQuestionForAdmin,
+  editQuestionForAdminVariables,
+} from "../Question/__generated__/editQuestionForAdmin";
+import {
+  questionManagementFormData,
+  questionManagementFormDefalut,
+} from "./Var_questionManagementForm";
+import {
+  createQuestionManagement,
+  createQuestionManagementVariables,
+} from "./__generated__/createQuestionManagement";
+import {
+  deleteQuestionManagement,
+  deleteQuestionManagementVariables,
+} from "./__generated__/deleteQuestionManagement";
+import {
+  editQuestionManagement,
+  editQuestionManagementVariables,
+} from "./__generated__/editQuestionManagement";
+import {
+  findAllQuestionManagement,
+  findAllQuestionManagementVariables,
+} from "./__generated__/findAllQuestionManagement";
 
-export const FIND_QUESTIONS_FOR_ADMIN = gql`
-  query findQuestionsForAdmin($input: FindQuestionsInput!) {
-    findQuestionsForAdmin(input: $input) {
+export const FIND_ALL_QUESTION_MANAGEMENT = gql`
+  query findAllQuestionManagement($input: FindAllQuestionManagementInput!) {
+    findAllQuestionManagement(input: $input) {
       ok
       error
-      questions {
+      questionManagements {
         id
         createdAt
-        brandName
-        tags
-        name
-        phoneNumber
-        email
-        budget
-        productLink
-        uniqueness
-        isAgency
-        user {
-          nameId
+        stateDate
+        stateName
+        stateTime
+        note
+        question {
+          id
         }
-        product
-        isAnalyzed
+        questionId
       }
     }
   }
 `;
 
-export const CREATE_QUESTION_FOR_ADMIN = gql`
-  mutation createQuestionForAdmin($input: CreateQuestionForAdminInput!) {
-    createQuestionForAdmin(input: $input) {
-      ok
-      error
-      questionId
-    }
-  }
-`;
-
-export const EDIT_QUESTION_FOR_ADMIN = gql`
-  mutation editQuestionForAdmin($input: EditQuestionInput!) {
-    editQuestionForAdmin(input: $input) {
+export const CREATE_QUESTION_MANAGEMENT = gql`
+  mutation createQuestionManagement($input: CreateQuestionManagementInput!) {
+    createQuestionManagement(input: $input) {
       ok
       error
     }
   }
 `;
 
-export const DELETE_QUESTION_FOR_ADMIN = gql`
-  mutation deleteQuestionForAdmin($input: DeleteQuestionInput!) {
-    deleteQuestionForAdmin(input: $input) {
+export const EDIT_QUESTION_MANAGEMENT = gql`
+  mutation editQuestionManagement($input: EditQuestionManagementInput!) {
+    editQuestionManagement(input: $input) {
+      ok
+      error
+    }
+  }
+`;
+
+export const DELETE_QUESTION_MANAGEMENT = gql`
+  mutation deleteQuestionManagement($input: DeleteQuestionManagementInput!) {
+    deleteQuestionManagement(input: $input) {
       ok
       error
     }
@@ -89,7 +104,9 @@ export const DELETE_QUESTION_FOR_ADMIN = gql`
 `;
 
 export default function App() {
-  const [questionForm, setQuestionForm] = useRecoilState(questionFormData);
+  const [questionManagementForm, setQuestionManagementForm] = useRecoilState(
+    questionManagementFormData
+  );
 
   const [tableFromDateState, setTableFromDateState] =
     useRecoilState(tableFromDate);
@@ -181,12 +198,12 @@ export default function App() {
 
   //쿼리
   const {
-    loading: findQuestionsForAdminLoading,
-    error: findQuestionsForAdminError,
-    data: findQuestionsForAdminData,
+    loading: findAllQuestionManagementLoading,
+    error: findAllQuestionManagementError,
+    data: findAllQuestionManagementData,
     refetch,
-  } = useQuery<findQuestionsForAdmin, findQuestionsForAdminVariables>(
-    FIND_QUESTIONS_FOR_ADMIN,
+  } = useQuery<findAllQuestionManagement, findAllQuestionManagementVariables>(
+    FIND_ALL_QUESTION_MANAGEMENT,
     {
       variables: {
         input: {
@@ -198,31 +215,29 @@ export default function App() {
   );
   useEffect(() => {
     tokenCheck("query", refetch);
-  }, [findQuestionsForAdminData]);
+  }, [findAllQuestionManagementData]);
 
   const questionsData = useMemo(
     () =>
-      findQuestionsForAdminData?.findQuestionsForAdmin.questions?.map(
+      findAllQuestionManagementData?.findAllQuestionManagement.questionManagements?.map(
         (val, idx) => ({
           ...val,
           createdAt: datePrettier(val.createdAt),
-          isAgency: val.isAgency?.toString(),
-          brandName_partner: val.user?.nameId,
         })
       ),
-    [findQuestionsForAdminData]
+    [findAllQuestionManagementData]
   );
 
   //뮤테이션
   const [
-    createQuestionForAdminMutation,
+    createQuestionManagementMutation,
     {
-      loading: createQuestionForAdminLoading,
-      error: createQuestionForAdminError,
-      data: createQuestionForAdminData,
+      loading: createQuestionManagementLoading,
+      error: createQuestionManagementError,
+      data: createQuestionManagementData,
     },
-  ] = useMutation<createQuestionForAdmin, createQuestionForAdminVariables>(
-    CREATE_QUESTION_FOR_ADMIN,
+  ] = useMutation<createQuestionManagement, createQuestionManagementVariables>(
+    CREATE_QUESTION_MANAGEMENT,
     {
       onCompleted: () => {
         refetch();
@@ -231,10 +246,13 @@ export default function App() {
   );
 
   const [
-    editQuestionForAdminMutation,
-    { loading: editQuestionForAdminLoading, data: editQuestionForAdminData },
-  ] = useMutation<editQuestionForAdmin, editQuestionForAdminVariables>(
-    EDIT_QUESTION_FOR_ADMIN,
+    editQuestionManagementMutation,
+    {
+      loading: editQuestionManagementLoading,
+      data: editQuestionManagementData,
+    },
+  ] = useMutation<editQuestionManagement, editQuestionManagementVariables>(
+    EDIT_QUESTION_MANAGEMENT,
     {
       onCompleted: () => {
         refetch();
@@ -243,13 +261,13 @@ export default function App() {
   );
 
   const [
-    deleteQuestionForAdminMutation,
+    deleteQuestionManagementMutation,
     {
-      loading: deleteQuestionForAdminLoading,
-      data: deleteQuestionForAdminData,
+      loading: deleteQuestionManagementLoading,
+      data: deleteQuestionManagementData,
     },
-  ] = useMutation<deleteQuestionForAdmin, deleteQuestionForAdminVariables>(
-    DELETE_QUESTION_FOR_ADMIN,
+  ] = useMutation<deleteQuestionManagement, deleteQuestionManagementVariables>(
+    DELETE_QUESTION_MANAGEMENT,
     {
       onCompleted: () => {
         refetch();
@@ -276,26 +294,20 @@ export default function App() {
   const onSubmit_create = (data) => {
     tokenCheck("mutation", async () => {
       try {
-        await createQuestionForAdminMutation({
+        await createQuestionManagementMutation({
           variables: {
             input: {
-              brandName: data.brandName,
-              brandName_partner: data.brandName_partner,
-              product: data.product,
-              isAnalyzed: data.isAnalyzed,
-              name: data.name,
-              phoneNumber: data.phoneNumber,
-              email: data.email,
-              budget: data.budget,
-              productLink: data.productLink,
-              uniqueness: data.uniqueness,
-              isAgency: data.isAgency === "true" ? true : false,
-              tags: data.tags,
+              stateDate: data.stateDate,
+              stateName: data.stateName,
+              state: data.state,
+              stateTime: data.stateTime,
+              note: data.note,
+              questionId: data.questionId,
             },
           },
         });
         reset_create(
-          questionFormDefalut.reduce(
+          questionManagementFormDefalut.reduce(
             (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
             {}
           )

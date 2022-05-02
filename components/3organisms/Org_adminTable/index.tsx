@@ -179,16 +179,7 @@ const ColumnIndeterminateCheckbox = forwardRef<HTMLInputElement>(
 );
 ColumnIndeterminateCheckbox.displayName = "ColumnIndeterminateCheckbox";
 
-function Table({
-  columns,
-  data,
-  setCreateForm,
-  createForm,
-  setEditForm,
-  editForm,
-  deleteMutation,
-  refetch,
-}) {
+function Table({ columns, data, customOptions }) {
   const defaultColumn = useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -364,8 +355,8 @@ function Table({
                               (e) => !["selection"].includes(e.accessor)
                             );
 
-                            setEditForm.setRecoil(filteredCellValues);
-                            setEditForm.setReset(
+                            customOptions.setEditRecoil(filteredCellValues);
+                            customOptions.setEditReset(
                               filteredCellValues.reduce(
                                 (pre, cur) => ({
                                   ...pre,
@@ -376,7 +367,7 @@ function Table({
                             );
                             setisModalOpen_edit(true);
                             setTimeout(() => {
-                              setEditForm.setFocus(cell.column.id);
+                              customOptions.setEditFocus(cell.column.id);
                             }, 100);
                           }}
                         >
@@ -403,7 +394,7 @@ function Table({
         if (["c", "C"].includes(e.key)) {
           setisModalOpen_create(true);
           setTimeout(() => {
-            setCreateForm.setFocus("brandName");
+            customOptions.setCreateFocus();
           }, 100);
         }
       }
@@ -428,7 +419,7 @@ function Table({
                     className="center w-20 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500"
                     onClick={() => {
                       setTimeout(() => {
-                        setCreateForm.setFocus();
+                        customOptions.setCreateFocus();
                       }, 100);
                     }}
                   >
@@ -436,12 +427,14 @@ function Table({
                   </div>
                 </>
               ),
-              modal: createForm,
+              modal: customOptions.createForm,
             }}
           />
         </div>
         <div className="">
-          <Modal_adminEdit data={{ button: <></>, modal: editForm }} />
+          <Modal_adminEdit
+            data={{ button: <></>, modal: customOptions.editForm }}
+          />
         </div>
 
         {/* 열선택 */}
@@ -497,7 +490,9 @@ function Table({
             onClick={() => {
               const returnValue = confirm("정말로 삭제하시겠습니까?");
               if (returnValue) {
-                selectedFlatRows.forEach((e) => deleteMutation(e.original.id));
+                selectedFlatRows.forEach((e) =>
+                  customOptions.deleteMutation(e.original.id)
+                );
               }
             }}
           >
@@ -550,7 +545,7 @@ function Table({
                       ) {
                         setTableFromDateState(rawTableFromDateState);
                         setTableToDateState(rawTableToDateState);
-                        refetch();
+                        customOptions.refetch();
                       } else {
                         throw "날짜를 입력해주세요";
                       }
@@ -627,32 +622,14 @@ function Table({
   );
 }
 
-function App({
-  columns,
-  data,
-  setCreateForm,
-  createForm,
-  setEditForm,
-  editForm,
-  deleteMutation,
-  refetch,
-}) {
+function App({ columns, data, customOptions }) {
   return (
     <div className="bg-gray-50 w-full  overflow-x-scroll middle-scroll ">
       <TableStyles>
-        <Table
-          columns={columns}
-          data={data}
-          setCreateForm={setCreateForm}
-          createForm={createForm}
-          setEditForm={setEditForm}
-          editForm={editForm}
-          deleteMutation={deleteMutation}
-          refetch={refetch}
-        />
+        <Table columns={columns} data={data} customOptions={customOptions} />
       </TableStyles>
     </div>
   );
 }
 
-export default memo(App);
+export default App;

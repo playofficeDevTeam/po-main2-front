@@ -97,6 +97,9 @@ export interface CreatePaymentInput {
 }
 
 export interface CreateQuestionForAdminInput {
+  id?: number | null;
+  createdAt?: any | null;
+  updatedAt?: any | null;
   tags?: string | null;
   brandName?: string | null;
   name?: string | null;
@@ -107,10 +110,16 @@ export interface CreateQuestionForAdminInput {
   uniqueness?: string | null;
   isAgency?: boolean | null;
   user?: UserInputType | null;
+  product?: string | null;
+  isAnalyzed?: string | null;
+  questionManagements?: questionManagementInputType[] | null;
   brandName_partner?: string | null;
 }
 
 export interface CreateQuestionInput {
+  id?: number | null;
+  createdAt?: any | null;
+  updatedAt?: any | null;
   tags?: string | null;
   brandName?: string | null;
   name?: string | null;
@@ -121,6 +130,22 @@ export interface CreateQuestionInput {
   uniqueness?: string | null;
   isAgency?: boolean | null;
   user?: UserInputType | null;
+  product?: string | null;
+  isAnalyzed?: string | null;
+  questionManagements?: questionManagementInputType[] | null;
+}
+
+export interface CreateQuestionManagementInput {
+  id?: number | null;
+  createdAt?: any | null;
+  updatedAt?: any | null;
+  stateDate?: any | null;
+  stateName?: string | null;
+  state?: string | null;
+  stateTime?: string | null;
+  note?: string | null;
+  question?: questionInputType | null;
+  questionId?: number | null;
 }
 
 export interface CreateUserForAdminInput {
@@ -143,6 +168,10 @@ export interface CreateUserForAdminInput {
 }
 
 export interface DeleteQuestionInput {
+  id: number;
+}
+
+export interface DeleteQuestionManagementInput {
   id: number;
 }
 
@@ -172,7 +201,23 @@ export interface EditQuestionInput {
   uniqueness?: string | null;
   isAgency?: boolean | null;
   user?: UserInputType | null;
+  product?: string | null;
+  isAnalyzed?: string | null;
+  questionManagements?: questionManagementInputType[] | null;
   brandName_partner?: string | null;
+}
+
+export interface EditQuestionManagementInput {
+  createdAt?: any | null;
+  updatedAt?: any | null;
+  stateDate?: any | null;
+  stateName?: string | null;
+  state?: string | null;
+  stateTime?: string | null;
+  note?: string | null;
+  question?: questionInputType | null;
+  questionId?: number | null;
+  id: number;
 }
 
 export interface EditUserInput {
@@ -192,6 +237,11 @@ export interface EditUserInput {
   payments?: paymentInputType[] | null;
   questions?: questionInputType[] | null;
   id: number;
+}
+
+export interface FindAllQuestionManagementInput {
+  fromDate: any;
+  toDate: any;
 }
 
 export interface FindPaymentInput {
@@ -284,6 +334,19 @@ export interface questionInputType {
   uniqueness?: string | null;
   isAgency?: boolean | null;
   user?: UserInputType | null;
+  product?: string | null;
+  isAnalyzed?: string | null;
+  questionManagements?: questionManagementInputType[] | null;
+}
+
+export interface questionManagementInputType {
+  stateDate?: any | null;
+  stateName?: string | null;
+  state?: string | null;
+  stateTime?: string | null;
+  note?: string | null;
+  question?: questionInputType | null;
+  questionId?: number | null;
 }
 
 //==============================================================

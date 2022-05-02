@@ -321,157 +321,155 @@ const App = () => {
       <Org_adminTable
         columns={columns}
         data={usersData}
-        deleteMutation={(id) => {
-          tokenCheck("mutation", () => {
-            deleteUserMutation({
-              variables: {
-                input: {
-                  id,
+        customOptions={{
+          refetch: refetch,
+          deleteMutation: (id) => {
+            tokenCheck("mutation", () => {
+              deleteUserMutation({
+                variables: {
+                  input: {
+                    id,
+                  },
                 },
-              },
+              });
             });
-          });
-        }}
-        refetch={refetch}
-        setCreateForm={{
-          setFocus: () => {
+          },
+          setCreateFocus: () => {
             setFocus_create("email");
           },
-        }}
-        createForm={
-          <>
-            <form onSubmit={handleSubmit_create(onSubmit_create)}>
-              <ul>
-                {partnerForm.map(
-                  (val, idx) =>
-                    !["id", "createdAt"].includes(val.accessor) && (
-                      <>
-                        <li key={idx} className="flex items-center">
-                          <div className="w-28 flex pl-1">{val.Header}</div>
-                          {!["uniqueness"].includes(val.accessor) ? (
-                            <input
-                              defaultValue={val.value}
-                              {...register_create(val.accessor)}
-                              className="border w-60 p-1 m-1"
-                              type={`text`}
-                            />
-                          ) : (
-                            <textarea
-                              defaultValue={val.value}
-                              {...register_create(val.accessor)}
-                              className="border w-60 p-1 m-1"
-                            ></textarea>
-                          )}
-                        </li>
-                        {["email"].includes(val.accessor) && (
-                          <li className="flex items-center">
-                            <div className="w-28 flex pl-1">{"패스워드"}</div>
-                            <input
-                              defaultValue={""}
-                              {...register_create("password")}
-                              className="border w-60 p-1 m-1"
-                              type={`text`}
-                            />
+          setEditRecoil: setPartnerForm,
+          setEditReset: reset_edit,
+          setEditFocus: setFocus_edit,
+          createForm: (
+            <>
+              <form onSubmit={handleSubmit_create(onSubmit_create)}>
+                <ul>
+                  {partnerForm.map(
+                    (val, idx) =>
+                      !["id", "createdAt"].includes(val.accessor) && (
+                        <>
+                          <li key={idx} className="flex items-center">
+                            <div className="w-28 flex pl-1">{val.Header}</div>
+                            {!["uniqueness"].includes(val.accessor) ? (
+                              <input
+                                defaultValue={val.value}
+                                {...register_create(val.accessor)}
+                                className="border w-60 p-1 m-1"
+                                type={`text`}
+                              />
+                            ) : (
+                              <textarea
+                                defaultValue={val.value}
+                                {...register_create(val.accessor)}
+                                className="border w-60 p-1 m-1"
+                              ></textarea>
+                            )}
                           </li>
-                        )}
-                      </>
-                    )
-                )}
-              </ul>
-              <div className="flex justify-end mt-2">
-                <div
-                  className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                  onClick={() => {
-                    reset_create(
-                      partnerFormDefault.reduce(
-                        (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-                        { password: "" }
+                          {["email"].includes(val.accessor) && (
+                            <li className="flex items-center">
+                              <div className="w-28 flex pl-1">{"패스워드"}</div>
+                              <input
+                                defaultValue={""}
+                                {...register_create("password")}
+                                className="border w-60 p-1 m-1"
+                                type={`text`}
+                              />
+                            </li>
+                          )}
+                        </>
                       )
-                    );
+                  )}
+                </ul>
+                <div className="flex justify-end mt-2">
+                  <div
+                    className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                    onClick={() => {
+                      reset_create(
+                        partnerFormDefault.reduce(
+                          (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
+                          { password: "" }
+                        )
+                      );
 
-                    setTimeout(() => {
-                      setFocus_create("email");
-                    }, 0);
-                  }}
-                >
-                  초기화
+                      setTimeout(() => {
+                        setFocus_create("email");
+                      }, 0);
+                    }}
+                  >
+                    초기화
+                  </div>
+                  <div
+                    className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                    onClick={() => {
+                      setisModalOpen(false);
+                    }}
+                  >
+                    취소
+                  </div>
+                  <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
+                    확인
+                  </button>
                 </div>
-                <div
-                  className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                  onClick={() => {
-                    setisModalOpen(false);
-                  }}
-                >
-                  취소
-                </div>
-                <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
-                  확인
-                </button>
-              </div>
-            </form>
-          </>
-        }
-        setEditForm={{
-          setRecoil: setPartnerForm,
-          setReset: reset_edit,
-          setFocus: setFocus_edit,
-        }}
-        editForm={
-          <>
-            <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
-              <ul>
-                {partnerForm.map(
-                  (val, idx) =>
-                    !["id", "createdAt"].includes(val.accessor) && (
-                      <>
-                        <li key={idx} className="flex items-center">
-                          <div className="w-28 flex pl-1">{val.Header}</div>
-                          {!["uniqueness"].includes(val.accessor) ? (
-                            <input
-                              defaultValue={val.value}
-                              {...register_edit(val.accessor)}
-                              className="border w-60 p-1 m-1"
-                              type={`text`}
-                            />
-                          ) : (
-                            <textarea
-                              defaultValue={val.value}
-                              {...register_edit(val.accessor)}
-                              className="border w-60 p-1 m-1"
-                            ></textarea>
-                          )}
-                        </li>
-                        {["email"].includes(val.accessor) && (
-                          <li className="flex items-center">
-                            <div className="w-28 flex pl-1">{"패스워드"}</div>
-                            <input
-                              defaultValue={""}
-                              {...register_edit("password")}
-                              className="border w-60 p-1 m-1"
-                              type={`text`}
-                            />
+              </form>
+            </>
+          ),
+          editForm: (
+            <>
+              <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
+                <ul>
+                  {partnerForm.map(
+                    (val, idx) =>
+                      !["id", "createdAt"].includes(val.accessor) && (
+                        <>
+                          <li key={idx} className="flex items-center">
+                            <div className="w-28 flex pl-1">{val.Header}</div>
+                            {!["uniqueness"].includes(val.accessor) ? (
+                              <input
+                                defaultValue={val.value}
+                                {...register_edit(val.accessor)}
+                                className="border w-60 p-1 m-1"
+                                type={`text`}
+                              />
+                            ) : (
+                              <textarea
+                                defaultValue={val.value}
+                                {...register_edit(val.accessor)}
+                                className="border w-60 p-1 m-1"
+                              ></textarea>
+                            )}
                           </li>
-                        )}
-                      </>
-                    )
-                )}
-              </ul>
-              <div className="flex justify-end mt-2">
-                <div
-                  className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                  onClick={() => {
-                    setisEditModalOpen(false);
-                  }}
-                >
-                  취소
+                          {["email"].includes(val.accessor) && (
+                            <li className="flex items-center">
+                              <div className="w-28 flex pl-1">{"패스워드"}</div>
+                              <input
+                                defaultValue={""}
+                                {...register_edit("password")}
+                                className="border w-60 p-1 m-1"
+                                type={`text`}
+                              />
+                            </li>
+                          )}
+                        </>
+                      )
+                  )}
+                </ul>
+                <div className="flex justify-end mt-2">
+                  <div
+                    className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                    onClick={() => {
+                      setisEditModalOpen(false);
+                    }}
+                  >
+                    취소
+                  </div>
+                  <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
+                    확인
+                  </button>
                 </div>
-                <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
-                  확인
-                </button>
-              </div>
-            </form>
-          </>
-        }
+              </form>
+            </>
+          ),
+        }}
       />
     </>
   );

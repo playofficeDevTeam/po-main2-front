@@ -28,6 +28,8 @@ export interface findQuestionsForAdmin_findQuestionsForAdmin_questions {
   uniqueness: string | null;
   isAgency: boolean | null;
   user: findQuestionsForAdmin_findQuestionsForAdmin_questions_user | null;
+  product: string | null;
+  isAnalyzed: string | null;
 }
 
 export interface findQuestionsForAdmin_findQuestionsForAdmin {
