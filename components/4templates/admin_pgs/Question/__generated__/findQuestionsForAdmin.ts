@@ -29,6 +29,7 @@ export interface findQuestionsForAdmin_findQuestionsForAdmin_questions {
   isAgency: boolean | null;
   user: findQuestionsForAdmin_findQuestionsForAdmin_questions_user | null;
   product: string | null;
+  serviceInquired: string | null;
   isAnalyzed: string | null;
 }
 

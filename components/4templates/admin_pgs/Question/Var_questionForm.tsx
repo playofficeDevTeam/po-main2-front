@@ -6,6 +6,11 @@ export const questionFormDefalut = [
   { Header: "브랜드명", accessor: "brandName", value: "" },
   { Header: "제품", accessor: "product", value: "" },
   {
+    Header: "문의서비스",
+    accessor: "serviceInquired",
+    value: "",
+  },
+  {
     Header: "분석유무",
     accessor: "isAnalyzed",
     value: "",

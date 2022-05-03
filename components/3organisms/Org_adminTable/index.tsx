@@ -32,6 +32,7 @@ import {
 } from "./Var_tableInputDate";
 import { dateToInput } from "./fn_dateToInput";
 import dayjs from "dayjs";
+import { questionManagementFormDefalut } from "../../4templates/admin_pgs/QuestionManagement/Var_questionManagementForm";
 
 export const TableStyles = styled.div`
   width: max-content;
@@ -312,7 +313,7 @@ function Table({ columns, data, customOptions }) {
             style,
           })}
           className={`tr hover:bg-gray-200 ${
-            index % 2 === 1 ? "bg-white" : "bg-gray-50"
+            index % 2 === 0 ? "bg-white" : "bg-gray-50"
           }`}
         >
           {row.cells.map((cell, idx) => {
@@ -338,9 +339,12 @@ function Table({ columns, data, customOptions }) {
                       <div className="">{cell.render("Cell")}</div>
 
                       {/* 수정버튼 */}
-                      {!["selection", "id", "createdAt"].includes(
-                        cell.column.id
-                      ) && (
+                      {![
+                        "selection",
+                        "id",
+                        "createdAt",
+                        ...customOptions.removeEditBtn,
+                      ].includes(cell.column.id) && (
                         <div
                           className="hidden group-hover:block"
                           onClick={() => {
@@ -365,6 +369,7 @@ function Table({ columns, data, customOptions }) {
                                 {}
                               )
                             );
+
                             setisModalOpen_edit(true);
                             setTimeout(() => {
                               customOptions.setEditFocus(cell.column.id);
@@ -418,6 +423,15 @@ function Table({ columns, data, customOptions }) {
                   <div
                     className="center w-20 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500"
                     onClick={() => {
+                      customOptions.setCreateReset(
+                        questionManagementFormDefalut.reduce(
+                          (pre, cur) => ({
+                            ...pre,
+                            [cur.accessor]: cur.value,
+                          }),
+                          {}
+                        )
+                      );
                       setTimeout(() => {
                         customOptions.setCreateFocus();
                       }, 100);

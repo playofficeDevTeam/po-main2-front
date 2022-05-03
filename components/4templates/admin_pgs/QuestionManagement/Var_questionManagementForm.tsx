@@ -1,31 +1,16 @@
 import { atom, useRecoilState } from "recoil";
+import { dateSmall } from "./fn_DateSmall";
 
 export const questionManagementFormDefalut = [
   { Header: "생성일", accessor: "createdAt", value: "" },
-  { Header: "브랜드명(R)", accessor: "brandName_partner", value: "" },
   { Header: "브랜드명", accessor: "brandName", value: "" },
+  { Header: "스케쥴", accessor: "stateDate", value: dateSmall(new Date()) },
+  { Header: "제목", accessor: "stateName", value: "" },
+  { Header: "상태", accessor: "state", value: "" },
+  { Header: "시간", accessor: "stateTime", value: "" },
+  { Header: "비고", accessor: "note", value: "" },
   { Header: "제품", accessor: "product", value: "" },
-  {
-    Header: "분석유무",
-    accessor: "isAnalyzed",
-    value: "",
-  },
-  { Header: "이름", accessor: "name", value: "" },
-  { Header: "연락처", accessor: "phoneNumber", value: "" },
-  { Header: "이메일", accessor: "email", value: "" },
-  {
-    Header: "예산",
-    accessor: "budget",
-    value: "",
-  },
-  { Header: "제품 링크", accessor: "productLink", value: "" },
-  { Header: "특이사항", accessor: "uniqueness", value: "" },
-  {
-    Header: "대행사",
-    accessor: "isAgency",
-    value: "",
-  },
-  { Header: "태그", accessor: "tags", value: "" },
+  { Header: "문의서비스", accessor: "serviceInquired", value: "" },
   { Header: "dataId", accessor: "id", value: "" },
 ];
 

@@ -44,6 +44,11 @@ const listsData = [
     url: "/admin/question",
   },
   {
+    icon: <i className="fas fa-question-circle"></i>,
+    title: "문의관리",
+    url: "/admin/question-management",
+  },
+  {
     icon: <i className="fas fa-shopping-basket"></i>,
     title: "서비스",
     url: "/admin/item",

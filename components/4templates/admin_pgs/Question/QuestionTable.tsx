@@ -54,6 +54,7 @@ export const FIND_QUESTIONS_FOR_ADMIN = gql`
           nameId
         }
         product
+        serviceInquired
         isAnalyzed
       }
     }
@@ -117,6 +118,12 @@ export default function App() {
       },
 
       { Header: "제품", accessor: "product", width: 150, sortDescFirst: true },
+      {
+        Header: "문의서비스",
+        accessor: "serviceInquired",
+        width: 150,
+        sortDescFirst: true,
+      },
       {
         Header: "분석유무",
         accessor: "isAnalyzed",
@@ -282,6 +289,7 @@ export default function App() {
               brandName: data.brandName,
               brandName_partner: data.brandName_partner,
               product: data.product,
+              serviceInquired: data.serviceInquired,
               isAnalyzed: data.isAnalyzed,
               name: data.name,
               phoneNumber: data.phoneNumber,
@@ -326,6 +334,7 @@ export default function App() {
               brandName: data.brandName,
               brandName_partner: data.brandName_partner,
               product: data.product,
+              serviceInquired: data.serviceInquired,
               isAnalyzed: data.isAnalyzed,
               name: data.name,
               phoneNumber: data.phoneNumber,
@@ -366,7 +375,9 @@ export default function App() {
         columns={columns}
         data={questionsData}
         customOptions={{
-          refetch: refetch,
+          refetch: () => {
+            tokenCheck("query", refetch);
+          },
           deleteMutation: (id) => {
             tokenCheck("mutation", () => {
               deleteQuestionForAdminMutation({

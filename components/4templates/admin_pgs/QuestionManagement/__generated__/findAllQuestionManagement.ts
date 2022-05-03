@@ -12,6 +12,9 @@ import { FindAllQuestionManagementInput } from "./../../../../../__generated__/g
 export interface findAllQuestionManagement_findAllQuestionManagement_questionManagements_question {
   __typename: "Question";
   id: number;
+  brandName: string | null;
+  product: string | null;
+  serviceInquired: string | null;
 }
 
 export interface findAllQuestionManagement_findAllQuestionManagement_questionManagements {
@@ -20,6 +23,7 @@ export interface findAllQuestionManagement_findAllQuestionManagement_questionMan
   createdAt: any;
   stateDate: any | null;
   stateName: string | null;
+  state: string | null;
   stateTime: string | null;
   note: string | null;
   question: findAllQuestionManagement_findAllQuestionManagement_questionManagements_question | null;

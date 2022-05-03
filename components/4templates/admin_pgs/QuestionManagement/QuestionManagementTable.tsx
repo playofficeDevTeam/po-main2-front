@@ -2,9 +2,7 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { useMemo, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import Org_adminTable, {
-  SelectColumnFilter,
-} from "../../../3organisms/Org_adminTable";
+import Org_adminTable from "../../../3organisms/Org_adminTable";
 import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
 import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
 import { isModal_adminEditOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
@@ -15,25 +13,10 @@ import {
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import { datePrettier } from "../Question/fn_DatePrettier";
 import { formSelector } from "../Question/fn_formSelector";
-import {
-  FIND_QUESTIONS_FOR_ADMIN,
-  CREATE_QUESTION_FOR_ADMIN,
-  EDIT_QUESTION_FOR_ADMIN,
-  DELETE_QUESTION_FOR_ADMIN,
-} from "../Question/QuestionTable";
+
 import { questionFormDefalut } from "../Question/Var_questionForm";
-import {
-  createQuestionForAdmin,
-  createQuestionForAdminVariables,
-} from "../Question/__generated__/createQuestionForAdmin";
-import {
-  deleteQuestionForAdmin,
-  deleteQuestionForAdminVariables,
-} from "../Question/__generated__/deleteQuestionForAdmin";
-import {
-  editQuestionForAdmin,
-  editQuestionForAdminVariables,
-} from "../Question/__generated__/editQuestionForAdmin";
+import { dateSmall } from "./fn_DateSmall";
+
 import {
   questionManagementFormData,
   questionManagementFormDefalut,
@@ -65,10 +48,14 @@ export const FIND_ALL_QUESTION_MANAGEMENT = gql`
         createdAt
         stateDate
         stateName
+        state
         stateTime
         note
         question {
           id
+          brandName
+          product
+          serviceInquired
         }
         questionId
       }
@@ -121,74 +108,40 @@ export default function App() {
         sortDescFirst: true,
       },
       {
-        Header: "브랜드명(R)",
-        accessor: "brandName_partner",
-        width: 150,
-        sortDescFirst: true,
-      },
-      {
         Header: "브랜드명",
         accessor: "brandName",
         width: 150,
         sortDescFirst: true,
       },
+      {
+        Header: "스케쥴",
+        accessor: "stateDate",
+        width: 150,
+        sortDescFirst: true,
+      },
+      {
+        Header: "제목",
+        accessor: "stateName",
+        width: 150,
+        sortDescFirst: true,
+      },
+      { Header: "상태", accessor: "state", width: 150, sortDescFirst: true },
+      {
+        Header: "시간",
+        accessor: "stateTime",
+        width: 150,
+        sortDescFirst: true,
+      },
+      { Header: "비고", accessor: "note", width: 150, sortDescFirst: true },
 
       { Header: "제품", accessor: "product", width: 150, sortDescFirst: true },
       {
-        Header: "분석유무",
-        accessor: "isAnalyzed",
+        Header: "문의서비스",
+        accessor: "serviceInquired",
         width: 150,
         sortDescFirst: true,
       },
-      { Header: "이름", accessor: "name", width: 150, sortDescFirst: true },
-      {
-        Header: "연락처",
-        accessor: "phoneNumber",
-        width: 150,
-        sortDescFirst: true,
-      },
-      { Header: "이메일", accessor: "email", width: 150, sortDescFirst: true },
-      {
-        Header: "예산",
-        accessor: "budget",
-        width: 150,
-        Filter: SelectColumnFilter,
-
-        sortDescFirst: true,
-      },
-      {
-        Header: "제품 링크",
-        accessor: "productLink",
-        width: 150,
-
-        sortDescFirst: true,
-      },
-      {
-        Header: "특이사항",
-        accessor: "uniqueness",
-        width: 150,
-
-        sortDescFirst: true,
-      },
-      {
-        Header: "대행사",
-        accessor: "isAgency",
-        width: 100,
-        Filter: SelectColumnFilter,
-
-        sortDescFirst: true,
-      },
-      {
-        Header: "태그",
-        accessor: "tags",
-        width: 150,
-        sortDescFirst: true,
-      },
-      {
-        Header: "dataId",
-        accessor: "id",
-        width: 0,
-      },
+      { Header: "dataId", accessor: "id", width: 0 },
     ],
     []
   );
@@ -217,12 +170,16 @@ export default function App() {
     tokenCheck("query", refetch);
   }, [findAllQuestionManagementData]);
 
-  const questionsData = useMemo(
+  const questionManagementData = useMemo(
     () =>
       findAllQuestionManagementData?.findAllQuestionManagement.questionManagements?.map(
         (val, idx) => ({
           ...val,
           createdAt: datePrettier(val.createdAt),
+          stateDate: dateSmall(val.stateDate),
+          brandName: val.question?.brandName,
+          product: val.question?.product,
+          serviceInquired: val.question?.serviceInquired,
         })
       ),
     [findAllQuestionManagementData]
@@ -294,6 +251,9 @@ export default function App() {
   const onSubmit_create = (data) => {
     tokenCheck("mutation", async () => {
       try {
+        if (data.stateDate === "") {
+          throw "스케쥴 날짜를 입력해주세요";
+        }
         await createQuestionManagementMutation({
           variables: {
             input: {
@@ -332,22 +292,19 @@ export default function App() {
   const onSubmit_edit = (data) => {
     tokenCheck("mutation", async () => {
       try {
-        await editQuestionForAdminMutation({
+        if (data.stateDate === "") {
+          throw "스케쥴 날짜를 입력해주세요";
+        }
+        await editQuestionManagementMutation({
           variables: {
             input: {
-              brandName: data.brandName,
-              brandName_partner: data.brandName_partner,
-              product: data.product,
-              isAnalyzed: data.isAnalyzed,
-              name: data.name,
-              phoneNumber: data.phoneNumber,
-              email: data.email,
-              budget: data.budget,
-              productLink: data.productLink,
-              uniqueness: data.uniqueness,
-              isAgency: data.isAgency === "true" ? true : false,
-              tags: data.tags,
-              id: +formSelector("id", questionForm),
+              stateDate: data.stateDate,
+              stateName: data.stateName,
+              state: data.state,
+              stateTime: data.stateTime,
+              note: data.note,
+              questionId: data.questionId,
+              id: +formSelector("id", questionManagementForm),
             },
           },
         });
@@ -366,22 +323,28 @@ export default function App() {
     });
   };
 
-  if (findQuestionsForAdminError) {
-    return <>권한이 없습니다.</>;
+  if (findAllQuestionManagementError) {
+    return (
+      <>
+        권한이 없습니다. <br /> {findAllQuestionManagementError.message}
+      </>
+    );
   }
-  if (findQuestionsForAdminLoading) {
+  if (findAllQuestionManagementLoading) {
     return <div className="">로딩중</div>;
   }
   return (
     <>
       <Org_adminTable
         columns={columns}
-        data={questionsData}
+        data={questionManagementData}
         customOptions={{
-          refetch: refetch,
+          refetch: () => {
+            tokenCheck("query", refetch);
+          },
           deleteMutation: (id) => {
             tokenCheck("mutation", () => {
-              deleteQuestionForAdminMutation({
+              deleteQuestionManagementMutation({
                 variables: {
                   input: {
                     id,
@@ -391,33 +354,48 @@ export default function App() {
             });
           },
           setCreateFocus: () => {
-            setFocus_create("brandName");
+            setFocus_create("stateName");
           },
-          setEditRecoil: setQuestionForm,
+          setCreateReset: reset_create,
+          setEditRecoil: setQuestionManagementForm,
           setEditReset: reset_edit,
           setEditFocus: setFocus_edit,
+          removeEditBtn: ["brandName", "product", "serviceInquired"],
           createForm: (
             <>
               <form onSubmit={handleSubmit_create(onSubmit_create)}>
                 <ul>
-                  {questionForm.map(
+                  {questionManagementForm.map(
                     (val, idx) =>
-                      !["id", "createdAt"].includes(val.accessor) && (
+                      ![
+                        "id",
+                        "createdAt",
+                        "brandName",
+                        "product",
+                        "serviceInquired",
+                      ].includes(val.accessor) && (
                         <li key={idx} className="flex items-center">
                           <div className="w-28 flex pl-1">{val.Header}</div>
-                          {!["uniqueness"].includes(val.accessor) ? (
+                          {["stateDate"].includes(val.accessor) ? (
+                            <input
+                              defaultValue={val.value}
+                              {...register_create(val.accessor)}
+                              className="border w-60 p-1 m-1"
+                              type={`date`}
+                            />
+                          ) : ["note"].includes(val.accessor) ? (
+                            <textarea
+                              defaultValue={val.value}
+                              {...register_create(val.accessor)}
+                              className="border w-60 p-1 m-1"
+                            ></textarea>
+                          ) : (
                             <input
                               defaultValue={val.value}
                               {...register_create(val.accessor)}
                               className="border w-60 p-1 m-1"
                               type={`text`}
                             />
-                          ) : (
-                            <textarea
-                              defaultValue={val.value}
-                              {...register_create(val.accessor)}
-                              className="border w-60 p-1 m-1"
-                            ></textarea>
                           )}
                         </li>
                       )
@@ -428,14 +406,13 @@ export default function App() {
                     className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
                     onClick={() => {
                       reset_create(
-                        questionFormDefalut.reduce(
+                        questionManagementFormDefalut.reduce(
                           (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
                           {}
                         )
                       );
-
                       setTimeout(() => {
-                        setFocus_create("brandName");
+                        setFocus_create("stateName");
                       }, 0);
                     }}
                   >
@@ -460,24 +437,37 @@ export default function App() {
             <>
               <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
                 <ul>
-                  {questionForm.map(
+                  {questionManagementForm.map(
                     (val, idx) =>
-                      !["id", "createdAt"].includes(val.accessor) && (
+                      ![
+                        "id",
+                        "createdAt",
+                        "brandName",
+                        "product",
+                        "serviceInquired",
+                      ].includes(val.accessor) && (
                         <li key={idx} className="flex items-center">
                           <div className="w-28 flex pl-1">{val.Header}</div>
-                          {!["uniqueness"].includes(val.accessor) ? (
+                          {["stateDate"].includes(val.accessor) ? (
+                            <input
+                              defaultValue={val.value}
+                              {...register_edit(val.accessor)}
+                              className="border w-60 p-1 m-1"
+                              type={`date`}
+                            />
+                          ) : ["note"].includes(val.accessor) ? (
+                            <textarea
+                              defaultValue={val.value}
+                              {...register_edit(val.accessor)}
+                              className="border w-60 p-1 m-1"
+                            ></textarea>
+                          ) : (
                             <input
                               defaultValue={val.value}
                               {...register_edit(val.accessor)}
                               className="border w-60 p-1 m-1"
                               type={`text`}
                             />
-                          ) : (
-                            <textarea
-                              defaultValue={val.value}
-                              {...register_edit(val.accessor)}
-                              className="border w-60 p-1 m-1"
-                            ></textarea>
                           )}
                         </li>
                       )

@@ -322,7 +322,9 @@ const App = () => {
         columns={columns}
         data={usersData}
         customOptions={{
-          refetch: refetch,
+          refetch: () => {
+            tokenCheck("query", refetch);
+          },
           deleteMutation: (id) => {
             tokenCheck("mutation", () => {
               deleteUserMutation({

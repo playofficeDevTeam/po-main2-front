@@ -111,6 +111,7 @@ export interface CreateQuestionForAdminInput {
   isAgency?: boolean | null;
   user?: UserInputType | null;
   product?: string | null;
+  serviceInquired?: string | null;
   isAnalyzed?: string | null;
   questionManagements?: questionManagementInputType[] | null;
   brandName_partner?: string | null;
@@ -131,6 +132,7 @@ export interface CreateQuestionInput {
   isAgency?: boolean | null;
   user?: UserInputType | null;
   product?: string | null;
+  serviceInquired?: string | null;
   isAnalyzed?: string | null;
   questionManagements?: questionManagementInputType[] | null;
 }
@@ -202,6 +204,7 @@ export interface EditQuestionInput {
   isAgency?: boolean | null;
   user?: UserInputType | null;
   product?: string | null;
+  serviceInquired?: string | null;
   isAnalyzed?: string | null;
   questionManagements?: questionManagementInputType[] | null;
   brandName_partner?: string | null;
@@ -335,6 +338,7 @@ export interface questionInputType {
   isAgency?: boolean | null;
   user?: UserInputType | null;
   product?: string | null;
+  serviceInquired?: string | null;
   isAnalyzed?: string | null;
   questionManagements?: questionManagementInputType[] | null;
 }
