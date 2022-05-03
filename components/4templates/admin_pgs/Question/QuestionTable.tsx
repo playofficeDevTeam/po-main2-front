@@ -404,19 +404,19 @@ export default function App() {
                       !["id", "createdAt"].includes(val.accessor) && (
                         <li key={idx} className="flex items-center">
                           <div className="w-28 flex pl-1">{val.Header}</div>
-                          {!["uniqueness"].includes(val.accessor) ? (
+                          {["uniqueness"].includes(val.accessor) ? (
+                            <textarea
+                              defaultValue={val.value}
+                              {...register_create(val.accessor)}
+                              className="border w-60 p-1 m-1"
+                            ></textarea>
+                          ) : (
                             <input
                               defaultValue={val.value}
                               {...register_create(val.accessor)}
                               className="border w-60 p-1 m-1"
                               type={`text`}
                             />
-                          ) : (
-                            <textarea
-                              defaultValue={val.value}
-                              {...register_create(val.accessor)}
-                              className="border w-60 p-1 m-1"
-                            ></textarea>
                           )}
                         </li>
                       )

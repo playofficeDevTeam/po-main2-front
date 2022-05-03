@@ -1,10 +1,11 @@
 import { atom, useRecoilState } from "recoil";
 import { dateSmall } from "./fn_DateSmall";
 
+const nowDate = dateSmall(new Date());
 export const questionManagementFormDefalut = [
   { Header: "생성일", accessor: "createdAt", value: "" },
   { Header: "브랜드명", accessor: "brandName", value: "" },
-  { Header: "스케쥴", accessor: "stateDate", value: dateSmall(new Date()) },
+  { Header: "스케쥴", accessor: "stateDate", value: nowDate },
   { Header: "제목", accessor: "stateName", value: "" },
   { Header: "상태", accessor: "state", value: "" },
   { Header: "시간", accessor: "stateTime", value: "" },
@@ -15,7 +16,7 @@ export const questionManagementFormDefalut = [
 ];
 
 export const questionManagementFormData = atom({
-  key: "questionFormData",
+  key: "questionManagementFormData",
   default: questionManagementFormDefalut,
 });
 

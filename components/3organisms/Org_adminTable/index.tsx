@@ -1,6 +1,5 @@
 import {
   forwardRef,
-  memo,
   useCallback,
   useEffect,
   useMemo,
@@ -32,7 +31,6 @@ import {
 } from "./Var_tableInputDate";
 import { dateToInput } from "./fn_dateToInput";
 import dayjs from "dayjs";
-import { questionManagementFormDefalut } from "../../4templates/admin_pgs/QuestionManagement/Var_questionManagementForm";
 
 export const TableStyles = styled.div`
   width: max-content;
@@ -343,7 +341,7 @@ function Table({ columns, data, customOptions }) {
                         "selection",
                         "id",
                         "createdAt",
-                        ...customOptions.removeEditBtn,
+                        ...(customOptions.removeEditBtn ?? []),
                       ].includes(cell.column.id) && (
                         <div
                           className="hidden group-hover:block"
@@ -423,15 +421,6 @@ function Table({ columns, data, customOptions }) {
                   <div
                     className="center w-20 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500"
                     onClick={() => {
-                      customOptions.setCreateReset(
-                        questionManagementFormDefalut.reduce(
-                          (pre, cur) => ({
-                            ...pre,
-                            [cur.accessor]: cur.value,
-                          }),
-                          {}
-                        )
-                      );
                       setTimeout(() => {
                         customOptions.setCreateFocus();
                       }, 100);
