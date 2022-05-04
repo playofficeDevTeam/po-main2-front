@@ -31,7 +31,9 @@ export const useGtm = (data = data1) => {
     };
     if (!isSent) {
       waitForFbq(() => {
-        TagManager.dataLayer(gtmArgs);
+        setTimeout(() => {
+          TagManager.dataLayer(gtmArgs);
+        }, 100);
       });
     }
   };
