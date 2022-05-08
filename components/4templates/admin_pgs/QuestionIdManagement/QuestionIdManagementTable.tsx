@@ -1,6 +1,6 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
 import { useMemo, useEffect } from "react";
-import { isChrome } from "react-device-detect";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import Org_adminTable from "../../../3organisms/Org_adminTable";
@@ -16,32 +16,40 @@ import { datePrettier } from "../Question/fn_DatePrettier";
 import { formSelector } from "../Question/fn_formSelector";
 
 import { questionFormDefalut } from "../Question/Var_questionForm";
-import { dateSmall } from "./fn_DateSmall";
-
+import { dateSmall } from "../QuestionManagement/fn_DateSmall";
+import {
+  CREATE_QUESTION_MANAGEMENT,
+  EDIT_QUESTION_MANAGEMENT,
+  DELETE_QUESTION_MANAGEMENT,
+} from "../QuestionManagement/QuestionManagementTable";
 import {
   questionManagementFormData,
   questionManagementFormDefalut,
-} from "./Var_questionManagementForm";
+} from "../QuestionManagement/Var_questionManagementForm";
 import {
   createQuestionManagement,
   createQuestionManagementVariables,
-} from "./__generated__/createQuestionManagement";
+} from "../QuestionManagement/__generated__/createQuestionManagement";
 import {
   deleteQuestionManagement,
   deleteQuestionManagementVariables,
-} from "./__generated__/deleteQuestionManagement";
+} from "../QuestionManagement/__generated__/deleteQuestionManagement";
 import {
   editQuestionManagement,
   editQuestionManagementVariables,
-} from "./__generated__/editQuestionManagement";
+} from "../QuestionManagement/__generated__/editQuestionManagement";
 import {
-  findAllQuestionManagement,
-  findAllQuestionManagementVariables,
-} from "./__generated__/findAllQuestionManagement";
+  findIdQuestionManagement,
+  findIdQuestionManagementVariables,
+} from "./__generated__/findIdQuestionManagement";
+import {
+  findOneQuestion,
+  findOneQuestionVariables,
+} from "./__generated__/findOneQuestion";
 
-export const FIND_ALL_QUESTION_MANAGEMENT = gql`
-  query findAllQuestionManagement($input: FindAllQuestionManagementInput!) {
-    findAllQuestionManagement(input: $input) {
+export const FIND_ID_QUESTION_MANAGEMENT = gql`
+  query findIdQuestionManagement($input: FindIdQuestionManagementInput!) {
+    findIdQuestionManagement(input: $input) {
       ok
       error
       questionManagements {
@@ -64,34 +72,23 @@ export const FIND_ALL_QUESTION_MANAGEMENT = gql`
   }
 `;
 
-export const CREATE_QUESTION_MANAGEMENT = gql`
-  mutation createQuestionManagement($input: CreateQuestionManagementInput!) {
-    createQuestionManagement(input: $input) {
+export const FIND_ONE_QUESTION = gql`
+  query findOneQuestion($input: FindOneQuestionInput!) {
+    findOneQuestion(input: $input) {
       ok
       error
-    }
-  }
-`;
-
-export const EDIT_QUESTION_MANAGEMENT = gql`
-  mutation editQuestionManagement($input: EditQuestionManagementInput!) {
-    editQuestionManagement(input: $input) {
-      ok
-      error
-    }
-  }
-`;
-
-export const DELETE_QUESTION_MANAGEMENT = gql`
-  mutation deleteQuestionManagement($input: DeleteQuestionManagementInput!) {
-    deleteQuestionManagement(input: $input) {
-      ok
-      error
+      question {
+        id
+        brandName
+      }
     }
   }
 `;
 
 export default function App() {
+  const router = useRouter();
+  const { id } = router.query;
+  const questionId = +(id + "");
   const [questionManagementForm, setQuestionManagementForm] = useRecoilState(
     questionManagementFormData
   );
@@ -143,7 +140,6 @@ export default function App() {
         sortDescFirst: true,
       },
       { Header: "dataId", accessor: "id", width: 0 },
-      { Header: "relationId", accessor: "relationId", width: 0 },
     ],
     []
   );
@@ -153,28 +149,40 @@ export default function App() {
 
   //쿼리
   const {
-    loading: findAllQuestionManagementLoading,
-    error: findAllQuestionManagementError,
-    data: findAllQuestionManagementData,
+    loading: findIdQuestionManagementLoading,
+    error: findIdQuestionManagementError,
+    data: findIdQuestionManagementData,
     refetch,
-  } = useQuery<findAllQuestionManagement, findAllQuestionManagementVariables>(
-    FIND_ALL_QUESTION_MANAGEMENT,
+  } = useQuery<findIdQuestionManagement, findIdQuestionManagementVariables>(
+    FIND_ID_QUESTION_MANAGEMENT,
     {
       variables: {
         input: {
           fromDate: dateToInput(tableFromDateState),
           toDate: dateToInput(tableToDateState),
+          QuestionId: questionId,
         },
       },
     }
   );
   useEffect(() => {
     tokenCheck("query", refetch);
-  }, [findAllQuestionManagementData]);
+  }, [findIdQuestionManagementData]);
+
+  const { data: findOneQuestionData } = useQuery<
+    findOneQuestion,
+    findOneQuestionVariables
+  >(FIND_ONE_QUESTION, {
+    variables: {
+      input: {
+        id: questionId,
+      },
+    },
+  });
 
   const questionManagementData = useMemo(
     () =>
-      findAllQuestionManagementData?.findAllQuestionManagement.questionManagements?.map(
+      findIdQuestionManagementData?.findIdQuestionManagement.questionManagements?.map(
         (val, idx) => ({
           ...val,
           createdAt: datePrettier(val.createdAt),
@@ -182,10 +190,9 @@ export default function App() {
           brandName: val.question?.brandName,
           product: val.question?.product,
           serviceInquired: val.question?.serviceInquired,
-          relationId: val.question?.id,
         })
       ),
-    [findAllQuestionManagementData]
+    [findIdQuestionManagementData]
   );
 
   //뮤테이션
@@ -265,7 +272,7 @@ export default function App() {
               state: data.state,
               stateTime: data.stateTime,
               note: data.note,
-              questionId: data.questionId,
+              questionId: questionId,
             },
           },
         });
@@ -306,7 +313,7 @@ export default function App() {
               state: data.state,
               stateTime: data.stateTime,
               note: data.note,
-              questionId: data.questionId,
+              questionId: questionId,
               id: +formSelector("id", questionManagementForm),
             },
           },
@@ -326,14 +333,14 @@ export default function App() {
     });
   };
 
-  if (findAllQuestionManagementError) {
+  if (findIdQuestionManagementError) {
     return (
       <>
-        권한이 없습니다. <br /> {findAllQuestionManagementError.message}
+        권한이 없습니다. <br /> {findIdQuestionManagementError.message}
       </>
     );
   }
-  if (findAllQuestionManagementLoading) {
+  if (findIdQuestionManagementLoading) {
     return <div className="">로딩중</div>;
   }
   return (
@@ -342,11 +349,7 @@ export default function App() {
         columns={columns}
         data={questionManagementData}
         customOptions={{
-          openDetailPage: (selectedFlatRows) => {
-            selectedFlatRows.forEach((val) => {
-              window.open(window.location.href + "/" + val.values.relationId);
-            });
-          },
+          title: findOneQuestionData?.findOneQuestion.question?.brandName,
           refetch: () => {
             tokenCheck("query", refetch);
           },
@@ -369,6 +372,79 @@ export default function App() {
           setEditReset: reset_edit,
           setEditFocus: setFocus_edit,
           removeEditBtn: ["brandName", "product", "serviceInquired"],
+          createForm: (
+            <>
+              <form onSubmit={handleSubmit_create(onSubmit_create)}>
+                <ul>
+                  {questionManagementForm.map(
+                    (val, idx) =>
+                      ![
+                        "id",
+                        "createdAt",
+                        "brandName",
+                        "product",
+                        "serviceInquired",
+                        "relationId",
+                      ].includes(val.accessor) && (
+                        <li key={idx} className="flex items-center">
+                          <div className="w-28 flex pl-1">{val.Header}</div>
+                          {["stateDate"].includes(val.accessor) ? (
+                            <input
+                              defaultValue={val.value}
+                              {...register_create(val.accessor)}
+                              className="border w-60 p-1 m-1"
+                              type={`date`}
+                            />
+                          ) : ["note"].includes(val.accessor) ? (
+                            <textarea
+                              defaultValue={val.value}
+                              {...register_create(val.accessor)}
+                              className="border w-60 p-1 m-1"
+                            ></textarea>
+                          ) : (
+                            <input
+                              defaultValue={val.value}
+                              {...register_create(val.accessor)}
+                              className="border w-60 p-1 m-1"
+                              type={`text`}
+                            />
+                          )}
+                        </li>
+                      )
+                  )}
+                </ul>
+                <div className="flex justify-end mt-2">
+                  <div
+                    className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                    onClick={() => {
+                      reset_create(
+                        questionManagementFormDefalut.reduce(
+                          (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
+                          {}
+                        )
+                      );
+                      setTimeout(() => {
+                        setFocus_create("stateName");
+                      }, 0);
+                    }}
+                  >
+                    초기화
+                  </div>
+                  <div
+                    className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                    onClick={() => {
+                      setisModalOpen(false);
+                    }}
+                  >
+                    취소
+                  </div>
+                  <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
+                    확인
+                  </button>
+                </div>
+              </form>
+            </>
+          ),
           editForm: (
             <>
               <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
@@ -381,6 +457,7 @@ export default function App() {
                         "brandName",
                         "product",
                         "serviceInquired",
+                        "relationId",
                       ].includes(val.accessor) && (
                         <li key={idx} className="flex items-center">
                           <div className="w-28 flex pl-1">{val.Header}</div>

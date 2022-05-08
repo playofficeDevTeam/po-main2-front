@@ -181,6 +181,29 @@ export interface DeleteUserInput {
   id: number;
 }
 
+export interface EditAdminInput {
+  createdAt?: any | null;
+  updatedAt?: any | null;
+  campaignsToManagement?: CampaignInputType[] | null;
+  campaignsSold?: CampaignInputType[] | null;
+  password?: string | null;
+  nickName?: string | null;
+  role?: AdminRole | null;
+  refreshToken?: string | null;
+  id: number;
+}
+
+export interface EditMeForAdminInput {
+  createdAt?: any | null;
+  updatedAt?: any | null;
+  campaignsToManagement?: CampaignInputType[] | null;
+  campaignsSold?: CampaignInputType[] | null;
+  password?: string | null;
+  nickName?: string | null;
+  role?: AdminRole | null;
+  refreshToken?: string | null;
+}
+
 export interface EditPaymentFormDataInput {
   id: number;
   brandName?: string | null;
@@ -245,6 +268,16 @@ export interface EditUserInput {
 export interface FindAllQuestionManagementInput {
   fromDate: any;
   toDate: any;
+}
+
+export interface FindIdQuestionManagementInput {
+  fromDate: any;
+  toDate: any;
+  QuestionId: number;
+}
+
+export interface FindOneQuestionInput {
+  id: number;
 }
 
 export interface FindPaymentInput {

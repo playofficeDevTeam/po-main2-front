@@ -317,7 +317,7 @@ function Table({ columns, data, customOptions }) {
           {row.cells.map((cell, idx) => {
             return (
               <>
-                {!["id"].includes(cell.column.id) && (
+                {!["id", "relationId"].includes(cell.column.id) && (
                   <div
                     {...cell.getCellProps()}
                     className={`thin-scroll  td group border-r px-2 border-gray-300  ${
@@ -369,9 +369,9 @@ function Table({ columns, data, customOptions }) {
                             );
 
                             setisModalOpen_edit(true);
-                            setTimeout(() => {
-                              customOptions.setEditFocus(cell.column.id);
-                            }, 100);
+                            // setTimeout(() => {
+                            //   customOptions.setEditFocus(cell.column.id);
+                            // }, 100);
                           }}
                         >
                           <div className="ml-1">
@@ -413,27 +413,35 @@ function Table({ columns, data, customOptions }) {
       {/* 메뉴 */}
       <div className="flex py-2">
         {/* 생성 */}
-        <div className="mr-3 cursor-pointer">
-          <Modal_adminCreate
-            data={{
-              button: (
-                <>
-                  <div
-                    className="center w-20 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500"
-                    onClick={() => {
-                      setTimeout(() => {
-                        customOptions.setCreateFocus();
-                      }, 100);
-                    }}
-                  >
-                    <i className="fas fa-plus mr-2 text-sm"></i> 생성
-                  </div>
-                </>
-              ),
-              modal: customOptions.createForm,
-            }}
-          />
-        </div>
+        {customOptions.createForm ? (
+          <>
+            <div className="mr-3 cursor-pointer">
+              <Modal_adminCreate
+                data={{
+                  button: (
+                    <>
+                      <div
+                        className="center w-20 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500"
+                        onClick={() => {
+                          setTimeout(() => {
+                            customOptions.setCreateFocus();
+                          }, 100);
+                        }}
+                      >
+                        <i className="fas fa-plus mr-2 text-sm"></i> 생성
+                      </div>
+                    </>
+                  ),
+                  modal: customOptions.createForm,
+                }}
+              />
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
+
+        {/* 수정모달 */}
         <div className="">
           <Modal_adminEdit
             data={{ button: <></>, modal: customOptions.editForm }}
@@ -489,19 +497,46 @@ function Table({ columns, data, customOptions }) {
         {/* 삭제 */}
         {selectedFlatRows.length !== 0 && (
           <div
-            className=" cursor-pointer center w-14 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300 "
+            className="mr-3 cursor-pointer center w-14 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300 "
             onClick={() => {
-              const returnValue = confirm("정말로 삭제하시겠습니까?");
-              if (returnValue) {
-                selectedFlatRows.forEach((e) =>
-                  customOptions.deleteMutation(e.original.id)
-                );
+              try {
+                if (selectedFlatRows.length > 4) {
+                  throw "5개 이상의 데이터를 한번에 지울 수 없습니다.";
+                }
+                const returnValue = confirm("정말로 삭제하시겠습니까?");
+                if (returnValue) {
+                  selectedFlatRows.forEach((e) =>
+                    customOptions.deleteMutation(e.original.id)
+                  );
+                }
+              } catch (error) {
+                alert(error);
               }
             }}
           >
             <i className="fas fa-trash-alt"></i>
           </div>
         )}
+
+        {/* {새창열기} */}
+        {selectedFlatRows.length !== 0 && customOptions.openDetailPage ? (
+          <div
+            className="mr-3 cursor-pointer center px-3 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300"
+            onClick={() => {
+              customOptions.openDetailPage(selectedFlatRows);
+              console.log(selectedFlatRows);
+            }}
+          >
+            상세정보 열기
+          </div>
+        ) : (
+          <></>
+        )}
+
+        {/* 타이틀 */}
+        <div className="center h-8 px-3 text-gray-900 font-medium">
+          {customOptions.title}
+        </div>
       </div>
 
       <table {...getTableProps()} className="bg-white">
@@ -568,7 +603,7 @@ function Table({ columns, data, customOptions }) {
             <tr {...headerGroup.getHeaderGroupProps()} key={idx}>
               {headerGroup.headers.map(
                 (column, idx) =>
-                  !["id"].includes(column.id) && (
+                  !["id", "relationId"].includes(column.id) && (
                     <th
                       {...column.getHeaderProps()}
                       className={`${!["id"].includes(column.id) ? "" : ""} `}

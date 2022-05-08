@@ -1,11 +1,22 @@
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { memo, useEffect, useState } from "react";
-import { FIND_ME_FOR_ADMIN } from "../../4templates/admin_pgs/Dashboard/Gql_admin";
+import { useForm } from "react-hook-form";
+import { useRecoilState } from "recoil";
+import Modal1 from "../../1atoms/Modal1";
+import {
+  EDIT_ADMIN,
+  EDIT_ME_FOR_ADMIN,
+  FIND_ME_FOR_ADMIN,
+} from "../../4templates/admin_pgs/Admin/Gql_admin";
+import { editMeForAdmin } from "../../4templates/admin_pgs/Admin/__generated__/editMeForAdmin";
 import { findMeforAdmin } from "../../4templates/admin_pgs/Dashboard/__generated__/findMeforAdmin";
 import { adminLoggedInVar } from "../../common/apollo";
 import { useTokenCheck } from "../../hooks/useTokenCheck";
+import Modal_adminCreate, {
+  isModal_adminCreateOpenAtom,
+} from "../Org_adminTable/Modal_adminCreate";
 
 const listsData = [
   {
@@ -44,7 +55,7 @@ const listsData = [
     url: "/admin/question",
   },
   {
-    icon: <i className="fas fa-question-circle"></i>,
+    icon: <i className="fas fa-question-circle text-orange-600"></i>,
     title: "문의관리",
     url: "/admin/question-management",
   },
@@ -70,14 +81,49 @@ function App() {
     localStorage.removeItem("refreshToken");
   };
 
+  const tokenCheck = useTokenCheck();
+
   const { loading, error, data, refetch } =
     useQuery<findMeforAdmin>(FIND_ME_FOR_ADMIN);
-  const tokenCheck = useTokenCheck();
   useEffect(() => {
     tokenCheck("query", refetch);
   }, [loading]);
 
   const [sideBarOpenState, setSideBarOpenState] = useState(true);
+
+  const [editMeForAdminMutation, { data: editMeForAdminData }] =
+    useMutation<editMeForAdmin>(EDIT_ME_FOR_ADMIN);
+
+  const {
+    register,
+    handleSubmit,
+    setFocus,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    try {
+      if (data.newPassword === data.newPasswordCheck) {
+        tokenCheck("mutation", () => {
+          editMeForAdminMutation({
+            variables: {
+              input: {
+                password: data.newPassword,
+              },
+            },
+          });
+        });
+        setisModalOpen(false);
+      } else {
+        throw "비밀번호가 일치하지 않습니다";
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const [isModalOpen, setisModalOpen] = useRecoilState(
+    isModal_adminCreateOpenAtom
+  );
 
   return (
     <div className=" relative z-50">
@@ -112,7 +158,9 @@ function App() {
                 <Link href={val.url}>
                   <a
                     className={`flex items-center p-2 cursor-pointer  rounded-md hover:bg-gray-100 ${
-                      pathname === val.url ? "bg-gray-100" : ""
+                      pathname.split("/")[2] === val.url.split("/")[2]
+                        ? "bg-gray-100"
+                        : ""
                     } ${sideBarOpenState ? "pl-4 " : " justify-center"}`}
                   >
                     <div className="w-5 text-center text-gray-700">
@@ -129,10 +177,70 @@ function App() {
         </div>
         {sideBarOpenState && (
           <ul>
-            <li className="center">{data?.findMeforAdmin.admin?.email}</li>
+            <li className="center p-1">{data?.findMeforAdmin.admin?.email}</li>
+            <Modal_adminCreate
+              data={{
+                button: (
+                  <>
+                    <li
+                      className="center p-1 cursor-pointer  rounded-md hover:bg-gray-100"
+                      onClick={() => {
+                        setTimeout(() => {
+                          setFocus("newPassword");
+                        }, 100);
+                      }}
+                    >
+                      비밀번호 변경
+                    </li>
+                  </>
+                ),
+                modal: (
+                  <>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                      <ul className=" pb-4">
+                        <li className="flex items-center">
+                          <div className="w-36 flex pl-1">새 비밀번호</div>
+                          <input
+                            {...register("newPassword")}
+                            required
+                            className="border w-60 p-1 m-1"
+                            type={`password`}
+                          />
+                        </li>
+                        {errors.newPassword?.type === "required" &&
+                          "새 비밀번호를 입력해주세요"}
+                        <li className="flex items-center">
+                          <div className="w-36 flex pl-1">새 비밀번호 확인</div>
+                          <input
+                            {...register("newPasswordCheck")}
+                            required
+                            className="border w-60 p-1 m-1"
+                            type={`password`}
+                          />
+                        </li>
+                      </ul>
+                      <div className="flex justify-end mt-2">
+                        <div
+                          className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                          onClick={() => {
+                            setisModalOpen(false);
+                          }}
+                        >
+                          취소
+                        </div>
+                        <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
+                          확인
+                        </button>
+                      </div>
+                    </form>
+                  </>
+                ),
+              }}
+            />
+
             <li>
               <div
-                className="center p-2 cursor-pointer  rounded-md hover:bg-gray-100"
+                className="center p-1 cursor-pointer  rounded-md hover:bg-gray-100"
                 onClick={() => {
                   logout();
                 }}

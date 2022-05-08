@@ -375,6 +375,18 @@ export default function App() {
         columns={columns}
         data={questionsData}
         customOptions={{
+          openDetailPage: (selectedFlatRows) => {
+            selectedFlatRows.forEach((val) => {
+              window.open(
+                window.location.href.replace(
+                  "question",
+                  "question-management"
+                ) +
+                  "/" +
+                  val.values.id
+              );
+            });
+          },
           refetch: () => {
             tokenCheck("query", refetch);
           },

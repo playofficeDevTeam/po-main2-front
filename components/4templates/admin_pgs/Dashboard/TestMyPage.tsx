@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
-import { FIND_ME_FOR_ADMIN } from "./Gql_admin";
+import { FIND_ME_FOR_ADMIN } from "../Admin/Gql_admin";
 import { findMeforAdmin } from "./__generated__/findMeforAdmin";
 import useIsMobile from "/home/app/components/hooks/useIsMobile";
 

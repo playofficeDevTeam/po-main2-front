@@ -13,6 +13,7 @@ export const questionManagementFormDefalut = [
   { Header: "제품", accessor: "product", value: "" },
   { Header: "문의서비스", accessor: "serviceInquired", value: "" },
   { Header: "dataId", accessor: "id", value: "" },
+  { Header: "relationId", accessor: "relationId", value: "" },
 ];
 
 export const questionManagementFormData = atom({
