@@ -20,11 +20,11 @@ export enum UserRole {
 export interface AdminInputType {
   campaignsToManagement: CampaignInputType[];
   campaignsSold: CampaignInputType[];
-  email: string;
-  password: string;
-  nickName: string;
-  role: AdminRole;
-  refreshToken: string;
+  email?: string | null;
+  password?: string | null;
+  nickName?: string | null;
+  role?: AdminRole | null;
+  refreshToken?: string | null;
 }
 
 export interface CampaignInputType {
@@ -69,6 +69,19 @@ export interface CampaignUploadLinkType {
   uploadDate: any;
   uploadLink: string;
   campaignParticipation: CampaignParticipationInput;
+}
+
+export interface CreateAdminSuperInput {
+  id?: number | null;
+  createdAt?: any | null;
+  updatedAt?: any | null;
+  campaignsToManagement?: CampaignInputType[] | null;
+  campaignsSold?: CampaignInputType[] | null;
+  email?: string | null;
+  password?: string | null;
+  nickName?: string | null;
+  role?: AdminRole | null;
+  refreshToken?: string | null;
 }
 
 export interface CreateItemInput {
@@ -169,6 +182,10 @@ export interface CreateUserForAdminInput {
   questions?: questionInputType[] | null;
 }
 
+export interface DeleteAdminInput {
+  id: number;
+}
+
 export interface DeleteQuestionInput {
   id: number;
 }
@@ -186,6 +203,7 @@ export interface EditAdminInput {
   updatedAt?: any | null;
   campaignsToManagement?: CampaignInputType[] | null;
   campaignsSold?: CampaignInputType[] | null;
+  email?: string | null;
   password?: string | null;
   nickName?: string | null;
   role?: AdminRole | null;
@@ -301,12 +319,12 @@ export interface ItemIdAndAmount {
 }
 
 export interface LoginAdminInput {
-  email: string;
-  password: string;
+  email?: string | null;
+  password?: string | null;
 }
 
 export interface RenewalAdminAccessTokenInput {
-  refreshToken: string;
+  refreshToken?: string | null;
 }
 
 export interface UserInputType {

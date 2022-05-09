@@ -6,22 +6,25 @@
 import { AdminRole } from "./../../../../../__generated__/globalTypes";
 
 // ====================================================
-// GraphQL query operation: findMeforAdmin
+// GraphQL query operation: findAllAdmin
 // ====================================================
 
-export interface findMeforAdmin_findMeforAdmin_admin {
+export interface findAllAdmin_findAllAdmin_admins {
   __typename: "Admin";
+  id: number;
+  createdAt: any;
   email: string | null;
+  nickName: string | null;
   role: AdminRole | null;
 }
 
-export interface findMeforAdmin_findMeforAdmin {
-  __typename: "FindAdminOutput";
+export interface findAllAdmin_findAllAdmin {
+  __typename: "FindAllAdminsOutput";
   ok: boolean;
   error: string | null;
-  admin: findMeforAdmin_findMeforAdmin_admin | null;
+  admins: findAllAdmin_findAllAdmin_admins[] | null;
 }
 
-export interface findMeforAdmin {
-  findMeforAdmin: findMeforAdmin_findMeforAdmin;
+export interface findAllAdmin {
+  findAllAdmin: findAllAdmin_findAllAdmin;
 }

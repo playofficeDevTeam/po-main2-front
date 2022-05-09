@@ -79,9 +79,9 @@ function GlobalFilter({
           onChange(e.target.value);
         }}
         placeholder={``}
-        className="border rounded-sm"
+        className="border rounded-sm px-1"
         style={{
-          width: "30rem",
+          width: "26rem",
           fontSize: "1.1rem",
         }}
       />
@@ -356,7 +356,6 @@ function Table({ columns, data, customOptions }) {
                             const filteredCellValues = cellValues.filter(
                               (e) => !["selection"].includes(e.accessor)
                             );
-
                             customOptions.setEditRecoil(filteredCellValues);
                             customOptions.setEditReset(
                               filteredCellValues.reduce(
@@ -369,9 +368,9 @@ function Table({ columns, data, customOptions }) {
                             );
 
                             setisModalOpen_edit(true);
-                            // setTimeout(() => {
-                            //   customOptions.setEditFocus(cell.column.id);
-                            // }, 100);
+                            setTimeout(() => {
+                              customOptions.setEditFocus(cell.column.id);
+                            }, 100);
                           }}
                         >
                           <div className="ml-1">

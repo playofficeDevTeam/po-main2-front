@@ -1,7 +1,12 @@
+import AdminTable from "./AdminTable";
 import useIsMobile from "/home/app/components/hooks/useIsMobile";
 
 export default function App() {
   const isMobile = useIsMobile();
 
-  return <>관리자 페이지</>;
+  return (
+    <>
+      <AdminTable />
+    </>
+  );
 }

@@ -4,9 +4,7 @@ import { useRouter } from "next/router";
 import { memo, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import Modal1 from "../../1atoms/Modal1";
 import {
-  EDIT_ADMIN,
   EDIT_ME_FOR_ADMIN,
   FIND_ME_FOR_ADMIN,
 } from "../../4templates/admin_pgs/Admin/Gql_admin";
@@ -17,6 +15,9 @@ import { useTokenCheck } from "../../hooks/useTokenCheck";
 import Modal_adminCreate, {
   isModal_adminCreateOpenAtom,
 } from "../Org_adminTable/Modal_adminCreate";
+import Modal_changPassword, {
+  isModal_changePasswordAtom,
+} from "./Modal_changPassword";
 
 const listsData = [
   {
@@ -122,7 +123,7 @@ function App() {
   };
 
   const [isModalOpen, setisModalOpen] = useRecoilState(
-    isModal_adminCreateOpenAtom
+    isModal_changePasswordAtom
   );
 
   return (
@@ -178,7 +179,7 @@ function App() {
         {sideBarOpenState && (
           <ul>
             <li className="center p-1">{data?.findMeforAdmin.admin?.email}</li>
-            <Modal_adminCreate
+            <Modal_changPassword
               data={{
                 button: (
                   <>
