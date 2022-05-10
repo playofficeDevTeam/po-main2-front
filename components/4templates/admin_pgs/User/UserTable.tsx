@@ -12,84 +12,31 @@ import {
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
-import { datePrettier } from "../Question/fn_DatePrettier";
-import { formSelector } from "../Question/fn_formSelector";
 import {
-  deleteQuestionForAdmin,
-  deleteQuestionForAdminVariables,
-} from "../Question/__generated__/deleteQuestionForAdmin";
-import {
-  editQuestionForAdmin,
-  editQuestionForAdminVariables,
-} from "../Question/__generated__/editQuestionForAdmin";
-import { partnerFormData, partnerFormDefault } from "./Var_PartnerForm";
+  FIND_USERS,
+  CREATE_USER_FOR_ADMIN,
+  EDIT_USER,
+  DELETE_USER,
+} from "../Partner/PartnerTable";
 import {
   createUserForAdmin,
   createUserForAdminVariables,
-} from "./__generated__/createUserForAdmin";
-import { deleteUser, deleteUserVariables } from "./__generated__/deleteUser";
-import { editUser, editUserVariables } from "./__generated__/editUser";
-import { findUsers, findUsersVariables } from "./__generated__/findUsers";
-
-export const FIND_USERS = gql`
-  query findUsers($input: FindUsersInput!) {
-    findUsers(input: $input) {
-      ok
-      error
-      users {
-        id
-        createdAt
-        tags
-        email
-        role
-        name
-        phoneNumber
-        brandName
-        residentRegistrationNumber
-        nameId
-        campaignParticipations {
-          id
-        }
-        payments {
-          id
-        }
-        questions {
-          id
-        }
-      }
-    }
-  }
-`;
-
-export const CREATE_USER_FOR_ADMIN = gql`
-  mutation createUserForAdmin($input: CreateUserForAdminInput!) {
-    createUserForAdmin(input: $input) {
-      ok
-      error
-    }
-  }
-`;
-
-export const EDIT_USER = gql`
-  mutation editUser($input: EditUserInput!) {
-    editUser(input: $input) {
-      ok
-      error
-    }
-  }
-`;
-
-export const DELETE_USER = gql`
-  mutation deleteUser($input: DeleteUserInput!) {
-    deleteUser(input: $input) {
-      ok
-      error
-    }
-  }
-`;
+} from "../Partner/__generated__/createUserForAdmin";
+import {
+  deleteUser,
+  deleteUserVariables,
+} from "../Partner/__generated__/deleteUser";
+import { editUser, editUserVariables } from "../Partner/__generated__/editUser";
+import {
+  findUsers,
+  findUsersVariables,
+} from "../Partner/__generated__/findUsers";
+import { datePrettier } from "../Question/fn_DatePrettier";
+import { formSelector } from "../Question/fn_formSelector";
+import { userFormData, userFormDefault } from "./Var_UserForm";
 
 const App = () => {
-  const [partnerForm, setPartnerForm] = useRecoilState(partnerFormData);
+  const [userForm, setPartnerForm] = useRecoilState(userFormData);
   const [tableFromDateState, setTableFromDateState] =
     useRecoilState(tableFromDate);
   const [tableToDateState, setTableToDateState] = useRecoilState(tableToDate);
@@ -105,18 +52,12 @@ const App = () => {
       {
         Header: "이메일(ID)",
         accessor: "email",
-        width: 150,
+        width: 250,
         sortDescFirst: true,
       },
       {
-        Header: "브랜드명(ID)",
+        Header: "이름(ID)",
         accessor: "nameId",
-        width: 150,
-        sortDescFirst: true,
-      },
-      {
-        Header: "브랜드명",
-        accessor: "brandName",
         width: 150,
         sortDescFirst: true,
       },
@@ -131,10 +72,10 @@ const App = () => {
       {
         Header: "주민등록번호",
         accessor: "residentRegistrationNumber",
-        width: 150,
+        width: 180,
         sortDescFirst: true,
       },
-      { Header: "태그", accessor: "tags", width: 150, sortDescFirst: true },
+      { Header: "태그", accessor: "tags", width: 250, sortDescFirst: true },
       { Header: "dataId", accessor: "id", width: 0 },
     ],
     []
@@ -154,7 +95,7 @@ const App = () => {
       input: {
         fromDate: dateToInput(tableFromDateState),
         toDate: dateToInput(tableToDateState),
-        userRole: UserRole.Partner,
+        userRole: UserRole.Creator,
       },
     },
   });
@@ -227,21 +168,19 @@ const App = () => {
           await createUserForAdminMutation({
             variables: {
               input: {
-                role: UserRole.Partner,
+                role: UserRole.Creator,
                 email: data.email === "" ? null : data.email,
                 password: data.password === "" ? null : data.password,
-                name: data.name,
                 nameId: data.nameId === "" ? null : data.nameId,
+                name: data.name,
                 phoneNumber: data.phoneNumber,
-                brandName: data.brandName,
                 residentRegistrationNumber: data.residentRegistrationNumber,
                 tags: data.tags,
               },
             },
           });
-
           reset_create(
-            partnerFormDefault.reduce(
+            userFormDefault.reduce(
               (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
               { password: "", passwordCheck: "" }
             )
@@ -258,7 +197,7 @@ const App = () => {
         } else if (
           errorString.indexOf("UQ_1db0f40d9ff5904789eb33dc031") !== -1
         ) {
-          alert(`브랜드명(ID)이 중복됩니다.`);
+          alert(`이름(ID)이 중복됩니다.`);
         } else {
           alert(pureError);
         }
@@ -283,18 +222,17 @@ const App = () => {
               input: {
                 email: data.email === "" ? null : data.email,
                 password: data.password === "" ? null : data.password,
-                name: data.name,
                 nameId: data.nameId === "" ? null : data.nameId,
+                name: data.name,
                 phoneNumber: data.phoneNumber,
-                brandName: data.brandName,
                 residentRegistrationNumber: data.residentRegistrationNumber,
                 tags: data.tags,
-                id: +formSelector("id", partnerForm),
+                id: +formSelector("id", userForm),
               },
             },
           });
           reset_edit(
-            partnerFormDefault.reduce(
+            userFormDefault.reduce(
               (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
               {}
             )
@@ -308,10 +246,6 @@ const App = () => {
         const pureError = errorString.replace("Error: ", "");
         if (errorString.indexOf("UQ_e12875dfb3b1d92d7d7c5377e22") !== -1) {
           alert(`이메일(ID)이 중복됩니다.`);
-        } else if (
-          errorString.indexOf("UQ_1db0f40d9ff5904789eb33dc031") !== -1
-        ) {
-          alert(`브랜드명(ID)이 중복됩니다.`);
         } else {
           alert(pureError);
         }
@@ -323,7 +257,7 @@ const App = () => {
     return (
       <>
         권한이 없습니다.
-        {/* <div className="">{findUsersError.toString()}</div> */}
+        <div className="">{findUsersError.toString()}</div>
       </>
     );
   }
@@ -360,7 +294,7 @@ const App = () => {
             <>
               <form onSubmit={handleSubmit_create(onSubmit_create)}>
                 <ul>
-                  {partnerForm.map(
+                  {userForm.map(
                     (val, idx) =>
                       !["id", "createdAt"].includes(val.accessor) && (
                         <>
@@ -416,7 +350,7 @@ const App = () => {
                     className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
                     onClick={() => {
                       reset_create(
-                        partnerFormDefault.reduce(
+                        userFormDefault.reduce(
                           (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
                           { password: "", passwordCheck: "" }
                         )
@@ -448,7 +382,7 @@ const App = () => {
             <>
               <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
                 <ul>
-                  {partnerForm.map(
+                  {userForm.map(
                     (val, idx) =>
                       !["id", "createdAt"].includes(val.accessor) && (
                         <>

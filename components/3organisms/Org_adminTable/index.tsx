@@ -390,22 +390,23 @@ function Table({ columns, data, customOptions }) {
     [prepareRow, rows, selectedFlatRows]
   );
 
-  useEffect(() => {
-    const handler = (e) => {
-      if (e.shiftKey) {
-        if (["c", "C"].includes(e.key)) {
-          setisModalOpen_create(true);
-          setTimeout(() => {
-            customOptions.setCreateFocus();
-          }, 100);
+  customOptions.createForm &&
+    useEffect(() => {
+      const handler = (e) => {
+        if (e.shiftKey) {
+          if (["c", "C"].includes(e.key)) {
+            setisModalOpen_create(true);
+            setTimeout(() => {
+              customOptions.setCreateFocus();
+            }, 100);
+          }
         }
-      }
-    };
-    window.addEventListener("keydown", handler);
-    return () => {
-      window.removeEventListener("keydown", handler);
-    };
-  }, []);
+      };
+      window.addEventListener("keydown", handler);
+      return () => {
+        window.removeEventListener("keydown", handler);
+      };
+    }, []);
 
   return (
     <>
@@ -553,49 +554,53 @@ function Table({ columns, data, customOptions }) {
                 globalFilter={state.globalFilter}
                 setGlobalFilter={setGlobalFilter}
               />
-              <div className="ml-2 flex  px-4">
-                <div className="h-full center mr-2">기한: </div>
-                <input
-                  className="border rounded-sm pl-1"
-                  type="date"
-                  value={dateToInput(rawTableFromDateState)}
-                  onChange={(e) => {
-                    setRawTableFromDateState((state) => dayjs(e.target.value));
-                  }}
-                />
-                <div className="mx-2">~</div>
-                <input
-                  className="border rounded-sm pl-1"
-                  type="date"
-                  value={dateToInput(rawTableToDateState)}
-                  onChange={(e) => {
-                    setRawTableToDateState((state) => dayjs(e.target.value));
-                  }}
-                />
-                <div
-                  className=""
-                  onClick={() => {
-                    try {
-                      if (
-                        dayjs(rawTableFromDateState).get("date") &&
-                        dayjs(rawTableToDateState).get("date")
-                      ) {
-                        setTableFromDateState(rawTableFromDateState);
-                        setTableToDateState(rawTableToDateState);
-                        customOptions.refetch();
-                      } else {
-                        throw "날짜를 입력해주세요";
+              {!customOptions.noDate && (
+                <div className="ml-2 flex  px-4">
+                  <div className="h-full center mr-2">기한: </div>
+                  <input
+                    className="border rounded-sm pl-1"
+                    type="date"
+                    value={dateToInput(rawTableFromDateState)}
+                    onChange={(e) => {
+                      setRawTableFromDateState((state) =>
+                        dayjs(e.target.value)
+                      );
+                    }}
+                  />
+                  <div className="mx-2">~</div>
+                  <input
+                    className="border rounded-sm pl-1"
+                    type="date"
+                    value={dateToInput(rawTableToDateState)}
+                    onChange={(e) => {
+                      setRawTableToDateState((state) => dayjs(e.target.value));
+                    }}
+                  />
+                  <div
+                    className=""
+                    onClick={() => {
+                      try {
+                        if (
+                          dayjs(rawTableFromDateState).get("date") &&
+                          dayjs(rawTableToDateState).get("date")
+                        ) {
+                          setTableFromDateState(rawTableFromDateState);
+                          setTableToDateState(rawTableToDateState);
+                          customOptions.refetch();
+                        } else {
+                          throw "날짜를 입력해주세요";
+                        }
+                      } catch (error) {
+                        alert(error);
                       }
-                    } catch (error) {
-                      alert(error);
-                    }
-                  }}
-                >
-                  <div className="ml-2 bg-orange-400 hover:bg-orange-500 h-full center text-white text-sm px-2 rounded-md cursor-pointer">
-                    업데이트
+                    }}
+                  >
+                    <div className="ml-2 bg-orange-400 hover:bg-orange-500 h-full center text-white text-sm px-2 rounded-md cursor-pointer">
+                      업데이트
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </th>
           </tr>
           {headerGroups.map((headerGroup, idx) => (

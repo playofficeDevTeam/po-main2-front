@@ -178,7 +178,7 @@ const App = () => {
           reset_create(
             adminFormDefault.reduce(
               (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-              {}
+              { password: "", passwordCheck: "" }
             )
           );
           setisModalOpen(false);
@@ -250,6 +250,7 @@ const App = () => {
         columns={columns}
         data={adminsData}
         customOptions={{
+          noDate: true,
           refetch: () => {
             tokenCheck("query", refetch);
           },
@@ -281,7 +282,9 @@ const App = () => {
                         <>
                           {["email"].includes(val.accessor) ? (
                             <li key={idx} className="flex items-center">
-                              <div className="w-28 flex pl-1">{val.Header}</div>
+                              <div className="w-28 flex pl-1">
+                                {val.Header}*
+                              </div>
                               <input
                                 defaultValue={val.value}
                                 required
@@ -306,7 +309,7 @@ const App = () => {
                             <>
                               <li className="flex items-center">
                                 <div className="w-28 flex pl-1">
-                                  {"비밀번호"}
+                                  {"비밀번호"}*
                                 </div>
                                 <input
                                   defaultValue={""}
@@ -318,7 +321,7 @@ const App = () => {
                               </li>
                               <li className="flex items-center">
                                 <div className="w-28 flex pl-1">
-                                  {"비밀번호 확인"}
+                                  {"비밀번호 확인"}*
                                 </div>
                                 <input
                                   defaultValue={""}
