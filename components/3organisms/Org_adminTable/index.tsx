@@ -36,6 +36,7 @@ import { FIND_ME_FOR_ADMIN } from "../../4templates/admin_pgs/Admin/Gql_admin";
 import { findMeforAdmin } from "../../4templates/admin_pgs/Admin/__generated__/findMeforAdmin";
 import { useTokenCheck } from "../../hooks/useTokenCheck";
 import { useQuery } from "@apollo/client";
+import { nickNameAtom } from "../Org_header/Org_adminSidebar";
 
 export const TableStyles = styled.div`
   width: max-content;
@@ -302,15 +303,7 @@ function Table({ columns, data, customOptions }) {
 
   const tokenCheck = useTokenCheck();
 
-  const {
-    loading: loading_admin,
-    error: error_admin,
-    data: data_admin,
-    refetch: refetch_admin,
-  } = useQuery<findMeforAdmin>(FIND_ME_FOR_ADMIN);
-  useEffect(() => {
-    tokenCheck("query", refetch_admin);
-  }, [loading_admin]);
+  const [nickName, setNickName] = useRecoilState(nickNameAtom);
 
   //테이블 스타일
   //테이블 스타일
@@ -423,15 +416,13 @@ function Table({ columns, data, customOptions }) {
           //시프트 s/d누를때 닉네임/데이트 생성
           if ([83, 68].includes(e.keyCode)) {
             let newContent;
-            let logedInNickName =
-              data_admin?.findMeforAdmin.admin?.email?.split("@")[0];
 
             if ([83].includes(e.keyCode)) {
-              newContent = logedInNickName;
+              newContent = nickName;
             } else if ([68].includes(e.keyCode)) {
               const date = new Date();
               const prettyDate = dateTime(date);
-              newContent = logedInNickName + " " + prettyDate;
+              newContent = nickName + " " + prettyDate;
             }
             const focusedElement: any = document.activeElement;
             const getValue_create = customOptions.getValues_create(
@@ -460,7 +451,7 @@ function Table({ columns, data, customOptions }) {
     return () => {
       window.removeEventListener("keydown", handler);
     };
-  }, []);
+  }, [nickName]);
 
   return (
     <>

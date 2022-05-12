@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { memo, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRecoilState } from "recoil";
+import { atom, useRecoilState } from "recoil";
 import {
   EDIT_ME_FOR_ADMIN,
   FIND_ME_FOR_ADMIN,
@@ -12,9 +12,6 @@ import { editMeForAdmin } from "../../4templates/admin_pgs/Admin/__generated__/e
 import { findMeforAdmin } from "../../4templates/admin_pgs/Dashboard/__generated__/findMeforAdmin";
 import { adminLoggedInVar } from "../../common/apollo";
 import { useTokenCheck } from "../../hooks/useTokenCheck";
-import Modal_adminCreate, {
-  isModal_adminCreateOpenAtom,
-} from "../Org_adminTable/Modal_adminCreate";
 import Modal_changPassword, {
   isModal_changePasswordAtom,
 } from "./Modal_changPassword";
@@ -67,6 +64,11 @@ const listsData = [
   },
 ];
 
+export const nickNameAtom = atom({
+  key: "nickNameAtom",
+  default: "",
+});
+
 function App() {
   const pathname = window.location.pathname;
 
@@ -84,11 +86,14 @@ function App() {
 
   const tokenCheck = useTokenCheck();
 
+  const [nickName, setNickName] = useRecoilState(nickNameAtom);
+
   const { loading, error, data, refetch } =
     useQuery<findMeforAdmin>(FIND_ME_FOR_ADMIN);
   useEffect(() => {
     tokenCheck("query", refetch);
-  }, [loading]);
+    setNickName(data?.findMeforAdmin.admin?.email?.split("@")[0] + "");
+  }, [loading, data]);
 
   const [sideBarOpenState, setSideBarOpenState] = useState(true);
 
@@ -179,7 +184,7 @@ function App() {
         {sideBarOpenState && (
           <ul>
             <li className="center p-1">
-              {data?.findMeforAdmin.admin?.email.split("@")[0]}
+              {nickName !== "undefined" ? nickName : "로딩중"}
             </li>
             <Modal_changPassword
               data={{
