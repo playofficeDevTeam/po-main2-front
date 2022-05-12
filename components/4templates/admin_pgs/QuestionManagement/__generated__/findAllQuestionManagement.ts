@@ -26,6 +26,7 @@ export interface findAllQuestionManagement_findAllQuestionManagement_questionMan
   state: string | null;
   stateTime: string | null;
   note: string | null;
+  comment: string | null;
   question: findAllQuestionManagement_findAllQuestionManagement_questionManagements_question | null;
   questionId: number | null;
 }

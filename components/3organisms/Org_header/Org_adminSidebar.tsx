@@ -178,7 +178,9 @@ function App() {
         </div>
         {sideBarOpenState && (
           <ul>
-            <li className="center p-1">{data?.findMeforAdmin.admin?.email}</li>
+            <li className="center p-1">
+              {data?.findMeforAdmin.admin?.email.split("@")[0]}
+            </li>
             <Modal_changPassword
               data={{
                 button: (

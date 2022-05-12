@@ -31,6 +31,11 @@ import {
 } from "./Var_tableInputDate";
 import { dateToInput } from "./fn_dateToInput";
 import dayjs from "dayjs";
+import { dateTime } from "./fn_DateTime";
+import { FIND_ME_FOR_ADMIN } from "../../4templates/admin_pgs/Admin/Gql_admin";
+import { findMeforAdmin } from "../../4templates/admin_pgs/Admin/__generated__/findMeforAdmin";
+import { useTokenCheck } from "../../hooks/useTokenCheck";
+import { useQuery } from "@apollo/client";
 
 export const TableStyles = styled.div`
   width: max-content;
@@ -295,6 +300,18 @@ function Table({ columns, data, customOptions }) {
     isModal_adminEditOpenAtom
   );
 
+  const tokenCheck = useTokenCheck();
+
+  const {
+    loading: loading_admin,
+    error: error_admin,
+    data: data_admin,
+    refetch: refetch_admin,
+  } = useQuery<findMeforAdmin>(FIND_ME_FOR_ADMIN);
+  useEffect(() => {
+    tokenCheck("query", refetch_admin);
+  }, [loading_admin]);
+
   //테이블 스타일
   //테이블 스타일
   //테이블 스타일
@@ -390,23 +407,60 @@ function Table({ columns, data, customOptions }) {
     [prepareRow, rows, selectedFlatRows]
   );
 
-  customOptions.createForm &&
-    useEffect(() => {
-      const handler = (e) => {
+  useEffect(() => {
+    const handler = (e) => {
+      try {
         if (e.shiftKey) {
-          if (["c", "C"].includes(e.key)) {
-            setisModalOpen_create(true);
+          //시프트 c 누를때 생성
+          if (customOptions.createForm) {
+            if ([67].includes(e.keyCode)) {
+              setisModalOpen_create(true);
+              setTimeout(() => {
+                customOptions.setCreateFocus();
+              }, 100);
+            }
+          }
+          //시프트 s/d누를때 닉네임/데이트 생성
+          if ([83, 68].includes(e.keyCode)) {
+            let newContent;
+            let logedInNickName =
+              data_admin?.findMeforAdmin.admin?.email?.split("@")[0];
+
+            if ([83].includes(e.keyCode)) {
+              newContent = logedInNickName;
+            } else if ([68].includes(e.keyCode)) {
+              const date = new Date();
+              const prettyDate = dateTime(date);
+              newContent = logedInNickName + " " + prettyDate;
+            }
+            const focusedElement: any = document.activeElement;
+            const getValue_create = customOptions.getValues_create(
+              focusedElement.name
+            );
             setTimeout(() => {
-              customOptions.setCreateFocus();
-            }, 100);
+              customOptions.setCreateReset({
+                [focusedElement.name]: getValue_create + newContent,
+              });
+            }, 0);
+            const getValue_edit = customOptions.getValues_edit(
+              focusedElement.name
+            );
+            setTimeout(() => {
+              customOptions.setEditReset({
+                [focusedElement.name]: getValue_edit + newContent,
+              });
+            }, 0);
           }
         }
-      };
-      window.addEventListener("keydown", handler);
-      return () => {
-        window.removeEventListener("keydown", handler);
-      };
-    }, []);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, []);
 
   return (
     <>

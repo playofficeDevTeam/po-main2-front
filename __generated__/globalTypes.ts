@@ -159,6 +159,7 @@ export interface CreateQuestionManagementInput {
   state?: string | null;
   stateTime?: string | null;
   note?: string | null;
+  comment?: string | null;
   question?: questionInputType | null;
   questionId?: number | null;
 }
@@ -259,6 +260,7 @@ export interface EditQuestionManagementInput {
   state?: string | null;
   stateTime?: string | null;
   note?: string | null;
+  comment?: string | null;
   question?: questionInputType | null;
   questionId?: number | null;
   id: number;
@@ -400,6 +402,7 @@ export interface questionManagementInputType {
   state?: string | null;
   stateTime?: string | null;
   note?: string | null;
+  comment?: string | null;
   question?: questionInputType | null;
   questionId?: number | null;
 }

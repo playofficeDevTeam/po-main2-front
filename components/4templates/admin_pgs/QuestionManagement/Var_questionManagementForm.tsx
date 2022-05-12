@@ -10,6 +10,7 @@ export const questionManagementFormDefalut = [
   { Header: "상태", accessor: "state", value: "" },
   { Header: "시간", accessor: "stateTime", value: "" },
   { Header: "비고", accessor: "note", value: "" },
+  { Header: "코멘트", accessor: "comment", value: "" },
   { Header: "제품", accessor: "product", value: "" },
   { Header: "문의서비스", accessor: "serviceInquired", value: "" },
   { Header: "dataId", accessor: "id", value: "" },

@@ -277,6 +277,7 @@ export default function App() {
     handleSubmit: handleSubmit_create,
     reset: reset_create,
     setFocus: setFocus_create,
+    getValues: getValues_create,
     formState: { errors: errors_create },
   } = useForm();
 
@@ -322,6 +323,7 @@ export default function App() {
     handleSubmit: handleSubmit_edit,
     reset: reset_edit,
     setFocus: setFocus_edit,
+    getValues: getValues_edit,
     formState: { errors: errors_edit },
   } = useForm();
 
@@ -375,6 +377,9 @@ export default function App() {
         columns={columns}
         data={questionsData}
         customOptions={{
+          setCreateReset: reset_create,
+          getValues_create,
+          getValues_edit,
           openDetailPage: (selectedFlatRows) => {
             selectedFlatRows.forEach((val) => {
               window.open(
@@ -420,13 +425,13 @@ export default function App() {
                             <textarea
                               defaultValue={val.value}
                               {...register_create(val.accessor)}
-                              className="border w-60 p-1 m-1"
+                              className="border w-96 p-1 m-1"
                             ></textarea>
                           ) : (
                             <input
                               defaultValue={val.value}
                               {...register_create(val.accessor)}
-                              className="border w-60 p-1 m-1"
+                              className="border w-96 p-1 m-1"
                               type={`text`}
                             />
                           )}
@@ -480,14 +485,14 @@ export default function App() {
                             <input
                               defaultValue={val.value}
                               {...register_edit(val.accessor)}
-                              className="border w-60 p-1 m-1"
+                              className="border w-96 p-1 m-1"
                               type={`text`}
                             />
                           ) : (
                             <textarea
                               defaultValue={val.value}
                               {...register_edit(val.accessor)}
-                              className="border w-60 p-1 m-1"
+                              className="border w-96 p-1 m-1"
                             ></textarea>
                           )}
                         </li>

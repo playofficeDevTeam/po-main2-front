@@ -159,6 +159,7 @@ const App = () => {
     handleSubmit: handleSubmit_create,
     reset: reset_create,
     setFocus: setFocus_create,
+    getValues: getValues_create,
     formState: { errors: errors_create },
   } = useForm();
 
@@ -198,6 +199,7 @@ const App = () => {
     handleSubmit: handleSubmit_edit,
     reset: reset_edit,
     setFocus: setFocus_edit,
+    getValues: getValues_edit,
     formState: { errors: errors_edit },
   } = useForm();
 
@@ -250,6 +252,9 @@ const App = () => {
         columns={columns}
         data={adminsData}
         customOptions={{
+          setCreateReset: reset_create,
+          getValues_create,
+          getValues_edit,
           noDate: true,
           refetch: () => {
             tokenCheck("query", refetch);
@@ -289,7 +294,7 @@ const App = () => {
                                 defaultValue={val.value}
                                 required
                                 {...register_create(val.accessor)}
-                                className="border w-60 p-1 m-1"
+                                className="border w-96 p-1 m-1"
                                 type={`text`}
                               />
                             </li>
@@ -299,7 +304,7 @@ const App = () => {
                               <input
                                 defaultValue={val.value}
                                 {...register_create(val.accessor)}
-                                className="border w-60 p-1 m-1"
+                                className="border w-96 p-1 m-1"
                                 type={`text`}
                               />
                             </li>
@@ -315,7 +320,7 @@ const App = () => {
                                   defaultValue={""}
                                   required
                                   {...register_create("password")}
-                                  className="border w-60 p-1 m-1"
+                                  className="border w-96 p-1 m-1"
                                   type={`password`}
                                 />
                               </li>
@@ -327,7 +332,7 @@ const App = () => {
                                   defaultValue={""}
                                   required
                                   {...register_create("passwordCheck")}
-                                  className="border w-60 p-1 m-1"
+                                  className="border w-96 p-1 m-1"
                                   type={`password`}
                                 />
                               </li>
@@ -383,7 +388,7 @@ const App = () => {
                             <input
                               defaultValue={val.value}
                               {...register_edit(val.accessor)}
-                              className="border w-60 p-1 m-1"
+                              className="border w-96 p-1 m-1"
                               type={`text`}
                             />
                           </li>
@@ -396,7 +401,7 @@ const App = () => {
                                 <input
                                   defaultValue={""}
                                   {...register_edit("password")}
-                                  className="border w-60 p-1 m-1"
+                                  className="border w-96 p-1 m-1"
                                   type={`password`}
                                 />
                               </li>
@@ -407,7 +412,7 @@ const App = () => {
                                 <input
                                   defaultValue={""}
                                   {...register_edit("passwordCheck")}
-                                  className="border w-60 p-1 m-1"
+                                  className="border w-96 p-1 m-1"
                                   type={`password`}
                                 />
                               </li>

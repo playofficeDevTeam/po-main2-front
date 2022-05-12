@@ -60,6 +60,7 @@ export const FIND_ID_QUESTION_MANAGEMENT = gql`
         state
         stateTime
         note
+        comment
         question {
           id
           brandName
@@ -131,7 +132,12 @@ export default function App() {
         sortDescFirst: true,
       },
       { Header: "비고", accessor: "note", width: 150, sortDescFirst: true },
-
+      {
+        Header: "코멘트",
+        accessor: "comment",
+        width: 150,
+        sortDescFirst: true,
+      },
       { Header: "제품", accessor: "product", width: 150, sortDescFirst: true },
       {
         Header: "문의서비스",
@@ -255,6 +261,7 @@ export default function App() {
     handleSubmit: handleSubmit_create,
     reset: reset_create,
     setFocus: setFocus_create,
+    getValues: getValues_create,
     formState: { errors: errors_create },
   } = useForm();
 
@@ -272,6 +279,7 @@ export default function App() {
               state: data.state,
               stateTime: data.stateTime,
               note: data.note,
+              comment: data.comment,
               questionId: questionId,
             },
           },
@@ -296,6 +304,7 @@ export default function App() {
     handleSubmit: handleSubmit_edit,
     reset: reset_edit,
     setFocus: setFocus_edit,
+    getValues: getValues_edit,
     formState: { errors: errors_edit },
   } = useForm();
 
@@ -313,6 +322,7 @@ export default function App() {
               state: data.state,
               stateTime: data.stateTime,
               note: data.note,
+              comment: data.comment,
               questionId: questionId,
               id: +formSelector("id", questionManagementForm),
             },
@@ -368,6 +378,8 @@ export default function App() {
             setFocus_create("stateName");
           },
           setCreateReset: reset_create,
+          getValues_create,
+          getValues_edit,
           setEditRecoil: setQuestionManagementForm,
           setEditReset: reset_edit,
           setEditFocus: setFocus_edit,
@@ -392,20 +404,22 @@ export default function App() {
                             <input
                               defaultValue={val.value}
                               {...register_create(val.accessor)}
-                              className="border w-60 p-1 m-1"
+                              className="border w-96 p-1 m-1"
                               type={`date`}
                             />
-                          ) : ["note"].includes(val.accessor) ? (
+                          ) : ["note", "comment"].includes(val.accessor) ? (
                             <textarea
                               defaultValue={val.value}
                               {...register_create(val.accessor)}
-                              className="border w-60 p-1 m-1"
+                              className={`border w-96 p-1 m-1 ${
+                                ["comment"].includes(val.accessor) ? "h-40" : ""
+                              }`}
                             ></textarea>
                           ) : (
                             <input
                               defaultValue={val.value}
                               {...register_create(val.accessor)}
-                              className="border w-60 p-1 m-1"
+                              className="border w-96 p-1 m-1"
                               type={`text`}
                             />
                           )}
@@ -465,20 +479,22 @@ export default function App() {
                             <input
                               defaultValue={val.value}
                               {...register_edit(val.accessor)}
-                              className="border w-60 p-1 m-1"
+                              className="border w-96 p-1 m-1"
                               type={`date`}
                             />
-                          ) : ["note"].includes(val.accessor) ? (
+                          ) : ["note", "comment"].includes(val.accessor) ? (
                             <textarea
                               defaultValue={val.value}
                               {...register_edit(val.accessor)}
-                              className="border w-60 p-1 m-1"
+                              className={`border w-96 p-1 m-1 ${
+                                ["comment"].includes(val.accessor) ? "h-40" : ""
+                              }`}
                             ></textarea>
                           ) : (
                             <input
                               defaultValue={val.value}
                               {...register_edit(val.accessor)}
-                              className="border w-60 p-1 m-1"
+                              className="border w-96 p-1 m-1"
                               type={`text`}
                             />
                           )}
