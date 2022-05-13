@@ -1,7 +1,9 @@
-import useIsMobile from "/home/app/components/hooks/useIsMobile";
+import ItemTable from "./ItemTable";
 
 export default function App() {
-  const isMobile = useIsMobile();
-
-  return <>서비스 페이지</>;
+  return (
+    <>
+      <ItemTable />
+    </>
+  );
 }

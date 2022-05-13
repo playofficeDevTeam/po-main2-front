@@ -320,9 +320,9 @@ function Table({ columns, data, customOptions }) {
           {...row.getRowProps({
             style,
           })}
-          className={`tr hover:bg-gray-200 ${
+          className={`tr hover:bg-gray-100 ${
             index % 2 === 0 ? "bg-white" : "bg-gray-50"
-          }`}
+          } `}
         >
           {row.cells.map((cell, idx) => {
             return (
@@ -334,7 +334,15 @@ function Table({ columns, data, customOptions }) {
                       !["createdAt"].includes(cell.column.id)
                         ? "overflow-x-auto"
                         : "overflow-x-hidden"
-                    }`}
+                    }
+                     ${
+                       selectedFlatRows
+                         .map((val) => val.id)
+                         .includes(cell.row.id)
+                         ? "bg-gray-200"
+                         : ""
+                     }
+                    `}
                     key={idx}
                   >
                     <div

@@ -187,6 +187,10 @@ export interface DeleteAdminInput {
   id: number;
 }
 
+export interface DeleteItemInput {
+  id: number;
+}
+
 export interface DeleteQuestionInput {
   id: number;
 }
@@ -209,6 +213,19 @@ export interface EditAdminInput {
   nickName?: string | null;
   role?: AdminRole | null;
   refreshToken?: string | null;
+  id: number;
+}
+
+export interface EditItemInput {
+  createdAt?: any | null;
+  updatedAt?: any | null;
+  itemCategory1?: string | null;
+  itemName?: string | null;
+  detailInfo?: string[] | null;
+  price?: number | null;
+  discountRate?: number | null;
+  type?: string | null;
+  carts?: cartInputType[] | null;
   id: number;
 }
 
