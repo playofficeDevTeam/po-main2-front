@@ -225,6 +225,7 @@ export default function App() {
         if (data.stateDate === "") {
           throw "스케쥴 날짜를 입력해주세요";
         }
+
         await editItemMutation({
           variables: {
             input: {
@@ -238,6 +239,7 @@ export default function App() {
             },
           },
         });
+
         reset_edit(
           questionFormDefalut.reduce(
             (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
@@ -263,6 +265,7 @@ export default function App() {
   if (findAllItemsLoading) {
     return <div className="">로딩중</div>;
   }
+
   return (
     <>
       <Org_adminTable

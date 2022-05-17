@@ -31,7 +31,7 @@ export interface CampaignInputType {
   tags?: string | null;
   salesDate?: any | null;
   targetDate?: any | null;
-  brandName?: string | null;
+  partner?: UserInputType | null;
   cumulativeOrder?: number | null;
   itemName?: string | null;
   keyword?: string | null;
@@ -44,7 +44,6 @@ export interface CampaignInputType {
   discountRate?: number | null;
   commisstion?: number | null;
   advertisingCost?: number | null;
-  payment?: paymentInputType | null;
   campaignParticipations?: CampaignParticipationInput[] | null;
   campaignManagers?: AdminInputType[] | null;
   salesManager?: AdminInputType | null;
@@ -82,6 +81,32 @@ export interface CreateAdminSuperInput {
   nickName?: string | null;
   role?: AdminRole | null;
   refreshToken?: string | null;
+}
+
+export interface CreateCampaignInput {
+  id?: number | null;
+  createdAt?: any | null;
+  updatedAt?: any | null;
+  tags?: string | null;
+  salesDate?: any | null;
+  targetDate?: any | null;
+  partner?: UserInputType | null;
+  cumulativeOrder?: number | null;
+  itemName?: string | null;
+  keyword?: string | null;
+  media?: string | null;
+  service?: string | null;
+  form?: string | null;
+  plan?: string | null;
+  price?: number | null;
+  amount?: number | null;
+  discountRate?: number | null;
+  commisstion?: number | null;
+  advertisingCost?: number | null;
+  campaignParticipations?: CampaignParticipationInput[] | null;
+  campaignManagers?: AdminInputType[] | null;
+  salesManager?: AdminInputType | null;
+  brandName_partner?: string | null;
 }
 
 export interface CreateItemInput {
@@ -178,12 +203,17 @@ export interface CreateUserForAdminInput {
   brandName?: string | null;
   residentRegistrationNumber?: string | null;
   tags?: string | null;
+  campaigns?: CampaignInputType[] | null;
   campaignParticipations?: CampaignParticipationInput[] | null;
   payments?: paymentInputType[] | null;
   questions?: questionInputType[] | null;
 }
 
 export interface DeleteAdminInput {
+  id: number;
+}
+
+export interface DeleteCampaignInput {
   id: number;
 }
 
@@ -214,6 +244,32 @@ export interface EditAdminInput {
   role?: AdminRole | null;
   refreshToken?: string | null;
   id: number;
+}
+
+export interface EditCampaignInput {
+  createdAt?: any | null;
+  updatedAt?: any | null;
+  tags?: string | null;
+  salesDate?: any | null;
+  targetDate?: any | null;
+  partner?: UserInputType | null;
+  cumulativeOrder?: number | null;
+  itemName?: string | null;
+  keyword?: string | null;
+  media?: string | null;
+  service?: string | null;
+  form?: string | null;
+  plan?: string | null;
+  price?: number | null;
+  amount?: number | null;
+  discountRate?: number | null;
+  commisstion?: number | null;
+  advertisingCost?: number | null;
+  campaignParticipations?: CampaignParticipationInput[] | null;
+  campaignManagers?: AdminInputType[] | null;
+  salesManager?: AdminInputType | null;
+  id: number;
+  brandName_partner?: string | null;
 }
 
 export interface EditItemInput {
@@ -296,6 +352,7 @@ export interface EditUserInput {
   brandName?: string | null;
   residentRegistrationNumber?: string | null;
   tags?: string | null;
+  campaigns?: CampaignInputType[] | null;
   campaignParticipations?: CampaignParticipationInput[] | null;
   payments?: paymentInputType[] | null;
   questions?: questionInputType[] | null;
@@ -303,6 +360,11 @@ export interface EditUserInput {
 }
 
 export interface FindAllQuestionManagementInput {
+  fromDate: any;
+  toDate: any;
+}
+
+export interface FindCampaignsInput {
   fromDate: any;
   toDate: any;
 }
@@ -357,6 +419,7 @@ export interface UserInputType {
   brandName?: string | null;
   residentRegistrationNumber?: string | null;
   tags?: string | null;
+  campaigns?: CampaignInputType[] | null;
   campaignParticipations?: CampaignParticipationInput[] | null;
   payments?: paymentInputType[] | null;
   questions?: questionInputType[] | null;
@@ -393,7 +456,6 @@ export interface paymentInputType {
   orderId?: string | null;
   amount?: number | null;
   paymentState?: string | null;
-  campaigns?: CampaignInputType[] | null;
 }
 
 export interface questionInputType {
