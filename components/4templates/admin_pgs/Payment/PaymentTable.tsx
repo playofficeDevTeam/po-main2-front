@@ -13,49 +13,39 @@ import {
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import { datePrettier } from "../Question/fn_DatePrettier";
 import { formSelector } from "../Question/fn_formSelector";
-import { campaignFormData, campaignFormDefalut } from "./Var_campaignForm";
-import {
-  createCampaign,
-  createCampaignVariables,
-} from "./__generated__/createCampaign";
-import {
-  deleteCampaign,
-  deleteCampaignVariables,
-} from "./__generated__/deleteCampaign";
-import {
-  editCampaign,
-  editCampaignVariables,
-} from "./__generated__/editCampaign";
-import {
-  findCampaigns,
-  findCampaignsVariables,
-} from "./__generated__/findCampaigns";
-import { dateSmall } from "../QuestionManagement/fn_DateSmall";
+import { paymentFormData, paymentFormDefalut } from "./Var_paymentForm";
 
-export const FIND_CAMPAIGNS = gql`
-  query findCampaigns($input: FindCampaignsInput!) {
-    findCampaigns(input: $input) {
+import {
+  deletePayment,
+  deletePaymentVariables,
+} from "./__generated__/deletePayment";
+import { editPayment, editPaymentVariables } from "./__generated__/editPayment";
+import {
+  findPayments,
+  findPaymentsVariables,
+} from "./__generated__/findPayments";
+import {
+  createPaymentForAdmin,
+  createPaymentForAdminVariables,
+} from "./__generated__/createPaymentForAdmin";
+
+export const FIND_PAYMENTS = gql`
+  query findPayments($input: FindPaymentsInput!) {
+    findPayments(input: $input) {
       ok
       error
-      campaigns {
+      payments {
         id
         createdAt
         tags
-        salesDate
-        targetDate
-        cumulativeOrder
-        itemName
-        keyword
-        media
-        service
-        form
-        plan
-        price
+        brandName
+        name
+        phoneNumber
+        email
+        paymentMethod
         amount
-        discountRate
-        commisstion
-        advertisingCost
-        partner {
+        paymentState
+        user {
           nameId
         }
       }
@@ -63,27 +53,27 @@ export const FIND_CAMPAIGNS = gql`
   }
 `;
 
-export const CREATE_CAMPAIGN = gql`
-  mutation createCampaign($input: CreateCampaignInput!) {
-    createCampaign(input: $input) {
+export const CREATE_PAYMENT_FOR_ADMIN = gql`
+  mutation createPaymentForAdmin($input: CreatePaymentForAdminInput!) {
+    createPaymentForAdmin(input: $input) {
       ok
       error
     }
   }
 `;
 
-export const EDIT_CAMPAIGN = gql`
-  mutation editCampaign($input: EditCampaignInput!) {
-    editCampaign(input: $input) {
+export const EDIT_PAYMENT = gql`
+  mutation editPayment($input: EditPaymentInput!) {
+    editPayment(input: $input) {
       ok
       error
     }
   }
 `;
 
-export const DELETE_CAMPAIGN = gql`
-  mutation deleteCampaign($input: DeleteCampaignInput!) {
-    deleteCampaign(input: $input) {
+export const DELETE_PAYMENT = gql`
+  mutation deletePayment($input: DeletePaymentInput!) {
+    deletePayment(input: $input) {
       ok
       error
     }
@@ -91,7 +81,7 @@ export const DELETE_CAMPAIGN = gql`
 `;
 
 export default function App() {
-  const [campaignForm, setCampaignForm] = useRecoilState(campaignFormData);
+  const [paymentForm, setPaymentForm] = useRecoilState(paymentFormData);
 
   const [tableFromDateState, setTableFromDateState] =
     useRecoilState(tableFromDate);
@@ -106,79 +96,35 @@ export default function App() {
         sortDescFirst: true,
       },
       {
-        Header: "매출일",
-        accessor: "salesDate",
-        width: 150,
-        sortDescFirst: true,
-      },
-      {
-        Header: "목표일",
-        accessor: "targetDate",
-        width: 150,
-        sortDescFirst: true,
-      },
-      {
         Header: "브랜드명(R)",
         accessor: "brandName_partner",
         width: 150,
         sortDescFirst: true,
       },
       {
-        Header: "누적차수",
-        accessor: "cumulativeOrder",
+        Header: "브랜드명",
+        accessor: "brandName",
         width: 150,
         sortDescFirst: true,
       },
+      { Header: "이름", accessor: "name", width: 150, sortDescFirst: true },
       {
-        Header: "아이템명",
-        accessor: "itemName",
+        Header: "연락처",
+        accessor: "phoneNumber",
         width: 150,
         sortDescFirst: true,
       },
+      { Header: "이메일", accessor: "email", width: 150, sortDescFirst: true },
       {
-        Header: "키워드",
-        accessor: "keyword",
+        Header: "결제수단",
+        accessor: "paymentMethod",
         width: 150,
         sortDescFirst: true,
       },
-      { Header: "매체", accessor: "media", width: 150, sortDescFirst: true },
+      { Header: "금액", accessor: "amount", width: 150, sortDescFirst: true },
       {
-        Header: "서비스명",
-        accessor: "service",
-        width: 150,
-        sortDescFirst: true,
-      },
-      { Header: "형태", accessor: "form", width: 150, sortDescFirst: true },
-      { Header: "플랜", accessor: "plan", width: 150, sortDescFirst: true },
-      { Header: "가격", accessor: "price", width: 150, sortDescFirst: true },
-      { Header: "수량", accessor: "amount", width: 150, sortDescFirst: true },
-      {
-        Header: "할인률",
-        accessor: "discountRate",
-        width: 150,
-        sortDescFirst: true,
-      },
-      {
-        Header: "수수료",
-        accessor: "commisstion",
-        width: 150,
-        sortDescFirst: true,
-      },
-      {
-        Header: "광고비",
-        accessor: "advertisingCost",
-        width: 150,
-        sortDescFirst: true,
-      },
-      {
-        Header: "캠페인 담당자",
-        accessor: "campaignManagers",
-        width: 150,
-        sortDescFirst: true,
-      },
-      {
-        Header: "판매 담당자",
-        accessor: "salesManager",
+        Header: "결제상태",
+        accessor: "paymentState",
         width: 150,
         sortDescFirst: true,
       },
@@ -193,11 +139,11 @@ export default function App() {
 
   //쿼리
   const {
-    loading: findCampaignsLoading,
-    error: findCampaignsError,
-    data: findCampaignsData,
+    loading: findPaymentsLoading,
+    error: findPaymentsError,
+    data: findPaymentsData,
     refetch,
-  } = useQuery<findCampaigns, findCampaignsVariables>(FIND_CAMPAIGNS, {
+  } = useQuery<findPayments, findPaymentsVariables>(FIND_PAYMENTS, {
     variables: {
       input: {
         fromDate: dateToInput(tableFromDateState),
@@ -207,47 +153,48 @@ export default function App() {
   });
   useEffect(() => {
     tokenCheck("query", refetch);
-  }, [findCampaignsData]);
+  }, [findPaymentsData]);
 
-  const campaignsData = useMemo(
+  const paymentsData = useMemo(
     () =>
-      findCampaignsData?.findCampaigns.campaigns?.map((val, idx) => ({
+      findPaymentsData?.findPayments.payments?.map((val, idx) => ({
         ...val,
         createdAt: datePrettier(val.createdAt),
-        salesDate: dateSmall(val.salesDate),
-        targetDate: dateSmall(val.targetDate),
-        brandName_partner: val.partner?.nameId,
+        brandName_partner: val.user?.nameId,
       })),
-    [findCampaignsData]
+    [findPaymentsData]
   );
 
   //뮤테이션
   const [
-    createCampaignMutation,
+    createPaymentForAdminMutation,
     {
-      loading: createCampaignLoading,
-      error: createCampaignError,
-      data: createCampaignData,
+      loading: createPaymentForAdminLoading,
+      error: createPaymentForAdminError,
+      data: createPaymentForAdminData,
     },
-  ] = useMutation<createCampaign, createCampaignVariables>(CREATE_CAMPAIGN, {
+  ] = useMutation<createPaymentForAdmin, createPaymentForAdminVariables>(
+    CREATE_PAYMENT_FOR_ADMIN,
+    {
+      onCompleted: () => {
+        refetch();
+      },
+    }
+  );
+
+  const [
+    editPaymentMutation,
+    { loading: editPaymentLoading, data: editPaymentData },
+  ] = useMutation<editPayment, editPaymentVariables>(EDIT_PAYMENT, {
     onCompleted: () => {
       refetch();
     },
   });
 
   const [
-    editCampaignMutation,
-    { loading: editCampaignLoading, data: editCampaignData },
-  ] = useMutation<editCampaign, editCampaignVariables>(EDIT_CAMPAIGN, {
-    onCompleted: () => {
-      refetch();
-    },
-  });
-
-  const [
-    deleteCampaignMutation,
-    { loading: deleteCampaignLoading, data: deleteCampaignData },
-  ] = useMutation<deleteCampaign, deleteCampaignVariables>(DELETE_CAMPAIGN, {
+    deletePaymentMutation,
+    { loading: deletePaymentLoading, data: deletePaymentData },
+  ] = useMutation<deletePayment, deletePaymentVariables>(DELETE_PAYMENT, {
     onCompleted: () => {
       refetch();
     },
@@ -279,30 +226,23 @@ export default function App() {
           throw "목표일을 입력해주세요";
         }
         console.log(data);
-        await createCampaignMutation({
+        await createPaymentForAdminMutation({
           variables: {
             input: {
-              tags: data.tags,
-              salesDate: data.salesDate,
-              targetDate: data.targetDate,
-              cumulativeOrder: +data.cumulativeOrder,
-              itemName: data.itemName,
-              keyword: data.keyword,
-              media: data.media,
-              service: data.service,
-              form: data.form,
-              plan: data.plan,
-              price: +data.price,
-              amount: +data.amount,
-              discountRate: +data.discountRate,
-              commisstion: +data.commisstion,
-              advertisingCost: +data.advertisingCost,
               brandName_partner: data.brandName_partner,
+              brandName: data.brandName,
+              name: data.name,
+              phoneNumber: data.phoneNumber,
+              email: data.email,
+              paymentMethod: data.paymentMethod,
+              amount: +data.amount,
+              paymentState: data.paymentState,
+              tags: data.tags,
             },
           },
         });
         reset_create(
-          campaignFormDefalut.reduce(
+          paymentFormDefalut.reduce(
             (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
             {}
           )
@@ -327,33 +267,26 @@ export default function App() {
 
   const onSubmit_edit = (data) => {
     tokenCheck("mutation", async () => {
-      console.log(formSelector("id", campaignForm));
+      console.log(formSelector("id", paymentForm));
       try {
-        await editCampaignMutation({
+        await editPaymentMutation({
           variables: {
             input: {
-              tags: data.tags,
-              salesDate: data.salesDate,
-              targetDate: data.targetDate,
-              cumulativeOrder: +data.cumulativeOrder,
-              itemName: data.itemName,
-              keyword: data.keyword,
-              media: data.media,
-              service: data.service,
-              form: data.form,
-              plan: data.plan,
-              price: +data.price,
-              amount: +data.amount,
-              discountRate: +data.discountRate,
-              commisstion: +data.commisstion,
-              advertisingCost: +data.advertisingCost,
               brandName_partner: data.brandName_partner,
-              id: +formSelector("id", campaignForm),
+              brandName: data.brandName,
+              name: data.name,
+              phoneNumber: data.phoneNumber,
+              email: data.email,
+              paymentMethod: data.paymentMethod,
+              amount: +data.amount,
+              paymentState: data.paymentState,
+              tags: data.tags,
+              id: +formSelector("id", paymentForm),
             },
           },
         });
         reset_edit(
-          campaignFormDefalut.reduce(
+          paymentFormDefalut.reduce(
             (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
             {}
           )
@@ -367,22 +300,22 @@ export default function App() {
     });
   };
 
-  if (findCampaignsError) {
+  if (findPaymentsError) {
     return (
       <>
         권한이 없습니다. <br />
-        {findCampaignsError.message}
+        {findPaymentsError.message}
       </>
     );
   }
-  if (findCampaignsLoading) {
+  if (findPaymentsLoading) {
     return <div className="">로딩중</div>;
   }
   return (
     <>
       <Org_adminTable
         columns={columns}
-        data={campaignsData}
+        data={paymentsData}
         customOptions={{
           setCreateReset: reset_create,
           getValues_create,
@@ -390,10 +323,7 @@ export default function App() {
           openDetailPage: (selectedFlatRows) => {
             selectedFlatRows.forEach((val) => {
               window.open(
-                window.location.href.replace(
-                  "campaign",
-                  "campaign-management"
-                ) +
+                window.location.href.replace("payment", "payment-management") +
                   "/" +
                   val.values.id
               );
@@ -404,7 +334,7 @@ export default function App() {
           },
           deleteMutation: (id) => {
             tokenCheck("mutation", () => {
-              deleteCampaignMutation({
+              deletePaymentMutation({
                 variables: {
                   input: {
                     id,
@@ -414,16 +344,16 @@ export default function App() {
             });
           },
           setCreateFocus: () => {
-            setFocus_create("brandName_partner");
+            setFocus_create("brandName");
           },
-          setEditRecoil: setCampaignForm,
+          setEditRecoil: setPaymentForm,
           setEditReset: reset_edit,
           setEditFocus: setFocus_edit,
           createForm: (
             <>
               <form onSubmit={handleSubmit_create(onSubmit_create)}>
                 <ul>
-                  {campaignForm.map(
+                  {paymentForm.map(
                     (val, idx) =>
                       !["id", "createdAt"].includes(val.accessor) && (
                         <li key={idx} className="flex items-center">
@@ -454,14 +384,14 @@ export default function App() {
                     className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
                     onClick={() => {
                       reset_create(
-                        campaignFormDefalut.reduce(
+                        paymentFormDefalut.reduce(
                           (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
                           {}
                         )
                       );
 
                       setTimeout(() => {
-                        setFocus_create("brandName_partner");
+                        setFocus_create("brandName");
                       }, 0);
                     }}
                   >
@@ -486,7 +416,7 @@ export default function App() {
             <>
               <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
                 <ul>
-                  {campaignForm.map(
+                  {paymentForm.map(
                     (val, idx) =>
                       !["id", "createdAt"].includes(val.accessor) && (
                         <li key={idx} className="flex items-center">

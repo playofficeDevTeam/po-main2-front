@@ -122,6 +122,26 @@ export interface CreateItemInput {
   carts?: cartInputType[] | null;
 }
 
+export interface CreatePaymentForAdminInput {
+  id?: number | null;
+  createdAt?: any | null;
+  updatedAt?: any | null;
+  tags?: string | null;
+  brandName?: string | null;
+  name?: string | null;
+  phoneNumber?: string | null;
+  email?: string | null;
+  user?: UserInputType | null;
+  carts?: cartInputType[] | null;
+  paymentMethod?: string | null;
+  paymentKey?: string | null;
+  orderId?: string | null;
+  amount?: number | null;
+  paymentState?: string | null;
+  itemInfo?: ItemIdAndAmount[] | null;
+  brandName_partner?: string | null;
+}
+
 export interface CreatePaymentInput {
   brandName?: string | null;
   name?: string | null;
@@ -221,6 +241,10 @@ export interface DeleteItemInput {
   id: number;
 }
 
+export interface DeletePaymentInput {
+  id: number;
+}
+
 export interface DeleteQuestionInput {
   id: number;
 }
@@ -304,6 +328,26 @@ export interface EditPaymentFormDataInput {
   email?: string | null;
 }
 
+export interface EditPaymentInput {
+  createdAt?: any | null;
+  updatedAt?: any | null;
+  tags?: string | null;
+  brandName?: string | null;
+  name?: string | null;
+  phoneNumber?: string | null;
+  email?: string | null;
+  user?: UserInputType | null;
+  carts?: cartInputType[] | null;
+  paymentMethod?: string | null;
+  paymentKey?: string | null;
+  orderId?: string | null;
+  amount?: number | null;
+  paymentState?: string | null;
+  id: number;
+  itemInfo?: ItemIdAndAmount[] | null;
+  brandName_partner?: string | null;
+}
+
 export interface EditQuestionInput {
   id: number;
   createdAt?: any | null;
@@ -381,6 +425,11 @@ export interface FindOneQuestionInput {
 
 export interface FindPaymentInput {
   id: number;
+}
+
+export interface FindPaymentsInput {
+  fromDate: any;
+  toDate: any;
 }
 
 export interface FindQuestionsInput {

@@ -1,7 +1,9 @@
-import useIsMobile from "/home/app/components/hooks/useIsMobile";
+import PaymentTable from "./PaymentTable";
 
 export default function App() {
-  const isMobile = useIsMobile();
-
-  return <>결제 페이지</>;
+  return (
+    <>
+      <PaymentTable />
+    </>
+  );
 }
