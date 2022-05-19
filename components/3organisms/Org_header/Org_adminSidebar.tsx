@@ -43,6 +43,11 @@ const listsData = [
     url: "/admin/campaign",
   },
   {
+    icon: <i className="fas fa-tasks text-orange-600"></i>,
+    title: "캠페인참여",
+    url: "/admin/campaign-participation",
+  },
+  {
     icon: <i className="fas fa-credit-card"></i>,
     title: "결제",
     url: "/admin/payment",

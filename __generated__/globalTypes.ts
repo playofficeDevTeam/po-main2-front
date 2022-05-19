@@ -56,12 +56,11 @@ export interface CampaignParticipationInput {
   campaign: CampaignInputType;
   campaignId?: number | null;
   manuscriptFee?: number | null;
-  proposal?: boolean | null;
-  consent?: boolean | null;
+  proposal?: string | null;
+  consent?: string | null;
   guide?: string | null;
   plan?: string | null;
-  isFileTaxes?: boolean | null;
-  paymentDate?: any | null;
+  isFileTaxes?: string | null;
 }
 
 export interface CampaignUploadLinkType {
@@ -107,6 +106,28 @@ export interface CreateCampaignInput {
   campaignManagers?: AdminInputType[] | null;
   salesManager?: AdminInputType | null;
   brandName_partner?: string | null;
+}
+
+export interface CreateCampaignParticipationInput {
+  id?: number | null;
+  createdAt?: any | null;
+  updatedAt?: any | null;
+  CampaignUploadLinks?: CampaignUploadLinkType[] | null;
+  user?: UserInputType | null;
+  userId?: number | null;
+  campaign?: CampaignInputType | null;
+  campaignId?: number | null;
+  manuscriptFee?: number | null;
+  proposal?: string | null;
+  consent?: string | null;
+  guide?: string | null;
+  plan?: string | null;
+  isFileTaxes?: string | null;
+  creatorNameId?: string | null;
+  brandName_partner?: string | null;
+  cumulativeOrder?: string | null;
+  itemName?: string | null;
+  keyword?: string | null;
 }
 
 export interface CreateItemInput {
@@ -237,6 +258,10 @@ export interface DeleteCampaignInput {
   id: number;
 }
 
+export interface DeleteCampaignParticipationInput {
+  id: number;
+}
+
 export interface DeleteItemInput {
   id: number;
 }
@@ -294,6 +319,28 @@ export interface EditCampaignInput {
   salesManager?: AdminInputType | null;
   id: number;
   brandName_partner?: string | null;
+}
+
+export interface EditCampaignParticipationInput {
+  createdAt?: any | null;
+  updatedAt?: any | null;
+  CampaignUploadLinks?: CampaignUploadLinkType[] | null;
+  user?: UserInputType | null;
+  userId?: number | null;
+  campaign?: CampaignInputType | null;
+  campaignId?: number | null;
+  manuscriptFee?: number | null;
+  proposal?: string | null;
+  consent?: string | null;
+  guide?: string | null;
+  plan?: string | null;
+  isFileTaxes?: string | null;
+  id: number;
+  creatorNameId?: string | null;
+  brandName_partner?: string | null;
+  cumulativeOrder?: string | null;
+  itemName?: string | null;
+  keyword?: string | null;
 }
 
 export interface EditItemInput {
@@ -401,6 +448,11 @@ export interface EditUserInput {
   payments?: paymentInputType[] | null;
   questions?: questionInputType[] | null;
   id: number;
+}
+
+export interface FindAllCampaignParticipationsInput {
+  fromDate: any;
+  toDate: any;
 }
 
 export interface FindAllQuestionManagementInput {

@@ -320,15 +320,15 @@ export default function App() {
           setCreateReset: reset_create,
           getValues_create,
           getValues_edit,
-          openDetailPage: (selectedFlatRows) => {
-            selectedFlatRows.forEach((val) => {
-              window.open(
-                window.location.href.replace("payment", "payment-management") +
-                  "/" +
-                  val.values.id
-              );
-            });
-          },
+          // openDetailPage: (selectedFlatRows) => {
+          //   selectedFlatRows.forEach((val) => {
+          //     window.open(
+          //       window.location.href.replace("payment", "payment-management") +
+          //         "/" +
+          //         val.values.id
+          //     );
+          //   });
+          // },
           refetch: () => {
             tokenCheck("query", refetch);
           },

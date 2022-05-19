@@ -128,7 +128,7 @@ export default function App() {
       findAllItemsData?.findAllItems.items?.map((val, idx) => ({
         ...val,
         createdAt: datePrettier(val.createdAt),
-        detailInfo: val.detailInfo?.join("/"),
+        detailInfo: val.detailInfo?.join(", "),
       })),
     [findAllItemsData]
   );
@@ -188,7 +188,7 @@ export default function App() {
             input: {
               itemCategory1: data.itemCategory1,
               itemName: data.itemName,
-              detailInfo: data.detailInfo.split("/"),
+              detailInfo: data.detailInfo.split(",").map((val) => val.trim()),
               price: +data.price,
               discountRate: +data.discountRate,
               type: data.type,
@@ -231,7 +231,7 @@ export default function App() {
             input: {
               itemCategory1: data.itemCategory1,
               itemName: data.itemName,
-              detailInfo: data.detailInfo.split("/"),
+              detailInfo: data.detailInfo.split(",").map((val) => val.trim()),
               price: +data.price,
               discountRate: +data.discountRate,
               type: data.type,
@@ -306,7 +306,17 @@ export default function App() {
                 <ul>
                   {itemForm.map(
                     (val, idx) =>
-                      !["id", "createdAt"].includes(val.accessor) && (
+                      !["id", "createdAt"].includes(val.accessor) &&
+                      (["detailInfo"].includes(val.accessor) ? (
+                        <li key={idx} className="flex items-center">
+                          <div className="w-28 flex pl-1">{val.Header}</div>
+                          <textarea
+                            defaultValue={val.value}
+                            {...register_create(val.accessor)}
+                            className="border w-96 p-1 m-1"
+                          />
+                        </li>
+                      ) : (
                         <li key={idx} className="flex items-center">
                           <div className="w-28 flex pl-1">{val.Header}</div>
                           <input
@@ -316,7 +326,7 @@ export default function App() {
                             type={`text`}
                           />
                         </li>
-                      )
+                      ))
                   )}
                 </ul>
                 <div className="flex justify-end mt-2">
@@ -358,7 +368,17 @@ export default function App() {
                 <ul>
                   {itemForm.map(
                     (val, idx) =>
-                      !["id", "createdAt"].includes(val.accessor) && (
+                      !["id", "createdAt"].includes(val.accessor) &&
+                      (["detailInfo"].includes(val.accessor) ? (
+                        <li key={idx} className="flex items-center">
+                          <div className="w-28 flex pl-1">{val.Header}</div>
+                          <textarea
+                            defaultValue={val.value}
+                            {...register_edit(val.accessor)}
+                            className="border w-96 p-1 m-1"
+                          />
+                        </li>
+                      ) : (
                         <li key={idx} className="flex items-center">
                           <div className="w-28 flex pl-1">{val.Header}</div>
                           <input
@@ -368,7 +388,7 @@ export default function App() {
                             type={`text`}
                           />
                         </li>
-                      )
+                      ))
                   )}
                 </ul>
                 <div className="flex justify-end mt-2">

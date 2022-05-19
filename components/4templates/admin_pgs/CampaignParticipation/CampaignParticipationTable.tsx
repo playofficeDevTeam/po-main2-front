@@ -13,77 +13,86 @@ import {
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import { datePrettier } from "../Question/fn_DatePrettier";
 import { formSelector } from "../Question/fn_formSelector";
-import { campaignFormData, campaignFormDefalut } from "./Var_campaignForm";
 import {
-  createCampaign,
-  createCampaignVariables,
-} from "./__generated__/createCampaign";
-import {
-  deleteCampaign,
-  deleteCampaignVariables,
-} from "./__generated__/deleteCampaign";
-import {
-  editCampaign,
-  editCampaignVariables,
-} from "./__generated__/editCampaign";
-import {
-  findCampaigns,
-  findCampaignsVariables,
-} from "./__generated__/findCampaigns";
+  campaignParticipationFormData,
+  campaignParticipationFormDefalut,
+} from "./Var_campaignParticipationForm";
 import { dateSmall } from "../QuestionManagement/fn_DateSmall";
+import {
+  createCampaignParticipation,
+  createCampaignParticipationVariables,
+} from "./__generated__/createCampaignParticipation";
+import {
+  deleteCampaignParticipation,
+  deleteCampaignParticipationVariables,
+} from "./__generated__/deleteCampaignParticipation";
+import {
+  editCampaignParticipation,
+  editCampaignParticipationVariables,
+} from "./__generated__/editCampaignParticipation";
+import {
+  findAllCampaignParticipations,
+  findAllCampaignParticipationsVariables,
+} from "./__generated__/findAllCampaignParticipations";
+import { textToBoolean } from "./fn_textToBoolean";
 
-export const FIND_CAMPAIGNS = gql`
-  query findCampaigns($input: FindCampaignsInput!) {
-    findCampaigns(input: $input) {
+export const FIND_ALL_CAMPAIGN_PARTICIPATIONS = gql`
+  query findAllCampaignParticipations(
+    $input: FindAllCampaignParticipationsInput!
+  ) {
+    findAllCampaignParticipations(input: $input) {
       ok
       error
-      campaigns {
+      campaignParticipations {
         id
         createdAt
-        tags
-        salesDate
-        targetDate
-        cumulativeOrder
-        itemName
-        keyword
-        media
-        service
-        form
-        plan
-        price
-        amount
-        discountRate
-        commisstion
-        advertisingCost
-        partner {
+        user {
           nameId
         }
+        campaign {
+          partner {
+            nameId
+          }
+          cumulativeOrder
+          itemName
+          keyword
+        }
+        manuscriptFee
+        proposal
+        consent
+        guide
+        plan
+        isFileTaxes
       }
     }
   }
 `;
 
-export const CREATE_CAMPAIGN = gql`
-  mutation createCampaign($input: CreateCampaignInput!) {
-    createCampaign(input: $input) {
+export const CREATE_CAMPAIGN_PARTICIPATION = gql`
+  mutation createCampaignParticipation(
+    $input: CreateCampaignParticipationInput!
+  ) {
+    createCampaignParticipation(input: $input) {
       ok
       error
     }
   }
 `;
 
-export const EDIT_CAMPAIGN = gql`
-  mutation editCampaign($input: EditCampaignInput!) {
-    editCampaign(input: $input) {
+export const EDIT_CAMPAIGN_PARTICIPATION = gql`
+  mutation editCampaignParticipation($input: EditCampaignParticipationInput!) {
+    editCampaignParticipation(input: $input) {
       ok
       error
     }
   }
 `;
 
-export const DELETE_CAMPAIGN = gql`
-  mutation deleteCampaign($input: DeleteCampaignInput!) {
-    deleteCampaign(input: $input) {
+export const DELETE_CAMPAIGN_PARTICIPATION = gql`
+  mutation deleteCampaignParticipation(
+    $input: DeleteCampaignParticipationInput!
+  ) {
+    deleteCampaignParticipation(input: $input) {
       ok
       error
     }
@@ -91,7 +100,9 @@ export const DELETE_CAMPAIGN = gql`
 `;
 
 export default function App() {
-  const [campaignForm, setCampaignForm] = useRecoilState(campaignFormData);
+  const [campaignParticipationForm, setCampaignForm] = useRecoilState(
+    campaignParticipationFormData
+  );
 
   const [tableFromDateState, setTableFromDateState] =
     useRecoilState(tableFromDate);
@@ -105,21 +116,34 @@ export default function App() {
         width: 90,
         sortDescFirst: true,
       },
+      { Header: "dataId", accessor: "id", width: 0, sortDescFirst: true },
+
       {
-        Header: "매출일",
-        accessor: "salesDate",
+        Header: "크리에이터명(R)",
+        accessor: "creatorNameId",
         width: 150,
         sortDescFirst: true,
       },
+
       {
-        Header: "목표일",
-        accessor: "targetDate",
+        Header: "원고료",
+        accessor: "manuscriptFee",
+        width: 150,
+        sortDescFirst: true,
+      },
+      { Header: "제안", accessor: "proposal", width: 150, sortDescFirst: true },
+      { Header: "승락", accessor: "consent", width: 150, sortDescFirst: true },
+      { Header: "가이드", accessor: "guide", width: 150, sortDescFirst: true },
+      { Header: "플랜", accessor: "plan", width: 150, sortDescFirst: true },
+      {
+        Header: "세금신고여부",
+        accessor: "isFileTaxes",
         width: 150,
         sortDescFirst: true,
       },
       {
         Header: "브랜드명(R)",
-        accessor: "brandName_partner",
+        accessor: "brandName_Partner",
         width: 150,
         sortDescFirst: true,
       },
@@ -141,49 +165,6 @@ export default function App() {
         width: 150,
         sortDescFirst: true,
       },
-      { Header: "매체", accessor: "media", width: 150, sortDescFirst: true },
-      {
-        Header: "서비스명",
-        accessor: "service",
-        width: 150,
-        sortDescFirst: true,
-      },
-      { Header: "형태", accessor: "form", width: 150, sortDescFirst: true },
-      { Header: "플랜", accessor: "plan", width: 150, sortDescFirst: true },
-      { Header: "가격", accessor: "price", width: 150, sortDescFirst: true },
-      { Header: "수량", accessor: "amount", width: 150, sortDescFirst: true },
-      {
-        Header: "할인률",
-        accessor: "discountRate",
-        width: 150,
-        sortDescFirst: true,
-      },
-      {
-        Header: "수수료",
-        accessor: "commisstion",
-        width: 150,
-        sortDescFirst: true,
-      },
-      {
-        Header: "광고비",
-        accessor: "advertisingCost",
-        width: 150,
-        sortDescFirst: true,
-      },
-      {
-        Header: "캠페인 담당자",
-        accessor: "campaignManagers",
-        width: 150,
-        sortDescFirst: true,
-      },
-      {
-        Header: "판매 담당자",
-        accessor: "salesManager",
-        width: 150,
-        sortDescFirst: true,
-      },
-      { Header: "태그", accessor: "tags", width: 150, sortDescFirst: true },
-      { Header: "dataId", accessor: "id", width: 0, sortDescFirst: true },
     ],
     []
   );
@@ -193,11 +174,14 @@ export default function App() {
 
   //쿼리
   const {
-    loading: findCampaignsLoading,
-    error: findCampaignsError,
-    data: findCampaignsData,
+    loading: findAllCampaignParticipationsLoading,
+    error: findAllCampaignParticipationsError,
+    data: findAllCampaignParticipationsData,
     refetch,
-  } = useQuery<findCampaigns, findCampaignsVariables>(FIND_CAMPAIGNS, {
+  } = useQuery<
+    findAllCampaignParticipations,
+    findAllCampaignParticipationsVariables
+  >(FIND_ALL_CAMPAIGN_PARTICIPATIONS, {
     variables: {
       input: {
         fromDate: dateToInput(tableFromDateState),
@@ -207,47 +191,66 @@ export default function App() {
   });
   useEffect(() => {
     tokenCheck("query", refetch);
-  }, [findCampaignsData]);
+  }, [findAllCampaignParticipationsData]);
 
-  const campaignsData = useMemo(
+  const campaignParticipationsData = useMemo(
     () =>
-      findCampaignsData?.findCampaigns.campaigns?.map((val, idx) => ({
-        ...val,
-        createdAt: datePrettier(val.createdAt),
-        salesDate: dateSmall(val.salesDate),
-        targetDate: dateSmall(val.targetDate),
-        brandName_partner: val.partner?.nameId,
-      })),
-    [findCampaignsData]
+      findAllCampaignParticipationsData?.findAllCampaignParticipations.campaignParticipations?.map(
+        (val, idx) => ({
+          ...val,
+          createdAt: datePrettier(val.createdAt),
+          creatorNameId: val.user?.nameId,
+          brandName_partner: val.campaign?.partner?.nameId,
+          cumulativeOrder: val.campaign?.cumulativeOrder,
+          itemName: val.campaign?.itemName,
+          keyword: val.campaign?.keyword,
+        })
+      ),
+    [findAllCampaignParticipationsData]
   );
 
   //뮤테이션
   const [
-    createCampaignMutation,
+    createCampaignParticipationMutation,
     {
-      loading: createCampaignLoading,
-      error: createCampaignError,
-      data: createCampaignData,
+      loading: createCampaignParticipationLoading,
+      error: createCampaignParticipationError,
+      data: createCampaignParticipationData,
     },
-  ] = useMutation<createCampaign, createCampaignVariables>(CREATE_CAMPAIGN, {
+  ] = useMutation<
+    createCampaignParticipation,
+    createCampaignParticipationVariables
+  >(CREATE_CAMPAIGN_PARTICIPATION, {
     onCompleted: () => {
       refetch();
     },
   });
 
   const [
-    editCampaignMutation,
-    { loading: editCampaignLoading, data: editCampaignData },
-  ] = useMutation<editCampaign, editCampaignVariables>(EDIT_CAMPAIGN, {
+    editCampaignParticipationMutation,
+    {
+      loading: editCampaignParticipationLoading,
+      data: editCampaignParticipationData,
+    },
+  ] = useMutation<
+    editCampaignParticipation,
+    editCampaignParticipationVariables
+  >(EDIT_CAMPAIGN_PARTICIPATION, {
     onCompleted: () => {
       refetch();
     },
   });
 
   const [
-    deleteCampaignMutation,
-    { loading: deleteCampaignLoading, data: deleteCampaignData },
-  ] = useMutation<deleteCampaign, deleteCampaignVariables>(DELETE_CAMPAIGN, {
+    deleteCampaignParticipationMutation,
+    {
+      loading: deleteCampaignParticipationLoading,
+      data: deleteCampaignParticipationData,
+    },
+  ] = useMutation<
+    deleteCampaignParticipation,
+    deleteCampaignParticipationVariables
+  >(DELETE_CAMPAIGN_PARTICIPATION, {
     onCompleted: () => {
       refetch();
     },
@@ -279,30 +282,25 @@ export default function App() {
           throw "목표일을 입력해주세요";
         }
         console.log(data);
-        await createCampaignMutation({
+        await createCampaignParticipationMutation({
           variables: {
             input: {
-              tags: data.tags,
-              salesDate: data.salesDate,
-              targetDate: data.targetDate,
-              cumulativeOrder: +data.cumulativeOrder,
+              manuscriptFee: +data.manuscriptFee,
+              proposal: data.proposal,
+              consent: data.consent,
+              guide: data.guide,
+              plan: data.plan,
+              isFileTaxes: data.isFileTaxes,
+              creatorNameId: data.creatorNameId,
+              brandName_partner: data.brandName_partner,
+              cumulativeOrder: data.cumulativeOrder,
               itemName: data.itemName,
               keyword: data.keyword,
-              media: data.media,
-              service: data.service,
-              form: data.form,
-              plan: data.plan,
-              price: +data.price,
-              amount: +data.amount,
-              discountRate: +data.discountRate,
-              commisstion: +data.commisstion,
-              advertisingCost: +data.advertisingCost,
-              brandName_partner: data.brandName_partner,
             },
           },
         });
         reset_create(
-          campaignFormDefalut.reduce(
+          campaignParticipationFormDefalut.reduce(
             (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
             {}
           )
@@ -327,33 +325,28 @@ export default function App() {
 
   const onSubmit_edit = (data) => {
     tokenCheck("mutation", async () => {
-      console.log(formSelector("id", campaignForm));
+      console.log(formSelector("id", campaignParticipationForm));
       try {
-        await editCampaignMutation({
+        await editCampaignParticipationMutation({
           variables: {
             input: {
-              tags: data.tags,
-              salesDate: data.salesDate,
-              targetDate: data.targetDate,
-              cumulativeOrder: +data.cumulativeOrder,
+              manuscriptFee: +data.manuscriptFee,
+              proposal: data.proposal,
+              consent: data.consent,
+              guide: data.guide,
+              plan: data.plan,
+              isFileTaxes: data.isFileTaxes,
+              creatorNameId: data.creatorNameId,
+              brandName_partner: data.brandName_partner,
+              cumulativeOrder: data.cumulativeOrder,
               itemName: data.itemName,
               keyword: data.keyword,
-              media: data.media,
-              service: data.service,
-              form: data.form,
-              plan: data.plan,
-              price: +data.price,
-              amount: +data.amount,
-              discountRate: +data.discountRate,
-              commisstion: +data.commisstion,
-              advertisingCost: +data.advertisingCost,
-              brandName_partner: data.brandName_partner,
-              id: +formSelector("id", campaignForm),
+              id: +formSelector("id", campaignParticipationForm),
             },
           },
         });
         reset_edit(
-          campaignFormDefalut.reduce(
+          campaignParticipationFormDefalut.reduce(
             (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
             {}
           )
@@ -367,22 +360,22 @@ export default function App() {
     });
   };
 
-  if (findCampaignsError) {
+  if (findAllCampaignParticipationsError) {
     return (
       <>
         권한이 없습니다. <br />
-        {findCampaignsError.message}
+        {findAllCampaignParticipationsError.message}
       </>
     );
   }
-  if (findCampaignsLoading) {
+  if (findAllCampaignParticipationsLoading) {
     return <div className="">로딩중</div>;
   }
   return (
     <>
       <Org_adminTable
         columns={columns}
-        data={campaignsData}
+        data={campaignParticipationsData}
         customOptions={{
           setCreateReset: reset_create,
           getValues_create,
@@ -391,8 +384,8 @@ export default function App() {
             selectedFlatRows.forEach((val) => {
               window.open(
                 window.location.href.replace(
-                  "campaign",
-                  "campaign-participation"
+                  "campaignParticipation",
+                  "campaignParticipation-participation"
                 ) +
                   "/" +
                   val.values.id
@@ -404,7 +397,7 @@ export default function App() {
           },
           deleteMutation: (id) => {
             tokenCheck("mutation", () => {
-              deleteCampaignMutation({
+              deleteCampaignParticipationMutation({
                 variables: {
                   input: {
                     id,
@@ -414,7 +407,7 @@ export default function App() {
             });
           },
           setCreateFocus: () => {
-            setFocus_create("brandName_partner");
+            setFocus_create("creatorNameId");
           },
           setEditRecoil: setCampaignForm,
           setEditReset: reset_edit,
@@ -423,7 +416,7 @@ export default function App() {
             <>
               <form onSubmit={handleSubmit_create(onSubmit_create)}>
                 <ul>
-                  {campaignForm.map(
+                  {campaignParticipationForm.map(
                     (val, idx) =>
                       !["id", "createdAt"].includes(val.accessor) && (
                         <li key={idx} className="flex items-center">
@@ -454,14 +447,14 @@ export default function App() {
                     className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
                     onClick={() => {
                       reset_create(
-                        campaignFormDefalut.reduce(
+                        campaignParticipationFormDefalut.reduce(
                           (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
                           {}
                         )
                       );
 
                       setTimeout(() => {
-                        setFocus_create("brandName_partner");
+                        setFocus_create("creatorNameId");
                       }, 0);
                     }}
                   >
@@ -486,7 +479,7 @@ export default function App() {
             <>
               <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
                 <ul>
-                  {campaignForm.map(
+                  {campaignParticipationForm.map(
                     (val, idx) =>
                       !["id", "createdAt"].includes(val.accessor) && (
                         <li key={idx} className="flex items-center">

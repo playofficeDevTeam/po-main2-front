@@ -32,11 +32,10 @@ import {
 import { dateToInput } from "./fn_dateToInput";
 import dayjs from "dayjs";
 import { dateTime } from "./fn_DateTime";
-import { FIND_ME_FOR_ADMIN } from "../../4templates/admin_pgs/Admin/Gql_admin";
-import { findMeforAdmin } from "../../4templates/admin_pgs/Admin/__generated__/findMeforAdmin";
 import { useTokenCheck } from "../../hooks/useTokenCheck";
 import { useQuery } from "@apollo/client";
 import { nickNameAtom } from "../Org_header/Org_adminSidebar";
+import { dateList } from "./tableViewTypeList";
 
 export const TableStyles = styled.div`
   width: max-content;
@@ -352,7 +351,16 @@ function Table({ columns, data, customOptions }) {
                           : "center h-full"
                       }`}
                     >
-                      <div className="">{cell.render("Cell")}</div>
+                      {dateList.includes(cell.column.id) ? (
+                        <>
+                          <div className="">
+                            {cell.value.split(" ")[0].substr(-8)}
+                          </div>
+                          <div className=" hidden">{cell.render("Cell")}</div>
+                        </>
+                      ) : (
+                        <div className="">{cell.render("Cell")}</div>
+                      )}
 
                       {/* 수정버튼 */}
                       {![
