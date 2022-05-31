@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { atom, useRecoilState } from "recoil";
+import { atom } from "recoil";
 
 export const rawTableFromDate = atom({
   key: "rawTableFromDate",

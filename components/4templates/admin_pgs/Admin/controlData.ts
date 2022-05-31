@@ -8,3 +8,13 @@ export const exceptionDataInEditBtn = [
   "createdAt",
   "role",
 ];
+
+export const exceptionDataInCreateForm = [
+  ...exceptionData,
+  "createdAt",
+  "role",
+];
+
+export const exceptionDataInEditForm = [...exceptionData, "createdAt", "role"];
+
+export const focusId = "email";

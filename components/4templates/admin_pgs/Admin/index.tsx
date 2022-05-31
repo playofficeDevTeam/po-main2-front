@@ -149,10 +149,10 @@ export default function App() {
 
     //윈도우에 따라 테이블 크기 조절
     const [windowHeightState, setWindowHeightState] = useState(
-      window.innerHeight - 200
+      window.innerHeight - 180
     );
     const heightCheck = () => {
-      setWindowHeightState(window.innerHeight - 200);
+      setWindowHeightState(window.innerHeight - 180);
     };
     const throttleheightCheck = throttle(200, heightCheck);
     useEffect(() => {

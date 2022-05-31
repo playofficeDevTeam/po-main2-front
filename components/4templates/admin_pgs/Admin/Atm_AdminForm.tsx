@@ -14,6 +14,11 @@ import { nickNameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import { formSelector } from "../Question/fn_formSelector";
 import {
+  exceptionDataInCreateForm,
+  exceptionDataInEditForm,
+  focusId,
+} from "./controlData";
+import {
   CREATE_ADMIN,
   EDIT_ADMIN,
   DELETE_ADMIN,
@@ -201,7 +206,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
           if ([67].includes(e.keyCode)) {
             setisModalOpen(true);
             setTimeout(() => {
-              setFocus_create("email");
+              setFocus_create(focusId);
             }, 100);
           }
           //시프트 s/d누를때 닉네임/데이트 생성
@@ -256,7 +261,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                     className="center w-20 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500"
                     onClick={() => {
                       setTimeout(() => {
-                        setFocus_create("email");
+                        setFocus_create(focusId);
                       }, 100);
                     }}
                   >
@@ -267,69 +272,56 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
               modal: (
                 <form onSubmit={handleSubmit_create(onSubmit_create)}>
                   <ul>
-                    {adminColumnsDefault.map(
-                      (val, idx) =>
-                        !["id", "createdAt", "role"].includes(val.accessor) && (
-                          <>
-                            {["email"].includes(val.accessor) ? (
-                              <li key={idx} className="flex items-center">
-                                <div className="w-28 flex pl-1">
-                                  {val.Header}*
-                                </div>
+                    {adminColumnsDefault.map((val, idx) => {
+                      if (!exceptionDataInCreateForm.includes(val.accessor)) {
+                        if (["email"].includes(val.accessor)) {
+                          return (
+                            <>
+                              <li key={idx}>
+                                <div>{val.Header}*</div>
                                 <input
                                   defaultValue={val.value}
                                   required
                                   {...register_create(val.accessor)}
-                                  className="border w-96 p-1 m-1"
                                   type={`text`}
                                 />
                               </li>
-                            ) : (
-                              <li key={idx} className="flex items-center">
-                                <div className="w-28 flex pl-1">
-                                  {val.Header}
-                                </div>
+                              <li>
+                                <div>{"비밀번호"}*</div>
                                 <input
-                                  defaultValue={val.value}
-                                  {...register_create(val.accessor)}
-                                  className="border w-96 p-1 m-1"
-                                  type={`text`}
+                                  defaultValue={""}
+                                  required
+                                  {...register_create("password")}
+                                  type={`password`}
                                 />
                               </li>
-                            )}
-
-                            {["email"].includes(val.accessor) && (
-                              <>
-                                <li className="flex items-center">
-                                  <div className="w-28 flex pl-1">
-                                    {"비밀번호"}*
-                                  </div>
-                                  <input
-                                    defaultValue={""}
-                                    required
-                                    {...register_create("password")}
-                                    className="border w-96 p-1 m-1"
-                                    type={`password`}
-                                  />
-                                </li>
-                                <li className="flex items-center">
-                                  <div className="w-28 flex pl-1">
-                                    {"비밀번호 확인"}*
-                                  </div>
-                                  <input
-                                    defaultValue={""}
-                                    required
-                                    {...register_create("passwordCheck")}
-                                    className="border w-96 p-1 m-1"
-                                    type={`password`}
-                                  />
-                                </li>
-                              </>
-                            )}
-                          </>
-                        )
-                    )}
+                              <li>
+                                <div>{"비밀번호 확인"}*</div>
+                                <input
+                                  defaultValue={""}
+                                  required
+                                  {...register_create("passwordCheck")}
+                                  type={`password`}
+                                />
+                              </li>
+                            </>
+                          );
+                        } else {
+                          return (
+                            <li key={idx}>
+                              <div>{val.Header}</div>
+                              <input
+                                defaultValue={val.value}
+                                {...register_create(val.accessor)}
+                                type={`text`}
+                              />
+                            </li>
+                          );
+                        }
+                      }
+                    })}
                   </ul>
+
                   <div className="flex justify-end mt-2">
                     <div
                       className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
@@ -345,7 +337,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                         );
 
                         setTimeout(() => {
-                          setFocus_create("email");
+                          setFocus_create(focusId);
                         }, 100);
                       }}
                     >
@@ -377,48 +369,51 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
               modal: (
                 <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
                   <ul>
-                    {adminColumnsDefault.map(
-                      (val, idx) =>
-                        !["id", "createdAt", "role"].includes(val.accessor) && (
-                          <>
-                            <li key={idx} className="flex items-center">
-                              <div className="w-28 flex pl-1">{val.Header}</div>
+                    {adminColumnsDefault.map((val, idx) => {
+                      if (!exceptionDataInCreateForm.includes(val.accessor)) {
+                        if (["email"].includes(val.accessor)) {
+                          return (
+                            <>
+                              <li key={idx}>
+                                <div>{val.Header}</div>
+                                <input
+                                  defaultValue={val.value}
+                                  {...register_edit(val.accessor)}
+                                  type={`text`}
+                                />
+                              </li>
+                              <li>
+                                <div>{"비밀번호"}</div>
+                                <input
+                                  defaultValue={""}
+                                  {...register_edit("password")}
+                                  type={`password`}
+                                />
+                              </li>
+                              <li>
+                                <div>{"비밀번호 확인"}</div>
+                                <input
+                                  defaultValue={""}
+                                  {...register_edit("passwordCheck")}
+                                  type={`password`}
+                                />
+                              </li>
+                            </>
+                          );
+                        } else {
+                          return (
+                            <li key={idx}>
+                              <div>{val.Header}</div>
                               <input
                                 defaultValue={val.value}
                                 {...register_edit(val.accessor)}
-                                className="border w-96 p-1 m-1"
                                 type={`text`}
                               />
                             </li>
-                            {["email"].includes(val.accessor) && (
-                              <>
-                                <li className="flex items-center">
-                                  <div className="w-28 flex pl-1">
-                                    {"비밀번호"}
-                                  </div>
-                                  <input
-                                    defaultValue={""}
-                                    {...register_edit("password")}
-                                    className="border w-96 p-1 m-1"
-                                    type={`password`}
-                                  />
-                                </li>
-                                <li className="flex items-center">
-                                  <div className="w-28 flex pl-1">
-                                    {"비밀번호 확인"}
-                                  </div>
-                                  <input
-                                    defaultValue={""}
-                                    {...register_edit("passwordCheck")}
-                                    className="border w-96 p-1 m-1"
-                                    type={`password`}
-                                  />
-                                </li>
-                              </>
-                            )}
-                          </>
-                        )
-                    )}
+                          );
+                        }
+                      }
+                    })}
                   </ul>
                   <div className="flex justify-end mt-2">
                     <div
