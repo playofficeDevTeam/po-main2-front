@@ -53,7 +53,7 @@ export interface CampaignParticipationInput {
   CampaignUploadLinks?: CampaignUploadLinkType[] | null;
   user?: UserInputType | null;
   userId?: number | null;
-  campaign: CampaignInputType;
+  campaign?: CampaignInputType | null;
   campaignId?: number | null;
   manuscriptFee?: number | null;
   proposal?: string | null;
@@ -248,10 +248,16 @@ export interface CreateUserForAdminInput {
   campaignParticipations?: CampaignParticipationInput[] | null;
   payments?: paymentInputType[] | null;
   questions?: questionInputType[] | null;
+  mediaTypes?: string[] | null;
+  naverBlogerId?: string | null;
+  naverAverageNumberOfVisitors?: string | null;
+  naverTotalNumberOfVisitors?: string | null;
+  naverNumberOfBuddys?: string | null;
+  instaNumberOfFollowers?: string | null;
 }
 
 export interface DeleteAdminInput {
-  id: number;
+  ids: number[];
 }
 
 export interface DeleteCampaignInput {
@@ -447,6 +453,12 @@ export interface EditUserInput {
   campaignParticipations?: CampaignParticipationInput[] | null;
   payments?: paymentInputType[] | null;
   questions?: questionInputType[] | null;
+  mediaTypes?: string[] | null;
+  naverBlogerId?: string | null;
+  naverAverageNumberOfVisitors?: string | null;
+  naverTotalNumberOfVisitors?: string | null;
+  naverNumberOfBuddys?: string | null;
+  instaNumberOfFollowers?: string | null;
   id: number;
 }
 
@@ -524,6 +536,12 @@ export interface UserInputType {
   campaignParticipations?: CampaignParticipationInput[] | null;
   payments?: paymentInputType[] | null;
   questions?: questionInputType[] | null;
+  mediaTypes?: string[] | null;
+  naverBlogerId?: string | null;
+  naverAverageNumberOfVisitors?: string | null;
+  naverTotalNumberOfVisitors?: string | null;
+  naverNumberOfBuddys?: string | null;
+  instaNumberOfFollowers?: string | null;
 }
 
 export interface cartInputType {

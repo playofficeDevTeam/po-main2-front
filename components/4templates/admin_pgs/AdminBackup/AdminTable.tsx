@@ -1,10 +1,8 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import { UserRole } from "../../../../__generated__/globalTypes";
 import Org_adminTable from "../../../3organisms/Org_adminTable/tableOptions";
-import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
 import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
 import { isModal_adminEditOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
 import {
@@ -14,74 +12,15 @@ import {
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import { datePrettier } from "../Question/fn_DatePrettier";
 import { formSelector } from "../Question/fn_formSelector";
-import { partnerFormData, partnerFormDefault } from "./Var_PartnerForm";
-import {
-  createUserForAdmin,
-  createUserForAdminVariables,
-} from "./__generated__/createUserForAdmin";
-import { deleteUser, deleteUserVariables } from "./__generated__/deleteUser";
-import { editUser, editUserVariables } from "./__generated__/editUser";
-import { findUsers, findUsersVariables } from "./__generated__/findUsers";
-
-export const FIND_USERS = gql`
-  query findUsers($input: FindUsersInput!) {
-    findUsers(input: $input) {
-      ok
-      error
-      users {
-        id
-        createdAt
-        tags
-        email
-        role
-        name
-        phoneNumber
-        brandName
-        residentRegistrationNumber
-        nameId
-        campaignParticipations {
-          id
-        }
-        payments {
-          id
-        }
-        questions {
-          id
-        }
-      }
-    }
-  }
-`;
-
-export const CREATE_USER_FOR_ADMIN = gql`
-  mutation createUserForAdmin($input: CreateUserForAdminInput!) {
-    createUserForAdmin(input: $input) {
-      ok
-      error
-    }
-  }
-`;
-
-export const EDIT_USER = gql`
-  mutation editUser($input: EditUserInput!) {
-    editUser(input: $input) {
-      ok
-      error
-    }
-  }
-`;
-
-export const DELETE_USER = gql`
-  mutation deleteUser($input: DeleteUserInput!) {
-    deleteUser(input: $input) {
-      ok
-      error
-    }
-  }
-`;
+import { EDIT_ADMIN } from "./Gql_admin";
+import { adminFormData, adminFormDefault } from "./Var_adminForm";
+import { createAdmin, createAdminVariables } from "./__generated__/createAdmin";
+import { deleteAdmin, deleteAdminVariables } from "./__generated__/deleteAdmin";
+import { editAdmin, editAdminVariables } from "./__generated__/editAdmin";
+import { findAllAdmin } from "./__generated__/findAllAdmin";
 
 const App = () => {
-  const [partnerForm, setPartnerForm] = useRecoilState(partnerFormData);
+  const [adminForm, setAdminForm] = useRecoilState(adminFormData);
   const [tableFromDateState, setTableFromDateState] =
     useRecoilState(tableFromDate);
   const [tableToDateState, setTableToDateState] = useRecoilState(tableToDate);
@@ -97,36 +36,22 @@ const App = () => {
       {
         Header: "이메일(ID)",
         accessor: "email",
-        width: 150,
+        width: 400,
         sortDescFirst: true,
       },
       {
-        Header: "브랜드명(ID)",
-        accessor: "nameId",
-        width: 150,
+        Header: "닉네임",
+        accessor: "nickName",
+        width: 300,
         sortDescFirst: true,
       },
-      {
-        Header: "브랜드명",
-        accessor: "brandName",
-        width: 150,
-        sortDescFirst: true,
-      },
-      { Header: "이름", accessor: "name", width: 150, sortDescFirst: true },
 
       {
-        Header: "연락처",
-        accessor: "phoneNumber",
+        Header: "역할",
+        accessor: "role",
         width: 150,
         sortDescFirst: true,
       },
-      {
-        Header: "주민등록번호",
-        accessor: "residentRegistrationNumber",
-        width: 150,
-        sortDescFirst: true,
-      },
-      { Header: "태그", accessor: "tags", width: 150, sortDescFirst: true },
       { Header: "dataId", accessor: "id", width: 0 },
     ],
     []
@@ -137,60 +62,51 @@ const App = () => {
 
   //쿼리
   const {
-    loading: findUsersLoading,
-    error: findUsersError,
-    data: findUsersData,
+    loading: findAllAdminLoading,
+    error: findAllAdminError,
+    data: findAllAdminData,
     refetch,
-  } = useQuery<findUsers, findUsersVariables>(FIND_USERS, {
-    variables: {
-      input: {
-        fromDate: dateToInput(tableFromDateState),
-        toDate: dateToInput(tableToDateState),
-        userRole: UserRole.Partner,
-      },
-    },
-  });
+  } = useQuery<findAllAdmin>(FIND_ALL_ADMIN);
   useEffect(() => {
     tokenCheck("query", refetch);
-  }, [findUsersData]);
+  }, [findAllAdminData]);
 
-  const usersData = useMemo(
+  const adminsData = useMemo(
     () =>
-      findUsersData?.findUsers.users?.map((val, idx) => ({
+      findAllAdminData?.findAllAdmin.admins?.map((val, idx) => ({
         ...val,
         createdAt: datePrettier(val.createdAt),
       })),
-    [findUsersData]
+    [findAllAdminData]
   );
 
   //뮤테이션
   const [
-    createUserForAdminMutation,
+    createAdminMutation,
     {
-      loading: createUserForAdminLoading,
-      error: createUserForAdminError,
-      data: createUserForAdminData,
+      loading: createAdminLoading,
+      error: createAdminError,
+      data: createAdminData,
     },
-  ] = useMutation<createUserForAdmin, createUserForAdminVariables>(
-    CREATE_USER_FOR_ADMIN,
-    {
-      onCompleted: () => {
-        refetch();
-      },
-    }
-  );
-
-  const [editUserMutation, { loading: editUserLoading, data: editUserData }] =
-    useMutation<editUser, editUserVariables>(EDIT_USER, {
-      onCompleted: () => {
-        refetch();
-      },
-    });
+  ] = useMutation<createAdmin, createAdminVariables>(CREATE_ADMIN, {
+    onCompleted: () => {
+      refetch();
+    },
+  });
 
   const [
-    deleteUserMutation,
-    { loading: deleteUserLoading, data: deleteUserData },
-  ] = useMutation<deleteUser, deleteUserVariables>(DELETE_USER, {
+    editAdminMutation,
+    { loading: editAdminLoading, data: editAdminData },
+  ] = useMutation<editAdmin, editAdminVariables>(EDIT_ADMIN, {
+    onCompleted: () => {
+      refetch();
+    },
+  });
+
+  const [
+    deleteAdminMutation,
+    { loading: deleteAdminLoading, data: deleteAdminData },
+  ] = useMutation<deleteAdmin, deleteAdminVariables>(DELETE_ADMIN, {
     onCompleted: () => {
       refetch();
     },
@@ -217,24 +133,17 @@ const App = () => {
     tokenCheck("mutation", async () => {
       try {
         if (data.password === data.passwordCheck) {
-          await createUserForAdminMutation({
+          await createAdminMutation({
             variables: {
               input: {
-                role: UserRole.Partner,
                 email: data.email === "" ? null : data.email,
-                password: data.password === "" ? null : data.password,
-                name: data.name,
-                nameId: data.nameId === "" ? null : data.nameId,
-                phoneNumber: data.phoneNumber,
-                brandName: data.brandName,
-                residentRegistrationNumber: data.residentRegistrationNumber,
-                tags: data.tags,
+                password: data.password,
+                nickName: data.nickName,
               },
             },
           });
-
           reset_create(
-            partnerFormDefault.reduce(
+            adminFormDefault.reduce(
               (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
               { password: "", passwordCheck: "" }
             )
@@ -246,15 +155,7 @@ const App = () => {
       } catch (error) {
         const errorString: string = error + "";
         const pureError = errorString.replace("Error: ", "");
-        if (errorString.indexOf("UQ_e12875dfb3b1d92d7d7c5377e22") !== -1) {
-          alert(`이메일(ID)이 중복됩니다.`);
-        } else if (
-          errorString.indexOf("UQ_1db0f40d9ff5904789eb33dc031") !== -1
-        ) {
-          alert(`브랜드명(ID)이 중복됩니다.`);
-        } else {
-          alert(pureError);
-        }
+        alert(pureError);
       }
     });
   };
@@ -272,23 +173,18 @@ const App = () => {
     tokenCheck("mutation", async () => {
       try {
         if (data.password === data.passwordCheck) {
-          await editUserMutation({
+          await editAdminMutation({
             variables: {
               input: {
                 email: data.email === "" ? null : data.email,
-                password: data.password === "" ? null : data.password,
-                name: data.name,
-                nameId: data.nameId === "" ? null : data.nameId,
-                phoneNumber: data.phoneNumber,
-                brandName: data.brandName,
-                residentRegistrationNumber: data.residentRegistrationNumber,
-                tags: data.tags,
-                id: +formSelector("id", partnerForm),
+                nickName: data.nickName,
+                password: data.password,
+                id: +formSelector("id", adminForm),
               },
             },
           });
           reset_edit(
-            partnerFormDefault.reduce(
+            adminFormDefault.reduce(
               (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
               {}
             )
@@ -300,45 +196,38 @@ const App = () => {
       } catch (error) {
         const errorString: string = error + "";
         const pureError = errorString.replace("Error: ", "");
-        if (errorString.indexOf("UQ_e12875dfb3b1d92d7d7c5377e22") !== -1) {
-          alert(`이메일(ID)이 중복됩니다.`);
-        } else if (
-          errorString.indexOf("UQ_1db0f40d9ff5904789eb33dc031") !== -1
-        ) {
-          alert(`브랜드명(ID)이 중복됩니다.`);
-        } else {
-          alert(pureError);
-        }
+        alert(pureError);
       }
     });
   };
 
-  if (findUsersError) {
+  if (findAllAdminError) {
     return (
       <>
         권한이 없습니다.
-        {/* <div className="">{findUsersError.toString()}</div> */}
+        <div className="">{findAllAdminError.toString()}</div>
       </>
     );
   }
-  if (findUsersLoading) {
+  if (findAllAdminLoading) {
     return <div className="">로딩중</div>;
   }
   return (
     <>
       <Org_adminTable
         columns={columns}
-        data={usersData}
+        data={adminsData}
         customOptions={{
           setCreateReset: reset_create,
           getValues_create,
           getValues_edit,
+          noDate: true,
           refetch: () => {
             tokenCheck("query", refetch);
           },
           deleteMutation: (id) => {
             tokenCheck("mutation", () => {
-              deleteUserMutation({
+              deleteAdminMutation({
                 variables: {
                   input: {
                     id,
@@ -350,42 +239,52 @@ const App = () => {
           setCreateFocus: () => {
             setFocus_create("email");
           },
-          setEditRecoil: setPartnerForm,
+          removeEditBtn: ["role"],
+          setEditRecoil: setAdminForm,
           setEditReset: reset_edit,
           setEditFocus: setFocus_edit,
           createForm: (
             <>
               <form onSubmit={handleSubmit_create(onSubmit_create)}>
                 <ul>
-                  {partnerForm.map(
+                  {adminForm.map(
                     (val, idx) =>
-                      !["id", "createdAt"].includes(val.accessor) && (
+                      !["id", "createdAt", "role"].includes(val.accessor) && (
                         <>
-                          <li key={idx} className="flex items-center">
-                            <div className="w-28 flex pl-1">{val.Header}</div>
-                            {!["uniqueness"].includes(val.accessor) ? (
+                          {["email"].includes(val.accessor) ? (
+                            <li key={idx} className="flex items-center">
+                              <div className="w-28 flex pl-1">
+                                {val.Header}*
+                              </div>
+                              <input
+                                defaultValue={val.value}
+                                required
+                                {...register_create(val.accessor)}
+                                className="border w-96 p-1 m-1"
+                                type={`text`}
+                              />
+                            </li>
+                          ) : (
+                            <li key={idx} className="flex items-center">
+                              <div className="w-28 flex pl-1">{val.Header}</div>
                               <input
                                 defaultValue={val.value}
                                 {...register_create(val.accessor)}
                                 className="border w-96 p-1 m-1"
                                 type={`text`}
                               />
-                            ) : (
-                              <textarea
-                                defaultValue={val.value}
-                                {...register_create(val.accessor)}
-                                className="border w-96 p-1 m-1"
-                              ></textarea>
-                            )}
-                          </li>
+                            </li>
+                          )}
+
                           {["email"].includes(val.accessor) && (
                             <>
                               <li className="flex items-center">
                                 <div className="w-28 flex pl-1">
-                                  {"비밀번호"}
+                                  {"비밀번호"}*
                                 </div>
                                 <input
                                   defaultValue={""}
+                                  required
                                   {...register_create("password")}
                                   className="border w-96 p-1 m-1"
                                   type={`password`}
@@ -393,10 +292,11 @@ const App = () => {
                               </li>
                               <li className="flex items-center">
                                 <div className="w-28 flex pl-1">
-                                  {"비밀번호 확인"}
+                                  {"비밀번호 확인"}*
                                 </div>
                                 <input
                                   defaultValue={""}
+                                  required
                                   {...register_create("passwordCheck")}
                                   className="border w-96 p-1 m-1"
                                   type={`password`}
@@ -413,7 +313,7 @@ const App = () => {
                     className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
                     onClick={() => {
                       reset_create(
-                        partnerFormDefault.reduce(
+                        adminFormDefault.reduce(
                           (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
                           { password: "", passwordCheck: "" }
                         )
@@ -421,7 +321,7 @@ const App = () => {
 
                       setTimeout(() => {
                         setFocus_create("email");
-                      }, 0);
+                      }, 100);
                     }}
                   >
                     초기화
@@ -445,26 +345,18 @@ const App = () => {
             <>
               <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
                 <ul>
-                  {partnerForm.map(
+                  {adminForm.map(
                     (val, idx) =>
-                      !["id", "createdAt"].includes(val.accessor) && (
+                      !["id", "createdAt", "role"].includes(val.accessor) && (
                         <>
                           <li key={idx} className="flex items-center">
                             <div className="w-28 flex pl-1">{val.Header}</div>
-                            {!["uniqueness"].includes(val.accessor) ? (
-                              <input
-                                defaultValue={val.value}
-                                {...register_edit(val.accessor)}
-                                className="border w-96 p-1 m-1"
-                                type={`text`}
-                              />
-                            ) : (
-                              <textarea
-                                defaultValue={val.value}
-                                {...register_edit(val.accessor)}
-                                className="border w-96 p-1 m-1"
-                              ></textarea>
-                            )}
+                            <input
+                              defaultValue={val.value}
+                              {...register_edit(val.accessor)}
+                              className="border w-96 p-1 m-1"
+                              type={`text`}
+                            />
                           </li>
                           {["email"].includes(val.accessor) && (
                             <>

@@ -22,7 +22,7 @@ import { questionFormData, questionFormDefalut } from "./Var_questionForm";
 import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
 import Org_adminTable, {
   SelectColumnFilter,
-} from "../../../3organisms/Org_adminTable";
+} from "../../../3organisms/Org_adminTable/tableOptions";
 import { isModal_adminEditOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
 import { formSelector } from "./fn_formSelector";
 import { datePrettier } from "./fn_DatePrettier";

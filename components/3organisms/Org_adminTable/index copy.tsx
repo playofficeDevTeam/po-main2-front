@@ -33,7 +33,6 @@ import { dateToInput } from "./fn_dateToInput";
 import dayjs from "dayjs";
 import { dateTime } from "./fn_DateTime";
 import { useTokenCheck } from "../../hooks/useTokenCheck";
-import { useQuery } from "@apollo/client";
 import { nickNameAtom } from "../Org_header/Org_adminSidebar";
 import { dateList } from "./tableViewTypeList";
 
@@ -63,7 +62,7 @@ export const TableStyles = styled.div`
   }
 `;
 
-function GlobalFilter({
+export function GlobalFilter({
   preGlobalFilteredRows,
   globalFilter,
   setGlobalFilter,
@@ -94,7 +93,7 @@ function GlobalFilter({
   );
 }
 
-export function DefaultColumnFilter({
+export function ColumnFilter({
   column: { filterValue, preFilteredRows, setFilter },
 }) {
   const count = preFilteredRows.length;
@@ -143,7 +142,7 @@ export function SelectColumnFilter({
   );
 }
 
-const IndeterminateCheckbox = forwardRef<HTMLInputElement>(
+export const IndeterminateCheckbox = forwardRef<HTMLInputElement>(
   ({ indeterminate, ...rest }: any, ref) => {
     const defaultRef: any = useRef();
     const resolvedRef: any = ref || defaultRef;
@@ -167,7 +166,7 @@ const IndeterminateCheckbox = forwardRef<HTMLInputElement>(
 
 IndeterminateCheckbox.displayName = "IndeterminateCheckbox";
 
-const ColumnIndeterminateCheckbox = forwardRef<HTMLInputElement>(
+export const ColumnIndeterminateCheckbox = forwardRef<HTMLInputElement>(
   ({ indeterminate, ...rest }: any, ref) => {
     const defaultRef: any = useRef();
     const resolvedRef: any = ref || defaultRef;
@@ -188,7 +187,7 @@ function Table({ columns, data, customOptions }) {
     () => ({
       // Let's set up our default Filter UI
       width: 150,
-      Filter: DefaultColumnFilter,
+      Filter: ColumnFilter,
     }),
     []
   );

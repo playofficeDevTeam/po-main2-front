@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { UserRole } from "../../../../__generated__/globalTypes";
-import Org_adminTable from "../../../3organisms/Org_adminTable";
+import Org_adminTable from "../../../3organisms/Org_adminTable/tableOptions";
 import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
 import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
 import { isModal_adminEditOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminEdit";

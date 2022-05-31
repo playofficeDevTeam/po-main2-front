@@ -2,7 +2,7 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import Org_adminTable from "../../../3organisms/Org_adminTable";
+import Org_adminTable from "../../../3organisms/Org_adminTable/tableOptions";
 import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
 import { isModal_adminEditOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
 import {
@@ -18,40 +18,6 @@ import { createAdmin, createAdminVariables } from "./__generated__/createAdmin";
 import { deleteAdmin, deleteAdminVariables } from "./__generated__/deleteAdmin";
 import { editAdmin, editAdminVariables } from "./__generated__/editAdmin";
 import { findAllAdmin } from "./__generated__/findAllAdmin";
-
-export const FIND_ALL_ADMIN = gql`
-  query findAllAdmin {
-    findAllAdmin {
-      ok
-      error
-      admins {
-        id
-        createdAt
-        email
-        nickName
-        role
-      }
-    }
-  }
-`;
-
-export const CREATE_ADMIN = gql`
-  mutation createAdmin($input: CreateAdminSuperInput!) {
-    createAdmin(input: $input) {
-      ok
-      error
-    }
-  }
-`;
-
-export const DELETE_ADMIN = gql`
-  mutation deleteAdmin($input: DeleteAdminInput!) {
-    deleteAdmin(input: $input) {
-      ok
-      error
-    }
-  }
-`;
 
 const App = () => {
   const [adminForm, setAdminForm] = useRecoilState(adminFormData);

@@ -32,7 +32,7 @@ export interface findAllCampaignParticipations_findAllCampaignParticipations_cam
   id: number;
   createdAt: any;
   user: findAllCampaignParticipations_findAllCampaignParticipations_campaignParticipations_user | null;
-  campaign: findAllCampaignParticipations_findAllCampaignParticipations_campaignParticipations_campaign;
+  campaign: findAllCampaignParticipations_findAllCampaignParticipations_campaignParticipations_campaign | null;
   manuscriptFee: number | null;
   proposal: string | null;
   consent: string | null;
