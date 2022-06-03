@@ -3,7 +3,7 @@ import Modal from "react-modal";
 import { atom, useRecoilState } from "recoil";
 import ScrollLock from "../../effects/ScrollLock";
 import useIsMobile from "../../hooks/useIsMobile";
-import { FormStyle } from "./styledTable";
+import { FormStyle } from "./TableStyle";
 
 const data1 = {
   button: <></>,
@@ -40,7 +40,7 @@ export default function App({ data = data1 }) {
             ? "translate(-50%, 0%)"
             : "translate(-50%, 40%)",
           opacity: isModalAnimated ? 1 : 0,
-          transitionDuration: "0.2s",
+          transitionDuration: "0.1s",
         },
       }
     : {
@@ -57,7 +57,7 @@ export default function App({ data = data1 }) {
             ? "translate(-50%, -50%)"
             : "translate(-50%, -48%)",
           opacity: isModalAnimated ? 1 : 0,
-          transitionDuration: "0.2s",
+          transitionDuration: "0.1s",
         },
       };
 

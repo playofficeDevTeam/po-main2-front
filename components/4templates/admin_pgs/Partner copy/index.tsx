@@ -1,4 +1,4 @@
-import AdminTable from "./AdminTable";
+import PartnerTable from "./PartnerTable";
 import useIsMobile from "/home/app/components/hooks/useIsMobile";
 
 export default function App() {
@@ -6,7 +6,7 @@ export default function App() {
 
   return (
     <>
-      <AdminTable />
+      <PartnerTable />
     </>
   );
 }

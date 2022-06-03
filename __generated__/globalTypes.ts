@@ -285,7 +285,7 @@ export interface DeleteQuestionManagementInput {
 }
 
 export interface DeleteUserInput {
-  id: number;
+  ids: number[];
 }
 
 export interface EditAdminInput {

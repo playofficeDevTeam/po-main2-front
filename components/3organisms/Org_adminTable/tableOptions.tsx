@@ -43,7 +43,6 @@ export function ColumnFilter({
       onChange={(e) => {
         setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
       }}
-      placeholder={`검색 필터`}
       className="border rounded-sm w-full text-base px-1"
     />
   );

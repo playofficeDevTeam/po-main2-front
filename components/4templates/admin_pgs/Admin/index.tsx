@@ -26,9 +26,11 @@ import { useRecoilState } from "recoil";
 import { isModal_adminEditOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
 import { dateList } from "../../../3organisms/Org_adminTable/tableViewTypeList";
 import TableStyle from "../../../3organisms/Org_adminTable/TableStyle";
-import Form from "./Atm_AdminForm";
-import { exceptionDataInEditBtn, exceptionDataInTable } from "./controlData";
-
+import {
+  adminExceptionDataInEditBtn,
+  adminExceptionDataInTable,
+} from "./adminControlData";
+import Atm_AdminForm from "./Atm_AdminForm";
 export default function App() {
   //토큰체크
   const tokenCheck = useTokenCheck();
@@ -189,7 +191,7 @@ export default function App() {
                   {!["id"].includes(cell.column.id) && (
                     <div
                       {...cell.getCellProps()}
-                      className={`thin-scroll  td group border-r px-2 border-gray-300 
+                      className={`overflow-x-auto thin-scroll  td group border-r px-2 border-gray-300 
                        ${
                          selectedFlatRows
                            .map((val) => val.id)
@@ -219,7 +221,9 @@ export default function App() {
                         )}
 
                         {/* 수정버튼 */}
-                        {!exceptionDataInEditBtn.includes(cell.column.id) && (
+                        {!adminExceptionDataInEditBtn.includes(
+                          cell.column.id
+                        ) && (
                           <div
                             className="hidden group-hover:block"
                             onClick={() => {
@@ -258,7 +262,7 @@ export default function App() {
 
     return (
       <>
-        <Form
+        <Atm_AdminForm
           getToggleHideAllColumnsProps={getToggleHideAllColumnsProps}
           allColumns={allColumns}
           selectedFlatRows={selectedFlatRows}
@@ -284,7 +288,7 @@ export default function App() {
               <tr {...headerGroup.getHeaderGroupProps()} key={idx}>
                 {headerGroup.headers.map(
                   (column, idx) =>
-                    !exceptionDataInTable.includes(column.id) && (
+                    !adminExceptionDataInTable.includes(column.id) && (
                       <th {...column.getHeaderProps()} key={idx}>
                         <div
                           {...column.getSortByToggleProps()}
@@ -338,24 +342,26 @@ export default function App() {
     );
   }
 
-  const MemoTable = memo(Table);
-
   //렌더링
   if (findAllAdminError) {
     return (
-      <>
+      <TableStyle>
         권한이 없습니다.
         <div className="">{findAllAdminError.toString()}</div>
-      </>
+      </TableStyle>
     );
   }
   if (findAllAdminLoading) {
-    return <div className="">로딩중</div>;
+    return (
+      <TableStyle>
+        <div className=""></div>
+      </TableStyle>
+    );
   }
 
   return (
     <TableStyle>
-      <MemoTable columns={columns} data={adminsData} />
+      <Table columns={columns} data={adminsData} />
     </TableStyle>
   );
 }

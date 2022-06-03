@@ -2,7 +2,9 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
+import { UserRole } from "../../../../__generated__/globalTypes";
 import { dateTime } from "../../../3organisms/Org_adminTable/fn_DateTime";
+import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
 import Modal_adminCreate, {
   isModal_adminCreateOpenAtom,
 } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
@@ -10,75 +12,94 @@ import Modal_adminEdit, {
   isModal_adminEditOpenAtom,
 } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
 import { ColumnIndeterminateCheckbox } from "../../../3organisms/Org_adminTable/tableOptions";
+import {
+  tableFromDate,
+  tableToDate,
+} from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import { nickNameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
+
 import { formSelector } from "../Question/fn_formSelector";
 import {
-  adminExceptionDataInCreateForm,
-  adminFocusId,
-} from "./adminControlData";
+  CREATE_USER_FOR_ADMIN,
+  DELETE_USER,
+  EDIT_USER,
+  FIND_USERS,
+} from "./Gql_user";
 import {
-  CREATE_ADMIN,
-  EDIT_ADMIN,
-  DELETE_ADMIN,
-  FIND_ALL_ADMIN,
-} from "./Gql_admin";
-import { adminColumnsData, adminColumnsDefault } from "./Var_adminColumns";
-import { createAdmin, createAdminVariables } from "./__generated__/createAdmin";
-import { deleteAdmin, deleteAdminVariables } from "./__generated__/deleteAdmin";
-import { editAdmin, editAdminVariables } from "./__generated__/editAdmin";
-import { findAllAdmin } from "./__generated__/findAllAdmin";
+  partnerExceptionDataInCreateForm,
+  partnerFocusId,
+} from "./partnerControlData";
+import {
+  partnerColumnsData,
+  partnerColumnsDefault,
+} from "./Var_partnerColumns";
+import {
+  createUserForAdmin,
+  createUserForAdminVariables,
+} from "./__generated__/createUserForAdmin";
+import { deleteUser, deleteUserVariables } from "./__generated__/deleteUser";
+import { editUser, editUserVariables } from "./__generated__/editUser";
+import { findUsers, findUsersVariables } from "./__generated__/findUsers";
 
 //폼 컴포넌트
 function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
+  const [tableFromDateState, setTableFromDateState] =
+    useRecoilState(tableFromDate);
+  const [tableToDateState, setTableToDateState] = useRecoilState(tableToDate);
+
   //토큰체크
   const tokenCheck = useTokenCheck();
 
   //쿼리
   const {
-    loading: findAllAdminLoading,
-    error: findAllAdminError,
-    data: findAllAdminData,
+    loading: findUsersLoading,
+    error: findUsersError,
+    data: findUsersData,
     refetch,
-  } = useQuery<findAllAdmin>(FIND_ALL_ADMIN);
-
+  } = useQuery<findUsers, findUsersVariables>(FIND_USERS, {
+    variables: {
+      input: {
+        fromDate: dateToInput(tableFromDateState),
+        toDate: dateToInput(tableToDateState),
+        userRole: UserRole.Partner,
+      },
+    },
+  });
   useEffect(() => {
     tokenCheck("query", refetch);
-  }, [findAllAdminData]);
+  }, [findUsersData]);
 
   //생성 뮤테이션
   const [
-    createAdminMutation,
+    createUserForAdminMutation,
     {
-      loading: createAdminLoading,
-      error: createAdminError,
-      data: createAdminData,
+      loading: createUserForAdminLoading,
+      error: createUserForAdminError,
+      data: createUserForAdminData,
     },
-  ] = useMutation<createAdmin, createAdminVariables>(CREATE_ADMIN, {
-    onCompleted: () => {
-      refetch();
-    },
-  });
+  ] = useMutation<createUserForAdmin, createUserForAdminVariables>(
+    CREATE_USER_FOR_ADMIN,
+    {
+      onCompleted: () => {
+        refetch();
+      },
+    }
+  );
 
   //수정 뮤테이션
-  const [
-    editAdminMutation,
-    { loading: editAdminLoading, error: editAdminError, data: editAdminData },
-  ] = useMutation<editAdmin, editAdminVariables>(EDIT_ADMIN, {
-    onCompleted: () => {
-      refetch();
-    },
-  });
+  const [editUserMutation, { loading: editUserLoading, data: editUserData }] =
+    useMutation<editUser, editUserVariables>(EDIT_USER, {
+      onCompleted: () => {
+        refetch();
+      },
+    });
 
   //삭제 뮤테이션
   const [
-    deleteAdminMutation,
-    {
-      loading: deleteAdminLoading,
-      error: deleteAdminError,
-      data: deleteAdminData,
-    },
-  ] = useMutation<deleteAdmin, deleteAdminVariables>(DELETE_ADMIN, {
+    deleteUserMutation,
+    { loading: deleteUserLoading, data: deleteUserData },
+  ] = useMutation<deleteUser, deleteUserVariables>(DELETE_USER, {
     onCompleted: () => {
       refetch();
     },
@@ -87,6 +108,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   const [isModalOpen, setisModalOpen] = useRecoilState(
     isModal_adminCreateOpenAtom
   );
+
   const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
     isModal_adminEditOpenAtom
   );
@@ -95,16 +117,17 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   useEffect(() => {
     if (isModalOpen) {
       setTimeout(() => {
-        setFocus_create(adminFocusId);
+        setFocus_create(partnerFocusId);
       }, 100);
     }
   }, [isModalOpen]);
 
   //수정시 테이블데이터 반영 및 포커싱
-  const [adminColumns, setAdminColumns] = useRecoilState(adminColumnsData);
+  const [partnerColumns, setPartnerColumns] =
+    useRecoilState(partnerColumnsData);
   useEffect(() => {
     reset_edit(
-      adminColumns.reduce(
+      partnerColumns.reduce(
         (pre, cur) => ({
           ...pre,
           [cur.accessor]: cur.value,
@@ -114,10 +137,12 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     );
     if (isEditModalOpen) {
       setTimeout(() => {
-        setFocus_edit(adminColumns.find((val) => val.selected)?.accessor || "");
+        setFocus_edit(
+          partnerColumns.find((val) => val.selected)?.accessor || ""
+        );
       }, 100);
     }
-  }, [adminColumns]);
+  }, [partnerColumns]);
 
   //유즈폼 생성
   const {
@@ -134,17 +159,23 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     tokenCheck("mutation", async () => {
       try {
         if (data.password === data.passwordCheck) {
-          await createAdminMutation({
+          await createUserForAdminMutation({
             variables: {
               input: {
+                role: UserRole.Partner,
                 email: data.email === "" ? null : data.email,
-                password: data.password,
-                nickName: data.nickName,
+                password: data.password === "" ? null : data.password,
+                name: data.name,
+                nameId: data.nameId === "" ? null : data.nameId,
+                phoneNumber: data.phoneNumber,
+                brandName: data.brandName,
+                residentRegistrationNumber: data.residentRegistrationNumber,
+                tags: data.tags,
               },
             },
           });
           reset_create(
-            adminColumnsDefault.reduce(
+            partnerColumnsDefault.reduce(
               (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
               { password: "", passwordCheck: "" }
             )
@@ -176,18 +207,23 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     tokenCheck("mutation", async () => {
       try {
         if (data.password === data.passwordCheck) {
-          await editAdminMutation({
+          await editUserMutation({
             variables: {
               input: {
                 email: data.email === "" ? null : data.email,
-                nickName: data.nickName,
-                password: data.password,
-                id: +formSelector("id", adminColumns),
+                password: data.password === "" ? null : data.password,
+                name: data.name,
+                nameId: data.nameId === "" ? null : data.nameId,
+                phoneNumber: data.phoneNumber,
+                brandName: data.brandName,
+                residentRegistrationNumber: data.residentRegistrationNumber,
+                tags: data.tags,
+                id: +formSelector("id", partnerColumns),
               },
             },
           });
           reset_edit(
-            adminColumnsDefault.reduce(
+            partnerColumnsDefault.reduce(
               (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
               {}
             )
@@ -270,9 +306,9 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
               modal: (
                 <form onSubmit={handleSubmit_create(onSubmit_create)}>
                   <ul>
-                    {adminColumnsDefault.map((val, idx) => {
+                    {partnerColumnsDefault.map((val, idx) => {
                       if (
-                        !adminExceptionDataInCreateForm.includes(val.accessor)
+                        !partnerExceptionDataInCreateForm.includes(val.accessor)
                       ) {
                         if (["email"].includes(val.accessor)) {
                           return (
@@ -327,7 +363,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                       className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
                       onClick={() => {
                         reset_create(
-                          adminColumnsDefault.reduce(
+                          partnerColumnsDefault.reduce(
                             (pre, cur) => ({
                               ...pre,
                               [cur.accessor]: cur.value,
@@ -336,7 +372,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                           )
                         );
                         setTimeout(() => {
-                          setFocus_create(adminFocusId);
+                          setFocus_create(partnerFocusId);
                         }, 0);
                       }}
                     >
@@ -368,9 +404,9 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
               modal: (
                 <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
                   <ul>
-                    {adminColumnsDefault.map((val, idx) => {
+                    {partnerColumnsDefault.map((val, idx) => {
                       if (
-                        !adminExceptionDataInCreateForm.includes(val.accessor)
+                        !partnerExceptionDataInCreateForm.includes(val.accessor)
                       ) {
                         if (["email"].includes(val.accessor)) {
                           return (
@@ -496,7 +532,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                     (val) => val.original.id
                   );
                   tokenCheck("mutation", () => {
-                    deleteAdminMutation({
+                    deleteUserMutation({
                       variables: {
                         input: {
                           ids: selectedIds,

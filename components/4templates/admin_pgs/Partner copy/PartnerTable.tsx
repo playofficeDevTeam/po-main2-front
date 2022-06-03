@@ -23,114 +23,11 @@ import { deleteUser, deleteUserVariables } from "./__generated__/deleteUser";
 import { editUser, editUserVariables } from "./__generated__/editUser";
 import { findUsers, findUsersVariables } from "./__generated__/findUsers";
 
-export const FIND_USERS = gql`
-  query findUsers($input: FindUsersInput!) {
-    findUsers(input: $input) {
-      ok
-      error
-      users {
-        id
-        createdAt
-        tags
-        email
-        role
-        name
-        phoneNumber
-        brandName
-        residentRegistrationNumber
-        nameId
-        campaignParticipations {
-          id
-        }
-        payments {
-          id
-        }
-        questions {
-          id
-        }
-      }
-    }
-  }
-`;
-
-export const CREATE_USER_FOR_ADMIN = gql`
-  mutation createUserForAdmin($input: CreateUserForAdminInput!) {
-    createUserForAdmin(input: $input) {
-      ok
-      error
-    }
-  }
-`;
-
-export const EDIT_USER = gql`
-  mutation editUser($input: EditUserInput!) {
-    editUser(input: $input) {
-      ok
-      error
-    }
-  }
-`;
-
-export const DELETE_USER = gql`
-  mutation deleteUser($input: DeleteUserInput!) {
-    deleteUser(input: $input) {
-      ok
-      error
-    }
-  }
-`;
-
 const App = () => {
   const [partnerForm, setPartnerForm] = useRecoilState(partnerFormData);
   const [tableFromDateState, setTableFromDateState] =
     useRecoilState(tableFromDate);
   const [tableToDateState, setTableToDateState] = useRecoilState(tableToDate);
-
-  const columns = useMemo(
-    () => [
-      {
-        Header: "생성일",
-        accessor: "createdAt",
-        width: 90,
-        sortDescFirst: true,
-      },
-      {
-        Header: "이메일(ID)",
-        accessor: "email",
-        width: 150,
-        sortDescFirst: true,
-      },
-      {
-        Header: "브랜드명(ID)",
-        accessor: "nameId",
-        width: 150,
-        sortDescFirst: true,
-      },
-      {
-        Header: "브랜드명",
-        accessor: "brandName",
-        width: 150,
-        sortDescFirst: true,
-      },
-      { Header: "이름", accessor: "name", width: 150, sortDescFirst: true },
-
-      {
-        Header: "연락처",
-        accessor: "phoneNumber",
-        width: 150,
-        sortDescFirst: true,
-      },
-      {
-        Header: "주민등록번호",
-        accessor: "residentRegistrationNumber",
-        width: 150,
-        sortDescFirst: true,
-      },
-      { Header: "태그", accessor: "tags", width: 150, sortDescFirst: true },
-      { Header: "dataId", accessor: "id", width: 0 },
-    ],
-    []
-  );
 
   //토큰체크
   const tokenCheck = useTokenCheck();
