@@ -6,7 +6,6 @@ import {
   IndeterminateCheckbox,
 } from "../../../3organisms/Org_adminTable/tableOptions";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
-import { datePrettier } from "../Question/fn_DatePrettier";
 
 import {
   useTable,
@@ -42,6 +41,7 @@ import {
   partnerExceptionDataInTable,
 } from "./partnerControlData";
 import Atm_PartnerForm from "./Atm_PartnerForm";
+import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
 
 export default function App() {
   const [tableFromDateState, setTableFromDateState] =

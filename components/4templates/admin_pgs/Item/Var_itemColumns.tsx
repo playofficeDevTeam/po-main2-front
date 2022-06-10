@@ -14,7 +14,7 @@ export const itemColumnsDefault = [
     accessor: "itemCategory1",
     value: "",
     selected: false,
-    width: 150,
+    width: 250,
     sortDescFirst: true,
   },
   {
@@ -22,7 +22,7 @@ export const itemColumnsDefault = [
     accessor: "itemName",
     value: "",
     selected: false,
-    width: 150,
+    width: 200,
     sortDescFirst: true,
   },
   {
@@ -30,7 +30,7 @@ export const itemColumnsDefault = [
     accessor: "detailInfo",
     value: "",
     selected: false,
-    width: 150,
+    width: 200,
     sortDescFirst: true,
   },
   {
@@ -38,7 +38,7 @@ export const itemColumnsDefault = [
     accessor: "price",
     value: "",
     selected: false,
-    width: 150,
+    width: 130,
     sortDescFirst: true,
   },
   {
@@ -46,7 +46,7 @@ export const itemColumnsDefault = [
     accessor: "discountRate",
     value: "",
     selected: false,
-    width: 150,
+    width: 80,
     sortDescFirst: true,
   },
   {

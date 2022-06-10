@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { dateTime } from "../../../3organisms/Org_adminTable/fn_DateTime";
+import { formSelector } from "../../../3organisms/Org_adminTable/fn_formSelector";
 import Modal_adminCreate, {
   isModal_adminCreateOpenAtom,
 } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
@@ -12,7 +13,6 @@ import Modal_adminEdit, {
 import { ColumnIndeterminateCheckbox } from "../../../3organisms/Org_adminTable/tableOptions";
 import { nickNameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
-import { formSelector } from "../Question/fn_formSelector";
 import {
   adminExceptionDataInCreateForm,
   adminExceptionDataInEditForm,

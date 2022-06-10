@@ -20,7 +20,6 @@ import { nickNameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import { userColumnsData, userColumnsDefault } from "../User/Var_userColumns";
 
-import { formSelector } from "../Question/fn_formSelector";
 import {
   userExceptionDataInCreateForm,
   userExceptionDataInEditForm,
@@ -45,6 +44,7 @@ import {
   findUsers,
   findUsersVariables,
 } from "../Partner/__generated__/findUsers";
+import { formSelector } from "../../../3organisms/Org_adminTable/fn_formSelector";
 //폼 컴포넌트
 function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   const [tableFromDateState, setTableFromDateState] =

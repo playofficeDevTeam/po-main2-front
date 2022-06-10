@@ -7,7 +7,6 @@ import {
   IndeterminateCheckbox,
 } from "../../../3organisms/Org_adminTable/tableOptions";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
-import { datePrettier } from "../Question/fn_DatePrettier";
 
 import {
   useTable,
@@ -25,7 +24,6 @@ import { useRecoilState } from "recoil";
 import { isModal_adminEditOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
 import { dateList } from "../../../3organisms/Org_adminTable/tableViewTypeList";
 import TableStyle from "../../../3organisms/Org_adminTable/TableStyle";
-import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
 import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
 import {
   tableFromDate,
@@ -39,6 +37,7 @@ import {
 } from "./itemControlData";
 import { itemColumnsDefault, itemColumnsData } from "./Var_itemColumns";
 import { findAllItems } from "./__generated__/findAllItems";
+import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
 
 export default function App() {
   const [tableFromDateState, setTableFromDateState] =

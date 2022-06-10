@@ -7,7 +7,6 @@ import {
   IndeterminateCheckbox,
 } from "../../../3organisms/Org_adminTable/tableOptions";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
-import { datePrettier } from "../Question/fn_DatePrettier";
 
 import {
   useTable,
@@ -46,6 +45,7 @@ import {
   findCampaigns,
   findCampaignsVariables,
 } from "./__generated__/findCampaigns";
+import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
 
 export default function App() {
   const [tableFromDateState, setTableFromDateState] =

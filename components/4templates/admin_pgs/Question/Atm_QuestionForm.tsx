@@ -19,17 +19,37 @@ import {
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import { nickNameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
-import { FIND_ALL_ITEM, CREATE_ITEM, EDIT_ITEM, DELETE_ITEM } from "./Gql_item";
 import {
-  itemFocusId,
-  itemExceptionDataInCreateForm,
-  itemExceptionDataInEditForm,
-} from "./itemControlData";
-import { itemColumnsData, itemColumnsDefault } from "./Var_itemColumns";
-import { createItem, createItemVariables } from "./__generated__/createItem";
-import { deleteItem, deleteItemVariables } from "./__generated__/deleteItem";
-import { editItem, editItemVariables } from "./__generated__/editItem";
-import { findAllItems } from "./__generated__/findAllItems";
+  FIND_QUESTIONS_FOR_ADMIN,
+  CREATE_QUESTION_FOR_ADMIN,
+  EDIT_QUESTION_FOR_ADMIN,
+  DELETE_QUESTION_FOR_ADMIN,
+} from "./Gql_question";
+import {
+  questionFocusId,
+  questionExceptionDataInCreateForm,
+  questionExceptionDataInEditForm,
+} from "./questionControlData";
+import {
+  questionColumnsData,
+  questionColumnsDefault,
+} from "./Var_questionColumns";
+import {
+  createQuestionForAdmin,
+  createQuestionForAdminVariables,
+} from "./__generated__/createQuestionForAdmin";
+import {
+  deleteQuestionForAdmin,
+  deleteQuestionForAdminVariables,
+} from "./__generated__/deleteQuestionForAdmin";
+import {
+  editQuestionForAdmin,
+  editQuestionForAdminVariables,
+} from "./__generated__/editQuestionForAdmin";
+import {
+  findQuestionsForAdmin,
+  findQuestionsForAdminVariables,
+} from "./__generated__/findQuestionsForAdmin";
 
 //폼 컴포넌트
 function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
@@ -42,57 +62,83 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
 
   //쿼리
   const {
-    loading: findAllItemsLoading,
-    error: findAllItemsError,
-    data: findAllItemsData,
+    loading: findQuestionsForAdminLoading,
+    error: findQuestionsForAdminError,
+    data: findQuestionsForAdminData,
     refetch,
-  } = useQuery<findAllItems>(FIND_ALL_ITEM);
+  } = useQuery<findQuestionsForAdmin, findQuestionsForAdminVariables>(
+    FIND_QUESTIONS_FOR_ADMIN,
+    {
+      variables: {
+        input: {
+          fromDate: dateToInput(tableFromDateState),
+          toDate: dateToInput(tableToDateState),
+        },
+      },
+    }
+  );
   useEffect(() => {
     tokenCheck("query", refetch);
-  }, [findAllItemsData]);
+  }, [findQuestionsForAdminData]);
 
   //쿼리가공
-  const itemData = useMemo(
+  const questionsData = useMemo(
     () =>
-      findAllItemsData?.findAllItems.items?.map((val, idx) => ({
-        ...val,
-        createdAt: datePrettier(val.createdAt),
-        detailInfo: val.detailInfo?.join(", "),
-      })),
-    [findAllItemsData]
+      findQuestionsForAdminData?.findQuestionsForAdmin.questions?.map(
+        (val, idx) => ({
+          ...val,
+          createdAt: datePrettier(val.createdAt),
+          isAgency: val.isAgency?.toString(),
+          brandName_partner: val.user?.nameId,
+        })
+      ),
+    [findQuestionsForAdminData]
   );
 
   //생성 뮤테이션
   const [
-    createItemMutation,
+    createQuestionForAdminMutation,
     {
-      loading: createItemLoading,
-      error: createItemError,
-      data: createItemData,
+      loading: createQuestionForAdminLoading,
+      error: createQuestionForAdminError,
+      data: createQuestionForAdminData,
     },
-  ] = useMutation<createItem, createItemVariables>(CREATE_ITEM, {
-    onCompleted: () => {
-      refetch();
-    },
-  });
-
-  //수정 뮤테이션
-  const [editItemMutation, { loading: editItemLoading, data: editItemData }] =
-    useMutation<editItem, editItemVariables>(EDIT_ITEM, {
+  ] = useMutation<createQuestionForAdmin, createQuestionForAdminVariables>(
+    CREATE_QUESTION_FOR_ADMIN,
+    {
       onCompleted: () => {
         refetch();
       },
-    });
+    }
+  );
+  //수정 뮤테이션
+  const [
+    editQuestionForAdminMutation,
+    { loading: editQuestionForAdminLoading, data: editQuestionForAdminData },
+  ] = useMutation<editQuestionForAdmin, editQuestionForAdminVariables>(
+    EDIT_QUESTION_FOR_ADMIN,
+    {
+      onCompleted: () => {
+        refetch();
+      },
+    }
+  );
 
   //삭제 뮤테이션
   const [
-    deleteItemMutation,
-    { loading: deleteItemLoading, data: deleteItemData },
-  ] = useMutation<deleteItem, deleteItemVariables>(DELETE_ITEM, {
-    onCompleted: () => {
-      refetch();
+    deleteQuestionForAdminMutation,
+    {
+      loading: deleteQuestionForAdminLoading,
+      data: deleteQuestionForAdminData,
     },
-  });
+  ] = useMutation<deleteQuestionForAdmin, deleteQuestionForAdminVariables>(
+    DELETE_QUESTION_FOR_ADMIN,
+    {
+      onCompleted: () => {
+        refetch();
+      },
+    }
+  );
 
   const [isModalOpen, setisModalOpen] = useRecoilState(
     isModal_adminCreateOpenAtom
@@ -106,16 +152,17 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   useEffect(() => {
     if (isModalOpen) {
       setTimeout(() => {
-        setFocus_create(itemFocusId);
+        setFocus_create(questionFocusId);
       }, 100);
     }
   }, [isModalOpen]);
 
   //수정시 테이블데이터 반영 및 포커싱
-  const [itemColumns, setItemColumns] = useRecoilState(itemColumnsData);
+  const [questionColumns, setQuestionColumns] =
+    useRecoilState(questionColumnsData);
   useEffect(() => {
     reset_edit(
-      itemColumns.reduce(
+      questionColumns.reduce(
         (pre, cur) => ({
           ...pre,
           [cur.accessor]: cur.value,
@@ -125,10 +172,12 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     );
     if (isEditModalOpen) {
       setTimeout(() => {
-        setFocus_edit(itemColumns.find((val) => val.selected)?.accessor || "");
+        setFocus_edit(
+          questionColumns.find((val) => val.selected)?.accessor || ""
+        );
       }, 100);
     }
-  }, [itemColumns]);
+  }, [questionColumns]);
 
   //유즈폼 생성
   const {
@@ -144,20 +193,27 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   const onSubmit_create = (data) => {
     tokenCheck("mutation", async () => {
       try {
-        await createItemMutation({
+        await createQuestionForAdminMutation({
           variables: {
             input: {
-              itemCategory1: data.itemCategory1,
-              itemName: data.itemName,
-              detailInfo: data.detailInfo.split(",").map((val) => val.trim()),
-              price: +data.price,
-              discountRate: +data.discountRate,
-              type: data.type,
+              brandName: data.brandName,
+              brandName_partner: data.brandName_partner,
+              product: data.product,
+              serviceInquired: data.serviceInquired,
+              isAnalyzed: data.isAnalyzed,
+              name: data.name,
+              phoneNumber: data.phoneNumber,
+              email: data.email,
+              budget: data.budget,
+              productLink: data.productLink,
+              uniqueness: data.uniqueness,
+              isAgency: data.isAgency === "true" ? true : false,
+              tags: data.tags,
             },
           },
         });
         reset_create(
-          itemColumnsDefault.reduce(
+          questionColumnsDefault.reduce(
             (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
             {}
           )
@@ -185,26 +241,28 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   const onSubmit_edit = (data) => {
     tokenCheck("mutation", async () => {
       try {
-        if (data.stateDate === "") {
-          throw "스케쥴 날짜를 입력해주세요";
-        }
-
-        await editItemMutation({
+        await editQuestionForAdminMutation({
           variables: {
             input: {
-              itemCategory1: data.itemCategory1,
-              itemName: data.itemName,
-              detailInfo: data.detailInfo.split(",").map((val) => val.trim()),
-              price: +data.price,
-              discountRate: +data.discountRate,
-              type: data.type,
-              id: +formSelector("id", itemColumns),
+              brandName: data.brandName,
+              brandName_partner: data.brandName_partner,
+              product: data.product,
+              serviceInquired: data.serviceInquired,
+              isAnalyzed: data.isAnalyzed,
+              name: data.name,
+              phoneNumber: data.phoneNumber,
+              email: data.email,
+              budget: data.budget,
+              productLink: data.productLink,
+              uniqueness: data.uniqueness,
+              isAgency: data.isAgency === "true" ? true : false,
+              tags: data.tags,
+              id: +formSelector("id", questionColumns),
             },
           },
         });
-
         reset_edit(
-          itemColumnsDefault.reduce(
+          questionColumnsDefault.reduce(
             (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
             {}
           )
@@ -284,29 +342,27 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
               modal: (
                 <form onSubmit={handleSubmit_create(onSubmit_create)}>
                   <ul>
-                    {itemColumnsDefault.map(
+                    {questionColumnsDefault.map(
                       (val, idx) =>
-                        !["id", "createdAt"].includes(val.accessor) &&
-                        (["detailInfo"].includes(val.accessor) ? (
+                        !["id", "createdAt"].includes(val.accessor) && (
                           <li key={idx} className="flex items-center">
                             <div className="w-28 flex pl-1">{val.Header}</div>
-                            <textarea
-                              defaultValue={val.value}
-                              {...register_create(val.accessor)}
-                              className="border w-96 p-1 m-1"
-                            />
+                            {["uniqueness"].includes(val.accessor) ? (
+                              <textarea
+                                defaultValue={val.value}
+                                {...register_create(val.accessor)}
+                                className="border w-96 p-1 m-1"
+                              ></textarea>
+                            ) : (
+                              <input
+                                defaultValue={val.value}
+                                {...register_create(val.accessor)}
+                                className="border w-96 p-1 m-1"
+                                type={`text`}
+                              />
+                            )}
                           </li>
-                        ) : (
-                          <li key={idx} className="flex items-center">
-                            <div className="w-28 flex pl-1">{val.Header}</div>
-                            <input
-                              defaultValue={val.value}
-                              {...register_create(val.accessor)}
-                              className="border w-96 p-1 m-1"
-                              type={`text`}
-                            />
-                          </li>
-                        ))
+                        )
                     )}
                   </ul>
                   <div className="flex justify-end mt-2">
@@ -314,7 +370,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                       className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
                       onClick={() => {
                         reset_create(
-                          itemColumnsDefault.reduce(
+                          questionColumnsDefault.reduce(
                             (pre, cur) => ({
                               ...pre,
                               [cur.accessor]: cur.value,
@@ -356,29 +412,27 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
               modal: (
                 <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
                   <ul>
-                    {itemColumnsDefault.map(
+                    {questionColumnsDefault.map(
                       (val, idx) =>
-                        !["id", "createdAt"].includes(val.accessor) &&
-                        (["detailInfo"].includes(val.accessor) ? (
+                        !["id", "createdAt"].includes(val.accessor) && (
                           <li key={idx} className="flex items-center">
                             <div className="w-28 flex pl-1">{val.Header}</div>
-                            <textarea
-                              defaultValue={val.value}
-                              {...register_edit(val.accessor)}
-                              className="border w-96 p-1 m-1"
-                            />
+                            {!["uniqueness"].includes(val.accessor) ? (
+                              <input
+                                defaultValue={val.value}
+                                {...register_edit(val.accessor)}
+                                className="border w-96 p-1 m-1"
+                                type={`text`}
+                              />
+                            ) : (
+                              <textarea
+                                defaultValue={val.value}
+                                {...register_edit(val.accessor)}
+                                className="border w-96 p-1 m-1"
+                              ></textarea>
+                            )}
                           </li>
-                        ) : (
-                          <li key={idx} className="flex items-center">
-                            <div className="w-28 flex pl-1">{val.Header}</div>
-                            <input
-                              defaultValue={val.value}
-                              {...register_edit(val.accessor)}
-                              className="border w-96 p-1 m-1"
-                              type={`text`}
-                            />
-                          </li>
-                        ))
+                        )
                     )}
                   </ul>
                   <div className="flex justify-end mt-2">
@@ -461,7 +515,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                     (val) => val.original.id
                   );
                   tokenCheck("mutation", () => {
-                    deleteItemMutation({
+                    deleteQuestionForAdminMutation({
                       variables: {
                         input: {
                           ids: selectedIds,

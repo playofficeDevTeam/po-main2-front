@@ -6,7 +6,6 @@ import {
   IndeterminateCheckbox,
 } from "../../../3organisms/Org_adminTable/tableOptions";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
-import { datePrettier } from "../Question/fn_DatePrettier";
 import { FIND_ALL_ADMIN } from "./Gql_admin";
 import { adminColumnsData, adminColumnsDefault } from "./Var_adminColumns";
 import { findAllAdmin } from "./__generated__/findAllAdmin";
@@ -31,6 +30,7 @@ import {
   adminExceptionDataInTable,
 } from "./adminControlData";
 import Atm_AdminForm from "./Atm_AdminForm";
+import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
 export default function App() {
   //토큰체크
   const tokenCheck = useTokenCheck();

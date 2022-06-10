@@ -5,6 +5,7 @@ import { useRecoilState } from "recoil";
 import { UserRole } from "../../../../__generated__/globalTypes";
 import { dateTime } from "../../../3organisms/Org_adminTable/fn_DateTime";
 import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
+import { formSelector } from "../../../3organisms/Org_adminTable/fn_formSelector";
 import Modal_adminCreate, {
   isModal_adminCreateOpenAtom,
 } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
@@ -19,7 +20,6 @@ import {
 import { nickNameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 
-import { formSelector } from "../Question/fn_formSelector";
 import {
   CREATE_USER_FOR_ADMIN,
   DELETE_USER,
