@@ -28,6 +28,7 @@ import {
 } from "./Gql_user";
 import {
   partnerExceptionDataInCreateForm,
+  partnerExceptionDataInEditForm,
   partnerFocusId,
 } from "./partnerControlData";
 import {
@@ -187,7 +188,15 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
       } catch (error) {
         const errorString: string = error + "";
         const pureError = errorString.replace("Error: ", "");
-        alert(pureError);
+        if (errorString.indexOf("UQ_e12875dfb3b1d92d7d7c5377e22") !== -1) {
+          alert(`이메일(ID)이 중복됩니다.`);
+        } else if (
+          errorString.indexOf("UQ_1db0f40d9ff5904789eb33dc031") !== -1
+        ) {
+          alert(`브랜드명(ID)이 중복됩니다.`);
+        } else {
+          alert(pureError);
+        }
       }
     });
   };
@@ -235,7 +244,15 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
       } catch (error) {
         const errorString: string = error + "";
         const pureError = errorString.replace("Error: ", "");
-        alert(pureError);
+        if (errorString.indexOf("UQ_e12875dfb3b1d92d7d7c5377e22") !== -1) {
+          alert(`이메일(ID)이 중복됩니다.`);
+        } else if (
+          errorString.indexOf("UQ_1db0f40d9ff5904789eb33dc031") !== -1
+        ) {
+          alert(`브랜드명(ID)이 중복됩니다.`);
+        } else {
+          alert(pureError);
+        }
       }
     });
   };
@@ -406,7 +423,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                   <ul>
                     {partnerColumnsDefault.map((val, idx) => {
                       if (
-                        !partnerExceptionDataInCreateForm.includes(val.accessor)
+                        !partnerExceptionDataInEditForm.includes(val.accessor)
                       ) {
                         if (["email"].includes(val.accessor)) {
                           return (

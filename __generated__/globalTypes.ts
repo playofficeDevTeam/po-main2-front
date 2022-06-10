@@ -261,27 +261,27 @@ export interface DeleteAdminInput {
 }
 
 export interface DeleteCampaignInput {
-  id: number;
+  ids: number[];
 }
 
 export interface DeleteCampaignParticipationInput {
-  id: number;
+  ids: number[];
 }
 
 export interface DeleteItemInput {
-  id: number;
+  ids: number[];
 }
 
 export interface DeletePaymentInput {
-  id: number;
+  ids: number[];
 }
 
 export interface DeleteQuestionInput {
-  id: number;
+  ids: number[];
 }
 
 export interface DeleteQuestionManagementInput {
-  id: number;
+  ids: number[];
 }
 
 export interface DeleteUserInput {

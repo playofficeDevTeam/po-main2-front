@@ -6,7 +6,7 @@ export const adminColumnsDefault = [
     accessor: "createdAt",
     value: "",
     selected: false,
-    width: 90,
+    width: 85,
     sortDescFirst: true,
   },
   {

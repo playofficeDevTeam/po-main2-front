@@ -1,6 +1,6 @@
 import { atom, useRecoilState } from "recoil";
 
-export const partnerColumnsDefault = [
+export const userColumnsDefault = [
   {
     Header: "생성일",
     accessor: "createdAt",
@@ -18,16 +18,8 @@ export const partnerColumnsDefault = [
     sortDescFirst: true,
   },
   {
-    Header: "브랜드명(ID)",
+    Header: "이름(ID)",
     accessor: "nameId",
-    value: "",
-    selected: false,
-    width: 150,
-    sortDescFirst: true,
-  },
-  {
-    Header: "브랜드명",
-    accessor: "brandName",
     value: "",
     selected: false,
     width: 150,
@@ -50,6 +42,14 @@ export const partnerColumnsDefault = [
     sortDescFirst: true,
   },
   {
+    Header: "주민등록번호",
+    accessor: "residentRegistrationNumber",
+    value: "",
+    selected: false,
+    width: 150,
+    sortDescFirst: true,
+  },
+  {
     Header: "태그",
     accessor: "tags",
     value: "",
@@ -57,20 +57,27 @@ export const partnerColumnsDefault = [
     width: 150,
     sortDescFirst: true,
   },
-  { Header: "dataId", accessor: "id", selected: false, value: "", width: 0 },
+  {
+    Header: "dataId",
+    accessor: "id",
+    value: "",
+    selected: false,
+    width: 0,
+    sortDescFirst: true,
+  },
 ];
 
-export const partnerColumnsData = atom({
-  key: "partnerColumnsData",
-  default: partnerColumnsDefault,
+export const userColumnsData = atom({
+  key: "userColumnsData",
+  default: userColumnsDefault,
 });
 
-export const usePartnerColumnsDataOnChange = () => {
-  const [partnerColumnsDataState, setPartnerColumnsDataState] =
-    useRecoilState(partnerColumnsData);
+export const useUserColumnsDataOnChange = () => {
+  const [userColumnsDataState, setUserColumnsDataState] =
+    useRecoilState(userColumnsData);
 
   const onChange = (e, id) => {
-    setPartnerColumnsDataState((columnsData) =>
+    setUserColumnsDataState((columnsData) =>
       columnsData.map((val, idx) =>
         idx === id ? { ...val, value: e.target.value } : val
       )

@@ -1,8 +1,9 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { dateTime } from "../../../3organisms/Org_adminTable/fn_DateTime";
+import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
 import Modal_adminCreate, {
   isModal_adminCreateOpenAtom,
 } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
@@ -10,52 +11,105 @@ import Modal_adminEdit, {
   isModal_adminEditOpenAtom,
 } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
 import { ColumnIndeterminateCheckbox } from "../../../3organisms/Org_adminTable/tableOptions";
+import {
+  tableFromDate,
+  tableToDate,
+} from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import { nickNameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
+import { datePrettier } from "../Question/fn_DatePrettier";
 import { formSelector } from "../Question/fn_formSelector";
 import {
-  adminExceptionDataInCreateForm,
-  adminExceptionDataInEditForm,
-  adminFocusId,
-} from "./adminControlData";
+  campaignParticipationExceptionDataInCreateForm,
+  campaignParticipationExceptionDataInEditForm,
+  campaignParticipationFocusId,
+} from "./campaignParticipationControlData";
 import {
-  CREATE_ADMIN,
-  EDIT_ADMIN,
-  DELETE_ADMIN,
-  FIND_ALL_ADMIN,
-} from "./Gql_admin";
-import { adminColumnsData, adminColumnsDefault } from "./Var_adminColumns";
-import { createAdmin, createAdminVariables } from "./__generated__/createAdmin";
-import { deleteAdmin, deleteAdminVariables } from "./__generated__/deleteAdmin";
-import { editAdmin, editAdminVariables } from "./__generated__/editAdmin";
-import { findAllAdmin } from "./__generated__/findAllAdmin";
+  FIND_ALL_CAMPAIGN_PARTICIPATIONS,
+  CREATE_CAMPAIGN_PARTICIPATION,
+  EDIT_CAMPAIGN_PARTICIPATION,
+  DELETE_CAMPAIGN_PARTICIPATION,
+} from "./Gql_campaignParticipation";
+import {
+  campaignParticipationColumnsData,
+  campaignParticipationColumnsDefault,
+} from "./Var_campaignParticipationColumns";
+import {
+  createCampaignParticipation,
+  createCampaignParticipationVariables,
+} from "./__generated__/createCampaignParticipation";
+import {
+  deleteCampaignParticipation,
+  deleteCampaignParticipationVariables,
+} from "./__generated__/deleteCampaignParticipation";
+import {
+  editCampaignParticipation,
+  editCampaignParticipationVariables,
+} from "./__generated__/editCampaignParticipation";
+import {
+  findAllCampaignParticipations,
+  findAllCampaignParticipationsVariables,
+} from "./__generated__/findAllCampaignParticipations";
 
 //폼 컴포넌트
 function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
+  const [tableFromDateState, setTableFromDateState] =
+    useRecoilState(tableFromDate);
+  const [tableToDateState, setTableToDateState] = useRecoilState(tableToDate);
+
   //토큰체크
   const tokenCheck = useTokenCheck();
 
   //쿼리
   const {
-    loading: findAllAdminLoading,
-    error: findAllAdminError,
-    data: findAllAdminData,
+    loading: findAllCampaignParticipationsLoading,
+    error: findAllCampaignParticipationsError,
+    data: findAllCampaignParticipationsData,
     refetch,
-  } = useQuery<findAllAdmin>(FIND_ALL_ADMIN);
-
+  } = useQuery<
+    findAllCampaignParticipations,
+    findAllCampaignParticipationsVariables
+  >(FIND_ALL_CAMPAIGN_PARTICIPATIONS, {
+    variables: {
+      input: {
+        fromDate: dateToInput(tableFromDateState),
+        toDate: dateToInput(tableToDateState),
+      },
+    },
+  });
   useEffect(() => {
     tokenCheck("query", refetch);
-  }, [findAllAdminData]);
+  }, [findAllCampaignParticipationsData]);
+
+  //쿼리가공
+  const campaignParticipationsData = useMemo(
+    () =>
+      findAllCampaignParticipationsData?.findAllCampaignParticipations.campaignParticipations?.map(
+        (val, idx) => ({
+          ...val,
+          createdAt: datePrettier(val.createdAt),
+          creatorNameId: val.user?.nameId,
+          brandName_partner: val.campaign?.partner?.nameId,
+          cumulativeOrder: val.campaign?.cumulativeOrder,
+          itemName: val.campaign?.itemName,
+          keyword: val.campaign?.keyword,
+        })
+      ),
+    [findAllCampaignParticipationsData]
+  );
 
   //생성 뮤테이션
   const [
-    createAdminMutation,
+    createCampaignParticipationMutation,
     {
-      loading: createAdminLoading,
-      error: createAdminError,
-      data: createAdminData,
+      loading: createCampaignParticipationLoading,
+      error: createCampaignParticipationError,
+      data: createCampaignParticipationData,
     },
-  ] = useMutation<createAdmin, createAdminVariables>(CREATE_ADMIN, {
+  ] = useMutation<
+    createCampaignParticipation,
+    createCampaignParticipationVariables
+  >(CREATE_CAMPAIGN_PARTICIPATION, {
     onCompleted: () => {
       refetch();
     },
@@ -63,23 +117,30 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
 
   //수정 뮤테이션
   const [
-    editAdminMutation,
-    { loading: editAdminLoading, error: editAdminError, data: editAdminData },
-  ] = useMutation<editAdmin, editAdminVariables>(EDIT_ADMIN, {
+    editCampaignParticipationMutation,
+    {
+      loading: editCampaignParticipationLoading,
+      data: editCampaignParticipationData,
+    },
+  ] = useMutation<
+    editCampaignParticipation,
+    editCampaignParticipationVariables
+  >(EDIT_CAMPAIGN_PARTICIPATION, {
     onCompleted: () => {
       refetch();
     },
   });
-
   //삭제 뮤테이션
   const [
-    deleteAdminMutation,
+    deleteCampaignParticipationMutation,
     {
-      loading: deleteAdminLoading,
-      error: deleteAdminError,
-      data: deleteAdminData,
+      loading: deleteCampaignParticipationLoading,
+      data: deleteCampaignParticipationData,
     },
-  ] = useMutation<deleteAdmin, deleteAdminVariables>(DELETE_ADMIN, {
+  ] = useMutation<
+    deleteCampaignParticipation,
+    deleteCampaignParticipationVariables
+  >(DELETE_CAMPAIGN_PARTICIPATION, {
     onCompleted: () => {
       refetch();
     },
@@ -88,6 +149,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   const [isModalOpen, setisModalOpen] = useRecoilState(
     isModal_adminCreateOpenAtom
   );
+
   const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
     isModal_adminEditOpenAtom
   );
@@ -96,16 +158,17 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   useEffect(() => {
     if (isModalOpen) {
       setTimeout(() => {
-        setFocus_create(adminFocusId);
+        setFocus_create(campaignParticipationFocusId);
       }, 100);
     }
   }, [isModalOpen]);
 
   //수정시 테이블데이터 반영 및 포커싱
-  const [adminColumns, setAdminColumns] = useRecoilState(adminColumnsData);
+  const [campaignParticipationColumns, setCampaignParticipationColumns] =
+    useRecoilState(campaignParticipationColumnsData);
   useEffect(() => {
     reset_edit(
-      adminColumns.reduce(
+      campaignParticipationColumns.reduce(
         (pre, cur) => ({
           ...pre,
           [cur.accessor]: cur.value,
@@ -115,10 +178,13 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     );
     if (isEditModalOpen) {
       setTimeout(() => {
-        setFocus_edit(adminColumns.find((val) => val.selected)?.accessor || "");
+        setFocus_edit(
+          campaignParticipationColumns.find((val) => val.selected)?.accessor ||
+            ""
+        );
       }, 100);
     }
-  }, [adminColumns]);
+  }, [campaignParticipationColumns]);
 
   //유즈폼 생성
   const {
@@ -134,26 +200,36 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   const onSubmit_create = (data) => {
     tokenCheck("mutation", async () => {
       try {
-        if (data.password === data.passwordCheck) {
-          await createAdminMutation({
-            variables: {
-              input: {
-                email: data.email === "" ? null : data.email,
-                password: data.password,
-                nickName: data.nickName,
-              },
-            },
-          });
-          reset_create(
-            adminColumnsDefault.reduce(
-              (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-              { password: "", passwordCheck: "" }
-            )
-          );
-          setisModalOpen(false);
-        } else {
-          throw "비밀번호가 일치하지 않습니다";
+        if (data.salesDate === "") {
+          throw "매출일을 입력해주세요";
+        } else if (data.targetDate === "") {
+          throw "목표일을 입력해주세요";
         }
+        console.log(data);
+        await createCampaignParticipationMutation({
+          variables: {
+            input: {
+              manuscriptFee: +data.manuscriptFee,
+              proposal: data.proposal,
+              consent: data.consent,
+              guide: data.guide,
+              plan: data.plan,
+              isFileTaxes: data.isFileTaxes,
+              creatorNameId: data.creatorNameId,
+              brandName_partner: data.brandName_partner,
+              cumulativeOrder: data.cumulativeOrder,
+              itemName: data.itemName,
+              keyword: data.keyword,
+            },
+          },
+        });
+        reset_create(
+          campaignParticipationColumnsDefault.reduce(
+            (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
+            {}
+          )
+        );
+        setisModalOpen(false);
       } catch (error) {
         const errorString: string = error + "";
         const pureError = errorString.replace("Error: ", "");
@@ -175,28 +251,33 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
 
   const onSubmit_edit = (data) => {
     tokenCheck("mutation", async () => {
+      console.log(formSelector("id", campaignParticipationColumns));
       try {
-        if (data.password === data.passwordCheck) {
-          await editAdminMutation({
-            variables: {
-              input: {
-                email: data.email === "" ? null : data.email,
-                nickName: data.nickName,
-                password: data.password,
-                id: +formSelector("id", adminColumns),
-              },
+        await editCampaignParticipationMutation({
+          variables: {
+            input: {
+              manuscriptFee: +data.manuscriptFee,
+              proposal: data.proposal,
+              consent: data.consent,
+              guide: data.guide,
+              plan: data.plan,
+              isFileTaxes: data.isFileTaxes,
+              creatorNameId: data.creatorNameId,
+              brandName_partner: data.brandName_partner,
+              cumulativeOrder: data.cumulativeOrder,
+              itemName: data.itemName,
+              keyword: data.keyword,
+              id: +formSelector("id", campaignParticipationColumns),
             },
-          });
-          reset_edit(
-            adminColumnsDefault.reduce(
-              (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-              {}
-            )
-          );
-          setisEditModalOpen(false);
-        } else {
-          throw "비밀번호가 일치하지 않습니다";
-        }
+          },
+        });
+        reset_edit(
+          campaignParticipationColumnsDefault.reduce(
+            (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
+            {}
+          )
+        );
+        setisEditModalOpen(false);
       } catch (error) {
         const errorString: string = error + "";
         const pureError = errorString.replace("Error: ", "");
@@ -204,7 +285,6 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
       }
     });
   };
-
   const [nickName, setNickName] = useRecoilState(nickNameAtom);
 
   useEffect(() => {
@@ -271,73 +351,50 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
               modal: (
                 <form onSubmit={handleSubmit_create(onSubmit_create)}>
                   <ul>
-                    {adminColumnsDefault.map((val, idx) => {
-                      if (
-                        !adminExceptionDataInCreateForm.includes(val.accessor)
-                      ) {
-                        if (["email"].includes(val.accessor)) {
-                          return (
-                            <>
-                              <li key={idx}>
-                                <div>{val.Header}*</div>
-                                <input
-                                  defaultValue={val.value}
-                                  required
-                                  {...register_create(val.accessor)}
-                                  type={`text`}
-                                />
-                              </li>
-                              <li>
-                                <div>{"비밀번호"}*</div>
-                                <input
-                                  defaultValue={""}
-                                  required
-                                  {...register_create("password")}
-                                  type={`password`}
-                                />
-                              </li>
-                              <li>
-                                <div>{"비밀번호 확인"}*</div>
-                                <input
-                                  defaultValue={""}
-                                  required
-                                  {...register_create("passwordCheck")}
-                                  type={`password`}
-                                />
-                              </li>
-                            </>
-                          );
-                        } else {
-                          return (
-                            <li key={idx}>
-                              <div>{val.Header}</div>
+                    {campaignParticipationColumns.map(
+                      (val, idx) =>
+                        !campaignParticipationExceptionDataInCreateForm.includes(
+                          val.accessor
+                        ) && (
+                          <li key={idx} className="flex items-center">
+                            <div className="w-28 flex pl-1">{val.Header}</div>
+                            {["salesDate", "targetDate"].includes(
+                              val.accessor
+                            ) ? (
                               <input
                                 defaultValue={val.value}
                                 {...register_create(val.accessor)}
+                                className="border w-96 p-1 m-1"
+                                type={`date`}
+                              />
+                            ) : (
+                              <input
+                                defaultValue={val.value}
+                                {...register_create(val.accessor)}
+                                className="border w-96 p-1 m-1"
                                 type={`text`}
                               />
-                            </li>
-                          );
-                        }
-                      }
-                    })}
+                            )}
+                          </li>
+                        )
+                    )}
                   </ul>
-
                   <div className="flex justify-end mt-2">
                     <div
                       className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
                       onClick={() => {
                         reset_create(
-                          adminColumnsDefault.reduce(
+                          campaignParticipationColumnsDefault.reduce(
                             (pre, cur) => ({
                               ...pre,
                               [cur.accessor]: cur.value,
                             }),
-                            { password: "", passwordCheck: "" }
+                            {}
                           )
                         );
+
                         setTimeout(() => {
-                          setFocus_create(adminFocusId);
+                          setFocus_create("brandName_partner");
                         }, 0);
                       }}
                     >
@@ -369,53 +426,33 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
               modal: (
                 <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
                   <ul>
-                    {adminColumnsDefault.map((val, idx) => {
-                      if (
-                        !adminExceptionDataInEditForm.includes(val.accessor)
-                      ) {
-                        if (["email"].includes(val.accessor)) {
-                          return (
-                            <>
-                              <li key={idx}>
-                                <div>{val.Header}</div>
-                                <input
-                                  defaultValue={val.value}
-                                  {...register_edit(val.accessor)}
-                                  type={`text`}
-                                />
-                              </li>
-                              <li>
-                                <div>{"비밀번호"}</div>
-                                <input
-                                  defaultValue={""}
-                                  {...register_edit("password")}
-                                  type={`password`}
-                                />
-                              </li>
-                              <li>
-                                <div>{"비밀번호 확인"}</div>
-                                <input
-                                  defaultValue={""}
-                                  {...register_edit("passwordCheck")}
-                                  type={`password`}
-                                />
-                              </li>
-                            </>
-                          );
-                        } else {
-                          return (
-                            <li key={idx}>
-                              <div>{val.Header}</div>
+                    {campaignParticipationColumns.map(
+                      (val, idx) =>
+                        !campaignParticipationExceptionDataInEditForm.includes(
+                          val.accessor
+                        ) && (
+                          <li key={idx} className="flex items-center">
+                            <div className="w-28 flex pl-1">{val.Header}</div>
+                            {["salesDate", "targetDate"].includes(
+                              val.accessor
+                            ) ? (
                               <input
                                 defaultValue={val.value}
                                 {...register_edit(val.accessor)}
+                                className="border w-96 p-1 m-1"
+                                type={`date`}
+                              />
+                            ) : (
+                              <input
+                                defaultValue={val.value}
+                                {...register_edit(val.accessor)}
+                                className="border w-96 p-1 m-1"
                                 type={`text`}
                               />
-                            </li>
-                          );
-                        }
-                      }
-                    })}
+                            )}
+                          </li>
+                        )
+                    )}
                   </ul>
                   <div className="flex justify-end mt-2">
                     <div
@@ -497,7 +534,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                     (val) => val.original.id
                   );
                   tokenCheck("mutation", () => {
-                    deleteAdminMutation({
+                    deleteCampaignParticipationMutation({
                       variables: {
                         input: {
                           ids: selectedIds,

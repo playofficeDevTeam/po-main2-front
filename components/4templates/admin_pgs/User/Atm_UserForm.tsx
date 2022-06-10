@@ -2,7 +2,9 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
+import { UserRole } from "../../../../__generated__/globalTypes";
 import { dateTime } from "../../../3organisms/Org_adminTable/fn_DateTime";
+import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
 import Modal_adminCreate, {
   isModal_adminCreateOpenAtom,
 } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
@@ -10,76 +12,97 @@ import Modal_adminEdit, {
   isModal_adminEditOpenAtom,
 } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
 import { ColumnIndeterminateCheckbox } from "../../../3organisms/Org_adminTable/tableOptions";
+import {
+  tableFromDate,
+  tableToDate,
+} from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import { nickNameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
+import { userColumnsData, userColumnsDefault } from "../User/Var_userColumns";
+
 import { formSelector } from "../Question/fn_formSelector";
 import {
-  adminExceptionDataInCreateForm,
-  adminExceptionDataInEditForm,
-  adminFocusId,
-} from "./adminControlData";
+  userExceptionDataInCreateForm,
+  userExceptionDataInEditForm,
+  userFocusId,
+} from "./userControlData";
 import {
-  CREATE_ADMIN,
-  EDIT_ADMIN,
-  DELETE_ADMIN,
-  FIND_ALL_ADMIN,
-} from "./Gql_admin";
-import { adminColumnsData, adminColumnsDefault } from "./Var_adminColumns";
-import { createAdmin, createAdminVariables } from "./__generated__/createAdmin";
-import { deleteAdmin, deleteAdminVariables } from "./__generated__/deleteAdmin";
-import { editAdmin, editAdminVariables } from "./__generated__/editAdmin";
-import { findAllAdmin } from "./__generated__/findAllAdmin";
-
+  FIND_USERS,
+  CREATE_USER_FOR_ADMIN,
+  EDIT_USER,
+  DELETE_USER,
+} from "../Partner/Gql_user";
+import {
+  createUserForAdmin,
+  createUserForAdminVariables,
+} from "../Partner/__generated__/createUserForAdmin";
+import {
+  deleteUser,
+  deleteUserVariables,
+} from "../Partner/__generated__/deleteUser";
+import { editUser, editUserVariables } from "../Partner/__generated__/editUser";
+import {
+  findUsers,
+  findUsersVariables,
+} from "../Partner/__generated__/findUsers";
 //폼 컴포넌트
 function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
+  const [tableFromDateState, setTableFromDateState] =
+    useRecoilState(tableFromDate);
+  const [tableToDateState, setTableToDateState] = useRecoilState(tableToDate);
+
   //토큰체크
   const tokenCheck = useTokenCheck();
 
   //쿼리
   const {
-    loading: findAllAdminLoading,
-    error: findAllAdminError,
-    data: findAllAdminData,
+    loading: findUsersLoading,
+    error: findUsersError,
+    data: findUsersData,
     refetch,
-  } = useQuery<findAllAdmin>(FIND_ALL_ADMIN);
-
+  } = useQuery<findUsers, findUsersVariables>(FIND_USERS, {
+    variables: {
+      input: {
+        fromDate: dateToInput(tableFromDateState),
+        toDate: dateToInput(tableToDateState),
+        userRole: UserRole.Creator,
+      },
+    },
+  });
   useEffect(() => {
     tokenCheck("query", refetch);
-  }, [findAllAdminData]);
+  }, [findUsersData]);
 
   //생성 뮤테이션
   const [
-    createAdminMutation,
+    createUserForAdminMutation,
     {
-      loading: createAdminLoading,
-      error: createAdminError,
-      data: createAdminData,
+      loading: createUserForAdminLoading,
+      error: createUserForAdminError,
+      data: createUserForAdminData,
     },
-  ] = useMutation<createAdmin, createAdminVariables>(CREATE_ADMIN, {
-    onCompleted: () => {
-      refetch();
-    },
-  });
+  ] = useMutation<createUserForAdmin, createUserForAdminVariables>(
+    CREATE_USER_FOR_ADMIN,
+    {
+      onCompleted: () => {
+        refetch();
+      },
+    }
+  );
 
   //수정 뮤테이션
-  const [
-    editAdminMutation,
-    { loading: editAdminLoading, error: editAdminError, data: editAdminData },
-  ] = useMutation<editAdmin, editAdminVariables>(EDIT_ADMIN, {
-    onCompleted: () => {
-      refetch();
-    },
-  });
+  const [editUserMutation, { loading: editUserLoading, data: editUserData }] =
+    useMutation<editUser, editUserVariables>(EDIT_USER, {
+      onCompleted: () => {
+        refetch();
+      },
+    });
 
   //삭제 뮤테이션
   const [
-    deleteAdminMutation,
-    {
-      loading: deleteAdminLoading,
-      error: deleteAdminError,
-      data: deleteAdminData,
-    },
-  ] = useMutation<deleteAdmin, deleteAdminVariables>(DELETE_ADMIN, {
+    deleteUserMutation,
+    { loading: deleteUserLoading, data: deleteUserData },
+  ] = useMutation<deleteUser, deleteUserVariables>(DELETE_USER, {
     onCompleted: () => {
       refetch();
     },
@@ -88,6 +111,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   const [isModalOpen, setisModalOpen] = useRecoilState(
     isModal_adminCreateOpenAtom
   );
+
   const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
     isModal_adminEditOpenAtom
   );
@@ -96,16 +120,16 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   useEffect(() => {
     if (isModalOpen) {
       setTimeout(() => {
-        setFocus_create(adminFocusId);
+        setFocus_create(userFocusId);
       }, 100);
     }
   }, [isModalOpen]);
 
   //수정시 테이블데이터 반영 및 포커싱
-  const [adminColumns, setAdminColumns] = useRecoilState(adminColumnsData);
+  const [userColumns, setUserColumns] = useRecoilState(userColumnsData);
   useEffect(() => {
     reset_edit(
-      adminColumns.reduce(
+      userColumns.reduce(
         (pre, cur) => ({
           ...pre,
           [cur.accessor]: cur.value,
@@ -115,10 +139,10 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     );
     if (isEditModalOpen) {
       setTimeout(() => {
-        setFocus_edit(adminColumns.find((val) => val.selected)?.accessor || "");
+        setFocus_edit(userColumns.find((val) => val.selected)?.accessor || "");
       }, 100);
     }
-  }, [adminColumns]);
+  }, [userColumns]);
 
   //유즈폼 생성
   const {
@@ -135,17 +159,22 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     tokenCheck("mutation", async () => {
       try {
         if (data.password === data.passwordCheck) {
-          await createAdminMutation({
+          await createUserForAdminMutation({
             variables: {
               input: {
+                role: UserRole.Creator,
                 email: data.email === "" ? null : data.email,
-                password: data.password,
-                nickName: data.nickName,
+                password: data.password === "" ? null : data.password,
+                nameId: data.nameId === "" ? null : data.nameId,
+                name: data.name,
+                phoneNumber: data.phoneNumber,
+                residentRegistrationNumber: data.residentRegistrationNumber,
+                tags: data.tags,
               },
             },
           });
           reset_create(
-            adminColumnsDefault.reduce(
+            userColumnsDefault.reduce(
               (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
               { password: "", passwordCheck: "" }
             )
@@ -157,7 +186,15 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
       } catch (error) {
         const errorString: string = error + "";
         const pureError = errorString.replace("Error: ", "");
-        alert(pureError);
+        if (errorString.indexOf("UQ_e12875dfb3b1d92d7d7c5377e22") !== -1) {
+          alert(`이메일(ID)이 중복됩니다.`);
+        } else if (
+          errorString.indexOf("UQ_1db0f40d9ff5904789eb33dc031") !== -1
+        ) {
+          alert(`이름(ID)이 중복됩니다.`);
+        } else {
+          alert(pureError);
+        }
       }
     });
   };
@@ -177,18 +214,22 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     tokenCheck("mutation", async () => {
       try {
         if (data.password === data.passwordCheck) {
-          await editAdminMutation({
+          await editUserMutation({
             variables: {
               input: {
                 email: data.email === "" ? null : data.email,
-                nickName: data.nickName,
-                password: data.password,
-                id: +formSelector("id", adminColumns),
+                password: data.password === "" ? null : data.password,
+                nameId: data.nameId === "" ? null : data.nameId,
+                name: data.name,
+                phoneNumber: data.phoneNumber,
+                residentRegistrationNumber: data.residentRegistrationNumber,
+                tags: data.tags,
+                id: +formSelector("id", userColumns),
               },
             },
           });
           reset_edit(
-            adminColumnsDefault.reduce(
+            userColumnsDefault.reduce(
               (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
               {}
             )
@@ -200,7 +241,15 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
       } catch (error) {
         const errorString: string = error + "";
         const pureError = errorString.replace("Error: ", "");
-        alert(pureError);
+        if (errorString.indexOf("UQ_e12875dfb3b1d92d7d7c5377e22") !== -1) {
+          alert(`이메일(ID)이 중복됩니다.`);
+        } else if (
+          errorString.indexOf("UQ_1db0f40d9ff5904789eb33dc031") !== -1
+        ) {
+          alert(`이름(ID)이 중복됩니다.`);
+        } else {
+          alert(pureError);
+        }
       }
     });
   };
@@ -271,37 +320,43 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
               modal: (
                 <form onSubmit={handleSubmit_create(onSubmit_create)}>
                   <ul>
-                    {adminColumnsDefault.map((val, idx) => {
+                    {userColumnsDefault.map((val, idx) => {
                       if (
-                        !adminExceptionDataInCreateForm.includes(val.accessor)
+                        !userExceptionDataInCreateForm.includes(val.accessor)
                       ) {
                         if (["email"].includes(val.accessor)) {
                           return (
                             <>
-                              <li key={idx}>
-                                <div>{val.Header}*</div>
+                              <li key={idx} className="flex items-center">
+                                <div className="w-28 flex pl-1">
+                                  {val.Header}
+                                </div>
                                 <input
                                   defaultValue={val.value}
-                                  required
                                   {...register_create(val.accessor)}
+                                  className="border w-96 p-1 m-1"
                                   type={`text`}
                                 />
                               </li>
-                              <li>
-                                <div>{"비밀번호"}*</div>
+                              <li className="flex items-center">
+                                <div className="w-28 flex pl-1">
+                                  {"비밀번호"}
+                                </div>
                                 <input
                                   defaultValue={""}
-                                  required
                                   {...register_create("password")}
+                                  className="border w-96 p-1 m-1"
                                   type={`password`}
                                 />
                               </li>
-                              <li>
-                                <div>{"비밀번호 확인"}*</div>
+                              <li className="flex items-center">
+                                <div className="w-28 flex pl-1">
+                                  {"비밀번호 확인"}
+                                </div>
                                 <input
                                   defaultValue={""}
-                                  required
                                   {...register_create("passwordCheck")}
+                                  className="border w-96 p-1 m-1"
                                   type={`password`}
                                 />
                               </li>
@@ -309,11 +364,12 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                           );
                         } else {
                           return (
-                            <li key={idx}>
-                              <div>{val.Header}</div>
+                            <li key={idx} className="flex items-center">
+                              <div className="w-28 flex pl-1">{val.Header}</div>
                               <input
                                 defaultValue={val.value}
                                 {...register_create(val.accessor)}
+                                className="border w-96 p-1 m-1"
                                 type={`text`}
                               />
                             </li>
@@ -328,7 +384,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                       className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
                       onClick={() => {
                         reset_create(
-                          adminColumnsDefault.reduce(
+                          userColumnsDefault.reduce(
                             (pre, cur) => ({
                               ...pre,
                               [cur.accessor]: cur.value,
@@ -337,7 +393,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                           )
                         );
                         setTimeout(() => {
-                          setFocus_create(adminFocusId);
+                          setFocus_create(userFocusId);
                         }, 0);
                       }}
                     >
@@ -369,34 +425,41 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
               modal: (
                 <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
                   <ul>
-                    {adminColumnsDefault.map((val, idx) => {
-                      if (
-                        !adminExceptionDataInEditForm.includes(val.accessor)
-                      ) {
+                    {userColumnsDefault.map((val, idx) => {
+                      if (!userExceptionDataInEditForm.includes(val.accessor)) {
                         if (["email"].includes(val.accessor)) {
                           return (
                             <>
-                              <li key={idx}>
-                                <div>{val.Header}</div>
+                              <li key={idx} className="flex items-center">
+                                <div className="w-28 flex pl-1">
+                                  {val.Header}
+                                </div>
                                 <input
                                   defaultValue={val.value}
                                   {...register_edit(val.accessor)}
+                                  className="border w-96 p-1 m-1"
                                   type={`text`}
                                 />
                               </li>
-                              <li>
-                                <div>{"비밀번호"}</div>
+                              <li className="flex items-center">
+                                <div className="w-28 flex pl-1">
+                                  {"비밀번호"}
+                                </div>
                                 <input
                                   defaultValue={""}
                                   {...register_edit("password")}
+                                  className="border w-96 p-1 m-1"
                                   type={`password`}
                                 />
                               </li>
-                              <li>
-                                <div>{"비밀번호 확인"}</div>
+                              <li className="flex items-center">
+                                <div className="w-28 flex pl-1">
+                                  {"비밀번호 확인"}
+                                </div>
                                 <input
                                   defaultValue={""}
                                   {...register_edit("passwordCheck")}
+                                  className="border w-96 p-1 m-1"
                                   type={`password`}
                                 />
                               </li>
@@ -404,11 +467,12 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                           );
                         } else {
                           return (
-                            <li key={idx}>
-                              <div>{val.Header}</div>
+                            <li key={idx} className="flex items-center">
+                              <div className="w-28 flex pl-1">{val.Header}</div>
                               <input
                                 defaultValue={val.value}
                                 {...register_edit(val.accessor)}
+                                className="border w-96 p-1 m-1"
                                 type={`text`}
                               />
                             </li>
@@ -497,7 +561,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                     (val) => val.original.id
                   );
                   tokenCheck("mutation", () => {
-                    deleteAdminMutation({
+                    deleteUserMutation({
                       variables: {
                         input: {
                           ids: selectedIds,

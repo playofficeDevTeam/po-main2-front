@@ -240,7 +240,7 @@ export default function App() {
                         className={`w-max  items-center   ${
                           !["selection"].includes(cell.column.id)
                             ? "flex items-center h-full "
-                            : "center h-full"
+                            : "h-full mx-auto center"
                         }`}
                       >
                         {dateList.includes(cell.column.id) ? (

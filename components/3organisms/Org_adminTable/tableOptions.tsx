@@ -1,5 +1,14 @@
+import dayjs from "dayjs";
 import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { useAsyncDebounce } from "react-table";
+import { useRecoilState } from "recoil";
+import { dateToInput } from "./fn_dateToInput";
+import {
+  rawTableFromDate,
+  rawTableToDate,
+  tableFromDate,
+  tableToDate,
+} from "./Var_tableInputDate";
 
 export function GlobalFilter({
   preGlobalFilteredRows,
@@ -28,6 +37,65 @@ export function GlobalFilter({
           fontSize: "1.1rem",
         }}
       />
+    </div>
+  );
+}
+
+export function DateFilter({ refetch }) {
+  const [rawTableFromDateState, setRawTableFromDateState] =
+    useRecoilState(rawTableFromDate);
+  const [rawTableToDateState, setRawTableToDateState] =
+    useRecoilState(rawTableToDate);
+
+  const [tableFromDateState, setTableFromDateState] =
+    useRecoilState(tableFromDate);
+  const [tableToDateState, setTableToDateState] = useRecoilState(tableToDate);
+
+  return (
+    <div className="ml-2 flex  px-4">
+      <div className="h-full center mr-2">기한: </div>
+      <input
+        className="border rounded-sm pl-1"
+        type="date"
+        value={dateToInput(rawTableFromDateState)}
+        onChange={(e) => {
+          setRawTableFromDateState((state) => dayjs(e.target.value));
+        }}
+      />
+      <div className="mx-2">~</div>
+      <input
+        className="border rounded-sm pl-1"
+        type="date"
+        value={dateToInput(rawTableToDateState)}
+        onChange={(e) => {
+          setRawTableToDateState((state) => dayjs(e.target.value));
+        }}
+      />
+      <div
+        className=""
+        onClick={() => {
+          try {
+            if (
+              dayjs(rawTableFromDateState).get("date") &&
+              dayjs(rawTableToDateState).get("date")
+            ) {
+              setTableFromDateState(rawTableFromDateState);
+              setTableToDateState(rawTableToDateState);
+              setTimeout(() => {
+                refetch();
+              }, 0);
+            } else {
+              throw "날짜를 입력해주세요";
+            }
+          } catch (error) {
+            alert(error);
+          }
+        }}
+      >
+        <div className="ml-2 bg-orange-400 hover:bg-orange-500 h-full center text-white text-sm px-2 rounded-md cursor-pointer">
+          업데이트
+        </div>
+      </div>
     </div>
   );
 }
