@@ -30,7 +30,7 @@ import {
   tableFromDate,
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
-import { dateSmall } from "../QuestionManagement/fn_DateSmall";
+import { dateSmall } from "/home/app/components/3organisms/Org_adminTable/fn_DateSmall";
 import Atm_CampaignForm from "./Atm_CampaignForm";
 import {
   campaignExceptionDataInEditBtn,

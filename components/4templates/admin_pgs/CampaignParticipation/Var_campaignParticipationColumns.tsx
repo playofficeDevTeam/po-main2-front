@@ -1,5 +1,5 @@
 import { atom, useRecoilState } from "recoil";
-import { dateSmall } from "../QuestionManagement/fn_DateSmall";
+import { dateSmall } from "/home/app/components/3organisms/Org_adminTable/fn_DateSmall";
 
 const nowDate = dateSmall(new Date());
 export const campaignParticipationColumnsDefault = [

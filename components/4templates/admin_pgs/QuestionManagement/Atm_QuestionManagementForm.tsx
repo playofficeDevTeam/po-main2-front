@@ -19,37 +19,38 @@ import {
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import { nickNameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
+import { dateSmall } from "/home/app/components/3organisms/Org_adminTable/fn_DateSmall";
 import {
-  FIND_QUESTIONS_FOR_ADMIN,
-  CREATE_QUESTION_FOR_ADMIN,
-  EDIT_QUESTION_FOR_ADMIN,
-  DELETE_QUESTION_FOR_ADMIN,
-} from "./Gql_question";
+  FIND_ALL_QUESTION_MANAGEMENT,
+  CREATE_QUESTION_MANAGEMENT,
+  EDIT_QUESTION_MANAGEMENT,
+  DELETE_QUESTION_MANAGEMENT,
+} from "./Gql_questionManagement";
 import {
-  questionFocusId,
-  questionExceptionDataInCreateForm,
-  questionExceptionDataInEditForm,
-} from "./questionControlData";
+  questionManagementFocusId,
+  questionManagementExceptionDataInCreateForm,
+  questionManagementExceptionDataInEditForm,
+} from "./questionManagementControlData";
 import {
-  questionColumnsData,
-  questionColumnsDefault,
-} from "./Var_questionColumns";
+  questionManagementColumnsData,
+  questionManagementColumnsDefault,
+} from "./Var_questionManagementColumns";
 import {
-  createQuestionForAdmin,
-  createQuestionForAdminVariables,
-} from "./__generated__/createQuestionForAdmin";
+  createQuestionManagement,
+  createQuestionManagementVariables,
+} from "./__generated__/createQuestionManagement";
 import {
-  deleteQuestionForAdmin,
-  deleteQuestionForAdminVariables,
-} from "./__generated__/deleteQuestionForAdmin";
+  deleteQuestionManagement,
+  deleteQuestionManagementVariables,
+} from "./__generated__/deleteQuestionManagement";
 import {
-  editQuestionForAdmin,
-  editQuestionForAdminVariables,
-} from "./__generated__/editQuestionForAdmin";
+  editQuestionManagement,
+  editQuestionManagementVariables,
+} from "./__generated__/editQuestionManagement";
 import {
-  findQuestionsForAdmin,
-  findQuestionsForAdminVariables,
-} from "./__generated__/findQuestionsForAdmin";
+  findAllQuestionManagement,
+  findAllQuestionManagementVariables,
+} from "./__generated__/findAllQuestionManagement";
 
 //폼 컴포넌트
 function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
@@ -62,12 +63,12 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
 
   //쿼리
   const {
-    loading: findQuestionsForAdminLoading,
-    error: findQuestionsForAdminError,
-    data: findQuestionsForAdminData,
+    loading: findAllQuestionManagementLoading,
+    error: findAllQuestionManagementError,
+    data: findAllQuestionManagementData,
     refetch,
-  } = useQuery<findQuestionsForAdmin, findQuestionsForAdminVariables>(
-    FIND_QUESTIONS_FOR_ADMIN,
+  } = useQuery<findAllQuestionManagement, findAllQuestionManagementVariables>(
+    FIND_ALL_QUESTION_MANAGEMENT,
     {
       variables: {
         input: {
@@ -79,44 +80,51 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   );
   useEffect(() => {
     tokenCheck("query", refetch);
-  }, [findQuestionsForAdminData]);
+  }, [findAllQuestionManagementData]);
 
   //쿼리가공
-  const questionsData = useMemo(
+  const questionManagementData = useMemo(
     () =>
-      findQuestionsForAdminData?.findQuestionsForAdmin.questions?.map(
+      findAllQuestionManagementData?.findAllQuestionManagement.questionManagements?.map(
         (val, idx) => ({
           ...val,
           createdAt: datePrettier(val.createdAt),
-          isAgency: val.isAgency?.toString(),
-          brandName_partner: val.user?.nameId,
+          stateDate: dateSmall(val.stateDate),
+          brandName: val.question?.brandName,
+          product: val.question?.product,
+          serviceInquired: val.question?.serviceInquired,
+          relationId: val.question?.id,
         })
       ),
-    [findQuestionsForAdminData]
+    [findAllQuestionManagementData]
   );
 
   //생성 뮤테이션
   const [
-    createQuestionForAdminMutation,
+    createQuestionManagementMutation,
     {
-      loading: createQuestionForAdminLoading,
-      error: createQuestionForAdminError,
-      data: createQuestionForAdminData,
+      loading: createQuestionManagementLoading,
+      error: createQuestionManagementError,
+      data: createQuestionManagementData,
     },
-  ] = useMutation<createQuestionForAdmin, createQuestionForAdminVariables>(
-    CREATE_QUESTION_FOR_ADMIN,
+  ] = useMutation<createQuestionManagement, createQuestionManagementVariables>(
+    CREATE_QUESTION_MANAGEMENT,
     {
       onCompleted: () => {
         refetch();
       },
     }
   );
+
   //수정 뮤테이션
   const [
-    editQuestionForAdminMutation,
-    { loading: editQuestionForAdminLoading, data: editQuestionForAdminData },
-  ] = useMutation<editQuestionForAdmin, editQuestionForAdminVariables>(
-    EDIT_QUESTION_FOR_ADMIN,
+    editQuestionManagementMutation,
+    {
+      loading: editQuestionManagementLoading,
+      data: editQuestionManagementData,
+    },
+  ] = useMutation<editQuestionManagement, editQuestionManagementVariables>(
+    EDIT_QUESTION_MANAGEMENT,
     {
       onCompleted: () => {
         refetch();
@@ -126,13 +134,13 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
 
   //삭제 뮤테이션
   const [
-    deleteQuestionForAdminMutation,
+    deleteQuestionManagementMutation,
     {
-      loading: deleteQuestionForAdminLoading,
-      data: deleteQuestionForAdminData,
+      loading: deleteQuestionManagementLoading,
+      data: deleteQuestionManagementData,
     },
-  ] = useMutation<deleteQuestionForAdmin, deleteQuestionForAdminVariables>(
-    DELETE_QUESTION_FOR_ADMIN,
+  ] = useMutation<deleteQuestionManagement, deleteQuestionManagementVariables>(
+    DELETE_QUESTION_MANAGEMENT,
     {
       onCompleted: () => {
         refetch();
@@ -152,17 +160,17 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   useEffect(() => {
     if (isModalOpen) {
       setTimeout(() => {
-        setFocus_create(questionFocusId);
+        setFocus_create(questionManagementFocusId);
       }, 100);
     }
   }, [isModalOpen]);
 
   //수정시 테이블데이터 반영 및 포커싱
-  const [questionColumns, setQuestionColumns] =
-    useRecoilState(questionColumnsData);
+  const [questionManagementColumns, setQuestionManagementColumns] =
+    useRecoilState(questionManagementColumnsData);
   useEffect(() => {
     reset_edit(
-      questionColumns.reduce(
+      questionManagementColumns.reduce(
         (pre, cur) => ({
           ...pre,
           [cur.accessor]: cur.value,
@@ -173,11 +181,11 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     if (isEditModalOpen) {
       setTimeout(() => {
         setFocus_edit(
-          questionColumns.find((val) => val.selected)?.accessor || ""
+          questionManagementColumns.find((val) => val.selected)?.accessor || ""
         );
       }, 100);
     }
-  }, [questionColumns]);
+  }, [questionManagementColumns]);
 
   //유즈폼 생성
   const {
@@ -193,27 +201,24 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   const onSubmit_create = (data) => {
     tokenCheck("mutation", async () => {
       try {
-        await createQuestionForAdminMutation({
+        if (data.stateDate === "") {
+          throw "스케쥴 날짜를 입력해주세요";
+        }
+        await createQuestionManagementMutation({
           variables: {
             input: {
-              brandName: data.brandName,
-              brandName_partner: data.brandName_partner,
-              product: data.product,
-              serviceInquired: data.serviceInquired,
-              isAnalyzed: data.isAnalyzed,
-              name: data.name,
-              phoneNumber: data.phoneNumber,
-              email: data.email,
-              budget: data.budget,
-              productLink: data.productLink,
-              uniqueness: data.uniqueness,
-              isAgency: data.isAgency === "true" ? true : false,
-              tags: data.tags,
+              stateDate: data.stateDate,
+              stateName: data.stateName,
+              state: data.state,
+              stateTime: data.stateTime,
+              note: data.note,
+              comment: data.comment,
+              questionId: data.questionId,
             },
           },
         });
         reset_create(
-          questionColumnsDefault.reduce(
+          questionManagementColumnsDefault.reduce(
             (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
             {}
           )
@@ -241,28 +246,25 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   const onSubmit_edit = (data) => {
     tokenCheck("mutation", async () => {
       try {
-        await editQuestionForAdminMutation({
+        if (data.stateDate === "") {
+          throw "스케쥴 날짜를 입력해주세요";
+        }
+        await editQuestionManagementMutation({
           variables: {
             input: {
-              brandName: data.brandName,
-              brandName_partner: data.brandName_partner,
-              product: data.product,
-              serviceInquired: data.serviceInquired,
-              isAnalyzed: data.isAnalyzed,
-              name: data.name,
-              phoneNumber: data.phoneNumber,
-              email: data.email,
-              budget: data.budget,
-              productLink: data.productLink,
-              uniqueness: data.uniqueness,
-              isAgency: data.isAgency === "true" ? true : false,
-              tags: data.tags,
-              id: +formSelector("id", questionColumns),
+              stateDate: data.stateDate,
+              stateName: data.stateName,
+              state: data.state,
+              stateTime: data.stateTime,
+              note: data.note,
+              comment: data.comment,
+              questionId: data.questionId,
+              id: +formSelector("id", questionManagementColumns),
             },
           },
         });
         reset_edit(
-          questionColumnsDefault.reduce(
+          questionManagementColumnsDefault.reduce(
             (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
             {}
           )
@@ -284,7 +286,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
         if (e.shiftKey) {
           //시프트 c 누를때 생성
           if ([67].includes(e.keyCode)) {
-            setisModalOpen(true);
+            // setisModalOpen(true);
           }
           //시프트 s/d누를때 닉네임/데이트 생성
           if ([83, 68].includes(e.keyCode)) {
@@ -328,82 +330,6 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     <>
       {/* 메뉴 */}
       <div className="flex py-2">
-        {/* 생성 */}
-        <div className="mr-3 cursor-pointer">
-          <Modal_adminCreate
-            data={{
-              button: (
-                <>
-                  <div className="center w-20 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500">
-                    <i className="fas fa-plus mr-2 text-sm"></i> 생성
-                  </div>
-                </>
-              ),
-              modal: (
-                <form onSubmit={handleSubmit_create(onSubmit_create)}>
-                  <ul>
-                    {questionColumnsDefault.map(
-                      (val, idx) =>
-                        !["id", "createdAt"].includes(val.accessor) && (
-                          <li key={idx} className="flex items-center">
-                            <div className="w-28 flex pl-1">{val.Header}</div>
-                            {["uniqueness"].includes(val.accessor) ? (
-                              <textarea
-                                defaultValue={val.value}
-                                {...register_create(val.accessor)}
-                                className="border w-96 p-1 m-1"
-                              ></textarea>
-                            ) : (
-                              <input
-                                defaultValue={val.value}
-                                {...register_create(val.accessor)}
-                                className="border w-96 p-1 m-1"
-                                type={`text`}
-                              />
-                            )}
-                          </li>
-                        )
-                    )}
-                  </ul>
-                  <div className="flex justify-end mt-2">
-                    <div
-                      className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                      onClick={() => {
-                        reset_create(
-                          questionColumnsDefault.reduce(
-                            (pre, cur) => ({
-                              ...pre,
-                              [cur.accessor]: cur.value,
-                            }),
-                            {}
-                          )
-                        );
-
-                        setTimeout(() => {
-                          setFocus_create("brandName_partner");
-                        }, 0);
-                      }}
-                    >
-                      초기화
-                    </div>
-                    <div
-                      className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                      onClick={() => {
-                        setisModalOpen(false);
-                      }}
-                    >
-                      취소
-                    </div>
-                    <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
-                      확인
-                    </button>
-                  </div>
-                </form>
-              ),
-            }}
-          />
-        </div>
-
         {/* 수정모달 */}
         <div className="">
           <Modal_adminEdit
@@ -412,24 +338,35 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
               modal: (
                 <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
                   <ul>
-                    {questionColumnsDefault.map(
+                    {questionManagementColumnsDefault.map(
                       (val, idx) =>
-                        !["id", "createdAt"].includes(val.accessor) && (
+                        !questionManagementExceptionDataInEditForm.includes(
+                          val.accessor
+                        ) && (
                           <li key={idx} className="flex items-center">
                             <div className="w-28 flex pl-1">{val.Header}</div>
-                            {!["uniqueness"].includes(val.accessor) ? (
+                            {["stateDate"].includes(val.accessor) ? (
+                              <input
+                                defaultValue={val.value}
+                                {...register_edit(val.accessor)}
+                                className="border w-96 p-1 m-1"
+                                type={`date`}
+                              />
+                            ) : ["note", "comment"].includes(val.accessor) ? (
+                              <textarea
+                                defaultValue={val.value}
+                                {...register_edit(val.accessor)}
+                                className={`border w-96 p-1 m-1 ${
+                                  ["comment"].includes(val.accessor) && "h-40"
+                                }`}
+                              ></textarea>
+                            ) : (
                               <input
                                 defaultValue={val.value}
                                 {...register_edit(val.accessor)}
                                 className="border w-96 p-1 m-1"
                                 type={`text`}
                               />
-                            ) : (
-                              <textarea
-                                defaultValue={val.value}
-                                {...register_edit(val.accessor)}
-                                className="border w-96 p-1 m-1"
-                              ></textarea>
                             )}
                           </li>
                         )
@@ -515,7 +452,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                     (val) => val.original.id
                   );
                   tokenCheck("mutation", () => {
-                    deleteQuestionForAdminMutation({
+                    deleteQuestionManagementMutation({
                       variables: {
                         input: {
                           ids: selectedIds,
@@ -539,14 +476,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
             className="mr-3 cursor-pointer center px-3 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300"
             onClick={() => {
               selectedFlatRows.forEach((val) => {
-                window.open(
-                  window.location.href.replace(
-                    "question",
-                    "question-management"
-                  ) +
-                    "/" +
-                    val.values.id
-                );
+                window.open(window.location.href + "/" + val.values.relationId);
               });
             }}
           >

@@ -20,7 +20,7 @@ import {
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import { nickNameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
-import { dateSmall } from "../QuestionManagement/fn_DateSmall";
+import { dateSmall } from "/home/app/components/3organisms/Org_adminTable/fn_DateSmall";
 import {
   campaignFocusId,
   campaignExceptionDataInCreateForm,
