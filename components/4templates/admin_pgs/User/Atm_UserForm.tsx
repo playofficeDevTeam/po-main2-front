@@ -45,6 +45,8 @@ import {
   findUsersVariables,
 } from "../Partner/__generated__/findUsers";
 import { formSelector } from "../../../3organisms/Org_adminTable/fn_formSelector";
+import { userSwitchingListData } from "./var_switchingColumns";
+import St_label from "../../../3organisms/Org_adminTable/St_label";
 //폼 컴포넌트
 function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   const [tableFromDateState, setTableFromDateState] =
@@ -302,6 +304,10 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
 
   const [columnPopupState, setColumnPopupState] = useState(false);
 
+  //테이블 컬럼 스위칭 스테이트
+  const [switchingColumns, setSwitchingColumns] = useRecoilState(
+    userSwitchingListData
+  );
   return (
     <>
       {/* 메뉴 */}
@@ -322,6 +328,9 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                   <ul>
                     {userColumnsDefault.map((val, idx) => {
                       if (
+                        switchingColumns
+                          .find((switchingColumn) => switchingColumn.selected)
+                          ?.columns.includes(val.accessor) &&
                         !userExceptionDataInCreateForm.includes(val.accessor)
                       ) {
                         if (["email"].includes(val.accessor)) {
@@ -426,7 +435,12 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                 <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
                   <ul>
                     {userColumnsDefault.map((val, idx) => {
-                      if (!userExceptionDataInEditForm.includes(val.accessor)) {
+                      if (
+                        switchingColumns
+                          .find((switchingColumn) => switchingColumn.selected)
+                          ?.columns.includes(val.accessor) &&
+                        !userExceptionDataInEditForm.includes(val.accessor)
+                      ) {
                         if (["email"].includes(val.accessor)) {
                           return (
                             <>
@@ -578,6 +592,24 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
             <i className="fas fa-trash-alt"></i>
           </div>
         )}
+
+        {switchingColumns.map((val1, idx1) => (
+          <St_label
+            selected={val1.selected}
+            onClick={() => {
+              setSwitchingColumns((state) =>
+                state.map((val2, idx2) =>
+                  idx2 === idx1
+                    ? { ...val2, selected: true }
+                    : { ...val2, selected: false }
+                )
+              );
+              console.log(switchingColumns);
+            }}
+          >
+            {val1.culumnName}
+          </St_label>
+        ))}
       </div>
     </>
   );

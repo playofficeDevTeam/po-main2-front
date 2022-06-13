@@ -13,6 +13,7 @@ import Modal_adminCreate, {
 import Modal_adminEdit, {
   isModal_adminEditOpenAtom,
 } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
+import St_label from "../../../3organisms/Org_adminTable/St_label";
 import { ColumnIndeterminateCheckbox } from "../../../3organisms/Org_adminTable/tableOptions";
 import {
   tableFromDate,
@@ -586,6 +587,11 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
             <i className="fas fa-trash-alt"></i>
           </div>
         )}
+
+        {/* 타이틀 */}
+        <St_label>
+          {findOneQuestionData?.findOneQuestion.question?.brandName}
+        </St_label>
       </div>
     </>
   );
