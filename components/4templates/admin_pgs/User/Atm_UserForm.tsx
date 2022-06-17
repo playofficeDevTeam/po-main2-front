@@ -45,7 +45,6 @@ import {
   findUsersVariables,
 } from "../Partner/__generated__/findUsers";
 import { formSelector } from "../../../3organisms/Org_adminTable/fn_formSelector";
-import { userSwitchingListData } from "./var_switchingColumns";
 import St_label from "../../../3organisms/Org_adminTable/St_label";
 //폼 컴포넌트
 function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
@@ -304,38 +303,69 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
 
   const [columnPopupState, setColumnPopupState] = useState(false);
 
-  //테이블 컬럼 스위칭 스테이트
-  const [switchingColumns, setSwitchingColumns] = useRecoilState(
-    userSwitchingListData
-  );
   return (
     <>
       {/* 메뉴 */}
-      <div className="flex py-2">
-        {/* 생성 */}
-        <div className="mr-3 cursor-pointer">
-          <Modal_adminCreate
-            data={{
-              button: (
-                <>
-                  <div className="center w-20 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500">
-                    <i className="fas fa-plus mr-2 text-sm"></i> 생성
-                  </div>
-                </>
-              ),
-              modal: (
-                <form onSubmit={handleSubmit_create(onSubmit_create)}>
-                  <ul>
-                    {userColumnsDefault.map((val, idx) => {
-                      if (
-                        switchingColumns
-                          .find((switchingColumn) => switchingColumn.selected)
-                          ?.columns.includes(val.accessor) &&
-                        !userExceptionDataInCreateForm.includes(val.accessor)
-                      ) {
-                        if (["email"].includes(val.accessor)) {
-                          return (
-                            <>
+      <div className="flex py-2 justify-between max-w-4xl">
+        <div className="flex">
+          {/* 생성 */}
+          <div className="mr-3 cursor-pointer">
+            <Modal_adminCreate
+              data={{
+                button: (
+                  <>
+                    <div className="center w-20 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500">
+                      <i className="fas fa-plus mr-2 text-sm"></i> 생성
+                    </div>
+                  </>
+                ),
+                modal: (
+                  <form onSubmit={handleSubmit_create(onSubmit_create)}>
+                    <ul>
+                      {userColumnsDefault.map((val, idx) => {
+                        if (
+                          !userExceptionDataInCreateForm.includes(val.accessor)
+                        ) {
+                          if (["email"].includes(val.accessor)) {
+                            return (
+                              <>
+                                <li key={idx} className="flex items-center">
+                                  <div className="w-28 flex pl-1">
+                                    {val.Header}
+                                  </div>
+                                  <input
+                                    defaultValue={val.value}
+                                    {...register_create(val.accessor)}
+                                    className="border w-96 p-1 m-1"
+                                    type={`text`}
+                                  />
+                                </li>
+                                <li className="flex items-center">
+                                  <div className="w-28 flex pl-1">
+                                    {"비밀번호"}
+                                  </div>
+                                  <input
+                                    defaultValue={""}
+                                    {...register_create("password")}
+                                    className="border w-96 p-1 m-1"
+                                    type={`password`}
+                                  />
+                                </li>
+                                <li className="flex items-center">
+                                  <div className="w-28 flex pl-1">
+                                    {"비밀번호 확인"}
+                                  </div>
+                                  <input
+                                    defaultValue={""}
+                                    {...register_create("passwordCheck")}
+                                    className="border w-96 p-1 m-1"
+                                    type={`password`}
+                                  />
+                                </li>
+                              </>
+                            );
+                          } else {
+                            return (
                               <li key={idx} className="flex items-center">
                                 <div className="w-28 flex pl-1">
                                   {val.Header}
@@ -347,103 +377,101 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                                   type={`text`}
                                 />
                               </li>
-                              <li className="flex items-center">
-                                <div className="w-28 flex pl-1">
-                                  {"비밀번호"}
-                                </div>
-                                <input
-                                  defaultValue={""}
-                                  {...register_create("password")}
-                                  className="border w-96 p-1 m-1"
-                                  type={`password`}
-                                />
-                              </li>
-                              <li className="flex items-center">
-                                <div className="w-28 flex pl-1">
-                                  {"비밀번호 확인"}
-                                </div>
-                                <input
-                                  defaultValue={""}
-                                  {...register_create("passwordCheck")}
-                                  className="border w-96 p-1 m-1"
-                                  type={`password`}
-                                />
-                              </li>
-                            </>
-                          );
-                        } else {
-                          return (
-                            <li key={idx} className="flex items-center">
-                              <div className="w-28 flex pl-1">{val.Header}</div>
-                              <input
-                                defaultValue={val.value}
-                                {...register_create(val.accessor)}
-                                className="border w-96 p-1 m-1"
-                                type={`text`}
-                              />
-                            </li>
-                          );
+                            );
+                          }
                         }
-                      }
-                    })}
-                  </ul>
+                      })}
+                    </ul>
 
-                  <div className="flex justify-end mt-2">
-                    <div
-                      className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                      onClick={() => {
-                        reset_create(
-                          userColumnsDefault.reduce(
-                            (pre, cur) => ({
-                              ...pre,
-                              [cur.accessor]: cur.value,
-                            }),
-                            { password: "", passwordCheck: "" }
-                          )
-                        );
-                        setTimeout(() => {
-                          setFocus_create(userFocusId);
-                        }, 0);
-                      }}
-                    >
-                      초기화
+                    <div className="flex justify-end mt-2">
+                      <div
+                        className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                        onClick={() => {
+                          reset_create(
+                            userColumnsDefault.reduce(
+                              (pre, cur) => ({
+                                ...pre,
+                                [cur.accessor]: cur.value,
+                              }),
+                              { password: "", passwordCheck: "" }
+                            )
+                          );
+                          setTimeout(() => {
+                            setFocus_create(userFocusId);
+                          }, 0);
+                        }}
+                      >
+                        초기화
+                      </div>
+                      <div
+                        className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                        onClick={() => {
+                          setisModalOpen(false);
+                        }}
+                      >
+                        취소
+                      </div>
+                      <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
+                        확인
+                      </button>
                     </div>
-                    <div
-                      className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                      onClick={() => {
-                        setisModalOpen(false);
-                      }}
-                    >
-                      취소
-                    </div>
-                    <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
-                      확인
-                    </button>
-                  </div>
-                </form>
-              ),
-            }}
-          />
-        </div>
-
-        {/* 수정모달 */}
-        <div className="">
-          <Modal_adminEdit
-            data={{
-              button: <></>,
-              modal: (
-                <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
-                  <ul>
-                    {userColumnsDefault.map((val, idx) => {
-                      if (
-                        switchingColumns
-                          .find((switchingColumn) => switchingColumn.selected)
-                          ?.columns.includes(val.accessor) &&
-                        !userExceptionDataInEditForm.includes(val.accessor)
-                      ) {
-                        if (["email"].includes(val.accessor)) {
-                          return (
-                            <>
+                  </form>
+                ),
+              }}
+            />
+          </div>
+          {/* 수정모달 */}
+          <div className="">
+            <Modal_adminEdit
+              data={{
+                button: <></>,
+                modal: (
+                  <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
+                    <ul>
+                      {userColumnsDefault.map((val, idx) => {
+                        if (
+                          !userExceptionDataInEditForm.includes(val.accessor)
+                        ) {
+                          if (["email"].includes(val.accessor)) {
+                            return (
+                              <>
+                                <li key={idx} className="flex items-center">
+                                  <div className="w-28 flex pl-1">
+                                    {val.Header}
+                                  </div>
+                                  <input
+                                    defaultValue={val.value}
+                                    {...register_edit(val.accessor)}
+                                    className="border w-96 p-1 m-1"
+                                    type={`text`}
+                                  />
+                                </li>
+                                <li className="flex items-center">
+                                  <div className="w-28 flex pl-1">
+                                    {"비밀번호"}
+                                  </div>
+                                  <input
+                                    defaultValue={""}
+                                    {...register_edit("password")}
+                                    className="border w-96 p-1 m-1"
+                                    type={`password`}
+                                  />
+                                </li>
+                                <li className="flex items-center">
+                                  <div className="w-28 flex pl-1">
+                                    {"비밀번호 확인"}
+                                  </div>
+                                  <input
+                                    defaultValue={""}
+                                    {...register_edit("passwordCheck")}
+                                    className="border w-96 p-1 m-1"
+                                    type={`password`}
+                                  />
+                                </li>
+                              </>
+                            );
+                          } else {
+                            return (
                               <li key={idx} className="flex items-center">
                                 <div className="w-28 flex pl-1">
                                   {val.Header}
@@ -455,161 +483,109 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                                   type={`text`}
                                 />
                               </li>
-                              <li className="flex items-center">
-                                <div className="w-28 flex pl-1">
-                                  {"비밀번호"}
-                                </div>
-                                <input
-                                  defaultValue={""}
-                                  {...register_edit("password")}
-                                  className="border w-96 p-1 m-1"
-                                  type={`password`}
-                                />
-                              </li>
-                              <li className="flex items-center">
-                                <div className="w-28 flex pl-1">
-                                  {"비밀번호 확인"}
-                                </div>
-                                <input
-                                  defaultValue={""}
-                                  {...register_edit("passwordCheck")}
-                                  className="border w-96 p-1 m-1"
-                                  type={`password`}
-                                />
-                              </li>
-                            </>
-                          );
-                        } else {
-                          return (
-                            <li key={idx} className="flex items-center">
-                              <div className="w-28 flex pl-1">{val.Header}</div>
-                              <input
-                                defaultValue={val.value}
-                                {...register_edit(val.accessor)}
-                                className="border w-96 p-1 m-1"
-                                type={`text`}
-                              />
-                            </li>
-                          );
+                            );
+                          }
                         }
-                      }
-                    })}
-                  </ul>
-                  <div className="flex justify-end mt-2">
-                    <div
-                      className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                      onClick={() => {
-                        setisEditModalOpen(false);
-                      }}
-                    >
-                      취소
+                      })}
+                    </ul>
+                    <div className="flex justify-end mt-2">
+                      <div
+                        className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                        onClick={() => {
+                          setisEditModalOpen(false);
+                        }}
+                      >
+                        취소
+                      </div>
+                      <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
+                        확인
+                      </button>
                     </div>
-                    <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
-                      확인
-                    </button>
-                  </div>
-                </form>
-              ),
-            }}
-          />
-        </div>
+                  </form>
+                ),
+              }}
+            />
+          </div>
+          {/* 열선택 */}
+          <div className="mr-3">
+            <div
+              className="center w-20 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300 cursor-pointer"
+              onClick={() => {
+                setColumnPopupState((state) => !state);
+              }}
+            >
+              <i className="fas fa-columns mr-2"></i>
+              <span className="mr-2">열</span>
+              {columnPopupState ? (
+                <i className="fas fa-caret-up"></i>
+              ) : (
+                <i className="fas fa-caret-down"></i>
+              )}
+            </div>
 
-        {/* 열선택 */}
-        <div className="mr-3">
-          <div
-            className="center w-20 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300 cursor-pointer"
-            onClick={() => {
-              setColumnPopupState((state) => !state);
-            }}
-          >
-            <i className="fas fa-columns mr-2"></i>
-            <span className="mr-2">열</span>
-            {columnPopupState ? (
-              <i className="fas fa-caret-up"></i>
-            ) : (
-              <i className="fas fa-caret-down"></i>
+            {columnPopupState && (
+              <div className="h-0 w-0 relative z-50 top-1">
+                <div className="w-48 p-3 px-4 bg-white border rounded-md shadow-md">
+                  <div className="py-1 flex items-center">
+                    <ColumnIndeterminateCheckbox
+                      {...getToggleHideAllColumnsProps()}
+                    />{" "}
+                    <span className="ml-2">전체 선택</span>
+                  </div>
+                  {allColumns.map(
+                    (column) =>
+                      !["selection", "id"].includes(column.id) && (
+                        <div key={column.id} className="py-1">
+                          <label className="flex items-center cursor-pointer">
+                            <input
+                              className="w-4 h-4 mr-2"
+                              type="checkbox"
+                              {...column.getToggleHiddenProps()}
+                            />{" "}
+                            {column.Header}
+                          </label>
+                        </div>
+                      )
+                  )}
+                </div>
+              </div>
             )}
           </div>
-
-          {columnPopupState && (
-            <div className="h-0 w-0 relative z-50 top-1">
-              <div className="w-48 p-3 px-4 bg-white border rounded-md shadow-md">
-                <div className="py-1 flex items-center">
-                  <ColumnIndeterminateCheckbox
-                    {...getToggleHideAllColumnsProps()}
-                  />{" "}
-                  <span className="ml-2">전체 선택</span>
-                </div>
-                {allColumns.map(
-                  (column) =>
-                    !["selection", "id"].includes(column.id) && (
-                      <div key={column.id} className="py-1">
-                        <label className="flex items-center cursor-pointer">
-                          <input
-                            className="w-4 h-4 mr-2"
-                            type="checkbox"
-                            {...column.getToggleHiddenProps()}
-                          />{" "}
-                          {column.Header}
-                        </label>
-                      </div>
-                    )
-                )}
-              </div>
+          {/* 삭제 */}
+          {selectedFlatRows.length !== 0 && (
+            <div
+              className="mr-3 cursor-pointer center w-14 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300 "
+              onClick={() => {
+                try {
+                  if (selectedFlatRows.length > 4) {
+                    throw "5개 이상의 데이터를 한번에 지울 수 없습니다.";
+                  }
+                  const returnValue = confirm("정말로 삭제하시겠습니까?");
+                  if (returnValue) {
+                    const selectedIds = selectedFlatRows.map(
+                      (val) => val.original.id
+                    );
+                    tokenCheck("mutation", () => {
+                      deleteUserMutation({
+                        variables: {
+                          input: {
+                            ids: selectedIds,
+                          },
+                        },
+                      });
+                    });
+                  }
+                } catch (error) {
+                  alert(error);
+                }
+              }}
+            >
+              <i className="fas fa-trash-alt"></i>
             </div>
           )}
         </div>
 
-        {/* 삭제 */}
-        {selectedFlatRows.length !== 0 && (
-          <div
-            className="mr-3 cursor-pointer center w-14 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300 "
-            onClick={() => {
-              try {
-                if (selectedFlatRows.length > 4) {
-                  throw "5개 이상의 데이터를 한번에 지울 수 없습니다.";
-                }
-                const returnValue = confirm("정말로 삭제하시겠습니까?");
-                if (returnValue) {
-                  const selectedIds = selectedFlatRows.map(
-                    (val) => val.original.id
-                  );
-                  tokenCheck("mutation", () => {
-                    deleteUserMutation({
-                      variables: {
-                        input: {
-                          ids: selectedIds,
-                        },
-                      },
-                    });
-                  });
-                }
-              } catch (error) {
-                alert(error);
-              }
-            }}
-          >
-            <i className="fas fa-trash-alt"></i>
-          </div>
-        )}
-
-        {switchingColumns.map((val1, idx1) => (
-          <St_label
-            selected={val1.selected}
-            onClick={() => {
-              setSwitchingColumns((state) =>
-                state.map((val2, idx2) =>
-                  idx2 === idx1
-                    ? { ...val2, selected: true }
-                    : { ...val2, selected: false }
-                )
-              );
-              console.log(switchingColumns);
-            }}
-          >
-            {val1.culumnName}
-          </St_label>
-        ))}
+        <div className="flex"></div>
       </div>
     </>
   );

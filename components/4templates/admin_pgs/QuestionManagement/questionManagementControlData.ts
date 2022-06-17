@@ -10,6 +10,7 @@ export const questionManagementExceptionDataInCreateForm = [
   "brandName",
   "product",
   "serviceInquired",
+  "newPage",
 ];
 
 export const questionManagementExceptionDataInEditForm = [
@@ -18,6 +19,7 @@ export const questionManagementExceptionDataInEditForm = [
   "brandName",
   "product",
   "serviceInquired",
+  "newPage",
 ];
 
 export const questionManagementExceptionDataInEditBtn = [
@@ -27,6 +29,7 @@ export const questionManagementExceptionDataInEditBtn = [
   "brandName",
   "product",
   "serviceInquired",
+  "newPage",
 ];
 
 export const questionManagementFocusId = "stateName";

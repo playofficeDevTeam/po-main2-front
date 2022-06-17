@@ -42,7 +42,6 @@ import {
 } from "./userControlData";
 import { userColumnsDefault, userColumnsData } from "./Var_userColumns";
 import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
-import { userSwitchingListData } from "./var_switchingColumns";
 
 export default function App() {
   const [tableFromDateState, setTableFromDateState] =
@@ -89,21 +88,8 @@ export default function App() {
     isModal_adminEditOpenAtom
   );
 
-  //테이블 컬럼 스위칭 스테이트
-  const [switchingColumns, setSwitchingColumns] = useRecoilState(
-    userSwitchingListData
-  );
-
   //테이블 컬럼 가공
-  const columns = useMemo(
-    () =>
-      userColumnsDefault.filter((userColumn) =>
-        switchingColumns
-          .find((switchVal) => switchVal.selected)
-          ?.columns.includes(userColumn.accessor)
-      ),
-    [switchingColumns]
-  );
+  const columns = useMemo(() => userColumnsDefault, []);
 
   //테이블 컴포넌트
   function Table({ columns, data }) {

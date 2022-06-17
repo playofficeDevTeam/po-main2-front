@@ -6,7 +6,7 @@ export const partnerColumnsDefault = [
     accessor: "createdAt",
     value: "",
     selected: false,
-    width: 85,
+    width: 87,
     sortDescFirst: true,
   },
   {

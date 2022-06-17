@@ -303,7 +303,7 @@ export default function App() {
                   globalFilter={state.globalFilter}
                   setGlobalFilter={setGlobalFilter}
                 />
-                <DateFilter refetch={refetch} />
+                {/* <DateFilter refetch={refetch} /> */}
               </th>
             </tr>
             {headerGroups.map((headerGroup, idx) => (

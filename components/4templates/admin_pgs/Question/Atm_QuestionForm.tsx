@@ -344,7 +344,9 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                   <ul>
                     {questionColumnsDefault.map(
                       (val, idx) =>
-                        !["id", "createdAt"].includes(val.accessor) && (
+                        !questionExceptionDataInCreateForm.includes(
+                          val.accessor
+                        ) && (
                           <li key={idx} className="flex items-center">
                             <div className="w-28 flex pl-1">{val.Header}</div>
                             {["uniqueness"].includes(val.accessor) ? (
@@ -414,7 +416,9 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                   <ul>
                     {questionColumnsDefault.map(
                       (val, idx) =>
-                        !["id", "createdAt"].includes(val.accessor) && (
+                        !questionExceptionDataInEditForm.includes(
+                          val.accessor
+                        ) && (
                           <li key={idx} className="flex items-center">
                             <div className="w-28 flex pl-1">{val.Header}</div>
                             {!["uniqueness"].includes(val.accessor) ? (

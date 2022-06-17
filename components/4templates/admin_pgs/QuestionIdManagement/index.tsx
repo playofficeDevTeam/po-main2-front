@@ -266,9 +266,10 @@ export default function App() {
             {row.cells.map((cell, idx) => {
               return (
                 <>
-                  {!questionManagementExceptionDataInTable.includes(
-                    cell.column.id
-                  ) && (
+                  {![
+                    ...questionManagementExceptionDataInTable,
+                    "newPage",
+                  ].includes(cell.column.id) && (
                     <div
                       {...cell.getCellProps()}
                       className={`overflow-x-auto thin-scroll  td group border-r px-2 border-gray-300 
@@ -369,9 +370,10 @@ export default function App() {
               <tr {...headerGroup.getHeaderGroupProps()} key={idx}>
                 {headerGroup.headers.map(
                   (column, idx) =>
-                    !questionManagementExceptionDataInTable.includes(
-                      column.id
-                    ) && (
+                    ![
+                      ...questionManagementExceptionDataInTable,
+                      "newPage",
+                    ].includes(column.id) && (
                       <th {...column.getHeaderProps()} key={idx}>
                         <div
                           {...column.getSortByToggleProps()}

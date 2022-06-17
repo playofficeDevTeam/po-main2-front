@@ -8,7 +8,15 @@ export const questionManagementColumnsDefault = [
     accessor: "createdAt",
     value: "",
     selected: false,
-    width: 85,
+    width: 87,
+    sortDescFirst: true,
+  },
+  {
+    Header: "새창",
+    accessor: "newPage",
+    value: "",
+    selected: false,
+    width: 64,
     sortDescFirst: true,
   },
   {
@@ -24,7 +32,7 @@ export const questionManagementColumnsDefault = [
     accessor: "stateDate",
     value: nowDate,
     selected: false,
-    width: 85,
+    width: 97,
     sortDescFirst: true,
   },
   {

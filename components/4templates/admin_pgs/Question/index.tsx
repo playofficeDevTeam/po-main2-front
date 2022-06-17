@@ -246,7 +246,7 @@ export default function App() {
                     >
                       <div
                         className={`w-max  items-center   ${
-                          !["selection"].includes(cell.column.id)
+                          !["selection", "newPage"].includes(cell.column.id)
                             ? "flex items-center h-full "
                             : "h-full mx-auto center"
                         }`}
@@ -278,7 +278,8 @@ export default function App() {
                                 })
                               );
                               const filteredCellValues = cellValues.filter(
-                                (e) => !["selection"].includes(e.accessor)
+                                (e) =>
+                                  !["selection", "newPage"].includes(e.accessor)
                               );
                               setQuestionColumns(filteredCellValues);
 
@@ -287,6 +288,28 @@ export default function App() {
                           >
                             <div className="ml-1">
                               <i className="fas fa-pen cursor-pointer  text-gray-400 hover:text-gray-900  text-xs flex pb-1"></i>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 새창열기버튼 */}
+                        {["newPage"].includes(cell.column.id) && (
+                          <div className="">
+                            <div
+                              className="px-2 py-1 bg-gray-300 rounded-md text-white cursor-pointer hover:bg-orange-400"
+                              onClick={() => {
+                                console.log(cell);
+                                window.open(
+                                  window.location.href.replace(
+                                    "question",
+                                    "question-management"
+                                  ) +
+                                    "/" +
+                                    cell.row.values.id
+                                );
+                              }}
+                            >
+                              열기
                             </div>
                           </div>
                         )}

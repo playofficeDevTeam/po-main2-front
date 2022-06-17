@@ -164,6 +164,11 @@ function App() {
             </div>
           </div>
           <ul>
+            <li>
+              <a href={`${process.env.NEXT_PUBLIC_API_HOST}/auth/ms`}>
+                ms 로그인
+              </a>
+            </li>
             {listsData.map((val, idx) => (
               <li className="px-1 pb-1" key={idx}>
                 <Link href={val.url}>
