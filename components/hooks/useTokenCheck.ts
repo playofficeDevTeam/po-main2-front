@@ -28,7 +28,9 @@ export const useTokenCheck = () => {
         accessTokenVar(accessToken);
         adminLoggedInVar(true);
       } else if (error) {
-        throw "오류가 생겼습니다. 다시 로그인해주세요.";
+        throw (
+          "오류가 생겼습니다. 다시 로그인해주세요." + " 에러메세지:" + error
+        );
       }
     },
   });
@@ -51,11 +53,11 @@ export const useTokenCheck = () => {
         complete: true,
       });
       const accessTokenExpired = accessTokendecoded?.payload.exp * 1000;
-      const accessTokentokenRole = accessTokendecoded?.payload.role;
 
       const refreshTokendecoded: any = jwt.decode(refreshToken, {
         complete: true,
       });
+      const refreshTokenRole = refreshTokendecoded?.payload.role;
       const refreshTokenExpired = refreshTokendecoded?.payload.exp * 1000;
 
       const now = new Date();
@@ -66,8 +68,8 @@ export const useTokenCheck = () => {
         throw "자동로그인 유효기한(1주)이 만료되었습니다. 다시 로그인해주세요.";
       }
 
-      if (["Super", "General"].includes(accessTokentokenRole)) {
-        if (accessTokenExpired - nowTime < marginTime) {
+      if (["Super", "General"].includes(refreshTokenRole)) {
+        if (!accessToken || accessTokenExpired - nowTime < marginTime) {
           await renewalAdminAccessToken({
             variables: {
               input: {
@@ -82,7 +84,7 @@ export const useTokenCheck = () => {
           }
           adminLoggedInVar(true);
         }
-      } else if (["Partner", "Creator"].includes(accessTokentokenRole)) {
+      } else if (["Partner", "Creator"].includes(refreshTokenRole)) {
       } else {
         adminLoggedInVar(false);
       }

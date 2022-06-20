@@ -304,7 +304,6 @@ export default function App() {
                             <div
                               className="px-2 py-1 bg-gray-300 rounded-md text-white cursor-pointer hover:bg-orange-400"
                               onClick={() => {
-                                console.log(cell);
                                 window.open(
                                   window.location.href +
                                     "/" +

@@ -291,9 +291,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
             }, 0);
           }
         }
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
     window.addEventListener("keydown", handler);
     return () => {

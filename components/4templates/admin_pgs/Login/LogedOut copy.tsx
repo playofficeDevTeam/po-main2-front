@@ -70,28 +70,68 @@ export default function App() {
             POKETING
           </div>
           <div className="center mb-4 text-gray-500">관리자 페이지</div>
-
-          <a
-            className="w-full h-12 bg-orange-500 text-white text-shadow-md border px-3 py-2 center text-lg font-medium  cursor-pointer mb-3"
-            href={`${process.env.NEXT_PUBLIC_API_HOST}/auth/ms`}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
           >
-            ms 로그인
-          </a>
-          <div className=" cursor-pointer flex items-center">
-            <i
-              className={`far mr-2 text-xl text-gray-500 ${
-                staySignedIn ? "fa-check-circle " : "fa-circle "
-              }`}
-            ></i>
-            <span
-              className=" text-gray-500"
+            <ul>
+              {loginFormInputSetting.map((val, idx) => (
+                <li key={idx}>
+                  <input
+                    className="login-input mb-2"
+                    type={val.type}
+                    placeholder={val.placeholder}
+                    name={val.name}
+                    value={loginFormDataState[idx]}
+                    onChange={(e) => {
+                      inputOnChange(e, idx);
+                    }}
+                  />
+                </li>
+              ))}
+            </ul>
+            <button
+              className="w-full h-12 bg-orange-500 text-white text-shadow-md border px-3 py-2 center text-lg font-medium  cursor-pointer mb-3"
               onClick={() => {
-                setStaySignedIn((val) => !val);
+                try {
+                  loginFormDataValidate.forEach((val, idx) => {
+                    if (!val.validateFunction(loginFormDataState[idx])) {
+                      const error = val.validateError;
+                      throw error;
+                    }
+                  });
+                  loginAdmin({
+                    variables: {
+                      input: {
+                        email: loginFormDataState[0],
+                        password: loginFormDataState[1],
+                      },
+                    },
+                  });
+                } catch (error) {
+                  alert(error);
+                }
               }}
             >
-              로그인 유지하기
-            </span>
-          </div>
+              로그인
+            </button>
+            <div className=" cursor-pointer flex items-center">
+              <i
+                className={`far mr-2 text-xl text-gray-500 ${
+                  staySignedIn ? "fa-check-circle " : "fa-circle "
+                }`}
+              ></i>
+              <span
+                className=" text-gray-500"
+                onClick={() => {
+                  setStaySignedIn((val) => !val);
+                }}
+              >
+                로그인 유지하기
+              </span>
+            </div>
+          </form>
         </div>
       </div>
     </>

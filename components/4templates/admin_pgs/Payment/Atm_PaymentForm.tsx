@@ -181,7 +181,6 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
         } else if (data.targetDate === "") {
           throw "목표일을 입력해주세요";
         }
-        console.log(data);
         await createPaymentForAdminMutation({
           variables: {
             input: {
@@ -291,9 +290,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
             }, 0);
           }
         }
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
     window.addEventListener("keydown", handler);
     return () => {
