@@ -81,12 +81,11 @@ function App() {
 
   const logout = () => {
     adminLoggedInVar(false);
-    router.push("/admin/log-in");
-
     sessionStorage.removeItem("accessToken");
     sessionStorage.removeItem("refreshToken");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    router.push("/admin/log-in");
   };
 
   const tokenCheck = useTokenCheck();
@@ -164,11 +163,6 @@ function App() {
             </div>
           </div>
           <ul>
-            <li>
-              <a href={`${process.env.NEXT_PUBLIC_API_HOST}/auth/ms`}>
-                ms 로그인
-              </a>
-            </li>
             {listsData.map((val, idx) => (
               <li className="px-1 pb-1" key={idx}>
                 <Link href={val.url}>
@@ -257,14 +251,16 @@ function App() {
             />
 
             <li>
-              <div
+              <a
                 className="center p-1 cursor-pointer  rounded-md hover:bg-gray-100"
+                href="https://login.microsoftonline.com/tenant-id/oauth2/v2.0/logout"
+                target="_blank"
                 onClick={() => {
                   logout();
                 }}
               >
                 로그아웃
-              </div>
+              </a>
             </li>
           </ul>
         )}

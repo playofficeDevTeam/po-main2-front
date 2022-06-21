@@ -77,7 +77,7 @@ export default function App() {
           >
             ms 로그인
           </a>
-          <div className=" cursor-pointer flex items-center">
+          {/* <div className=" cursor-pointer flex items-center">
             <i
               className={`far mr-2 text-xl text-gray-500 ${
                 staySignedIn ? "fa-check-circle " : "fa-circle "
@@ -91,7 +91,7 @@ export default function App() {
             >
               로그인 유지하기
             </span>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

@@ -20,11 +20,7 @@ export const useTokenCheck = () => {
         renewalAdminAccessToken: { ok, error, accessToken },
       } = data;
       if (ok && accessToken) {
-        if (sessionStorage.getItem("accessToken")) {
-          sessionStorage.setItem("accessToken", accessToken);
-        } else if (localStorage.getItem("accessToken")) {
-          localStorage.setItem("accessToken", accessToken);
-        }
+        localStorage.setItem("accessToken", accessToken);
         accessTokenVar(accessToken);
         adminLoggedInVar(true);
       } else if (error) {
