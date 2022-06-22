@@ -21,8 +21,12 @@ export interface AdminInputType {
   campaignsToManagement: CampaignInputType[];
   campaignsSold: CampaignInputType[];
   email?: string | null;
-  password?: string | null;
-  nickName?: string | null;
+  nickname?: string | null;
+  profilePicture?: string | null;
+  socialId?: string | null;
+  socialChatId?: string | null;
+  socialAccessToken?: string | null;
+  socialRefreshToken?: string | null;
   role?: AdminRole | null;
   refreshToken?: string | null;
 }
@@ -76,8 +80,12 @@ export interface CreateAdminSuperInput {
   campaignsToManagement?: CampaignInputType[] | null;
   campaignsSold?: CampaignInputType[] | null;
   email?: string | null;
-  password?: string | null;
-  nickName?: string | null;
+  nickname?: string | null;
+  profilePicture?: string | null;
+  socialId?: string | null;
+  socialChatId?: string | null;
+  socialAccessToken?: string | null;
+  socialRefreshToken?: string | null;
   role?: AdminRole | null;
   refreshToken?: string | null;
 }
@@ -231,13 +239,10 @@ export interface CreateQuestionManagementInput {
 }
 
 export interface CreateUserForAdminInput {
-  id?: number | null;
-  createdAt?: any | null;
-  updatedAt?: any | null;
   email?: string | null;
   password?: string | null;
-  refreshToken?: string | null;
-  role?: UserRole | null;
+  refreshToken: string;
+  role: UserRole;
   name?: string | null;
   nameId?: string | null;
   phoneNumber?: string | null;
@@ -294,8 +299,12 @@ export interface EditAdminInput {
   campaignsToManagement?: CampaignInputType[] | null;
   campaignsSold?: CampaignInputType[] | null;
   email?: string | null;
-  password?: string | null;
-  nickName?: string | null;
+  nickname?: string | null;
+  profilePicture?: string | null;
+  socialId?: string | null;
+  socialChatId?: string | null;
+  socialAccessToken?: string | null;
+  socialRefreshToken?: string | null;
   role?: AdminRole | null;
   refreshToken?: string | null;
   id: number;
@@ -367,8 +376,12 @@ export interface EditMeForAdminInput {
   updatedAt?: any | null;
   campaignsToManagement?: CampaignInputType[] | null;
   campaignsSold?: CampaignInputType[] | null;
-  password?: string | null;
-  nickName?: string | null;
+  nickname?: string | null;
+  profilePicture?: string | null;
+  socialId?: string | null;
+  socialChatId?: string | null;
+  socialAccessToken?: string | null;
+  socialRefreshToken?: string | null;
   role?: AdminRole | null;
   refreshToken?: string | null;
 }
@@ -514,7 +527,6 @@ export interface ItemIdAndAmount {
 
 export interface LoginAdminInput {
   email?: string | null;
-  password?: string | null;
 }
 
 export interface RenewalAdminAccessTokenInput {

@@ -19,7 +19,7 @@ export const adminColumnsDefault = [
   },
   {
     Header: "닉네임",
-    accessor: "nickName",
+    accessor: "nickname",
     value: "",
     selected: false,
     width: 300,

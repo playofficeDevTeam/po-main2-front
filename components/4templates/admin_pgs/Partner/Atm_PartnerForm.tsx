@@ -17,7 +17,7 @@ import {
   tableFromDate,
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
-import { nickNameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
+import { nicknameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 
 import {
@@ -257,7 +257,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     });
   };
 
-  const [nickName, setNickName] = useRecoilState(nickNameAtom);
+  const [nickname, setnickname] = useRecoilState(nicknameAtom);
 
   useEffect(() => {
     const handler = (e) => {
@@ -272,11 +272,11 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
             let newContent;
 
             if ([83].includes(e.keyCode)) {
-              newContent = nickName;
+              newContent = nickname;
             } else if ([68].includes(e.keyCode)) {
               const date = new Date();
               const prettyDate = dateTime(date);
-              newContent = nickName + " " + prettyDate;
+              newContent = nickname + " " + prettyDate;
             }
             const focusedElement: any = document.activeElement;
             const getValue_create = getValues_create(focusedElement.name);
@@ -299,7 +299,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     return () => {
       window.removeEventListener("keydown", handler);
     };
-  }, [nickName]);
+  }, [nickname]);
 
   const [columnPopupState, setColumnPopupState] = useState(false);
 

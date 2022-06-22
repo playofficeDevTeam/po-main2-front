@@ -14,7 +14,7 @@ export interface findAllAdmin_findAllAdmin_admins {
   id: number;
   createdAt: any;
   email: string | null;
-  nickName: string | null;
+  nickname: string | null;
   role: AdminRole | null;
 }
 

@@ -22,7 +22,7 @@ export const FIND_ALL_ADMIN = gql`
         id
         createdAt
         email
-        nickName
+        nickname
         role
       }
     }

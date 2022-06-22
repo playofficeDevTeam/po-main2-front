@@ -10,11 +10,12 @@ import {
 } from "../../4templates/admin_pgs/Admin/Gql_admin";
 import { editMeForAdmin } from "../../4templates/admin_pgs/Admin/__generated__/editMeForAdmin";
 import { findMeforAdmin } from "../../4templates/admin_pgs/Dashboard/__generated__/findMeforAdmin";
-import { adminLoggedInVar } from "../../common/apollo";
+import { adminLoggedInVar, refreshTokenVar } from "../../common/apollo";
 import { useTokenCheck } from "../../hooks/useTokenCheck";
 import Modal_changPassword, {
   isModal_changePasswordAtom,
 } from "./Modal_changPassword";
+import * as jwt from "jsonwebtoken";
 
 const listsData = [
   {
@@ -69,8 +70,8 @@ const listsData = [
   },
 ];
 
-export const nickNameAtom = atom({
-  key: "nickNameAtom",
+export const nicknameAtom = atom({
+  key: "nicknameAtom",
   default: "",
 });
 
@@ -83,21 +84,26 @@ function App() {
     adminLoggedInVar(false);
     sessionStorage.removeItem("accessToken");
     sessionStorage.removeItem("refreshToken");
+
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("socialAccessToken");
+    localStorage.removeItem("socialRefreshToken");
     router.push("/admin/log-in");
   };
 
   const tokenCheck = useTokenCheck();
 
-  const [nickName, setNickName] = useRecoilState(nickNameAtom);
+  const [nickname, setnickname] = useRecoilState(nicknameAtom);
 
-  const { loading, error, data, refetch } =
-    useQuery<findMeforAdmin>(FIND_ME_FOR_ADMIN);
   useEffect(() => {
-    tokenCheck("query", refetch);
-    setNickName(data?.findMeforAdmin.admin?.email?.split("@")[0] + "");
-  }, [loading, data]);
+    const refreshToken = refreshTokenVar();
+    const decodedRefreshToken: any = jwt.decode(refreshToken, {
+      complete: true,
+    });
+    const tokennickname = decodedRefreshToken?.payload.nickname;
+    setnickname(tokennickname);
+  }, []);
 
   const [sideBarOpenState, setSideBarOpenState] = useState(true);
 
@@ -188,9 +194,9 @@ function App() {
         {sideBarOpenState && (
           <ul>
             <li className="center p-1">
-              {nickName !== "undefined" ? nickName : "로딩중"}
+              {nickname !== "undefined" ? nickname : "로딩중"}
             </li>
-            <Modal_changPassword
+            {/* <Modal_changPassword
               data={{
                 button: (
                   <>
@@ -248,7 +254,7 @@ function App() {
                   </>
                 ),
               }}
-            />
+            /> */}
 
             <li>
               <a
