@@ -21,8 +21,6 @@ export default function App() {
         "socialRefreshToken",
         refreshData.socialRefreshToken
       );
-
-      console.log(refreshData);
     }
   }, [useMsRefreshMutation]);
   return (
