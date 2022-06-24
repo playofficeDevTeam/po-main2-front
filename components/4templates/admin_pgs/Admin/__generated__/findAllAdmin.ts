@@ -16,6 +16,7 @@ export interface findAllAdmin_findAllAdmin_admins {
   email: string | null;
   nickname: string | null;
   role: AdminRole | null;
+  profilePicture: string | null;
 }
 
 export interface findAllAdmin_findAllAdmin {

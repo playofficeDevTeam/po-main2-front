@@ -9,8 +9,6 @@ export default function App() {
   const router = useRouter();
   const refreshToken = router.query.refreshToken + "";
 
-  const [nickname, setnickname] = useRecoilState(nicknameAtom);
-
   useEffect(() => {
     if (router.query.refreshToken) {
       localStorage.removeItem("accessToken");
@@ -23,12 +21,6 @@ export default function App() {
       );
 
       refreshTokenVar(refreshToken);
-
-      const decodedRefreshToken: any = jwt.decode(refreshToken, {
-        complete: true,
-      });
-      const tokennickname = decodedRefreshToken?.payload.nickname;
-      setnickname(tokennickname);
 
       router.push("/admin/dashboard");
     }

@@ -6,8 +6,12 @@ export const FIND_ME_FOR_ADMIN = gql`
       ok
       error
       admin {
+        id
+        createdAt
         email
+        nickname
         role
+        profilePicture
       }
     }
   }
@@ -24,6 +28,7 @@ export const FIND_ALL_ADMIN = gql`
         email
         nickname
         role
+        profilePicture
       }
     }
   }

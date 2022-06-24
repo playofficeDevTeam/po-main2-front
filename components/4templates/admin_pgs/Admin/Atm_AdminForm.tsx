@@ -11,6 +11,7 @@ import Modal_adminEdit, {
   isModal_adminEditOpenAtom,
 } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
 import { ColumnIndeterminateCheckbox } from "../../../3organisms/Org_adminTable/tableOptions";
+import useShortCutEffect from "../../../3organisms/Org_adminTable/useShortCutEffect";
 import { nicknameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import {
@@ -23,12 +24,14 @@ import {
   EDIT_ADMIN,
   DELETE_ADMIN,
   FIND_ALL_ADMIN,
+  FIND_ME_FOR_ADMIN,
 } from "./Gql_admin";
 import { adminColumnsData, adminColumnsDefault } from "./Var_adminColumns";
 import { createAdmin, createAdminVariables } from "./__generated__/createAdmin";
 import { deleteAdmin, deleteAdminVariables } from "./__generated__/deleteAdmin";
 import { editAdmin, editAdminVariables } from "./__generated__/editAdmin";
 import { findAllAdmin } from "./__generated__/findAllAdmin";
+import { findMeforAdmin } from "./__generated__/findMeforAdmin";
 
 //폼 컴포넌트
 function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
@@ -139,7 +142,6 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
             variables: {
               input: {
                 email: data.email === "" ? null : data.email,
-                password: data.password,
                 nickname: data.nickname,
               },
             },
@@ -182,7 +184,6 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
               input: {
                 email: data.email === "" ? null : data.email,
                 nickname: data.nickname,
-                password: data.password,
                 id: +formSelector("id", adminColumns),
               },
             },
@@ -205,49 +206,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     });
   };
 
-  const [nickname, setnickname] = useRecoilState(nicknameAtom);
-
-  useEffect(() => {
-    const handler = (e) => {
-      try {
-        if (e.shiftKey) {
-          //시프트 c 누를때 생성
-          if ([67].includes(e.keyCode)) {
-            setisModalOpen(true);
-          }
-          //시프트 s/d누를때 닉네임/데이트 생성
-          if ([83, 68].includes(e.keyCode)) {
-            let newContent;
-
-            if ([83].includes(e.keyCode)) {
-              newContent = nickname;
-            } else if ([68].includes(e.keyCode)) {
-              const date = new Date();
-              const prettyDate = dateTime(date);
-              newContent = nickname + " " + prettyDate;
-            }
-            const focusedElement: any = document.activeElement;
-            const getValue_create = getValues_create(focusedElement.name);
-            setTimeout(() => {
-              reset_create({
-                [focusedElement.name]: getValue_create + newContent,
-              });
-            }, 0);
-            const getValue_edit = getValues_edit(focusedElement.name);
-            setTimeout(() => {
-              reset_edit({
-                [focusedElement.name]: getValue_edit + newContent,
-              });
-            }, 0);
-          }
-        }
-      } catch (error) {}
-    };
-    window.addEventListener("keydown", handler);
-    return () => {
-      window.removeEventListener("keydown", handler);
-    };
-  }, [nickname]);
+  useShortCutEffect(getValues_create, reset_create, getValues_edit, reset_edit);
 
   const [columnPopupState, setColumnPopupState] = useState(false);
 

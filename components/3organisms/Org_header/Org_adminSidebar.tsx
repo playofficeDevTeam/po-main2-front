@@ -9,13 +9,14 @@ import {
   FIND_ME_FOR_ADMIN,
 } from "../../4templates/admin_pgs/Admin/Gql_admin";
 import { editMeForAdmin } from "../../4templates/admin_pgs/Admin/__generated__/editMeForAdmin";
-import { findMeforAdmin } from "../../4templates/admin_pgs/Dashboard/__generated__/findMeforAdmin";
 import { adminLoggedInVar, refreshTokenVar } from "../../common/apollo";
 import { useTokenCheck } from "../../hooks/useTokenCheck";
 import Modal_changPassword, {
   isModal_changePasswordAtom,
 } from "./Modal_changPassword";
 import * as jwt from "jsonwebtoken";
+import { findMeforAdmin } from "../../4templates/admin_pgs/Admin/__generated__/findMeforAdmin";
+import fn_base64ToSrc from "../../4templates/admin_pgs/Admin/fn_base64ToSrc";
 
 const listsData = [
   {
@@ -77,9 +78,7 @@ export const nicknameAtom = atom({
 
 function App() {
   const pathname = window.location.pathname;
-
   const router = useRouter();
-
   const logout = () => {
     adminLoggedInVar(false);
     sessionStorage.removeItem("accessToken");
@@ -93,53 +92,22 @@ function App() {
   };
 
   const tokenCheck = useTokenCheck();
-
-  const [nickname, setnickname] = useRecoilState(nicknameAtom);
+  //쿼리
+  const {
+    loading: findMeforAdminLoading,
+    error: findMeforAdminError,
+    data: findMeforAdminData,
+    refetch,
+  } = useQuery<findMeforAdmin>(FIND_ME_FOR_ADMIN);
 
   useEffect(() => {
-    const refreshToken = refreshTokenVar();
-    const decodedRefreshToken: any = jwt.decode(refreshToken, {
-      complete: true,
-    });
-    const tokennickname = decodedRefreshToken?.payload.nickname;
-    setnickname(tokennickname);
-  }, []);
+    tokenCheck("query", refetch);
+  }, [findMeforAdminData]);
 
   const [sideBarOpenState, setSideBarOpenState] = useState(true);
 
   const [editMeForAdminMutation, { data: editMeForAdminData }] =
     useMutation<editMeForAdmin>(EDIT_ME_FOR_ADMIN);
-
-  const {
-    register,
-    handleSubmit,
-    setFocus,
-    formState: { errors },
-  } = useForm();
-  const onSubmit = (data) => {
-    try {
-      if (data.newPassword === data.newPasswordCheck) {
-        tokenCheck("mutation", () => {
-          editMeForAdminMutation({
-            variables: {
-              input: {
-                password: data.newPassword,
-              },
-            },
-          });
-        });
-        setisModalOpen(false);
-      } else {
-        throw "비밀번호가 일치하지 않습니다";
-      }
-    } catch (error) {
-      alert(error);
-    }
-  };
-
-  const [isModalOpen, setisModalOpen] = useRecoilState(
-    isModal_changePasswordAtom
-  );
 
   return (
     <div className=" relative z-50">
@@ -194,67 +162,21 @@ function App() {
         {sideBarOpenState && (
           <ul>
             <li className="center p-1">
-              {nickname !== "undefined" ? nickname : "로딩중"}
+              {findMeforAdminData && (
+                <div className="w-10 h-10 rounded-full">
+                  <img
+                    src={fn_base64ToSrc(
+                      findMeforAdminData.findMeforAdmin.admin?.profilePicture
+                    )}
+                    alt="프로필사진"
+                  />
+                </div>
+              )}
             </li>
-            {/* <Modal_changPassword
-              data={{
-                button: (
-                  <>
-                    <li
-                      className="center p-1 cursor-pointer  rounded-md hover:bg-gray-100"
-                      onClick={() => {
-                        setTimeout(() => {
-                          setFocus("newPassword");
-                        }, 100);
-                      }}
-                    >
-                      비밀번호 변경
-                    </li>
-                  </>
-                ),
-                modal: (
-                  <>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                      <ul className=" pb-4">
-                        <li className="flex items-center">
-                          <div className="w-36 flex pl-1">새 비밀번호</div>
-                          <input
-                            {...register("newPassword")}
-                            required
-                            className="border w-60 p-1 m-1"
-                            type={`password`}
-                          />
-                        </li>
-                        {errors.newPassword?.type === "required" &&
-                          "새 비밀번호를 입력해주세요"}
-                        <li className="flex items-center">
-                          <div className="w-36 flex pl-1">새 비밀번호 확인</div>
-                          <input
-                            {...register("newPasswordCheck")}
-                            required
-                            className="border w-60 p-1 m-1"
-                            type={`password`}
-                          />
-                        </li>
-                      </ul>
-                      <div className="flex justify-end mt-2">
-                        <div
-                          className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                          onClick={() => {
-                            setisModalOpen(false);
-                          }}
-                        >
-                          취소
-                        </div>
-                        <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
-                          확인
-                        </button>
-                      </div>
-                    </form>
-                  </>
-                ),
-              }}
-            /> */}
+            <li className="center p-1">
+              {findMeforAdminData &&
+                findMeforAdminData.findMeforAdmin.admin?.nickname}
+            </li>
 
             <li>
               <a
