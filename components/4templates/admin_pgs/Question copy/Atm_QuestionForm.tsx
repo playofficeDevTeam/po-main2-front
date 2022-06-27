@@ -150,130 +150,134 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   );
 
   // 생성시 포커싱
-  // useEffect(() => {
-  //   if (isModalOpen) {
-  //     setTimeout(() => {
-  //       setFocus_create(questionFocusId);
-  //     }, 100);
-  //   }
-  // }, [isModalOpen]);
+  useEffect(() => {
+    if (isModalOpen) {
+      setTimeout(() => {
+        setFocus_create(questionFocusId);
+      }, 100);
+    }
+  }, [isModalOpen]);
 
-  // //수정시 테이블데이터 반영 및 포커싱
-  // const [questionColumns, setQuestionColumns] =
-  //   useRecoilState(questionColumnsData);
-  // useEffect(() => {
-  //   reset_edit(
-  //     questionColumns.reduce(
-  //       (pre, cur) => ({
-  //         ...pre,
-  //         [cur.accessor]: cur.value,
-  //       }),
-  //       {}
-  //     )
-  //   );
-  //   if (isEditModalOpen) {
-  //     setTimeout(() => {
-  //       setFocus_edit(
-  //         questionColumns.find((val) => val.selected)?.accessor || ""
-  //       );
-  //     }, 100);
-  //   }
-  // }, [questionColumns]);
+  //수정시 테이블데이터 반영 및 포커싱
+  const [questionColumns, setQuestionColumns] =
+    useRecoilState(questionColumnsData);
+  useEffect(() => {
+    reset_edit(
+      questionColumns.reduce(
+        (pre, cur) => ({
+          ...pre,
+          [cur.accessor]: cur.value,
+        }),
+        {}
+      )
+    );
+    if (isEditModalOpen) {
+      setTimeout(() => {
+        setFocus_edit(
+          questionColumns.find((val) => val.selected)?.accessor || ""
+        );
+      }, 100);
+    }
+  }, [questionColumns]);
 
-  // //유즈폼 생성
-  const { handleSubmit } = useForm();
+  //유즈폼 생성
+  const {
+    register: register_create,
+    handleSubmit: handleSubmit_create,
+    reset: reset_create,
+    setFocus: setFocus_create,
+    getValues: getValues_create,
+    formState: { errors: errors_create },
+    watch: watch_create,
+  } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("test ok");
+  const onSubmit_create = (data) => {
+    tokenCheck("mutation", async () => {
+      try {
+        await createQuestionForAdminMutation({
+          variables: {
+            input: {
+              brandName: data.brandName,
+              brandName_partner: data.brandName_partner,
+              product: data.product,
+              serviceInquired: data.serviceInquired,
+              isAnalyzed: data.isAnalyzed,
+              name: data.name,
+              phoneNumber: data.phoneNumber,
+              email: data.email,
+              budget: data.budget,
+              productLink: data.productLink,
+              uniqueness: data.uniqueness,
+              isAgency: data.isAgency === "true" ? true : false,
+              tags: data.tags,
+            },
+          },
+        });
+        reset_create(
+          questionColumnsDefault.reduce(
+            (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
+            {}
+          )
+        );
+        setisModalOpen(false);
+      } catch (error) {
+        const errorString: string = error + "";
+        const pureError = errorString.replace("Error: ", "");
+        alert(pureError);
+      }
+    });
   };
 
-  // const onSubmit_create = (data) => {
-  //   tokenCheck("mutation", async () => {
-  //     try {
-  //       await createQuestionForAdminMutation({
-  //         variables: {
-  //           input: {
-  //             brandName: data.brandName,
-  //             brandName_partner: data.brandName_partner,
-  //             product: data.product,
-  //             serviceInquired: data.serviceInquired,
-  //             isAnalyzed: data.isAnalyzed,
-  //             name: data.name,
-  //             phoneNumber: data.phoneNumber,
-  //             email: data.email,
-  //             budget: data.budget,
-  //             productLink: data.productLink,
-  //             uniqueness: data.uniqueness,
-  //             isAgency: data.isAgency === "true" ? true : false,
-  //             tags: data.tags,
-  //           },
-  //         },
-  //       });
-  //       reset_create(
-  //         questionColumnsDefault.reduce(
-  //           (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-  //           {}
-  //         )
-  //       );
-  //       setisModalOpen(false);
-  //     } catch (error) {
-  //       const errorString: string = error + "";
-  //       const pureError = errorString.replace("Error: ", "");
-  //       alert(pureError);
-  //     }
-  //   });
-  // };
-
   //유즈폼 수정
-  // const {
-  //   register: register_edit,
-  //   handleSubmit: handleSubmit_edit,
-  //   reset: reset_edit,
-  //   setFocus: setFocus_edit,
-  //   getValues: getValues_edit,
-  //   formState: { errors: errors_edit },
-  //   watch: watch_edit,
-  // } = useForm();
+  const {
+    register: register_edit,
+    handleSubmit: handleSubmit_edit,
+    reset: reset_edit,
+    setFocus: setFocus_edit,
+    getValues: getValues_edit,
+    formState: { errors: errors_edit },
+    watch: watch_edit,
+  } = useForm();
 
-  // const onSubmit_edit = (data) => {
-  //   tokenCheck("mutation", async () => {
-  //     try {
-  //       await editQuestionForAdminMutation({
-  //         variables: {
-  //           input: {
-  //             brandName: data.brandName,
-  //             brandName_partner: data.brandName_partner,
-  //             product: data.product,
-  //             serviceInquired: data.serviceInquired,
-  //             isAnalyzed: data.isAnalyzed,
-  //             name: data.name,
-  //             phoneNumber: data.phoneNumber,
-  //             email: data.email,
-  //             budget: data.budget,
-  //             productLink: data.productLink,
-  //             uniqueness: data.uniqueness,
-  //             isAgency: data.isAgency === "true" ? true : false,
-  //             tags: data.tags,
-  //             id: +formSelector("id", questionColumns),
-  //           },
-  //         },
-  //       });
-  //       reset_edit(
-  //         questionColumnsDefault.reduce(
-  //           (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-  //           {}
-  //         )
-  //       );
-  //       setisEditModalOpen(false);
-  //     } catch (error) {
-  //       const errorString: string = error + "";
-  //       const pureError = errorString.replace("Error: ", "");
-  //       alert(pureError);
-  //     }
-  //   });
-  // };
+  const onSubmit_edit = (data) => {
+    tokenCheck("mutation", async () => {
+      try {
+        await editQuestionForAdminMutation({
+          variables: {
+            input: {
+              brandName: data.brandName,
+              brandName_partner: data.brandName_partner,
+              product: data.product,
+              serviceInquired: data.serviceInquired,
+              isAnalyzed: data.isAnalyzed,
+              name: data.name,
+              phoneNumber: data.phoneNumber,
+              email: data.email,
+              budget: data.budget,
+              productLink: data.productLink,
+              uniqueness: data.uniqueness,
+              isAgency: data.isAgency === "true" ? true : false,
+              tags: data.tags,
+              id: +formSelector("id", questionColumns),
+            },
+          },
+        });
+        reset_edit(
+          questionColumnsDefault.reduce(
+            (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
+            {}
+          )
+        );
+        setisEditModalOpen(false);
+      } catch (error) {
+        const errorString: string = error + "";
+        const pureError = errorString.replace("Error: ", "");
+        alert(pureError);
+      }
+    });
+  };
 
-  // useShortCutEffect(getValues_create, reset_create, getValues_edit, reset_edit);
+  useShortCutEffect(getValues_create, reset_create, getValues_edit, reset_edit);
 
   const [columnPopupState, setColumnPopupState] = useState(false);
 
@@ -293,9 +297,8 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                 </>
               ),
               modal: (
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <input type="text" />
-                  {/* <ul>
+                <form onSubmit={handleSubmit_create(onSubmit_create)}>
+                  <ul>
                     {questionColumnsDefault.map(
                       (val, idx) =>
                         !questionExceptionDataInCreateForm.includes(
@@ -320,7 +323,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                           </li>
                         )
                     )}
-                  </ul> */}
+                  </ul>
                   <div className="flex justify-end mt-2">
                     <div
                       className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
@@ -366,48 +369,47 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
             data={{
               button: <></>,
               modal: (
-                <></>
-                // <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
-                //   <ul>
-                //     {questionColumnsDefault.map(
-                //       (val, idx) =>
-                //         !questionExceptionDataInEditForm.includes(
-                //           val.accessor
-                //         ) && (
-                //           <li key={idx} className="flex items-center">
-                //             <div className="w-28 flex pl-1">{val.Header}</div>
-                //             {!["uniqueness"].includes(val.accessor) ? (
-                //               <input
-                //                 defaultValue={val.value}
-                //                 {...register_edit(val.accessor)}
-                //                 className="border w-96 p-1 m-1"
-                //                 type={`text`}
-                //               />
-                //             ) : (
-                //               <textarea
-                //                 defaultValue={val.value}
-                //                 {...register_edit(val.accessor)}
-                //                 className="border w-96 p-1 m-1"
-                //               ></textarea>
-                //             )}
-                //           </li>
-                //         )
-                //     )}
-                //   </ul>
-                //   <div className="flex justify-end mt-2">
-                //     <div
-                //       className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                //       onClick={() => {
-                //         setisEditModalOpen(false);
-                //       }}
-                //     >
-                //       취소
-                //     </div>
-                //     <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
-                //       확인
-                //     </button>
-                //   </div>
-                // </form>
+                <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
+                  <ul>
+                    {questionColumnsDefault.map(
+                      (val, idx) =>
+                        !questionExceptionDataInEditForm.includes(
+                          val.accessor
+                        ) && (
+                          <li key={idx} className="flex items-center">
+                            <div className="w-28 flex pl-1">{val.Header}</div>
+                            {!["uniqueness"].includes(val.accessor) ? (
+                              <input
+                                defaultValue={val.value}
+                                {...register_edit(val.accessor)}
+                                className="border w-96 p-1 m-1"
+                                type={`text`}
+                              />
+                            ) : (
+                              <textarea
+                                defaultValue={val.value}
+                                {...register_edit(val.accessor)}
+                                className="border w-96 p-1 m-1"
+                              ></textarea>
+                            )}
+                          </li>
+                        )
+                    )}
+                  </ul>
+                  <div className="flex justify-end mt-2">
+                    <div
+                      className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                      onClick={() => {
+                        setisEditModalOpen(false);
+                      }}
+                    >
+                      취소
+                    </div>
+                    <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
+                      확인
+                    </button>
+                  </div>
+                </form>
               ),
             }}
           />

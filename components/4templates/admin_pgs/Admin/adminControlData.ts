@@ -5,20 +5,23 @@ export const adminExceptionDataInTable = [...adminExceptionData];
 export const adminExceptionDataInCreateForm = [
   ...adminExceptionData,
   "createdAt",
-  "role",
+  "email",
+  "nickname",
 ];
 
 export const adminExceptionDataInEditForm = [
   ...adminExceptionData,
   "createdAt",
-  "role",
+  "email",
+  // "nickname",
 ];
 
 export const adminExceptionDataInEditBtn = [
   ...adminExceptionData,
   "selection",
   "createdAt",
-  "role",
+  "email",
+  "nickname",
 ];
 
-export const adminFocusId = "email";
+export const adminFocusId = "role";

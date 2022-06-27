@@ -1,14 +1,12 @@
-import { useQuery } from "@apollo/client";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ColumnFilter,
+  DateFilter,
   GlobalFilter,
   IndeterminateCheckbox,
 } from "../../../3organisms/Org_adminTable/tableOptions";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
-import { FIND_ALL_ADMIN } from "./Gql_admin";
-import { adminColumnsData, adminColumnsDefault } from "./Var_adminColumns";
-import { findAllAdmin } from "./__generated__/findAllAdmin";
 
 import {
   useTable,
@@ -17,6 +15,7 @@ import {
   useGlobalFilter,
   useBlockLayout,
   useRowSelect,
+  useResizeColumns,
 } from "react-table";
 import { FixedSizeList } from "react-window";
 
@@ -25,42 +24,80 @@ import { useRecoilState } from "recoil";
 import { isModal_adminEditOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
 import { dateList } from "../../../3organisms/Org_adminTable/tableViewTypeList";
 import TableStyle from "../../../3organisms/Org_adminTable/TableStyle";
+import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
+import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
 import {
-  adminExceptionDataInEditBtn,
-  adminExceptionDataInTable,
-} from "./adminControlData";
-import Atm_AdminForm from "./Atm_AdminForm";
+  tableFromDate,
+  tableToDate,
+} from "../../../3organisms/Org_adminTable/Var_tableInputDate";
+import Atm_QuestionForm from "./Atm_QuestionForm";
+import { FIND_QUESTIONS_FOR_ADMIN } from "./Gql_question";
+import {
+  questionExceptionDataInEditBtn,
+  questionExceptionDataInTable,
+} from "./questionControlData";
+import {
+  questionColumnsDefault,
+  questionColumnsData,
+} from "./Var_questionColumns";
 import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
-import fn_role_translate from "./fn_role_translate";
+import {
+  findQuestionsForAdmin,
+  findQuestionsForAdminVariables,
+} from "./__generated__/findQuestionsForAdmin";
+
 export default function App() {
+  const [tableFromDateState, setTableFromDateState] =
+    useRecoilState(tableFromDate);
+  const [tableToDateState, setTableToDateState] = useRecoilState(tableToDate);
+
   //토큰체크
   const tokenCheck = useTokenCheck();
 
   //쿼리
   const {
-    loading: findAllAdminLoading,
-    error: findAllAdminError,
-    data: findAllAdminData,
+    loading: findQuestionsForAdminLoading,
+    error: findQuestionsForAdminError,
+    data: findQuestionsForAdminData,
     refetch,
-  } = useQuery<findAllAdmin>(FIND_ALL_ADMIN);
-
+  } = useQuery<findQuestionsForAdmin, findQuestionsForAdminVariables>(
+    FIND_QUESTIONS_FOR_ADMIN,
+    {
+      variables: {
+        input: {
+          fromDate: dateToInput(tableFromDateState),
+          toDate: dateToInput(tableToDateState),
+        },
+      },
+    }
+  );
   useEffect(() => {
     tokenCheck("query", refetch);
-  }, [findAllAdminData]);
+  }, [findQuestionsForAdminData]);
 
   //쿼리데이터 가공
-  const adminsData = useMemo(
+  const questionsData = useMemo(
     () =>
-      findAllAdminData?.findAllAdmin.admins?.map((val, idx) => ({
-        ...val,
-        createdAt: datePrettier(val.createdAt),
-        role: fn_role_translate(val.role),
-      })),
-    [findAllAdminData]
+      findQuestionsForAdminData?.findQuestionsForAdmin.questions?.map(
+        (val, idx) => ({
+          ...val,
+          createdAt: datePrettier(val.createdAt),
+          isAgency: val.isAgency?.toString(),
+          brandName_partner: val.user?.nameId,
+        })
+      ),
+    [findQuestionsForAdminData]
+  );
+
+  const [isModalOpen, setisModalOpen] = useRecoilState(
+    isModal_adminCreateOpenAtom
+  );
+  const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
+    isModal_adminEditOpenAtom
   );
 
   //테이블 컬럼 가공
-  const columns = useMemo(() => adminColumnsDefault, []);
+  const columns = useMemo(() => questionColumnsDefault, []);
 
   //테이블 컴포넌트
   function Table({ columns, data }) {
@@ -126,6 +163,7 @@ export default function App() {
       useSortBy,
       useBlockLayout,
       useRowSelect,
+      useResizeColumns,
       (hooks) => {
         hooks.visibleColumns.push((columns) => [
           // Let's make a column for selection
@@ -172,7 +210,8 @@ export default function App() {
 
     //
 
-    const [adminColumns, setAdminColumns] = useRecoilState(adminColumnsData);
+    const [questionColumns, setQuestionColumns] =
+      useRecoilState(questionColumnsData);
 
     //테이블 스타일
     const RenderRow = useCallback(
@@ -207,7 +246,7 @@ export default function App() {
                     >
                       <div
                         className={`w-max  items-center   ${
-                          !["selection"].includes(cell.column.id)
+                          !["selection", "newPage"].includes(cell.column.id)
                             ? "flex items-center h-full "
                             : "h-full mx-auto center"
                         }`}
@@ -224,7 +263,7 @@ export default function App() {
                         )}
 
                         {/* 수정버튼 */}
-                        {!adminExceptionDataInEditBtn.includes(
+                        {!questionExceptionDataInEditBtn.includes(
                           cell.column.id
                         ) && (
                           <div
@@ -239,15 +278,37 @@ export default function App() {
                                 })
                               );
                               const filteredCellValues = cellValues.filter(
-                                (e) => !["selection"].includes(e.accessor)
+                                (e) =>
+                                  !["selection", "newPage"].includes(e.accessor)
                               );
-                              setAdminColumns(filteredCellValues);
+                              setQuestionColumns(filteredCellValues);
 
                               setisModalOpen_edit(true);
                             }}
                           >
                             <div className="ml-1">
                               <i className="fas fa-pen cursor-pointer  text-gray-400 hover:text-gray-900  text-xs flex pb-1"></i>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 새창열기버튼 */}
+                        {["newPage"].includes(cell.column.id) && (
+                          <div className="">
+                            <div
+                              className="px-2 py-1 bg-gray-300 rounded-md text-white cursor-pointer hover:bg-orange-400"
+                              onClick={() => {
+                                window.open(
+                                  window.location.href.replace(
+                                    "question",
+                                    "question-management"
+                                  ) +
+                                    "/" +
+                                    cell.row.values.id
+                                );
+                              }}
+                            >
+                              열기
                             </div>
                           </div>
                         )}
@@ -265,7 +326,7 @@ export default function App() {
 
     return (
       <>
-        <Atm_AdminForm
+        <Atm_QuestionForm
           getToggleHideAllColumnsProps={getToggleHideAllColumnsProps}
           allColumns={allColumns}
           selectedFlatRows={selectedFlatRows}
@@ -285,13 +346,14 @@ export default function App() {
                   globalFilter={state.globalFilter}
                   setGlobalFilter={setGlobalFilter}
                 />
+                <DateFilter refetch={refetch} />
               </th>
             </tr>
             {headerGroups.map((headerGroup, idx) => (
               <tr {...headerGroup.getHeaderGroupProps()} key={idx}>
                 {headerGroup.headers.map(
                   (column, idx) =>
-                    !adminExceptionDataInTable.includes(column.id) && (
+                    !questionExceptionDataInTable.includes(column.id) && (
                       <th {...column.getHeaderProps()} key={idx}>
                         <div
                           {...column.getSortByToggleProps()}
@@ -302,6 +364,15 @@ export default function App() {
                           }`}
                         >
                           {column.render("Header")}
+
+                          {/* 리사이징 */}
+                          <div
+                            {...column.getResizerProps()}
+                            className={`resizer ${
+                              column.isResizing ? "isResizing" : ""
+                            }`}
+                          />
+
                           <span>
                             {column.isSorted ? (
                               column.isSortedDesc ? (
@@ -345,16 +416,15 @@ export default function App() {
     );
   }
 
-  //렌더링
-  if (findAllAdminError) {
+  if (findQuestionsForAdminError) {
     return (
       <TableStyle>
         권한이 없습니다.
-        <div className="">{findAllAdminError.toString()}</div>
+        <div className="">{findQuestionsForAdminError.toString()}</div>
       </TableStyle>
     );
   }
-  if (findAllAdminLoading) {
+  if (findQuestionsForAdminLoading) {
     return (
       <TableStyle>
         <div className=""></div>
@@ -364,7 +434,7 @@ export default function App() {
 
   return (
     <TableStyle>
-      <Table columns={columns} data={adminsData} />
+      <Table columns={columns} data={questionsData} />
     </TableStyle>
   );
 }

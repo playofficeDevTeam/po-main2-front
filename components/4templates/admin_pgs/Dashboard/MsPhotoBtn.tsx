@@ -1,18 +1,31 @@
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { ConsoleView } from "react-device-detect";
+import { useEffect } from "react";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
-import { EDIT_ME_FOR_ADMIN } from "../Admin/Gql_admin";
+import fn_base64ToSrc from "../Admin/fn_base64ToSrc";
+import { EDIT_ME_FOR_ADMIN, FIND_ME_FOR_ADMIN } from "../Admin/Gql_admin";
 import {
   editMeForAdmin,
   editMeForAdminVariables,
 } from "../Admin/__generated__/editMeForAdmin";
+import { findMeforAdmin } from "../Admin/__generated__/findMeforAdmin";
 
 export default function App() {
-  const [src, setSrc] = useState("");
-
   const tokenCheck = useTokenCheck();
+
+  //쿼리
+  const {
+    loading: findMeforAdminLoading,
+    error: findMeforAdminError,
+    data: findMeforAdminData,
+    refetch,
+  } = useQuery<findMeforAdmin>(FIND_ME_FOR_ADMIN);
+  useEffect(() => {
+    tokenCheck("query", refetch);
+  }, [findMeforAdminData]);
+
+  const myPhoto = findMeforAdminData?.findMeforAdmin.admin?.profilePicture;
+
   const [editMeForAdminMutation, { data: editMeForAdminData }] = useMutation<
     editMeForAdmin,
     editMeForAdminVariables
@@ -58,8 +71,8 @@ export default function App() {
       >
         사진가져오기
       </div>
-      <div className="w-40 h-40 overflow-auto">{src}</div>
-      <img src={`${src}`} alt="" className=" w-20 h-20" />
+      <div className="w-40 h-40 overflow-auto">{myPhoto}</div>
+      <img src={`${fn_base64ToSrc(myPhoto)}`} alt="" className=" w-20 h-20" />
     </>
   );
 }

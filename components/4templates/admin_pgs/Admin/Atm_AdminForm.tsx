@@ -12,7 +12,6 @@ import Modal_adminEdit, {
 } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
 import { ColumnIndeterminateCheckbox } from "../../../3organisms/Org_adminTable/tableOptions";
 import useShortCutEffect from "../../../3organisms/Org_adminTable/useShortCutEffect";
-import { nicknameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import {
   adminExceptionDataInCreateForm,
@@ -176,14 +175,14 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   } = useForm();
 
   const onSubmit_edit = (data) => {
+    console.log(data);
     tokenCheck("mutation", async () => {
       try {
         if (data.password === data.passwordCheck) {
           await editAdminMutation({
             variables: {
               input: {
-                email: data.email === "" ? null : data.email,
-                nickname: data.nickname,
+                role: data.role,
                 id: +formSelector("id", adminColumns),
               },
             },
@@ -206,7 +205,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     });
   };
 
-  useShortCutEffect(getValues_create, reset_create, getValues_edit, reset_edit);
+  useShortCutEffect(null, null, getValues_edit, reset_edit);
 
   const [columnPopupState, setColumnPopupState] = useState(false);
 
@@ -215,7 +214,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
       {/* 메뉴 */}
       <div className="flex py-2">
         {/* 생성 */}
-        <div className="mr-3 cursor-pointer">
+        {/* <div className="mr-3 cursor-pointer">
           <Modal_adminCreate
             data={{
               button: (
@@ -242,24 +241,6 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                                   required
                                   {...register_create(val.accessor)}
                                   type={`text`}
-                                />
-                              </li>
-                              <li>
-                                <div>{"비밀번호"}*</div>
-                                <input
-                                  defaultValue={""}
-                                  required
-                                  {...register_create("password")}
-                                  type={`password`}
-                                />
-                              </li>
-                              <li>
-                                <div>{"비밀번호 확인"}*</div>
-                                <input
-                                  defaultValue={""}
-                                  required
-                                  {...register_create("passwordCheck")}
-                                  type={`password`}
                                 />
                               </li>
                             </>
@@ -316,7 +297,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
               ),
             }}
           />
-        </div>
+        </div> */}
 
         {/* 수정모달 */}
         <div className="">
@@ -330,32 +311,22 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                       if (
                         !adminExceptionDataInEditForm.includes(val.accessor)
                       ) {
-                        if (["email"].includes(val.accessor)) {
+                        if (["role"].includes(val.accessor)) {
                           return (
                             <>
                               <li key={idx}>
-                                <div>{val.Header}</div>
-                                <input
-                                  defaultValue={val.value}
-                                  {...register_edit(val.accessor)}
-                                  type={`text`}
-                                />
-                              </li>
-                              <li>
-                                <div>{"비밀번호"}</div>
-                                <input
-                                  defaultValue={""}
-                                  {...register_edit("password")}
-                                  type={`password`}
-                                />
-                              </li>
-                              <li>
-                                <div>{"비밀번호 확인"}</div>
-                                <input
-                                  defaultValue={""}
-                                  {...register_edit("passwordCheck")}
-                                  type={`password`}
-                                />
+                                <div>
+                                  <label
+                                    htmlFor={val.accessor}
+                                    className="form_label"
+                                  >
+                                    {val.Header}
+                                  </label>
+                                </div>
+                                <select {...register_edit(val.accessor)}>
+                                  <option value="General">일반</option>
+                                  <option value="Super">슈퍼</option>
+                                </select>
                               </li>
                             </>
                           );

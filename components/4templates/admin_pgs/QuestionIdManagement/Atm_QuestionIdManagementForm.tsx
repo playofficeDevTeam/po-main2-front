@@ -229,6 +229,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     formState: { errors: errors_create },
     watch: watch_create,
   } = useForm();
+  console.log(watch_create());
 
   const onSubmit_create = (data) => {
     tokenCheck("mutation", async () => {
@@ -353,7 +354,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                                 className={`border w-96 p-1 m-1 ${
                                   ["comment"].includes(val.accessor)
                                     ? "h-40"
-                                    : ""
+                                    : "h-40"
                                 }`}
                               ></textarea>
                             ) : (
@@ -429,10 +430,11 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                               />
                             ) : ["note", "comment"].includes(val.accessor) ? (
                               <textarea
-                                defaultValue={val.value}
                                 {...register_edit(val.accessor)}
                                 className={`border w-96 p-1 m-1 ${
-                                  ["comment"].includes(val.accessor) && "h-40"
+                                  ["comment"].includes(val.accessor)
+                                    ? "h-40"
+                                    : "h-40"
                                 }`}
                               ></textarea>
                             ) : (

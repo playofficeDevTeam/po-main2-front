@@ -42,6 +42,18 @@ export const FormStyle = styled.div`
         padding: 0.25rem;
         margin: 0.25rem;
       }
+      & select {
+        border-width: 1px;
+        width: 24rem;
+        padding: 0.25rem;
+        margin: 0.25rem;
+      }
+      & textarea {
+        border-width: 1px;
+        width: 24rem;
+        padding: 0.25rem;
+        margin: 0.25rem;
+      }
     }
   }
 `;

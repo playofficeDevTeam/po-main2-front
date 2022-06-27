@@ -239,10 +239,13 @@ export interface CreateQuestionManagementInput {
 }
 
 export interface CreateUserForAdminInput {
+  id?: number | null;
+  createdAt?: any | null;
+  updatedAt?: any | null;
   email?: string | null;
   password?: string | null;
-  refreshToken: string;
-  role: UserRole;
+  refreshToken?: string | null;
+  role?: UserRole | null;
   name?: string | null;
   nameId?: string | null;
   phoneNumber?: string | null;

@@ -34,7 +34,7 @@ export default function useShortCutEffect(
       try {
         if (e.shiftKey) {
           //시프트 c 누를때 생성
-          if ([67].includes(e.keyCode)) {
+          if ([67].includes(e.keyCode) && getValues_create) {
             setisModalOpen(true);
           }
           //시프트 s/d누를때 닉네임/데이트 생성

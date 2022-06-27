@@ -31,7 +31,7 @@ export const adminColumnsDefault = [
     accessor: "role",
     value: "",
     selected: false,
-    width: 150,
+    width: 100,
     sortDescFirst: true,
   },
   { Header: "dataId", accessor: "id", value: "", width: 0 },
