@@ -585,7 +585,7 @@ export interface paymentInputType {
   email?: string | null;
   user?: UserInputType | null;
   carts?: cartInputType[] | null;
-  paymentMethod: string;
+  paymentMethod?: string | null;
   paymentKey?: string | null;
   orderId?: string | null;
   amount?: number | null;

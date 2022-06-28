@@ -5,7 +5,6 @@ import { useRecoilState } from "recoil";
 import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
 import { dateTime } from "../../../3organisms/Org_adminTable/fn_DateTime";
 import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
-import { formSelector } from "../../../3organisms/Org_adminTable/fn_formSelector";
 import Modal_adminCreate, {
   isModal_adminCreateOpenAtom,
 } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
@@ -260,7 +259,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
               note: data.note,
               comment: data.comment,
               questionId: data.questionId,
-              id: +formSelector("id", questionManagementColumns),
+              // id: +formSelector("id", questionManagementColumns),
             },
           },
         });

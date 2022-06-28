@@ -31,8 +31,8 @@ import {
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import {
-  paymentColumnsData,
   paymentColumnsDefault,
+  rawpaymentColumnsData,
 } from "./Var_paymentColumns";
 import Atm_PaymentForm from "../Payment/Atm_PaymentForm";
 import { FIND_PAYMENTS } from "./Gql_payment";
@@ -202,10 +202,9 @@ export default function App() {
       isModal_adminEditOpenAtom
     );
 
-    //
-
-    const [paymentColumns, setPaymentColumns] =
-      useRecoilState(paymentColumnsData);
+    const [rawPaymentColumns, setRawPaymentColumns] = useRecoilState(
+      rawpaymentColumnsData
+    );
 
     //테이블 스타일
     const RenderRow = useCallback(
@@ -274,8 +273,7 @@ export default function App() {
                               const filteredCellValues = cellValues.filter(
                                 (e) => !["selection"].includes(e.accessor)
                               );
-                              setPaymentColumns(filteredCellValues);
-
+                              setRawPaymentColumns(filteredCellValues);
                               setisModalOpen_edit(true);
                             }}
                           >

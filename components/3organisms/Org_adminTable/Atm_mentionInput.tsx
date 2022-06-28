@@ -22,8 +22,11 @@ const users = [
 const defaultStyle = {
   control: {
     backgroundColor: "#fff",
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "normal",
+    width: "24rem",
+    padding: "0.25rem",
+    margin: "0.25rem",
   },
 
   "&multiLine": {
@@ -71,32 +74,27 @@ const defaultStyle = {
   },
 };
 
-export default function App({ register, className, value }) {
+export default function App({ className, id, value, onChange }) {
   return (
-    <input
-      type="text"
+    <MentionsInput
+      markup="@[__display__](user:__id__)"
+      id={id}
+      value={value}
+      onChange={onChange}
       className={className}
-      ref={register.ref}
-      name={register.name}
-      onChange={register.onChange}
-    />
-    // <MentionsInput
-    //   {...register}
-    //   value={value}
-    //   singleLine={false}
-    //   style={defaultStyle}
-    //   placeholder={"Mention people using '@'"}
-    //   a11ySuggestionsListLabel={"Suggested mentions"}
-    // >
-    //   <Mention
-    //     markup="@[__display__](user:__id__)"
-    //     trigger="@"
-    //     data={users}
-    //     renderSuggestion={(suggestion, search, highlightedDisplay) => (
-    //       <div className="user">{highlightedDisplay}</div>
-    //     )}
-    //     style={defaultStyle}
-    //   />
-    // </MentionsInput>
+      singleLine={false}
+      style={defaultStyle}
+      placeholder={"Mention people using '@'"}
+      a11ySuggestionsListLabel={"Suggested mentions"}
+    >
+      <Mention
+        trigger="@"
+        data={users}
+        renderSuggestion={(suggestion, search, highlightedDisplay) => (
+          <div className="user">{highlightedDisplay}</div>
+        )}
+        style={defaultStyle}
+      />
+    </MentionsInput>
   );
 }

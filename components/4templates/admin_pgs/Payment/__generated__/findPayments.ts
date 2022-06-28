@@ -23,7 +23,7 @@ export interface findPayments_findPayments_payments {
   name: string | null;
   phoneNumber: string | null;
   email: string | null;
-  paymentMethod: string;
+  paymentMethod: string | null;
   amount: number | null;
   paymentState: string | null;
   user: findPayments_findPayments_payments_user | null;

@@ -91,6 +91,11 @@ export const paymentColumnsDefault = [
   },
 ];
 
+export const rawpaymentColumnsData = atom({
+  key: "rawpaymentColumnsData",
+  default: paymentColumnsDefault,
+});
+
 export const paymentColumnsData = atom({
   key: "paymentColumnsData",
   default: paymentColumnsDefault,

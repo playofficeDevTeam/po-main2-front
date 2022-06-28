@@ -32,8 +32,6 @@ import {
   questionExceptionDataInEditForm,
 } from "./questionControlData";
 import {
-  formDataSelect,
-  formFocus,
   questionColumnsData,
   questionColumnsDefault,
   useQuestionColumnsDataOnChange,
