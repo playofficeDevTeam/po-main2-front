@@ -183,6 +183,7 @@ function App() {
                 className="center p-1 cursor-pointer  rounded-md hover:bg-gray-100"
                 href="https://login.microsoftonline.com/tenant-id/oauth2/v2.0/logout"
                 target="_blank"
+                rel="noreferrer"
                 onClick={() => {
                   logout();
                 }}

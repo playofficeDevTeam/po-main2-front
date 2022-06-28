@@ -210,8 +210,8 @@ export default function App() {
 
     //
 
-    const [questionColumns, setQuestionColumns] =
-      useRecoilState(questionColumnsData);
+    const [questionColumnsState, setQuestionColumnsState] =
+      useState(questionColumnsData);
 
     //테이블 스타일
     const RenderRow = useCallback(
@@ -281,7 +281,7 @@ export default function App() {
                                 (e) =>
                                   !["selection", "newPage"].includes(e.accessor)
                               );
-                              setQuestionColumns(filteredCellValues);
+                              setQuestionColumnsState(filteredCellValues);
 
                               setisModalOpen_edit(true);
                             }}
@@ -330,6 +330,7 @@ export default function App() {
           getToggleHideAllColumnsProps={getToggleHideAllColumnsProps}
           allColumns={allColumns}
           selectedFlatRows={selectedFlatRows}
+          // questionColumnsState={questionColumnsState}
         />
         <table {...getTableProps()} className="bg-white">
           <thead>

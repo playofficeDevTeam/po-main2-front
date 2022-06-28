@@ -1,4 +1,4 @@
-export default (input) => {
+export default function App(input) {
   const roleList = [
     {
       raw: "Super",
@@ -10,4 +10,4 @@ export default (input) => {
     },
   ];
   return roleList.find((val) => val.raw === input)?.show;
-};
+}
