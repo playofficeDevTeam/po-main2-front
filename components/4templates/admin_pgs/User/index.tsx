@@ -30,7 +30,6 @@ import {
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import Atm_UserForm from "./Atm_UserForm";
-import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
 import { FIND_USERS } from "../Partner/Gql_user";
 import {
   findUsers,
@@ -40,7 +39,7 @@ import {
   userExceptionDataInEditBtn,
   userExceptionDataInTable,
 } from "./userControlData";
-import { userColumnsDefault, userColumnsData } from "./Var_userColumns";
+import { userColumnsDefault, rawUserColumnsData } from "./Var_userColumns";
 import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
 
 export default function App() {
@@ -78,14 +77,6 @@ export default function App() {
         createdAt: datePrettier(val.createdAt),
       })),
     [findUsersData]
-  );
-
-  const [isModalOpen, setisModalOpen] = useRecoilState(
-    isModal_adminCreateOpenAtom
-  );
-
-  const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
-    isModal_adminEditOpenAtom
   );
 
   //테이블 컬럼 가공
@@ -199,10 +190,8 @@ export default function App() {
     const [isModalOpen_edit, setisModalOpen_edit] = useRecoilState(
       isModal_adminEditOpenAtom
     );
-
-    //
-
-    const [userColumns, setUserColumns] = useRecoilState(userColumnsData);
+    const [rawUserColumns, setRawUserColumns] =
+      useRecoilState(rawUserColumnsData);
 
     //테이블 스타일
     const RenderRow = useCallback(
@@ -221,7 +210,7 @@ export default function App() {
             {row.cells.map((cell, idx) => {
               return (
                 <>
-                  {!["id"].includes(cell.column.id) && (
+                  {!userExceptionDataInTable.includes(cell.column.id) && (
                     <div
                       {...cell.getCellProps()}
                       className={`overflow-x-auto thin-scroll  td group border-r px-2 border-gray-300 
@@ -264,15 +253,15 @@ export default function App() {
                                 (val, idx) => ({
                                   Header: val?.column?.Header,
                                   accessor: val?.column?.id,
-                                  value: val?.value,
+                                  value: val?.value || "",
                                   selected: val?.column?.id === cell.column.id,
+                                  inputType: val?.column?.inputType,
                                 })
                               );
                               const filteredCellValues = cellValues.filter(
                                 (e) => !["selection"].includes(e.accessor)
                               );
-                              setUserColumns(filteredCellValues);
-
+                              setRawUserColumns(filteredCellValues);
                               setisModalOpen_edit(true);
                             }}
                           >

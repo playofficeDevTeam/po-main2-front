@@ -1,8 +1,9 @@
 import { atom, useRecoilState } from "recoil";
 import { dateSmall } from "../../../3organisms/Org_adminTable/fn_DateSmall";
+import { IColumn } from "../adminAtoms/interface_column";
 
 const nowDate = dateSmall(new Date());
-export const questionManagementColumnsDefault = [
+export const questionManagementColumnsDefault: IColumn[] = [
   {
     Header: "생성일",
     accessor: "createdAt",
@@ -10,6 +11,7 @@ export const questionManagementColumnsDefault = [
     selected: false,
     width: 87,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "새창",
@@ -18,6 +20,7 @@ export const questionManagementColumnsDefault = [
     selected: false,
     width: 64,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "브랜드명",
@@ -26,6 +29,7 @@ export const questionManagementColumnsDefault = [
     selected: false,
     width: 200,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "스케쥴",
@@ -34,6 +38,7 @@ export const questionManagementColumnsDefault = [
     selected: false,
     width: 97,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "제목",
@@ -42,6 +47,7 @@ export const questionManagementColumnsDefault = [
     selected: false,
     width: 200,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "상태",
@@ -50,6 +56,7 @@ export const questionManagementColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "시간",
@@ -58,6 +65,7 @@ export const questionManagementColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "비고",
@@ -66,6 +74,7 @@ export const questionManagementColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "코멘트",
@@ -74,6 +83,7 @@ export const questionManagementColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "제품",
@@ -82,6 +92,7 @@ export const questionManagementColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "문의서비스",
@@ -90,6 +101,7 @@ export const questionManagementColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "dataId",
@@ -98,6 +110,7 @@ export const questionManagementColumnsDefault = [
     selected: false,
     width: 0,
     sortDescFirst: true,
+    inputType: "number",
   },
   {
     Header: "relationId",
@@ -106,8 +119,14 @@ export const questionManagementColumnsDefault = [
     selected: false,
     width: 0,
     sortDescFirst: true,
+    inputType: "number",
   },
 ];
+
+export const rawQuestionManagementColumnsData = atom({
+  key: "rawQuestionManagementColumnsData",
+  default: questionManagementColumnsDefault,
+});
 
 export const questionManagementColumnsData = atom({
   key: "questionManagementColumnsData",

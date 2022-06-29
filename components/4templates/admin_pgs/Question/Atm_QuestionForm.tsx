@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
-import { dateTime } from "../../../3organisms/Org_adminTable/fn_DateTime";
 import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
-import { formSelector } from "../../../3organisms/Org_adminTable/fn_formSelector";
+import {
+  formFocus,
+  columnsInput,
+} from "../../../3organisms/Org_adminTable/fn_inputControl";
 import Modal_adminCreate, {
   isModal_adminCreateOpenAtom,
 } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
@@ -18,7 +18,6 @@ import {
   tableFromDate,
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
-import { nicknameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import {
   FIND_QUESTIONS_FOR_ADMIN,
@@ -34,6 +33,7 @@ import {
 import {
   questionColumnsData,
   questionColumnsDefault,
+  rawQuestionColumnsData,
   useQuestionColumnsDataOnChange,
 } from "./Var_questionColumns";
 import {
@@ -54,12 +54,7 @@ import {
 } from "./__generated__/findQuestionsForAdmin";
 
 //폼 컴포넌트
-function Form({
-  getToggleHideAllColumnsProps,
-  allColumns,
-  selectedFlatRows,
-  // questionColumnsState,
-}) {
+function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   const [tableFromDateState, setTableFromDateState] =
     useRecoilState(tableFromDate);
   const [tableToDateState, setTableToDateState] = useRecoilState(tableToDate);
@@ -87,20 +82,6 @@ function Form({
   useEffect(() => {
     tokenCheck("query", refetch);
   }, [findQuestionsForAdminData]);
-
-  //쿼리가공
-  const questionsData = useMemo(
-    () =>
-      findQuestionsForAdminData?.findQuestionsForAdmin.questions?.map(
-        (val, idx) => ({
-          ...val,
-          createdAt: datePrettier(val.createdAt),
-          isAgency: val.isAgency?.toString(),
-          brandName_partner: val.user?.nameId,
-        })
-      ),
-    [findQuestionsForAdminData]
-  );
 
   //생성 뮤테이션
   const [
@@ -147,152 +128,84 @@ function Form({
     }
   );
 
+  //글로벌 스테이트 관리
   const [isModalOpen, setisModalOpen] = useRecoilState(
     isModal_adminCreateOpenAtom
   );
-
   const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
     isModal_adminEditOpenAtom
   );
 
-  // // 생성시 포커싱
-  // useEffect(() => {
-  //   if (isModalOpen) {
-  //     formFocus(questionFocusId);
-  //   }
-  // }, [isModalOpen]);
+  const [questionColumns, setQuestionColumns] =
+    useRecoilState(questionColumnsData);
+  const [rawQuestionColumns, setRawQuestionColumns] = useRecoilState(
+    rawQuestionColumnsData
+  );
+  const onChange = useQuestionColumnsDataOnChange();
 
-  // //수정시 테이블데이터 반영 및 포커싱
-  // const [questionColumns, setQuestionColumns] =
-  //   useRecoilState(questionColumnsData);
-  // useEffect(() => {
-  //   reset_edit(
-  //     questionColumns.reduce(
-  //       (pre, cur) => ({
-  //         ...pre,
-  //         [cur.accessor]: cur.value,
-  //       }),
-  //       {}
-  //     )
-  //   );
-  //   if (isEditModalOpen) {
-  //     setTimeout(() => {
-  //       setFocus_edit(
-  //         questionColumns.find((val) => val.selected)?.accessor || ""
-  //       );
-  //     }, 100);
-  //   }
-  // }, [questionColumns]);
+  // 생성시 포커싱
+  useEffect(() => {
+    if (isModalOpen) {
+      formFocus(questionFocusId);
+    }
+  }, [isModalOpen]);
 
-  // 데이터 상태관리
-  // const [questionColumnsDataState, setQuestionColumnsDataState] =
-  //   useRecoilState(questionColumnsData);
-  // const formOnChange = useQuestionColumnsDataOnChange();
+  //수정시 테이블데이터 반영 및 포커싱
+  useEffect(() => {
+    if (isEditModalOpen) {
+      setQuestionColumns(rawQuestionColumns);
+      formFocus(rawQuestionColumns.find((val) => val.selected)?.accessor || "");
+    }
+  }, [rawQuestionColumns]);
 
-  // 유즈폼 생성
-  const { handleSubmit: handleSubmit_create } = useForm();
+  // 생성 인풋
+  const createInput = columnsInput(
+    questionColumns,
+    questionExceptionDataInCreateForm
+  );
+
   const onSubmit_create = () => {
-    // console.log(questionColumnsDataState);
-    // console.log(formDataSelect(questionColumnsDataState, "brandName"));
-    // tokenCheck("mutation", async () => {
-    //   try {
-    //     await createQuestionForAdminMutation({
-    //       variables: {
-    //         input: {
-    //           brandName: formDataSelect(questionColumnsDataState, "brandName"),
-    //           brandName_partner: formDataSelect(
-    //             questionColumnsDataState,
-    //             "brandName_partner"
-    //           ),
-    //           product: formDataSelect(questionColumnsDataState, "product"),
-    //           serviceInquired: formDataSelect(
-    //             questionColumnsDataState,
-    //             "serviceInquired"
-    //           ),
-    //           isAnalyzed: formDataSelect(
-    //             questionColumnsDataState,
-    //             "isAnalyzed"
-    //           ),
-    //           name: formDataSelect(questionColumnsDataState, "name"),
-    //           phoneNumber: formDataSelect(
-    //             questionColumnsDataState,
-    //             "phoneNumber"
-    //           ),
-    //           email: formDataSelect(questionColumnsDataState, "email"),
-    //           budget: formDataSelect(questionColumnsDataState, "budget"),
-    //           productLink: formDataSelect(
-    //             questionColumnsDataState,
-    //             "productLink"
-    //           ),
-    //           uniqueness: formDataSelect(
-    //             questionColumnsDataState,
-    //             "uniqueness"
-    //           ),
-    //           isAgency: formDataSelect(questionColumnsDataState, "isAgency"),
-    //           tags: formDataSelect(questionColumnsDataState, "tags"),
-    //         },
-    //       },
-    //     });
-    //     setQuestionColumnsDataState(questionColumnsDefault);
-    //     setisModalOpen(false);
-    //   } catch (error) {
-    //     const errorString: string = error + "";
-    //     const pureError = errorString.replace("Error: ", "");
-    //     alert(pureError);
-    //   }
-    // });
+    tokenCheck("mutation", async () => {
+      try {
+        await createQuestionForAdminMutation({
+          variables: {
+            input: createInput,
+          },
+        });
+        setQuestionColumns(questionColumnsDefault);
+        setisModalOpen(false);
+      } catch (error) {
+        const errorString: string = error + "";
+        const pureError = errorString.replace("Error: ", "");
+        alert(pureError);
+      }
+    });
   };
 
-  //유즈폼 수정
-  // const {
-  //   register: register_edit,
-  //   handleSubmit: handleSubmit_edit,
-  //   reset: reset_edit,
-  //   setFocus: setFocus_edit,
-  //   getValues: getValues_edit,
-  //   formState: { errors: errors_edit },
-  //   watch: watch_edit,
-  // } = useForm();
+  // 수정인풋
+  const editInput = columnsInput(
+    questionColumns,
+    questionExceptionDataInEditForm.filter((val) => val !== "id")
+  );
+  const onSubmit_edit = () => {
+    tokenCheck("mutation", async () => {
+      try {
+        await editQuestionForAdminMutation({
+          variables: {
+            input: editInput,
+          },
+        });
+        setQuestionColumns(questionColumnsDefault);
+        setisEditModalOpen(false);
+      } catch (error) {
+        const errorString: string = error + "";
+        const pureError = errorString.replace("Error: ", "");
+        alert(pureError);
+      }
+    });
+  };
 
-  // const onSubmit_edit = (data) => {
-  //   tokenCheck("mutation", async () => {
-  //     try {
-  //       await editQuestionForAdminMutation({
-  //         variables: {
-  //           input: {
-  //             brandName: data.brandName,
-  //             brandName_partner: data.brandName_partner,
-  //             product: data.product,
-  //             serviceInquired: data.serviceInquired,
-  //             isAnalyzed: data.isAnalyzed,
-  //             name: data.name,
-  //             phoneNumber: data.phoneNumber,
-  //             email: data.email,
-  //             budget: data.budget,
-  //             productLink: data.productLink,
-  //             uniqueness: data.uniqueness,
-  //             isAgency: data.isAgency === "true" ? true : false,
-  //             tags: data.tags,
-  //             id: +formSelector("id", questionColumns),
-  //           },
-  //         },
-  //       });
-  //       reset_edit(
-  //         questionColumnsDefault.reduce(
-  //           (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-  //           {}
-  //         )
-  //       );
-  //       setisEditModalOpen(false);
-  //     } catch (error) {
-  //       const errorString: string = error + "";
-  //       const pureError = errorString.replace("Error: ", "");
-  //       alert(pureError);
-  //     }
-  //   });
-  // };
-
-  // useShortCutEffect(getValues_create, reset_create, getValues_edit, reset_edit);
+  useShortCutEffect({ createBtn: true, hotkey: true }, setQuestionColumns);
 
   const [columnPopupState, setColumnPopupState] = useState(false);
 
@@ -312,63 +225,67 @@ function Form({
                 </>
               ),
               modal: (
-                // <form onSubmit={handleSubmit_create(onSubmit_create)}>
-                //   <ul>
-                //     {questionColumnsDataState.map(
-                //       (val, idx) =>
-                //         !questionExceptionDataInCreateForm.includes(
-                //           val.accessor
-                //         ) && (
-                //           <li key={idx} className="flex items-center">
-                //             <div className="w-28 flex pl-1">{val.Header}</div>
-                //             {["uniqueness"].includes(val.accessor) ? (
-                //               <textarea
-                //                 id={val.accessor}
-                //                 value={val.value}
-                //                 onChange={(e) => {
-                //                   formOnChange(e, idx);
-                //                 }}
-                //                 className="border w-96 p-1 m-1"
-                //               ></textarea>
-                //             ) : (
-                //               <input
-                //                 id={val.accessor}
-                //                 value={val.value}
-                //                 onChange={(e) => {
-                //                   formOnChange(e, idx);
-                //                 }}
-                //                 className="border w-96 p-1 m-1"
-                //                 type={`text`}
-                //               />
-                //             )}
-                //           </li>
-                //         )
-                //     )}
-                //   </ul>
-                //   <div className="flex justify-end mt-2">
-                //     <div
-                //       className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                //       onClick={() => {
-                //         setQuestionColumnsDataState(questionColumnsDefault);
-                //         formFocus(questionFocusId);
-                //       }}
-                //     >
-                //       초기화
-                //     </div>
-                //     <div
-                //       className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                //       onClick={() => {
-                //         setisModalOpen(false);
-                //       }}
-                //     >
-                //       취소
-                //     </div>
-                //     <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
-                //       확인
-                //     </button>
-                //   </div>
-                // </form>
-                <></>
+                <form
+                  onSubmit={(e) => {
+                    onSubmit_create();
+                    e.preventDefault();
+                  }}
+                >
+                  <ul>
+                    {questionColumns.map(
+                      (val, idx) =>
+                        !questionExceptionDataInCreateForm.includes(
+                          val.accessor
+                        ) && (
+                          <li key={idx} className="flex items-center">
+                            <div className="w-28 flex pl-1">{val.Header}</div>
+                            {["uniqueness"].includes(val.accessor) ? (
+                              <textarea
+                                id={val.accessor}
+                                value={val.value}
+                                onChange={(e) => {
+                                  onChange(e, idx);
+                                }}
+                                className="border w-96 p-1 m-1"
+                              ></textarea>
+                            ) : (
+                              <input
+                                id={val.accessor}
+                                value={val.value}
+                                onChange={(e) => {
+                                  onChange(e, idx);
+                                }}
+                                className="border w-96 p-1 m-1"
+                                type={`text`}
+                              />
+                            )}
+                          </li>
+                        )
+                    )}
+                  </ul>
+                  <div className="flex justify-end mt-2">
+                    <div
+                      className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                      onClick={() => {
+                        setQuestionColumns(questionColumnsDefault);
+                        formFocus(questionFocusId);
+                      }}
+                    >
+                      초기화
+                    </div>
+                    <div
+                      className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                      onClick={() => {
+                        setisModalOpen(false);
+                      }}
+                    >
+                      취소
+                    </div>
+                    <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
+                      확인
+                    </button>
+                  </div>
+                </form>
               ),
             }}
           />
@@ -380,48 +297,58 @@ function Form({
             data={{
               button: <></>,
               modal: (
-                <></>
-                // <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
-                //   <ul>
-                //     {questionColumnsDefault.map(
-                //       (val, idx) =>
-                //         !questionExceptionDataInEditForm.includes(
-                //           val.accessor
-                //         ) && (
-                //           <li key={idx} className="flex items-center">
-                //             <div className="w-28 flex pl-1">{val.Header}</div>
-                //             {!["uniqueness"].includes(val.accessor) ? (
-                //               <input
-                //                 defaultValue={val.value}
-                //                 {...register_edit(val.accessor)}
-                //                 className="border w-96 p-1 m-1"
-                //                 type={`text`}
-                //               />
-                //             ) : (
-                //               <textarea
-                //                 defaultValue={val.value}
-                //                 {...register_edit(val.accessor)}
-                //                 className="border w-96 p-1 m-1"
-                //               ></textarea>
-                //             )}
-                //           </li>
-                //         )
-                //     )}
-                //   </ul>
-                //   <div className="flex justify-end mt-2">
-                //     <div
-                //       className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                //       onClick={() => {
-                //         setisEditModalOpen(false);
-                //       }}
-                //     >
-                //       취소
-                //     </div>
-                //     <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
-                //       확인
-                //     </button>
-                //   </div>
-                // </form>
+                <form
+                  onSubmit={(e) => {
+                    onSubmit_edit();
+                    e.preventDefault();
+                  }}
+                >
+                  <ul>
+                    {questionColumns.map(
+                      (val, idx) =>
+                        !questionExceptionDataInEditForm.includes(
+                          val.accessor
+                        ) && (
+                          <li key={idx} className="flex items-center">
+                            <div className="w-28 flex pl-1">{val.Header}</div>
+                            {!["uniqueness"].includes(val.accessor) ? (
+                              <input
+                                id={val.accessor}
+                                value={val.value}
+                                onChange={(e) => {
+                                  onChange(e, idx);
+                                }}
+                                className="border w-96 p-1 m-1"
+                                type={`text`}
+                              />
+                            ) : (
+                              <textarea
+                                id={val.accessor}
+                                value={val.value}
+                                onChange={(e) => {
+                                  onChange(e, idx);
+                                }}
+                                className="border w-96 p-1 m-1"
+                              ></textarea>
+                            )}
+                          </li>
+                        )
+                    )}
+                  </ul>
+                  <div className="flex justify-end mt-2">
+                    <div
+                      className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                      onClick={() => {
+                        setisEditModalOpen(false);
+                      }}
+                    >
+                      취소
+                    </div>
+                    <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
+                      확인
+                    </button>
+                  </div>
+                </form>
               ),
             }}
           />

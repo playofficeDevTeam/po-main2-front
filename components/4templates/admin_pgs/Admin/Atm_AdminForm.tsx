@@ -1,9 +1,10 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import { dateTime } from "../../../3organisms/Org_adminTable/fn_DateTime";
-import { formSelector } from "../../../3organisms/Org_adminTable/fn_formSelector";
+import {
+  columnsInput,
+  formFocus,
+} from "../../../3organisms/Org_adminTable/fn_inputControl";
 import Modal_adminCreate, {
   isModal_adminCreateOpenAtom,
 } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
@@ -25,7 +26,12 @@ import {
   FIND_ALL_ADMIN,
   FIND_ME_FOR_ADMIN,
 } from "./Gql_admin";
-import { adminColumnsData, adminColumnsDefault } from "./Var_adminColumns";
+import {
+  adminColumnsData,
+  adminColumnsDefault,
+  rawAdminColumnsData,
+  useAdminColumnsDataOnChange,
+} from "./Var_adminColumns";
 import { createAdmin, createAdminVariables } from "./__generated__/createAdmin";
 import { deleteAdmin, deleteAdminVariables } from "./__generated__/deleteAdmin";
 import { editAdmin, editAdminVariables } from "./__generated__/editAdmin";
@@ -87,6 +93,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     },
   });
 
+  //글로벌 스테이트 관리
   const [isModalOpen, setisModalOpen] = useRecoilState(
     isModal_adminCreateOpenAtom
   );
@@ -94,67 +101,42 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     isModal_adminEditOpenAtom
   );
 
+  const [adminColumns, setAdminColumns] = useRecoilState(adminColumnsData);
+  const [rawAdminColumns, setRawAdminColumns] =
+    useRecoilState(rawAdminColumnsData);
+
+  const onChange = useAdminColumnsDataOnChange();
+
   // 생성시 포커싱
   useEffect(() => {
     if (isModalOpen) {
-      setTimeout(() => {
-        setFocus_create(adminFocusId);
-      }, 100);
+      formFocus(adminFocusId);
     }
   }, [isModalOpen]);
 
   //수정시 테이블데이터 반영 및 포커싱
-  const [adminColumns, setAdminColumns] = useRecoilState(adminColumnsData);
   useEffect(() => {
-    reset_edit(
-      adminColumns.reduce(
-        (pre, cur) => ({
-          ...pre,
-          [cur.accessor]: cur.value,
-        }),
-        {}
-      )
-    );
     if (isEditModalOpen) {
-      setTimeout(() => {
-        setFocus_edit(adminColumns.find((val) => val.selected)?.accessor || "");
-      }, 100);
+      setAdminColumns(rawAdminColumns);
+      formFocus(rawAdminColumns.find((val) => val.selected)?.accessor || "");
     }
-  }, [adminColumns]);
+  }, [rawAdminColumns]);
 
-  //유즈폼 생성
-  const {
-    register: register_create,
-    handleSubmit: handleSubmit_create,
-    reset: reset_create,
-    setFocus: setFocus_create,
-    getValues: getValues_create,
-    formState: { errors: errors_create },
-    watch: watch_create,
-  } = useForm();
-
-  const onSubmit_create = (data) => {
+  // 수정인풋
+  const editInput = columnsInput(
+    adminColumns,
+    adminExceptionDataInEditForm.filter((val) => val !== "id")
+  );
+  const onSubmit_edit = () => {
     tokenCheck("mutation", async () => {
       try {
-        if (data.password === data.passwordCheck) {
-          await createAdminMutation({
-            variables: {
-              input: {
-                email: data.email === "" ? null : data.email,
-                nickname: data.nickname,
-              },
-            },
-          });
-          reset_create(
-            adminColumnsDefault.reduce(
-              (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-              { password: "", passwordCheck: "" }
-            )
-          );
-          setisModalOpen(false);
-        } else {
-          throw "비밀번호가 일치하지 않습니다";
-        }
+        await editAdminMutation({
+          variables: {
+            input: editInput,
+          },
+        });
+        setAdminColumns(adminColumnsDefault);
+        setisEditModalOpen(false);
       } catch (error) {
         const errorString: string = error + "";
         const pureError = errorString.replace("Error: ", "");
@@ -163,49 +145,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     });
   };
 
-  //유즈폼 수정
-  const {
-    register: register_edit,
-    handleSubmit: handleSubmit_edit,
-    reset: reset_edit,
-    setFocus: setFocus_edit,
-    getValues: getValues_edit,
-    formState: { errors: errors_edit },
-    watch: watch_edit,
-  } = useForm();
-
-  const onSubmit_edit = (data) => {
-    console.log(data);
-    tokenCheck("mutation", async () => {
-      try {
-        if (data.password === data.passwordCheck) {
-          await editAdminMutation({
-            variables: {
-              input: {
-                role: data.role,
-                id: +formSelector("id", adminColumns),
-              },
-            },
-          });
-          reset_edit(
-            adminColumnsDefault.reduce(
-              (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-              {}
-            )
-          );
-          setisEditModalOpen(false);
-        } else {
-          throw "비밀번호가 일치하지 않습니다";
-        }
-      } catch (error) {
-        const errorString: string = error + "";
-        const pureError = errorString.replace("Error: ", "");
-        alert(pureError);
-      }
-    });
-  };
-
-  useShortCutEffect(null, null, getValues_edit, reset_edit);
+  useShortCutEffect({ createBtn: true, hotkey: true }, setAdminColumns);
 
   const [columnPopupState, setColumnPopupState] = useState(false);
 
@@ -213,101 +153,20 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     <>
       {/* 메뉴 */}
       <div className="flex py-2">
-        {/* 생성 */}
-        {/* <div className="mr-3 cursor-pointer">
-          <Modal_adminCreate
-            data={{
-              button: (
-                <>
-                  <div className="center w-20 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500">
-                    <i className="fas fa-plus mr-2 text-sm"></i> 생성
-                  </div>
-                </>
-              ),
-              modal: (
-                <form onSubmit={handleSubmit_create(onSubmit_create)}>
-                  <ul>
-                    {adminColumnsDefault.map((val, idx) => {
-                      if (
-                        !adminExceptionDataInCreateForm.includes(val.accessor)
-                      ) {
-                        if (["email"].includes(val.accessor)) {
-                          return (
-                            <>
-                              <li key={idx}>
-                                <div>{val.Header}*</div>
-                                <input
-                                  defaultValue={val.value}
-                                  required
-                                  {...register_create(val.accessor)}
-                                  type={`text`}
-                                />
-                              </li>
-                            </>
-                          );
-                        } else {
-                          return (
-                            <li key={idx}>
-                              <div>{val.Header}</div>
-                              <input
-                                defaultValue={val.value}
-                                {...register_create(val.accessor)}
-                                type={`text`}
-                              />
-                            </li>
-                          );
-                        }
-                      }
-                    })}
-                  </ul>
-
-                  <div className="flex justify-end mt-2">
-                    <div
-                      className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                      onClick={() => {
-                        reset_create(
-                          adminColumnsDefault.reduce(
-                            (pre, cur) => ({
-                              ...pre,
-                              [cur.accessor]: cur.value,
-                            }),
-                            { password: "", passwordCheck: "" }
-                          )
-                        );
-                        setTimeout(() => {
-                          setFocus_create(adminFocusId);
-                        }, 0);
-                      }}
-                    >
-                      초기화
-                    </div>
-                    <div
-                      className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                      onClick={() => {
-                        setisModalOpen(false);
-                      }}
-                    >
-                      취소
-                    </div>
-                    <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
-                      확인
-                    </button>
-                  </div>
-                </form>
-              ),
-            }}
-          />
-        </div> */}
-
         {/* 수정모달 */}
         <div className="">
           <Modal_adminEdit
             data={{
               button: <></>,
               modal: (
-                <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
+                <form
+                  onSubmit={(e) => {
+                    onSubmit_edit();
+                    e.preventDefault();
+                  }}
+                >
                   <ul>
-                    {adminColumnsDefault.map((val, idx) => {
+                    {adminColumns.map((val, idx) => {
                       if (
                         !adminExceptionDataInEditForm.includes(val.accessor)
                       ) {
@@ -323,7 +182,14 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                                     {val.Header}
                                   </label>
                                 </div>
-                                <select {...register_edit(val.accessor)}>
+                                <select
+                                  id={val.accessor}
+                                  value={val.value}
+                                  onChange={(e) => {
+                                    onChange(e, idx);
+                                  }}
+                                  className="border w-96 p-1 m-1"
+                                >
                                   <option value="General">일반</option>
                                   <option value="Super">슈퍼</option>
                                 </select>
@@ -335,8 +201,12 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                             <li key={idx}>
                               <div>{val.Header}</div>
                               <input
-                                defaultValue={val.value}
-                                {...register_edit(val.accessor)}
+                                id={val.accessor}
+                                value={val.value}
+                                onChange={(e) => {
+                                  onChange(e, idx);
+                                }}
+                                className="border w-96 p-1 m-1"
                                 type={`text`}
                               />
                             </li>

@@ -38,7 +38,7 @@ export interface findAllCampaignParticipations_findAllCampaignParticipations_cam
   consent: string | null;
   guide: string | null;
   plan: string | null;
-  isFileTaxes: string | null;
+  isFileTaxes: boolean | null;
 }
 
 export interface findAllCampaignParticipations_findAllCampaignParticipations {

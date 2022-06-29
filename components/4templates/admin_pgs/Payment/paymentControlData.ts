@@ -1,4 +1,4 @@
-const paymentExceptionData = ["id"];
+export const paymentExceptionData = ["id"];
 
 export const paymentExceptionDataInTable = [...paymentExceptionData];
 

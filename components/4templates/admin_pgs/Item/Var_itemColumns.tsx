@@ -1,6 +1,7 @@
 import { atom, useRecoilState } from "recoil";
+import { IColumn } from "../adminAtoms/interface_column";
 
-export const itemColumnsDefault = [
+export const itemColumnsDefault: IColumn[] = [
   {
     Header: "생성일",
     accessor: "createdAt",
@@ -8,6 +9,7 @@ export const itemColumnsDefault = [
     selected: false,
     width: 87,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "카테고리1",
@@ -16,6 +18,7 @@ export const itemColumnsDefault = [
     selected: false,
     width: 250,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "서비스명",
@@ -24,6 +27,7 @@ export const itemColumnsDefault = [
     selected: false,
     width: 200,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "상세정보",
@@ -32,6 +36,7 @@ export const itemColumnsDefault = [
     selected: false,
     width: 200,
     sortDescFirst: true,
+    inputType: "array",
   },
   {
     Header: "가격",
@@ -40,6 +45,7 @@ export const itemColumnsDefault = [
     selected: false,
     width: 130,
     sortDescFirst: true,
+    inputType: "won",
   },
   {
     Header: "할인율",
@@ -48,6 +54,7 @@ export const itemColumnsDefault = [
     selected: false,
     width: 80,
     sortDescFirst: true,
+    inputType: "number",
   },
   {
     Header: "유형",
@@ -56,6 +63,7 @@ export const itemColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "dataId",
@@ -64,9 +72,14 @@ export const itemColumnsDefault = [
     selected: false,
     width: 0,
     sortDescFirst: true,
+    inputType: "number",
   },
 ];
 
+export const rawItemColumnsData = atom({
+  key: "rawItemColumnsData",
+  default: itemColumnsDefault,
+});
 export const itemColumnsData = atom({
   key: "itemColumnsData",
   default: itemColumnsDefault,

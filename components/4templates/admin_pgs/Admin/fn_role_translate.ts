@@ -1,4 +1,4 @@
-export default function App(input) {
+export default function App(input, reverse = false) {
   const roleList = [
     {
       raw: "Super",
@@ -9,5 +9,9 @@ export default function App(input) {
       show: "일반",
     },
   ];
-  return roleList.find((val) => val.raw === input)?.show;
+  if (!reverse) {
+    return roleList.find((val) => val.raw === input)?.show;
+  } else {
+    return roleList.find((val) => val.show === input)?.raw;
+  }
 }

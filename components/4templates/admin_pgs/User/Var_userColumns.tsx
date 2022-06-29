@@ -1,6 +1,7 @@
 import { atom, useRecoilState } from "recoil";
+import { IColumn } from "../adminAtoms/interface_column";
 
-export const userColumnsDefault = [
+export const userColumnsDefault: IColumn[] = [
   {
     Header: "생성일",
     accessor: "createdAt",
@@ -8,6 +9,7 @@ export const userColumnsDefault = [
     selected: false,
     width: 87,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "이메일(ID)",
@@ -16,6 +18,25 @@ export const userColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
+  },
+  {
+    Header: "비밀번호",
+    accessor: "password",
+    value: "",
+    selected: false,
+    width: 0,
+    sortDescFirst: true,
+    inputType: "string",
+  },
+  {
+    Header: "비밀번호 확인",
+    accessor: "passwordCheck",
+    value: "",
+    selected: false,
+    width: 0,
+    sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "이름(ID)",
@@ -24,6 +45,7 @@ export const userColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "이름",
@@ -32,6 +54,7 @@ export const userColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "연락처",
@@ -40,6 +63,7 @@ export const userColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "주민등록번호",
@@ -48,6 +72,7 @@ export const userColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "태그",
@@ -56,6 +81,7 @@ export const userColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "dataId",
@@ -64,8 +90,14 @@ export const userColumnsDefault = [
     selected: false,
     width: 0,
     sortDescFirst: true,
+    inputType: "number",
   },
 ];
+
+export const rawUserColumnsData = atom({
+  key: "rawUserColumnsData",
+  default: userColumnsDefault,
+});
 
 export const userColumnsData = atom({
   key: "userColumnsData",

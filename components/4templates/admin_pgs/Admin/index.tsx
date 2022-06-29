@@ -191,7 +191,7 @@ export default function App() {
             {row.cells.map((cell, idx) => {
               return (
                 <>
-                  {!["id"].includes(cell.column.id) && (
+                  {!adminExceptionDataInTable.includes(cell.column.id) && (
                     <div
                       {...cell.getCellProps()}
                       className={`overflow-x-auto thin-scroll  td group border-r px-2 border-gray-300 
@@ -234,13 +234,26 @@ export default function App() {
                                 (val, idx) => ({
                                   Header: val?.column?.Header,
                                   accessor: val?.column?.id,
-                                  value: val?.value,
+                                  value: val?.value || "",
                                   selected: val?.column?.id === cell.column.id,
+                                  inputType: val?.column?.inputType,
                                 })
                               );
-                              const filteredCellValues = cellValues.filter(
-                                (e) => !["selection"].includes(e.accessor)
-                              );
+                              const filteredCellValues = cellValues
+                                .filter(
+                                  (e) => !["selection"].includes(e.accessor)
+                                )
+                                .map((val) =>
+                                  val.accessor === "role"
+                                    ? {
+                                        ...val,
+                                        value: fn_role_translate(
+                                          val.value,
+                                          true
+                                        ),
+                                      }
+                                    : { ...val }
+                                );
                               setAdminColumns(filteredCellValues);
 
                               setisModalOpen_edit(true);

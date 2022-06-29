@@ -3,9 +3,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
-import { dateTime } from "../../../3organisms/Org_adminTable/fn_DateTime";
 import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
 import { formSelector } from "../../../3organisms/Org_adminTable/fn_formSelector";
+import {
+  formFocus,
+  columnsInput,
+} from "../../../3organisms/Org_adminTable/fn_inputControl";
 import Modal_adminCreate, {
   isModal_adminCreateOpenAtom,
 } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
@@ -18,7 +21,6 @@ import {
   tableFromDate,
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
-import { nicknameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import {
   campaignParticipationExceptionDataInCreateForm,
@@ -34,6 +36,8 @@ import {
 import {
   campaignParticipationColumnsData,
   campaignParticipationColumnsDefault,
+  rawCampaignParticipationColumnsData,
+  useCampaignParticipationColumnsDataOnChange,
 } from "./Var_campaignParticipationColumns";
 import {
   createCampaignParticipation,
@@ -81,23 +85,6 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   useEffect(() => {
     tokenCheck("query", refetch);
   }, [findAllCampaignParticipationsData]);
-
-  //쿼리가공
-  const campaignParticipationsData = useMemo(
-    () =>
-      findAllCampaignParticipationsData?.findAllCampaignParticipations.campaignParticipations?.map(
-        (val, idx) => ({
-          ...val,
-          createdAt: datePrettier(val.createdAt),
-          creatorNameId: val.user?.nameId,
-          brandName_partner: val.campaign?.partner?.nameId,
-          cumulativeOrder: val.campaign?.cumulativeOrder,
-          itemName: val.campaign?.itemName,
-          keyword: val.campaign?.keyword,
-        })
-      ),
-    [findAllCampaignParticipationsData]
-  );
 
   //생성 뮤테이션
   const [
@@ -147,88 +134,55 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     },
   });
 
+  //글로벌 스테이트 관리
   const [isModalOpen, setisModalOpen] = useRecoilState(
     isModal_adminCreateOpenAtom
   );
-
   const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
     isModal_adminEditOpenAtom
   );
 
+  const [campaignParticipationColumns, setCampaignParticipationColumns] =
+    useRecoilState(campaignParticipationColumnsData);
+  const [rawCampaignParticipationColumns, setRawCampaignParticipationColumns] =
+    useRecoilState(rawCampaignParticipationColumnsData);
+
+  const onChange = useCampaignParticipationColumnsDataOnChange();
+
   // 생성시 포커싱
   useEffect(() => {
     if (isModalOpen) {
-      setTimeout(() => {
-        setFocus_create(campaignParticipationFocusId);
-      }, 100);
+      formFocus(campaignParticipationFocusId);
     }
   }, [isModalOpen]);
 
   //수정시 테이블데이터 반영 및 포커싱
-  const [campaignParticipationColumns, setCampaignParticipationColumns] =
-    useRecoilState(campaignParticipationColumnsData);
   useEffect(() => {
-    reset_edit(
-      campaignParticipationColumns.reduce(
-        (pre, cur) => ({
-          ...pre,
-          [cur.accessor]: cur.value,
-        }),
-        {}
-      )
-    );
     if (isEditModalOpen) {
-      setTimeout(() => {
-        setFocus_edit(
-          campaignParticipationColumns.find((val) => val.selected)?.accessor ||
-            ""
-        );
-      }, 100);
+      setCampaignParticipationColumns(rawCampaignParticipationColumns);
+      formFocus(
+        rawCampaignParticipationColumns.find((val) => val.selected)?.accessor ||
+          ""
+      );
     }
-  }, [campaignParticipationColumns]);
+  }, [rawCampaignParticipationColumns]);
 
-  //유즈폼 생성
-  const {
-    register: register_create,
-    handleSubmit: handleSubmit_create,
-    reset: reset_create,
-    setFocus: setFocus_create,
-    getValues: getValues_create,
-    formState: { errors: errors_create },
-    watch: watch_create,
-  } = useForm();
+  // 생성 인풋
+  const createInput = columnsInput(
+    campaignParticipationColumns,
+    campaignParticipationExceptionDataInCreateForm
+  );
 
-  const onSubmit_create = (data) => {
+  const onSubmit_create = () => {
+    console.log(createInput);
     tokenCheck("mutation", async () => {
       try {
-        if (data.salesDate === "") {
-          throw "매출일을 입력해주세요";
-        } else if (data.targetDate === "") {
-          throw "목표일을 입력해주세요";
-        }
         await createCampaignParticipationMutation({
           variables: {
-            input: {
-              manuscriptFee: +data.manuscriptFee,
-              proposal: data.proposal,
-              consent: data.consent,
-              guide: data.guide,
-              plan: data.plan,
-              isFileTaxes: data.isFileTaxes,
-              creatorNameId: data.creatorNameId,
-              brandName_partner: data.brandName_partner,
-              cumulativeOrder: data.cumulativeOrder,
-              itemName: data.itemName,
-              keyword: data.keyword,
-            },
+            input: createInput,
           },
         });
-        reset_create(
-          campaignParticipationColumnsDefault.reduce(
-            (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-            {}
-          )
-        );
+        setCampaignParticipationColumns(campaignParticipationColumnsDefault);
         setisModalOpen(false);
       } catch (error) {
         const errorString: string = error + "";
@@ -238,44 +192,21 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     });
   };
 
-  //유즈폼 수정
-  const {
-    register: register_edit,
-    handleSubmit: handleSubmit_edit,
-    reset: reset_edit,
-    setFocus: setFocus_edit,
-    getValues: getValues_edit,
-    formState: { errors: errors_edit },
-    watch: watch_edit,
-  } = useForm();
+  // 수정인풋
+  const editInput = columnsInput(
+    campaignParticipationColumns,
+    campaignParticipationExceptionDataInEditForm.filter((val) => val !== "id")
+  );
 
-  const onSubmit_edit = (data) => {
+  const onSubmit_edit = () => {
     tokenCheck("mutation", async () => {
       try {
         await editCampaignParticipationMutation({
           variables: {
-            input: {
-              manuscriptFee: +data.manuscriptFee,
-              proposal: data.proposal,
-              consent: data.consent,
-              guide: data.guide,
-              plan: data.plan,
-              isFileTaxes: data.isFileTaxes,
-              creatorNameId: data.creatorNameId,
-              brandName_partner: data.brandName_partner,
-              cumulativeOrder: data.cumulativeOrder,
-              itemName: data.itemName,
-              keyword: data.keyword,
-              id: +formSelector("id", campaignParticipationColumns),
-            },
+            input: editInput,
           },
         });
-        reset_edit(
-          campaignParticipationColumnsDefault.reduce(
-            (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-            {}
-          )
-        );
+        setCampaignParticipationColumns(campaignParticipationColumnsDefault);
         setisEditModalOpen(false);
       } catch (error) {
         const errorString: string = error + "";
@@ -285,7 +216,10 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     });
   };
 
-  useShortCutEffect(getValues_create, reset_create, getValues_edit, reset_edit);
+  useShortCutEffect(
+    { createBtn: true, hotkey: true },
+    setCampaignParticipationColumns
+  );
 
   const [columnPopupState, setColumnPopupState] = useState(false);
 
@@ -305,7 +239,12 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                 </>
               ),
               modal: (
-                <form onSubmit={handleSubmit_create(onSubmit_create)}>
+                <form
+                  onSubmit={(e) => {
+                    onSubmit_create();
+                    e.preventDefault();
+                  }}
+                >
                   <ul>
                     {campaignParticipationColumns.map(
                       (val, idx) =>
@@ -318,15 +257,21 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                               val.accessor
                             ) ? (
                               <input
-                                defaultValue={val.value}
-                                {...register_create(val.accessor)}
+                                id={val.accessor}
+                                value={val.value}
+                                onChange={(e) => {
+                                  onChange(e, idx);
+                                }}
                                 className="border w-96 p-1 m-1"
                                 type={`date`}
                               />
                             ) : (
                               <input
-                                defaultValue={val.value}
-                                {...register_create(val.accessor)}
+                                id={val.accessor}
+                                value={val.value}
+                                onChange={(e) => {
+                                  onChange(e, idx);
+                                }}
                                 className="border w-96 p-1 m-1"
                                 type={`text`}
                               />
@@ -339,19 +284,10 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                     <div
                       className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
                       onClick={() => {
-                        reset_create(
-                          campaignParticipationColumnsDefault.reduce(
-                            (pre, cur) => ({
-                              ...pre,
-                              [cur.accessor]: cur.value,
-                            }),
-                            {}
-                          )
+                        setCampaignParticipationColumns(
+                          campaignParticipationColumnsDefault
                         );
-
-                        setTimeout(() => {
-                          setFocus_create("brandName_partner");
-                        }, 0);
+                        formFocus(campaignParticipationFocusId);
                       }}
                     >
                       초기화
@@ -380,7 +316,12 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
             data={{
               button: <></>,
               modal: (
-                <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
+                <form
+                  onSubmit={(e) => {
+                    onSubmit_edit();
+                    e.preventDefault();
+                  }}
+                >
                   <ul>
                     {campaignParticipationColumns.map(
                       (val, idx) =>
@@ -393,15 +334,21 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                               val.accessor
                             ) ? (
                               <input
-                                defaultValue={val.value}
-                                {...register_edit(val.accessor)}
+                                id={val.accessor}
+                                value={val.value}
+                                onChange={(e) => {
+                                  onChange(e, idx);
+                                }}
                                 className="border w-96 p-1 m-1"
                                 type={`date`}
                               />
                             ) : (
                               <input
-                                defaultValue={val.value}
-                                {...register_edit(val.accessor)}
+                                id={val.accessor}
+                                value={val.value}
+                                onChange={(e) => {
+                                  onChange(e, idx);
+                                }}
                                 className="border w-96 p-1 m-1"
                                 type={`text`}
                               />

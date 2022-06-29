@@ -1,12 +1,9 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import Atm_mentionInput from "../../../3organisms/Org_adminTable/Atm_mentionInput";
-import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
 import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
 import {
-  formDataSelect,
+  columnsInput,
   formFocus,
 } from "../../../3organisms/Org_adminTable/fn_inputControl";
 import Modal_adminCreate, {
@@ -21,7 +18,6 @@ import {
   tableFromDate,
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
-import { nicknameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import {
   FIND_PAYMENTS,
@@ -37,7 +33,7 @@ import {
 import {
   paymentColumnsData,
   paymentColumnsDefault,
-  rawpaymentColumnsData,
+  rawPaymentColumnsData,
   usePaymentColumnsDataOnChange,
 } from "./Var_paymentColumns";
 import {
@@ -80,17 +76,6 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   useEffect(() => {
     tokenCheck("query", refetch);
   }, [findPaymentsData]);
-
-  //쿼리가공
-  const paymentsData = useMemo(
-    () =>
-      findPaymentsData?.findPayments.payments?.map((val, idx) => ({
-        ...val,
-        createdAt: datePrettier(val.createdAt),
-        brandName_partner: val.user?.nameId,
-      })),
-    [findPaymentsData]
-  );
 
   //생성 뮤테이션
   const [
@@ -136,17 +121,12 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
     isModal_adminEditOpenAtom
   );
+
   const [paymentColumns, setPaymentColumns] =
     useRecoilState(paymentColumnsData);
-
-  useEffect(() => {
-    console.log(paymentColumns);
-  }, [paymentColumns]);
-
   const [rawPaymentColumns, setRawPaymentColumns] = useRecoilState(
-    rawpaymentColumnsData
+    rawPaymentColumnsData
   );
-
   const onChange = usePaymentColumnsDataOnChange();
 
   // 생성시 포커싱
@@ -164,28 +144,17 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     }
   }, [rawPaymentColumns]);
 
-  //유즈폼 생성
-  const { handleSubmit: handleSubmit_create } = useForm();
-
+  // 생성 인풋
+  const createInput = columnsInput(
+    paymentColumns,
+    paymentExceptionDataInCreateForm
+  );
   const onSubmit_create = () => {
     tokenCheck("mutation", async () => {
       try {
         await createPaymentForAdminMutation({
           variables: {
-            input: {
-              brandName_partner: formDataSelect(
-                paymentColumns,
-                "brandName_partner"
-              ),
-              brandName: formDataSelect(paymentColumns, "brandName"),
-              name: formDataSelect(paymentColumns, "name"),
-              phoneNumber: formDataSelect(paymentColumns, "phoneNumber"),
-              email: formDataSelect(paymentColumns, "email"),
-              paymentMethod: formDataSelect(paymentColumns, "paymentMethod"),
-              amount: +formDataSelect(paymentColumns, "amount"),
-              paymentState: formDataSelect(paymentColumns, "paymentState"),
-              tags: formDataSelect(paymentColumns, "tags"),
-            },
+            input: createInput,
           },
         });
         setPaymentColumns(paymentColumnsDefault);
@@ -198,29 +167,18 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     });
   };
 
-  //유즈폼 수정
-  const { handleSubmit: handleSubmit_edit } = useForm();
-
+  // 수정인풋
+  const editInput = columnsInput(
+    paymentColumns,
+    paymentExceptionDataInEditForm.filter((val) => val !== "id")
+  );
   const onSubmit_edit = () => {
     tokenCheck("mutation", async () => {
+      console.log(editInput);
       try {
         await editPaymentMutation({
           variables: {
-            input: {
-              brandName_partner: formDataSelect(
-                paymentColumns,
-                "brandName_partner"
-              ),
-              brandName: formDataSelect(paymentColumns, "brandName"),
-              name: formDataSelect(paymentColumns, "name"),
-              phoneNumber: formDataSelect(paymentColumns, "phoneNumber"),
-              email: formDataSelect(paymentColumns, "email"),
-              paymentMethod: formDataSelect(paymentColumns, "paymentMethod"),
-              amount: +formDataSelect(paymentColumns, "amount"),
-              paymentState: formDataSelect(paymentColumns, "paymentState"),
-              tags: formDataSelect(paymentColumns, "tags"),
-              id: +formDataSelect(paymentColumns, "id"),
-            },
+            input: editInput,
           },
         });
         setPaymentColumns(paymentColumnsDefault);
@@ -233,7 +191,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     });
   };
 
-  useShortCutEffect({ createBtn: true, hotkey: true });
+  useShortCutEffect({ createBtn: true, hotkey: true }, setPaymentColumns);
 
   const [columnPopupState, setColumnPopupState] = useState(false);
 
@@ -253,7 +211,12 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                 </>
               ),
               modal: (
-                <form onSubmit={handleSubmit_create(onSubmit_create)}>
+                <form
+                  onSubmit={(e) => {
+                    onSubmit_create();
+                    e.preventDefault();
+                  }}
+                >
                   <ul>
                     {paymentColumns.map(
                       (val, idx) =>
@@ -275,13 +238,14 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                                 type={`date`}
                               />
                             ) : (
-                              <Atm_mentionInput
+                              <input
                                 id={val.accessor}
                                 value={val.value}
                                 onChange={(e) => {
                                   onChange(e, idx);
                                 }}
-                                className=""
+                                className="border w-96 p-1 m-1"
+                                type={`text`}
                               />
                             )}
                           </li>
@@ -322,11 +286,16 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
             data={{
               button: <></>,
               modal: (
-                <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
+                <form
+                  onSubmit={(e) => {
+                    onSubmit_edit();
+                    e.preventDefault();
+                  }}
+                >
                   <ul>
                     {paymentColumns.map(
                       (val, idx) =>
-                        !paymentExceptionDataInCreateForm.includes(
+                        !paymentExceptionDataInEditForm.includes(
                           val.accessor
                         ) && (
                           <li key={idx} className="flex items-center">

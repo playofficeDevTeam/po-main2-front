@@ -3,11 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
-import { dateTime } from "../../../3organisms/Org_adminTable/fn_DateTime";
 import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
-import Modal_adminCreate, {
-  isModal_adminCreateOpenAtom,
-} from "../../../3organisms/Org_adminTable/Modal_adminCreate";
+import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
 import Modal_adminEdit, {
   isModal_adminEditOpenAtom,
 } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
@@ -16,7 +13,6 @@ import {
   tableFromDate,
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
-import { nicknameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import { dateSmall } from "/home/app/components/3organisms/Org_adminTable/fn_DateSmall";
 import {
@@ -33,6 +29,8 @@ import {
 import {
   questionManagementColumnsData,
   questionManagementColumnsDefault,
+  rawQuestionManagementColumnsData,
+  useQuestionManagementColumnsDataOnChange,
 } from "./Var_questionManagementColumns";
 import {
   createQuestionManagement,
@@ -51,6 +49,10 @@ import {
   findAllQuestionManagementVariables,
 } from "./__generated__/findAllQuestionManagement";
 import useShortCutEffect from "../../../3organisms/Org_adminTable/useShortCutEffect";
+import {
+  formFocus,
+  columnsInput,
+} from "../../../3organisms/Org_adminTable/fn_inputControl";
 
 //폼 컴포넌트
 function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
@@ -81,23 +83,6 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   useEffect(() => {
     tokenCheck("query", refetch);
   }, [findAllQuestionManagementData]);
-
-  //쿼리가공
-  const questionManagementData = useMemo(
-    () =>
-      findAllQuestionManagementData?.findAllQuestionManagement.questionManagements?.map(
-        (val, idx) => ({
-          ...val,
-          createdAt: datePrettier(val.createdAt),
-          stateDate: dateSmall(val.stateDate),
-          brandName: val.question?.brandName,
-          product: val.question?.product,
-          serviceInquired: val.question?.serviceInquired,
-          relationId: val.question?.id,
-        })
-      ),
-    [findAllQuestionManagementData]
-  );
 
   //생성 뮤테이션
   const [
@@ -148,81 +133,53 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     }
   );
 
+  //글로벌 스테이트 관리
   const [isModalOpen, setisModalOpen] = useRecoilState(
     isModal_adminCreateOpenAtom
   );
-
   const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
     isModal_adminEditOpenAtom
   );
 
+  const [questionManagementColumns, setQuestionManagementColumns] =
+    useRecoilState(questionManagementColumnsData);
+  const [rawQuestionManagementColumns, setRawQuestionManagementColumns] =
+    useRecoilState(rawQuestionManagementColumnsData);
+
+  const onChange = useQuestionManagementColumnsDataOnChange();
+
   // 생성시 포커싱
   useEffect(() => {
     if (isModalOpen) {
-      setTimeout(() => {
-        setFocus_create(questionManagementFocusId);
-      }, 100);
+      formFocus(questionManagementFocusId);
     }
   }, [isModalOpen]);
 
   //수정시 테이블데이터 반영 및 포커싱
-  const [questionManagementColumns, setQuestionManagementColumns] =
-    useRecoilState(questionManagementColumnsData);
   useEffect(() => {
-    reset_edit(
-      questionManagementColumns.reduce(
-        (pre, cur) => ({
-          ...pre,
-          [cur.accessor]: cur.value,
-        }),
-        {}
-      )
-    );
     if (isEditModalOpen) {
-      setTimeout(() => {
-        setFocus_edit(
-          questionManagementColumns.find((val) => val.selected)?.accessor || ""
-        );
-      }, 100);
+      setQuestionManagementColumns(rawQuestionManagementColumns);
+      formFocus(
+        rawQuestionManagementColumns.find((val) => val.selected)?.accessor || ""
+      );
     }
-  }, [questionManagementColumns]);
+  }, [rawQuestionManagementColumns]);
 
-  //유즈폼 생성
-  const {
-    register: register_create,
-    handleSubmit: handleSubmit_create,
-    reset: reset_create,
-    setFocus: setFocus_create,
-    getValues: getValues_create,
-    formState: { errors: errors_create },
-    watch: watch_create,
-  } = useForm();
+  // 생성 인풋
+  const createInput = columnsInput(
+    questionManagementColumns,
+    questionManagementExceptionDataInCreateForm
+  );
 
   const onSubmit_create = (data) => {
     tokenCheck("mutation", async () => {
       try {
-        if (data.stateDate === "") {
-          throw "스케쥴 날짜를 입력해주세요";
-        }
         await createQuestionManagementMutation({
           variables: {
-            input: {
-              stateDate: data.stateDate,
-              stateName: data.stateName,
-              state: data.state,
-              stateTime: data.stateTime,
-              note: data.note,
-              comment: data.comment,
-              questionId: data.questionId,
-            },
+            input: createInput,
           },
         });
-        reset_create(
-          questionManagementColumnsDefault.reduce(
-            (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-            {}
-          )
-        );
+        setQuestionManagementColumns(questionManagementColumnsDefault);
         setisModalOpen(false);
       } catch (error) {
         const errorString: string = error + "";
@@ -232,43 +189,25 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     });
   };
 
-  //유즈폼 수정
-  const {
-    register: register_edit,
-    handleSubmit: handleSubmit_edit,
-    reset: reset_edit,
-    setFocus: setFocus_edit,
-    getValues: getValues_edit,
-    formState: { errors: errors_edit },
-    watch: watch_edit,
-  } = useForm();
+  // 수정인풋
+  const editInput = columnsInput(
+    questionManagementColumns,
+    questionManagementExceptionDataInEditForm.filter((val) => val !== "id")
+  );
 
-  const onSubmit_edit = (data) => {
+  const onSubmit_edit = () => {
     tokenCheck("mutation", async () => {
+      console.log(editInput);
       try {
-        if (data.stateDate === "") {
+        if (editInput.stateDate === "Invalid Date") {
           throw "스케쥴 날짜를 입력해주세요";
         }
         await editQuestionManagementMutation({
           variables: {
-            input: {
-              stateDate: data.stateDate,
-              stateName: data.stateName,
-              state: data.state,
-              stateTime: data.stateTime,
-              note: data.note,
-              comment: data.comment,
-              questionId: data.questionId,
-              // id: +formSelector("id", questionManagementColumns),
-            },
+            input: editInput,
           },
         });
-        reset_edit(
-          questionManagementColumnsDefault.reduce(
-            (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-            {}
-          )
-        );
+        setQuestionManagementColumns(questionManagementColumnsDefault);
         setisEditModalOpen(false);
       } catch (error) {
         const errorString: string = error + "";
@@ -278,7 +217,10 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     });
   };
 
-  useShortCutEffect(getValues_create, reset_create, getValues_edit, reset_edit);
+  useShortCutEffect(
+    { createBtn: true, hotkey: true },
+    setQuestionManagementColumns
+  );
 
   const [columnPopupState, setColumnPopupState] = useState(false);
 
@@ -292,9 +234,14 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
             data={{
               button: <></>,
               modal: (
-                <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
+                <form
+                  onSubmit={(e) => {
+                    onSubmit_edit();
+                    e.preventDefault();
+                  }}
+                >
                   <ul>
-                    {questionManagementColumnsDefault.map(
+                    {questionManagementColumns.map(
                       (val, idx) =>
                         !questionManagementExceptionDataInEditForm.includes(
                           val.accessor
@@ -303,23 +250,32 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                             <div className="w-28 flex pl-1">{val.Header}</div>
                             {["stateDate"].includes(val.accessor) ? (
                               <input
-                                defaultValue={val.value}
-                                {...register_edit(val.accessor)}
+                                id={val.accessor}
+                                value={val.value}
+                                onChange={(e) => {
+                                  onChange(e, idx);
+                                }}
                                 className="border w-96 p-1 m-1"
                                 type={`date`}
                               />
                             ) : ["note", "comment"].includes(val.accessor) ? (
                               <textarea
-                                defaultValue={val.value}
-                                {...register_edit(val.accessor)}
+                                id={val.accessor}
+                                value={val.value}
+                                onChange={(e) => {
+                                  onChange(e, idx);
+                                }}
                                 className={`border w-96 p-1 m-1 ${
                                   ["comment"].includes(val.accessor) && "h-40"
                                 }`}
                               ></textarea>
                             ) : (
                               <input
-                                defaultValue={val.value}
-                                {...register_edit(val.accessor)}
+                                id={val.accessor}
+                                value={val.value}
+                                onChange={(e) => {
+                                  onChange(e, idx);
+                                }}
                                 className="border w-96 p-1 m-1"
                                 type={`text`}
                               />

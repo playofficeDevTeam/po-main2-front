@@ -13,7 +13,7 @@ export const adminExceptionDataInEditForm = [
   ...adminExceptionData,
   "createdAt",
   "email",
-  // "nickname",
+  "nickname",
 ];
 
 export const adminExceptionDataInEditBtn = [

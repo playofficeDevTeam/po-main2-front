@@ -1,11 +1,10 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
-import { dateTime } from "../../../3organisms/Org_adminTable/fn_DateTime";
-import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
-import { formSelector } from "../../../3organisms/Org_adminTable/fn_formSelector";
+import {
+  formFocus,
+  columnsInput,
+} from "../../../3organisms/Org_adminTable/fn_inputControl";
 import Modal_adminCreate, {
   isModal_adminCreateOpenAtom,
 } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
@@ -18,7 +17,6 @@ import {
   tableFromDate,
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
-import { nicknameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import { FIND_ALL_ITEM, CREATE_ITEM, EDIT_ITEM, DELETE_ITEM } from "./Gql_item";
 import {
@@ -26,7 +24,12 @@ import {
   itemExceptionDataInCreateForm,
   itemExceptionDataInEditForm,
 } from "./itemControlData";
-import { itemColumnsData, itemColumnsDefault } from "./Var_itemColumns";
+import {
+  itemColumnsData,
+  itemColumnsDefault,
+  rawItemColumnsData,
+  useItemColumnsDataOnChange,
+} from "./Var_itemColumns";
 import { createItem, createItemVariables } from "./__generated__/createItem";
 import { deleteItem, deleteItemVariables } from "./__generated__/deleteItem";
 import { editItem, editItemVariables } from "./__generated__/editItem";
@@ -51,17 +54,6 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   useEffect(() => {
     tokenCheck("query", refetch);
   }, [findAllItemsData]);
-
-  //쿼리가공
-  const itemData = useMemo(
-    () =>
-      findAllItemsData?.findAllItems.items?.map((val, idx) => ({
-        ...val,
-        createdAt: datePrettier(val.createdAt),
-        detailInfo: val.detailInfo?.join(", "),
-      })),
-    [findAllItemsData]
-  );
 
   //생성 뮤테이션
   const [
@@ -95,74 +87,45 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     },
   });
 
+  //글로벌 스테이트 관리
   const [isModalOpen, setisModalOpen] = useRecoilState(
     isModal_adminCreateOpenAtom
   );
-
   const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
     isModal_adminEditOpenAtom
   );
 
+  const [itemColumns, setItemColumns] = useRecoilState(itemColumnsData);
+  const [rawItemColumns, setRawItemColumns] =
+    useRecoilState(rawItemColumnsData);
+  const onChange = useItemColumnsDataOnChange();
+
   // 생성시 포커싱
   useEffect(() => {
     if (isModalOpen) {
-      setTimeout(() => {
-        setFocus_create(itemFocusId);
-      }, 100);
+      formFocus(itemFocusId);
     }
   }, [isModalOpen]);
 
   //수정시 테이블데이터 반영 및 포커싱
-  const [itemColumns, setItemColumns] = useRecoilState(itemColumnsData);
   useEffect(() => {
-    reset_edit(
-      itemColumns.reduce(
-        (pre, cur) => ({
-          ...pre,
-          [cur.accessor]: cur.value,
-        }),
-        {}
-      )
-    );
     if (isEditModalOpen) {
-      setTimeout(() => {
-        setFocus_edit(itemColumns.find((val) => val.selected)?.accessor || "");
-      }, 100);
+      setItemColumns(rawItemColumns);
+      formFocus(rawItemColumns.find((val) => val.selected)?.accessor || "");
     }
-  }, [itemColumns]);
+  }, [rawItemColumns]);
 
-  //유즈폼 생성
-  const {
-    register: register_create,
-    handleSubmit: handleSubmit_create,
-    reset: reset_create,
-    setFocus: setFocus_create,
-    getValues: getValues_create,
-    formState: { errors: errors_create },
-    watch: watch_create,
-  } = useForm();
-
-  const onSubmit_create = (data) => {
+  // 생성 인풋
+  const createInput = columnsInput(itemColumns, itemExceptionDataInCreateForm);
+  const onSubmit_create = () => {
     tokenCheck("mutation", async () => {
       try {
         await createItemMutation({
           variables: {
-            input: {
-              itemCategory1: data.itemCategory1,
-              itemName: data.itemName,
-              detailInfo: data.detailInfo.split(",").map((val) => val.trim()),
-              price: +data.price,
-              discountRate: +data.discountRate,
-              type: data.type,
-            },
+            input: createInput,
           },
         });
-        reset_create(
-          itemColumnsDefault.reduce(
-            (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-            {}
-          )
-        );
+        setItemColumns(itemColumnsDefault);
         setisModalOpen(false);
       } catch (error) {
         const errorString: string = error + "";
@@ -172,44 +135,21 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     });
   };
 
-  //유즈폼 수정
-  const {
-    register: register_edit,
-    handleSubmit: handleSubmit_edit,
-    reset: reset_edit,
-    setFocus: setFocus_edit,
-    getValues: getValues_edit,
-    formState: { errors: errors_edit },
-    watch: watch_edit,
-  } = useForm();
-
-  const onSubmit_edit = (data) => {
+  // 수정인풋
+  const editInput = columnsInput(
+    itemColumns,
+    itemExceptionDataInEditForm.filter((val) => val !== "id")
+  );
+  const onSubmit_edit = () => {
     tokenCheck("mutation", async () => {
+      console.log(editInput);
       try {
-        if (data.stateDate === "") {
-          throw "스케쥴 날짜를 입력해주세요";
-        }
-
         await editItemMutation({
           variables: {
-            input: {
-              itemCategory1: data.itemCategory1,
-              itemName: data.itemName,
-              detailInfo: data.detailInfo.split(",").map((val) => val.trim()),
-              price: +data.price,
-              discountRate: +data.discountRate,
-              type: data.type,
-              id: +formSelector("id", itemColumns),
-            },
+            input: editInput,
           },
         });
-
-        reset_edit(
-          itemColumnsDefault.reduce(
-            (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-            {}
-          )
-        );
+        setItemColumns(itemColumnsDefault);
         setisEditModalOpen(false);
       } catch (error) {
         const errorString: string = error + "";
@@ -219,7 +159,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     });
   };
 
-  useShortCutEffect(getValues_create, reset_create, getValues_edit, reset_edit);
+  useShortCutEffect({ createBtn: true, hotkey: true }, setItemColumns);
 
   const [columnPopupState, setColumnPopupState] = useState(false);
 
@@ -239,17 +179,25 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                 </>
               ),
               modal: (
-                <form onSubmit={handleSubmit_create(onSubmit_create)}>
+                <form
+                  onSubmit={(e) => {
+                    onSubmit_create();
+                    e.preventDefault();
+                  }}
+                >
                   <ul>
-                    {itemColumnsDefault.map(
+                    {itemColumns.map(
                       (val, idx) =>
                         !["id", "createdAt"].includes(val.accessor) &&
                         (["detailInfo"].includes(val.accessor) ? (
                           <li key={idx} className="flex items-center">
                             <div className="w-28 flex pl-1">{val.Header}</div>
                             <textarea
-                              defaultValue={val.value}
-                              {...register_create(val.accessor)}
+                              id={val.accessor}
+                              value={val.value}
+                              onChange={(e) => {
+                                onChange(e, idx);
+                              }}
                               className="border w-96 p-1 m-1"
                             />
                           </li>
@@ -257,8 +205,11 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                           <li key={idx} className="flex items-center">
                             <div className="w-28 flex pl-1">{val.Header}</div>
                             <input
-                              defaultValue={val.value}
-                              {...register_create(val.accessor)}
+                              id={val.accessor}
+                              value={val.value}
+                              onChange={(e) => {
+                                onChange(e, idx);
+                              }}
                               className="border w-96 p-1 m-1"
                               type={`text`}
                             />
@@ -270,19 +221,8 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                     <div
                       className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
                       onClick={() => {
-                        reset_create(
-                          itemColumnsDefault.reduce(
-                            (pre, cur) => ({
-                              ...pre,
-                              [cur.accessor]: cur.value,
-                            }),
-                            {}
-                          )
-                        );
-
-                        setTimeout(() => {
-                          setFocus_create("brandName_partner");
-                        }, 0);
+                        setItemColumns(itemColumnsDefault);
+                        formFocus(itemFocusId);
                       }}
                     >
                       초기화
@@ -311,17 +251,25 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
             data={{
               button: <></>,
               modal: (
-                <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
+                <form
+                  onSubmit={(e) => {
+                    onSubmit_edit();
+                    e.preventDefault();
+                  }}
+                >
                   <ul>
-                    {itemColumnsDefault.map(
+                    {itemColumns.map(
                       (val, idx) =>
                         !["id", "createdAt"].includes(val.accessor) &&
                         (["detailInfo"].includes(val.accessor) ? (
                           <li key={idx} className="flex items-center">
                             <div className="w-28 flex pl-1">{val.Header}</div>
                             <textarea
-                              defaultValue={val.value}
-                              {...register_edit(val.accessor)}
+                              id={val.accessor}
+                              value={val.value}
+                              onChange={(e) => {
+                                onChange(e, idx);
+                              }}
                               className="border w-96 p-1 m-1"
                             />
                           </li>
@@ -329,8 +277,11 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                           <li key={idx} className="flex items-center">
                             <div className="w-28 flex pl-1">{val.Header}</div>
                             <input
-                              defaultValue={val.value}
-                              {...register_edit(val.accessor)}
+                              id={val.accessor}
+                              value={val.value}
+                              onChange={(e) => {
+                                onChange(e, idx);
+                              }}
                               className="border w-96 p-1 m-1"
                               type={`text`}
                             />

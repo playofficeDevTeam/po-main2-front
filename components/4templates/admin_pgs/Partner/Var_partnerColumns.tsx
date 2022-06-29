@@ -1,6 +1,7 @@
 import { atom, useRecoilState } from "recoil";
+import { IColumn } from "../adminAtoms/interface_column";
 
-export const partnerColumnsDefault = [
+export const partnerColumnsDefault: IColumn[] = [
   {
     Header: "생성일",
     accessor: "createdAt",
@@ -8,6 +9,7 @@ export const partnerColumnsDefault = [
     selected: false,
     width: 87,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "이메일(ID)",
@@ -16,6 +18,25 @@ export const partnerColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
+  },
+  {
+    Header: "비밀번호",
+    accessor: "password",
+    value: "",
+    selected: false,
+    width: 0,
+    sortDescFirst: true,
+    inputType: "string",
+  },
+  {
+    Header: "비밀번호 확인",
+    accessor: "passwordCheck",
+    value: "",
+    selected: false,
+    width: 0,
+    sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "브랜드명(ID)",
@@ -24,6 +45,7 @@ export const partnerColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "브랜드명",
@@ -32,6 +54,7 @@ export const partnerColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "이름",
@@ -40,6 +63,7 @@ export const partnerColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "연락처",
@@ -48,6 +72,7 @@ export const partnerColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "태그",
@@ -56,10 +81,23 @@ export const partnerColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
-  { Header: "dataId", accessor: "id", selected: false, value: "", width: 0 },
+  {
+    Header: "dataId",
+    accessor: "id",
+    selected: false,
+    value: "",
+    width: 0,
+    sortDescFirst: true,
+    inputType: "string",
+  },
 ];
 
+export const rawPartnerColumnsData = atom({
+  key: "rawPartnerColumnsData",
+  default: partnerColumnsDefault,
+});
 export const partnerColumnsData = atom({
   key: "partnerColumnsData",
   default: partnerColumnsDefault,

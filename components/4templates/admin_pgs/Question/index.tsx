@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ColumnFilter,
@@ -39,6 +39,7 @@ import {
 import {
   questionColumnsDefault,
   questionColumnsData,
+  rawQuestionColumnsData,
 } from "./Var_questionColumns";
 import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
 import {
@@ -87,13 +88,6 @@ export default function App() {
         })
       ),
     [findQuestionsForAdminData]
-  );
-
-  const [isModalOpen, setisModalOpen] = useRecoilState(
-    isModal_adminCreateOpenAtom
-  );
-  const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
-    isModal_adminEditOpenAtom
   );
 
   //테이블 컬럼 가공
@@ -207,11 +201,9 @@ export default function App() {
     const [isModalOpen_edit, setisModalOpen_edit] = useRecoilState(
       isModal_adminEditOpenAtom
     );
-
-    //
-
-    const [questionColumnsState, setQuestionColumnsState] =
-      useState(questionColumnsData);
+    const [rawQuestionColumns, setRawQuestionColumns] = useRecoilState(
+      rawQuestionColumnsData
+    );
 
     //테이블 스타일
     const RenderRow = useCallback(
@@ -230,7 +222,7 @@ export default function App() {
             {row.cells.map((cell, idx) => {
               return (
                 <>
-                  {!["id"].includes(cell.column.id) && (
+                  {!questionExceptionDataInTable.includes(cell.column.id) && (
                     <div
                       {...cell.getCellProps()}
                       className={`overflow-x-auto thin-scroll  td group border-r px-2 border-gray-300 
@@ -273,16 +265,16 @@ export default function App() {
                                 (val, idx) => ({
                                   Header: val?.column?.Header,
                                   accessor: val?.column?.id,
-                                  value: val?.value,
+                                  value: val?.value || "",
                                   selected: val?.column?.id === cell.column.id,
+                                  inputType: val?.column?.inputType,
                                 })
                               );
                               const filteredCellValues = cellValues.filter(
                                 (e) =>
                                   !["selection", "newPage"].includes(e.accessor)
                               );
-                              setQuestionColumnsState(filteredCellValues);
-
+                              setRawQuestionColumns(filteredCellValues);
                               setisModalOpen_edit(true);
                             }}
                           >
@@ -330,7 +322,6 @@ export default function App() {
           getToggleHideAllColumnsProps={getToggleHideAllColumnsProps}
           allColumns={allColumns}
           selectedFlatRows={selectedFlatRows}
-          // questionColumnsState={questionColumnsState}
         />
         <table {...getTableProps()} className="bg-white">
           <thead>

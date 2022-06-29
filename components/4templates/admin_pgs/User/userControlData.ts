@@ -1,6 +1,10 @@
 const userExceptionData = ["id"];
 
-export const userExceptionDataInTable = [...userExceptionData];
+export const userExceptionDataInTable = [
+  ...userExceptionData,
+  "password",
+  "passwordCheck",
+];
 
 export const userExceptionDataInCreateForm = [
   ...userExceptionData,

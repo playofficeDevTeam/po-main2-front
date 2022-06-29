@@ -39,6 +39,7 @@ import {
 import {
   campaignColumnsDefault,
   campaignColumnsData,
+  rawCampaignColumnsData,
 } from "./Var_campaignColumns";
 import { FIND_CAMPAIGNS } from "./Gql_campaign";
 import {
@@ -84,13 +85,6 @@ export default function App() {
         brandName_partner: val.partner?.nameId,
       })),
     [findCampaignsData]
-  );
-
-  const [isModalOpen, setisModalOpen] = useRecoilState(
-    isModal_adminCreateOpenAtom
-  );
-  const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
-    isModal_adminEditOpenAtom
   );
 
   //테이블 컬럼 가공
@@ -204,11 +198,9 @@ export default function App() {
     const [isModalOpen_edit, setisModalOpen_edit] = useRecoilState(
       isModal_adminEditOpenAtom
     );
-
-    //
-
-    const [campaignColumns, setCampaignColumns] =
-      useRecoilState(campaignColumnsData);
+    const [rawCampaignColumns, setRawCampaignColumns] = useRecoilState(
+      rawCampaignColumnsData
+    );
 
     //테이블 스타일
     const RenderRow = useCallback(
@@ -227,7 +219,7 @@ export default function App() {
             {row.cells.map((cell, idx) => {
               return (
                 <>
-                  {!["id"].includes(cell.column.id) && (
+                  {!campaignExceptionDataInTable.includes(cell.column.id) && (
                     <div
                       {...cell.getCellProps()}
                       className={`overflow-x-auto thin-scroll  td group border-r px-2 border-gray-300 
@@ -270,15 +262,15 @@ export default function App() {
                                 (val, idx) => ({
                                   Header: val?.column?.Header,
                                   accessor: val?.column?.id,
-                                  value: val?.value,
+                                  value: val?.value || "",
                                   selected: val?.column?.id === cell.column.id,
+                                  inputType: val?.column?.inputType,
                                 })
                               );
                               const filteredCellValues = cellValues.filter(
                                 (e) => !["selection"].includes(e.accessor)
                               );
-                              setCampaignColumns(filteredCellValues);
-
+                              setRawCampaignColumns(filteredCellValues);
                               setisModalOpen_edit(true);
                             }}
                           >

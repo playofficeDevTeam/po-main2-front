@@ -1,6 +1,10 @@
 const partnerExceptionData = ["id"];
 
-export const partnerExceptionDataInTable = [...partnerExceptionData];
+export const partnerExceptionDataInTable = [
+  ...partnerExceptionData,
+  "password",
+  "passwordCheck",
+];
 
 export const partnerExceptionDataInCreateForm = [
   ...partnerExceptionData,

@@ -1,6 +1,7 @@
 import { atom, useRecoilState } from "recoil";
+import { IColumn } from "../adminAtoms/interface_column";
 
-export const questionColumnsDefault = [
+export const questionColumnsDefault: IColumn[] = [
   {
     Header: "생성일",
     accessor: "createdAt",
@@ -8,6 +9,7 @@ export const questionColumnsDefault = [
     selected: false,
     width: 87,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "새창",
@@ -16,6 +18,7 @@ export const questionColumnsDefault = [
     selected: false,
     width: 64,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "브랜드명(R)",
@@ -24,6 +27,7 @@ export const questionColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "브랜드명",
@@ -32,6 +36,7 @@ export const questionColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "제품",
@@ -40,6 +45,7 @@ export const questionColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "문의서비스",
@@ -48,6 +54,7 @@ export const questionColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "분석유무",
@@ -56,6 +63,7 @@ export const questionColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "boolean",
   },
   {
     Header: "이름",
@@ -64,6 +72,7 @@ export const questionColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "연락처",
@@ -72,6 +81,7 @@ export const questionColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "이메일",
@@ -80,6 +90,7 @@ export const questionColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "예산",
@@ -88,6 +99,7 @@ export const questionColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "won",
   },
   {
     Header: "제품 링크",
@@ -96,6 +108,7 @@ export const questionColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "특이사항",
@@ -104,6 +117,7 @@ export const questionColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "대행사",
@@ -112,6 +126,7 @@ export const questionColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "boolean",
   },
   {
     Header: "태그",
@@ -120,6 +135,7 @@ export const questionColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "dataId",
@@ -128,9 +144,14 @@ export const questionColumnsDefault = [
     selected: false,
     width: 0,
     sortDescFirst: true,
+    inputType: "number",
   },
 ];
 
+export const rawQuestionColumnsData = atom({
+  key: "rawQuestionColumnsData",
+  default: questionColumnsDefault,
+});
 export const questionColumnsData = atom({
   key: "questionColumnsData",
   default: questionColumnsDefault,

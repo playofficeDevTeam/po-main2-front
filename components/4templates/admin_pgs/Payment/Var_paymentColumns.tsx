@@ -1,6 +1,7 @@
 import { atom, useRecoilState } from "recoil";
+import { IColumn } from "../adminAtoms/interface_column";
 
-export const paymentColumnsDefault = [
+export const paymentColumnsDefault: IColumn[] = [
   {
     Header: "생성일",
     accessor: "createdAt",
@@ -8,6 +9,7 @@ export const paymentColumnsDefault = [
     selected: false,
     width: 87,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "브랜드명(R)",
@@ -16,6 +18,7 @@ export const paymentColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "브랜드명",
@@ -24,6 +27,7 @@ export const paymentColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "이름",
@@ -32,6 +36,7 @@ export const paymentColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "연락처",
@@ -40,6 +45,7 @@ export const paymentColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "이메일",
@@ -48,6 +54,7 @@ export const paymentColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "결제수단",
@@ -56,6 +63,7 @@ export const paymentColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "금액",
@@ -64,6 +72,7 @@ export const paymentColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "number",
   },
   {
     Header: "결제상태",
@@ -72,6 +81,7 @@ export const paymentColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "태그",
@@ -80,6 +90,7 @@ export const paymentColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "dataId",
@@ -88,11 +99,12 @@ export const paymentColumnsDefault = [
     selected: false,
     width: 0,
     sortDescFirst: true,
+    inputType: "number",
   },
 ];
 
-export const rawpaymentColumnsData = atom({
-  key: "rawpaymentColumnsData",
+export const rawPaymentColumnsData = atom({
+  key: "rawPaymentColumnsData",
   default: paymentColumnsDefault,
 });
 

@@ -1,8 +1,7 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ColumnFilter,
-  DateFilter,
   GlobalFilter,
   IndeterminateCheckbox,
 } from "../../../3organisms/Org_adminTable/tableOptions";
@@ -24,26 +23,17 @@ import { useRecoilState } from "recoil";
 import { isModal_adminEditOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
 import { dateList } from "../../../3organisms/Org_adminTable/tableViewTypeList";
 import TableStyle from "../../../3organisms/Org_adminTable/TableStyle";
-import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
-import {
-  tableFromDate,
-  tableToDate,
-} from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import Atm_ItemForm from "./Atm_ItemForm";
 import { FIND_ALL_ITEM } from "./Gql_item";
 import {
   itemExceptionDataInEditBtn,
   itemExceptionDataInTable,
 } from "./itemControlData";
-import { itemColumnsDefault, itemColumnsData } from "./Var_itemColumns";
+import { itemColumnsDefault, rawItemColumnsData } from "./Var_itemColumns";
 import { findAllItems } from "./__generated__/findAllItems";
 import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
 
 export default function App() {
-  const [tableFromDateState, setTableFromDateState] =
-    useRecoilState(tableFromDate);
-  const [tableToDateState, setTableToDateState] = useRecoilState(tableToDate);
-
   //토큰체크
   const tokenCheck = useTokenCheck();
 
@@ -67,13 +57,6 @@ export default function App() {
         detailInfo: val.detailInfo?.join(", "),
       })),
     [findAllItemsData]
-  );
-
-  const [isModalOpen, setisModalOpen] = useRecoilState(
-    isModal_adminCreateOpenAtom
-  );
-  const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
-    isModal_adminEditOpenAtom
   );
 
   //테이블 컬럼 가공
@@ -187,10 +170,8 @@ export default function App() {
     const [isModalOpen_edit, setisModalOpen_edit] = useRecoilState(
       isModal_adminEditOpenAtom
     );
-
-    //
-
-    const [itemColumns, setItemColumns] = useRecoilState(itemColumnsData);
+    const [rawItemColumns, setRawItemColumns] =
+      useRecoilState(rawItemColumnsData);
 
     //테이블 스타일
     const RenderRow = useCallback(
@@ -252,15 +233,15 @@ export default function App() {
                                 (val, idx) => ({
                                   Header: val?.column?.Header,
                                   accessor: val?.column?.id,
-                                  value: val?.value,
+                                  value: val?.value || "",
                                   selected: val?.column?.id === cell.column.id,
+                                  inputType: val?.column?.inputType,
                                 })
                               );
                               const filteredCellValues = cellValues.filter(
                                 (e) => !["selection"].includes(e.accessor)
                               );
-                              setItemColumns(filteredCellValues);
-
+                              setRawItemColumns(filteredCellValues);
                               setisModalOpen_edit(true);
                             }}
                           >

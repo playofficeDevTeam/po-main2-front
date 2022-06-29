@@ -1,9 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { UserRole } from "../../../../__generated__/globalTypes";
-import { dateTime } from "../../../3organisms/Org_adminTable/fn_DateTime";
 import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
 import Modal_adminCreate, {
   isModal_adminCreateOpenAtom,
@@ -16,9 +14,13 @@ import {
   tableFromDate,
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
-import { nicknameAtom } from "../../../3organisms/Org_header/Org_adminSidebar";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
-import { userColumnsData, userColumnsDefault } from "../User/Var_userColumns";
+import {
+  rawUserColumnsData,
+  userColumnsData,
+  userColumnsDefault,
+  useUserColumnsDataOnChange,
+} from "../User/Var_userColumns";
 
 import {
   userExceptionDataInCreateForm,
@@ -44,9 +46,11 @@ import {
   findUsers,
   findUsersVariables,
 } from "../Partner/__generated__/findUsers";
-import { formSelector } from "../../../3organisms/Org_adminTable/fn_formSelector";
-import St_label from "../../../3organisms/Org_adminTable/St_label";
 import useShortCutEffect from "../../../3organisms/Org_adminTable/useShortCutEffect";
+import {
+  formFocus,
+  columnsInput,
+} from "../../../3organisms/Org_adminTable/fn_inputControl";
 //폼 컴포넌트
 function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
   const [tableFromDateState, setTableFromDateState] =
@@ -110,77 +114,53 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     },
   });
 
+  //글로벌 스테이트 관리
   const [isModalOpen, setisModalOpen] = useRecoilState(
     isModal_adminCreateOpenAtom
   );
-
   const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
     isModal_adminEditOpenAtom
   );
 
+  const [userColumns, setUserColumns] = useRecoilState(userColumnsData);
+  const [rawUserColumns, setRawUserColumns] =
+    useRecoilState(rawUserColumnsData);
+  const onChange = useUserColumnsDataOnChange();
+
   // 생성시 포커싱
   useEffect(() => {
     if (isModalOpen) {
-      setTimeout(() => {
-        setFocus_create(userFocusId);
-      }, 100);
+      formFocus(userFocusId);
     }
   }, [isModalOpen]);
 
   //수정시 테이블데이터 반영 및 포커싱
-  const [userColumns, setUserColumns] = useRecoilState(userColumnsData);
   useEffect(() => {
-    reset_edit(
-      userColumns.reduce(
-        (pre, cur) => ({
-          ...pre,
-          [cur.accessor]: cur.value,
-        }),
-        {}
-      )
-    );
     if (isEditModalOpen) {
-      setTimeout(() => {
-        setFocus_edit(userColumns.find((val) => val.selected)?.accessor || "");
-      }, 100);
+      setUserColumns(rawUserColumns);
+      formFocus(rawUserColumns.find((val) => val.selected)?.accessor || "");
     }
-  }, [userColumns]);
+  }, [rawUserColumns]);
 
-  //유즈폼 생성
-  const {
-    register: register_create,
-    handleSubmit: handleSubmit_create,
-    reset: reset_create,
-    setFocus: setFocus_create,
-    getValues: getValues_create,
-    formState: { errors: errors_create },
-    watch: watch_create,
-  } = useForm();
+  // 생성 인풋
+  const createInput = columnsInput(userColumns, [
+    ...userExceptionDataInCreateForm,
+    "passwordCheck",
+  ]);
 
-  const onSubmit_create = (data) => {
+  const onSubmit_create = () => {
     tokenCheck("mutation", async () => {
       try {
-        if (data.password === data.passwordCheck) {
+        if (
+          userColumns.find((val) => val.accessor === "password")?.value ===
+          userColumns.find((val) => val.accessor === "passwordCheck")?.value
+        ) {
           await createUserForAdminMutation({
             variables: {
-              input: {
-                role: UserRole.Creator,
-                email: data.email === "" ? null : data.email,
-                password: data.password === "" ? null : data.password,
-                nameId: data.nameId === "" ? null : data.nameId,
-                name: data.name,
-                phoneNumber: data.phoneNumber,
-                residentRegistrationNumber: data.residentRegistrationNumber,
-                tags: data.tags,
-              },
+              input: { ...createInput, role: UserRole.Creator },
             },
           });
-          reset_create(
-            userColumnsDefault.reduce(
-              (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-              { password: "", passwordCheck: "" }
-            )
-          );
+          setUserColumns(userColumnsDefault);
           setisModalOpen(false);
         } else {
           throw "비밀번호가 일치하지 않습니다";
@@ -201,41 +181,27 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     });
   };
 
-  //유즈폼 수정
-  const {
-    register: register_edit,
-    handleSubmit: handleSubmit_edit,
-    reset: reset_edit,
-    setFocus: setFocus_edit,
-    getValues: getValues_edit,
-    formState: { errors: errors_edit },
-    watch: watch_edit,
-  } = useForm();
+  // 수정인풋
+  const editInput = columnsInput(
+    userColumns,
+    [...userExceptionDataInEditForm, "passwordCheck"].filter(
+      (val) => val !== "id"
+    )
+  );
 
-  const onSubmit_edit = (data) => {
+  const onSubmit_edit = () => {
     tokenCheck("mutation", async () => {
       try {
-        if (data.password === data.passwordCheck) {
+        if (
+          userColumns.find((val) => val.accessor === "password")?.value ===
+          userColumns.find((val) => val.accessor === "passwordCheck")?.value
+        ) {
           await editUserMutation({
             variables: {
-              input: {
-                email: data.email === "" ? null : data.email,
-                password: data.password === "" ? null : data.password,
-                nameId: data.nameId === "" ? null : data.nameId,
-                name: data.name,
-                phoneNumber: data.phoneNumber,
-                residentRegistrationNumber: data.residentRegistrationNumber,
-                tags: data.tags,
-                id: +formSelector("id", userColumns),
-              },
+              input: editInput,
             },
           });
-          reset_edit(
-            userColumnsDefault.reduce(
-              (pre, cur) => ({ ...pre, [cur.accessor]: cur.value }),
-              {}
-            )
-          );
+          setUserColumns(userColumnsDefault);
           setisEditModalOpen(false);
         } else {
           throw "비밀번호가 일치하지 않습니다";
@@ -256,7 +222,7 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
     });
   };
 
-  useShortCutEffect(getValues_create, reset_create, getValues_edit, reset_edit);
+  useShortCutEffect({ createBtn: true, hotkey: true }, setUserColumns);
 
   const [columnPopupState, setColumnPopupState] = useState(false);
 
@@ -277,13 +243,20 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                   </>
                 ),
                 modal: (
-                  <form onSubmit={handleSubmit_create(onSubmit_create)}>
+                  <form
+                    onSubmit={(e) => {
+                      onSubmit_create();
+                      e.preventDefault();
+                    }}
+                  >
                     <ul>
-                      {userColumnsDefault.map((val, idx) => {
+                      {userColumns.map((val, idx) => {
                         if (
                           !userExceptionDataInCreateForm.includes(val.accessor)
                         ) {
-                          if (["email"].includes(val.accessor)) {
+                          if (
+                            ["password", "passwordCheck"].includes(val.accessor)
+                          ) {
                             return (
                               <>
                                 <li key={idx} className="flex items-center">
@@ -291,31 +264,11 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                                     {val.Header}
                                   </div>
                                   <input
-                                    defaultValue={val.value}
-                                    {...register_create(val.accessor)}
-                                    className="border w-96 p-1 m-1"
-                                    type={`text`}
-                                  />
-                                </li>
-                                <li className="flex items-center">
-                                  <div className="w-28 flex pl-1">
-                                    {"비밀번호"}
-                                  </div>
-                                  <input
-                                    defaultValue={""}
-                                    {...register_create("password")}
-                                    className="border w-96 p-1 m-1"
-                                    type={`password`}
-                                  />
-                                </li>
-                                <li className="flex items-center">
-                                  <div className="w-28 flex pl-1">
-                                    {"비밀번호 확인"}
-                                  </div>
-                                  <input
-                                    defaultValue={""}
-                                    {...register_create("passwordCheck")}
-                                    className="border w-96 p-1 m-1"
+                                    id={val.accessor}
+                                    value={val.value}
+                                    onChange={(e) => {
+                                      onChange(e, idx);
+                                    }}
                                     type={`password`}
                                   />
                                 </li>
@@ -328,9 +281,11 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                                   {val.Header}
                                 </div>
                                 <input
-                                  defaultValue={val.value}
-                                  {...register_create(val.accessor)}
-                                  className="border w-96 p-1 m-1"
+                                  id={val.accessor}
+                                  value={val.value}
+                                  onChange={(e) => {
+                                    onChange(e, idx);
+                                  }}
                                   type={`text`}
                                 />
                               </li>
@@ -344,18 +299,8 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                       <div
                         className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
                         onClick={() => {
-                          reset_create(
-                            userColumnsDefault.reduce(
-                              (pre, cur) => ({
-                                ...pre,
-                                [cur.accessor]: cur.value,
-                              }),
-                              { password: "", passwordCheck: "" }
-                            )
-                          );
-                          setTimeout(() => {
-                            setFocus_create(userFocusId);
-                          }, 0);
+                          setUserColumns(userColumnsDefault);
+                          formFocus(userFocusId);
                         }}
                       >
                         초기화
@@ -383,13 +328,20 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
               data={{
                 button: <></>,
                 modal: (
-                  <form onSubmit={handleSubmit_edit(onSubmit_edit)}>
+                  <form
+                    onSubmit={(e) => {
+                      onSubmit_edit();
+                      e.preventDefault();
+                    }}
+                  >
                     <ul>
-                      {userColumnsDefault.map((val, idx) => {
+                      {userColumns.map((val, idx) => {
                         if (
                           !userExceptionDataInEditForm.includes(val.accessor)
                         ) {
-                          if (["email"].includes(val.accessor)) {
+                          if (
+                            ["password", "passwordCheck"].includes(val.accessor)
+                          ) {
                             return (
                               <>
                                 <li key={idx} className="flex items-center">
@@ -397,30 +349,11 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                                     {val.Header}
                                   </div>
                                   <input
-                                    defaultValue={val.value}
-                                    {...register_edit(val.accessor)}
-                                    className="border w-96 p-1 m-1"
-                                    type={`text`}
-                                  />
-                                </li>
-                                <li className="flex items-center">
-                                  <div className="w-28 flex pl-1">
-                                    {"비밀번호"}
-                                  </div>
-                                  <input
-                                    defaultValue={""}
-                                    {...register_edit("password")}
-                                    className="border w-96 p-1 m-1"
-                                    type={`password`}
-                                  />
-                                </li>
-                                <li className="flex items-center">
-                                  <div className="w-28 flex pl-1">
-                                    {"비밀번호 확인"}
-                                  </div>
-                                  <input
-                                    defaultValue={""}
-                                    {...register_edit("passwordCheck")}
+                                    id={val.accessor}
+                                    value={val.value}
+                                    onChange={(e) => {
+                                      onChange(e, idx);
+                                    }}
                                     className="border w-96 p-1 m-1"
                                     type={`password`}
                                   />
@@ -434,8 +367,11 @@ function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
                                   {val.Header}
                                 </div>
                                 <input
-                                  defaultValue={val.value}
-                                  {...register_edit(val.accessor)}
+                                  id={val.accessor}
+                                  value={val.value}
+                                  onChange={(e) => {
+                                    onChange(e, idx);
+                                  }}
                                   className="border w-96 p-1 m-1"
                                   type={`text`}
                                 />

@@ -17,3 +17,31 @@ export const formDataSelect = (columnState, name) => {
     return selectedValue;
   }
 };
+
+export const columnsInput = (columns, exceptionData) => {
+  const valueTypeCheck = (column) => {
+    if (column.value === "") {
+      return null;
+    } else if (column.inputType === "string") {
+      return column.value;
+    } else if (column.inputType === "number") {
+      return +column.value;
+    } else if (column.inputType === "boolean") {
+      return Boolean(column.value);
+    } else if (column.inputType === "won") {
+      return +column.value;
+    } else if (column.inputType === "array") {
+      return column.value.split(",").map((val) => val.trim());
+    }
+  };
+  const inputData = columns
+    .filter((val) => !exceptionData.includes(val.accessor))
+    .reduce(
+      (pre, cur) => ({
+        ...pre,
+        [cur.accessor]: valueTypeCheck(cur),
+      }),
+      {}
+    );
+  return inputData;
+};

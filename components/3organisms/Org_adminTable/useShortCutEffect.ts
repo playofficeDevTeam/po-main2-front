@@ -9,10 +9,13 @@ import { dateTime } from "./fn_DateTime";
 import { isModal_adminCreateOpenAtom } from "./Modal_adminCreate";
 import { isModal_adminEditOpenAtom } from "./Modal_adminEdit";
 
-export default function useShortCutEffect(input: {
-  createBtn: boolean;
-  hotkey: boolean;
-}) {
+export default function useShortCutEffect(
+  input: {
+    createBtn: boolean;
+    hotkey: boolean;
+  },
+  setState
+) {
   const tokenCheck = useTokenCheck();
   //쿼리
   const {
@@ -31,8 +34,6 @@ export default function useShortCutEffect(input: {
   const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
     isModal_adminEditOpenAtom
   );
-  const [paymentColumns, setPaymentColumns] =
-    useRecoilState(paymentColumnsData);
 
   useEffect(() => {
     const handler = (e) => {
@@ -45,7 +46,6 @@ export default function useShortCutEffect(input: {
           //시프트 s/d누를때 닉네임/데이트 생성
           if ([83, 68].includes(e.keyCode) && input.hotkey) {
             let newContent;
-
             if ([83].includes(e.keyCode)) {
               newContent = findMeforAdminData?.findMeforAdmin.admin?.nickname;
             } else if ([68].includes(e.keyCode)) {
@@ -57,12 +57,9 @@ export default function useShortCutEffect(input: {
                 prettyDate;
             }
             const focusedElement: any = document.activeElement;
-            const selectedElement: any = document.getElementById(
-              focusedElement.id
-            );
-            const selectedValue = selectedElement.value;
+            const selectedValue = focusedElement.value;
             setTimeout(() => {
-              setPaymentColumns((state) =>
+              setState((state) =>
                 state.map((val) =>
                   val.accessor === focusedElement.id
                     ? { ...val, value: selectedValue + newContent }

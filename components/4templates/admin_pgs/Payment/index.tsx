@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ColumnFilter,
@@ -25,14 +25,13 @@ import { isModal_adminEditOpenAtom } from "../../../3organisms/Org_adminTable/Mo
 import { dateList } from "../../../3organisms/Org_adminTable/tableViewTypeList";
 import TableStyle from "../../../3organisms/Org_adminTable/TableStyle";
 import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
-import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
 import {
   tableFromDate,
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import {
   paymentColumnsDefault,
-  rawpaymentColumnsData,
+  rawPaymentColumnsData,
 } from "./Var_paymentColumns";
 import Atm_PaymentForm from "../Payment/Atm_PaymentForm";
 import { FIND_PAYMENTS } from "./Gql_payment";
@@ -81,13 +80,6 @@ export default function App() {
         brandName_partner: val.user?.nameId,
       })),
     [findPaymentsData]
-  );
-
-  const [isModalOpen, setisModalOpen] = useRecoilState(
-    isModal_adminCreateOpenAtom
-  );
-  const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
-    isModal_adminEditOpenAtom
   );
 
   //테이블 컬럼 가공
@@ -201,9 +193,8 @@ export default function App() {
     const [isModalOpen_edit, setisModalOpen_edit] = useRecoilState(
       isModal_adminEditOpenAtom
     );
-
     const [rawPaymentColumns, setRawPaymentColumns] = useRecoilState(
-      rawpaymentColumnsData
+      rawPaymentColumnsData
     );
 
     //테이블 스타일
@@ -223,7 +214,7 @@ export default function App() {
             {row.cells.map((cell, idx) => {
               return (
                 <>
-                  {!["id"].includes(cell.column.id) && (
+                  {!paymentExceptionDataInTable.includes(cell.column.id) && (
                     <div
                       {...cell.getCellProps()}
                       className={`overflow-x-auto thin-scroll  td group border-r px-2 border-gray-300 
@@ -262,12 +253,14 @@ export default function App() {
                           <div
                             className="hidden group-hover:block"
                             onClick={() => {
+                              console.log(cell);
                               const cellValues = cell.row?.allCells?.map(
                                 (val, idx) => ({
                                   Header: val?.column?.Header,
                                   accessor: val?.column?.id,
-                                  value: val?.value,
+                                  value: val?.value || "",
                                   selected: val?.column?.id === cell.column.id,
+                                  inputType: val?.column?.inputType,
                                 })
                               );
                               const filteredCellValues = cellValues.filter(

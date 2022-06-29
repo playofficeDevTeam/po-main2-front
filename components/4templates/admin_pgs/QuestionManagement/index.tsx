@@ -40,6 +40,7 @@ import {
 import {
   questionManagementColumnsDefault,
   questionManagementColumnsData,
+  rawQuestionManagementColumnsData,
 } from "../QuestionManagement/Var_questionManagementColumns";
 import { dateSmall } from "/home/app/components/3organisms/Org_adminTable/fn_DateSmall";
 import { FIND_ALL_QUESTION_MANAGEMENT } from "./Gql_questionManagement";
@@ -92,13 +93,6 @@ export default function App() {
         })
       ),
     [findAllQuestionManagementData]
-  );
-
-  const [isModalOpen, setisModalOpen] = useRecoilState(
-    isModal_adminCreateOpenAtom
-  );
-  const [isEditModalOpen, setisEditModalOpen] = useRecoilState(
-    isModal_adminEditOpenAtom
   );
 
   //테이블 컬럼 가공
@@ -212,11 +206,8 @@ export default function App() {
     const [isModalOpen_edit, setisModalOpen_edit] = useRecoilState(
       isModal_adminEditOpenAtom
     );
-
-    //
-
-    const [questionManagementColumns, setQuestionManagementColumns] =
-      useRecoilState(questionManagementColumnsData);
+    const [rawQuestionManagementColumns, setRawQuestionManagementColumns] =
+      useRecoilState(rawQuestionManagementColumnsData);
 
     //테이블 스타일
     const RenderRow = useCallback(
@@ -280,16 +271,18 @@ export default function App() {
                                 (val, idx) => ({
                                   Header: val?.column?.Header,
                                   accessor: val?.column?.id,
-                                  value: val?.value,
+                                  value: val?.value || "",
                                   selected: val?.column?.id === cell.column.id,
+                                  inputType: val?.column?.inputType,
                                 })
                               );
                               const filteredCellValues = cellValues.filter(
                                 (e) =>
                                   !["selection", "newPage"].includes(e.accessor)
                               );
-                              setQuestionManagementColumns(filteredCellValues);
-
+                              setRawQuestionManagementColumns(
+                                filteredCellValues
+                              );
                               setisModalOpen_edit(true);
                             }}
                           >

@@ -64,7 +64,7 @@ export interface CampaignParticipationInput {
   consent?: string | null;
   guide?: string | null;
   plan?: string | null;
-  isFileTaxes?: string | null;
+  isFileTaxes?: boolean | null;
 }
 
 export interface CampaignUploadLinkType {
@@ -130,12 +130,9 @@ export interface CreateCampaignParticipationInput {
   consent?: string | null;
   guide?: string | null;
   plan?: string | null;
-  isFileTaxes?: string | null;
+  isFileTaxes?: boolean | null;
   creatorNameId?: string | null;
   brandName_partner?: string | null;
-  cumulativeOrder?: string | null;
-  itemName?: string | null;
-  keyword?: string | null;
 }
 
 export interface CreateItemInput {
@@ -352,13 +349,10 @@ export interface EditCampaignParticipationInput {
   consent?: string | null;
   guide?: string | null;
   plan?: string | null;
-  isFileTaxes?: string | null;
+  isFileTaxes?: boolean | null;
   id: number;
   creatorNameId?: string | null;
   brandName_partner?: string | null;
-  cumulativeOrder?: string | null;
-  itemName?: string | null;
-  keyword?: string | null;
 }
 
 export interface EditItemInput {

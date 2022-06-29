@@ -1,8 +1,9 @@
 import { atom, useRecoilState } from "recoil";
+import { IColumn } from "../adminAtoms/interface_column";
 import { dateSmall } from "/home/app/components/3organisms/Org_adminTable/fn_DateSmall";
 
 const nowDate = dateSmall(new Date());
-export const campaignColumnsDefault = [
+export const campaignColumnsDefault: IColumn[] = [
   {
     Header: "생성일",
     accessor: "createdAt",
@@ -10,6 +11,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 87,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "매출일",
@@ -18,6 +20,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "목표일",
@@ -26,6 +29,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "브랜드명(R)",
@@ -34,6 +38,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "누적차수",
@@ -42,6 +47,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "number",
   },
   {
     Header: "아이템명",
@@ -50,6 +56,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "키워드",
@@ -58,6 +65,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "매체",
@@ -66,6 +74,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "서비스명",
@@ -74,6 +83,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "형태",
@@ -82,6 +92,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "플랜",
@@ -90,6 +101,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "가격",
@@ -98,6 +110,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "won",
   },
   {
     Header: "수량",
@@ -106,6 +119,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "number",
   },
   {
     Header: "할인률",
@@ -114,6 +128,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "number",
   },
   {
     Header: "수수료",
@@ -122,6 +137,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "won",
   },
   {
     Header: "광고비",
@@ -130,6 +146,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "won",
   },
   {
     Header: "캠페인 담당자",
@@ -138,6 +155,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "판매 담당자",
@@ -146,6 +164,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "태그",
@@ -154,6 +173,7 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 150,
     sortDescFirst: true,
+    inputType: "string",
   },
   {
     Header: "dataId",
@@ -162,9 +182,14 @@ export const campaignColumnsDefault = [
     selected: false,
     width: 0,
     sortDescFirst: true,
+    inputType: "number",
   },
 ];
 
+export const rawCampaignColumnsData = atom({
+  key: "rawCampaignColumnsData",
+  default: campaignColumnsDefault,
+});
 export const campaignColumnsData = atom({
   key: "campaignColumnsData",
   default: campaignColumnsDefault,
