@@ -25,6 +25,7 @@ import { isModal_adminEditOpenAtom } from "../../../3organisms/Org_adminTable/Mo
 import { dateList } from "../../../3organisms/Org_adminTable/tableViewTypeList";
 import TableStyle from "../../../3organisms/Org_adminTable/TableStyle";
 import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
+import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
 import {
   tableFromDate,
   tableToDate,
@@ -37,6 +38,7 @@ import {
 } from "./questionControlData";
 import {
   questionColumnsDefault,
+  questionColumnsData,
   rawQuestionColumnsData,
 } from "./Var_questionColumns";
 import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
@@ -150,7 +152,6 @@ export default function App() {
           sortBy: useMemo(() => [{ id: "createdAt", desc: true }], []),
         },
       },
-
       useFilters,
       useGlobalFilter,
       useSortBy,

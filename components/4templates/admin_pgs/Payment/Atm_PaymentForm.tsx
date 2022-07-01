@@ -51,31 +51,18 @@ import {
 } from "./__generated__/findPayments";
 
 //폼 컴포넌트
-function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {
+function Form({
+  getToggleHideAllColumnsProps,
+  allColumns,
+  selectedFlatRows,
+  refetch,
+}) {
   const [tableFromDateState, setTableFromDateState] =
     useRecoilState(tableFromDate);
   const [tableToDateState, setTableToDateState] = useRecoilState(tableToDate);
 
   //토큰체크
   const tokenCheck = useTokenCheck();
-
-  //쿼리
-  const {
-    loading: findPaymentsLoading,
-    error: findPaymentsError,
-    data: findPaymentsData,
-    refetch,
-  } = useQuery<findPayments, findPaymentsVariables>(FIND_PAYMENTS, {
-    variables: {
-      input: {
-        fromDate: dateToInput(tableFromDateState),
-        toDate: dateToInput(tableToDateState),
-      },
-    },
-  });
-  useEffect(() => {
-    tokenCheck("query", refetch);
-  }, [findPaymentsData]);
 
   //생성 뮤테이션
   const [

@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ColumnFilter,
@@ -34,7 +34,7 @@ import {
   rawPaymentColumnsData,
 } from "./Var_paymentColumns";
 import Atm_PaymentForm from "../Payment/Atm_PaymentForm";
-import { DELETE_PAYMENT, FIND_PAYMENTS } from "./Gql_payment";
+import { FIND_PAYMENTS } from "./Gql_payment";
 import {
   paymentExceptionDataInEditBtn,
   paymentExceptionDataInTable,
@@ -44,10 +44,6 @@ import {
   findPaymentsVariables,
 } from "./__generated__/findPayments";
 import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
-import {
-  deletePayment,
-  deletePaymentVariables,
-} from "./__generated__/deletePayment";
 
 export default function App() {
   const [tableFromDateState, setTableFromDateState] =
@@ -88,16 +84,6 @@ export default function App() {
 
   //테이블 컬럼 가공
   const columns = useMemo(() => paymentColumnsDefault, []);
-
-  //삭제 뮤테이션
-  const [
-    deletePaymentMutation,
-    { loading: deletePaymentLoading, data: deletePaymentData },
-  ] = useMutation<deletePayment, deletePaymentVariables>(DELETE_PAYMENT, {
-    onCompleted: () => {
-      // refetch();
-    },
-  });
 
   //테이블 컴포넌트
   function Table({ columns, data }) {
@@ -303,30 +289,12 @@ export default function App() {
 
     return (
       <>
-        {/* <Atm_PaymentForm
+        <Atm_PaymentForm
           getToggleHideAllColumnsProps={getToggleHideAllColumnsProps}
           allColumns={allColumns}
           selectedFlatRows={selectedFlatRows}
-        /> */}
-        <div
-          className=""
-          onClick={() => {
-            tokenCheck("mutation", () => {
-              const selectedIds = selectedFlatRows.map(
-                (val) => val.original.id
-              );
-              deletePaymentMutation({
-                variables: {
-                  input: {
-                    ids: selectedIds,
-                  },
-                },
-              });
-            });
-          }}
-        >
-          삭제2
-        </div>
+          refetch={refetch}
+        />
         <table {...getTableProps()} className="bg-white">
           <thead>
             <tr>

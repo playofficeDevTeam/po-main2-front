@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ColumnFilter,
   DateFilter,
@@ -30,21 +30,22 @@ import {
   tableFromDate,
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
+import { dateSmall } from "/home/app/components/3organisms/Org_adminTable/fn_DateSmall";
+import Atm_CampaignForm from "./Atm_CampaignForm";
 import {
-  campaignParticipationColumnsData,
-  campaignParticipationColumnsDefault,
-  rawCampaignParticipationColumnsData,
-} from "./Var_campaignParticipationColumns";
-import Atm_CampaignParticipationForm from "./Atm_CampaignParticipationForm";
+  campaignExceptionDataInEditBtn,
+  campaignExceptionDataInTable,
+} from "./campaignControlData";
 import {
-  campaignParticipationExceptionDataInEditBtn,
-  campaignParticipationExceptionDataInTable,
-} from "./campaignParticipationControlData";
-import { FIND_ALL_CAMPAIGN_PARTICIPATIONS } from "./Gql_campaignParticipation";
+  campaignColumnsDefault,
+  campaignColumnsData,
+  rawCampaignColumnsData,
+} from "./Var_campaignColumns";
+import { FIND_CAMPAIGNS } from "./Gql_campaign";
 import {
-  findAllCampaignParticipations,
-  findAllCampaignParticipationsVariables,
-} from "./__generated__/findAllCampaignParticipations";
+  findCampaigns,
+  findCampaignsVariables,
+} from "./__generated__/findCampaigns";
 import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
 
 export default function App() {
@@ -57,14 +58,11 @@ export default function App() {
 
   //쿼리
   const {
-    loading: findAllCampaignParticipationsLoading,
-    error: findAllCampaignParticipationsError,
-    data: findAllCampaignParticipationsData,
+    loading: findCampaignsLoading,
+    error: findCampaignsError,
+    data: findCampaignsData,
     refetch,
-  } = useQuery<
-    findAllCampaignParticipations,
-    findAllCampaignParticipationsVariables
-  >(FIND_ALL_CAMPAIGN_PARTICIPATIONS, {
+  } = useQuery<findCampaigns, findCampaignsVariables>(FIND_CAMPAIGNS, {
     variables: {
       input: {
         fromDate: dateToInput(tableFromDateState),
@@ -74,27 +72,23 @@ export default function App() {
   });
   useEffect(() => {
     tokenCheck("query", refetch);
-  }, [findAllCampaignParticipationsData]);
+  }, [findCampaignsData]);
 
   //쿼리데이터 가공
-  const campaignParticipationsData = useMemo(
+  const campaignsData = useMemo(
     () =>
-      findAllCampaignParticipationsData?.findAllCampaignParticipations.campaignParticipations?.map(
-        (val, idx) => ({
-          ...val,
-          createdAt: datePrettier(val.createdAt),
-          creatorNameId: val.user?.nameId,
-          brandName_partner: val.campaign?.partner?.nameId,
-          cumulativeOrder: val.campaign?.cumulativeOrder,
-          itemName: val.campaign?.itemName,
-          keyword: val.campaign?.keyword,
-        })
-      ),
-    [findAllCampaignParticipationsData]
+      findCampaignsData?.findCampaigns.campaigns?.map((val, idx) => ({
+        ...val,
+        createdAt: datePrettier(val.createdAt),
+        salesDate: dateSmall(val.salesDate),
+        targetDate: dateSmall(val.targetDate),
+        brandName_partner: val.partner?.nameId,
+      })),
+    [findCampaignsData]
   );
 
   //테이블 컬럼 가공
-  const columns = useMemo(() => campaignParticipationColumnsDefault, []);
+  const columns = useMemo(() => campaignColumnsDefault, []);
 
   //테이블 컴포넌트
   function Table({ columns, data }) {
@@ -204,11 +198,9 @@ export default function App() {
     const [isModalOpen_edit, setisModalOpen_edit] = useRecoilState(
       isModal_adminEditOpenAtom
     );
-    const [
-      rawCampaignParticipationColumns,
-      setRawCampaignParticipationColumns,
-    ] = useRecoilState(rawCampaignParticipationColumnsData);
-    //
+    const [rawCampaignColumns, setRawCampaignColumns] = useRecoilState(
+      rawCampaignColumnsData
+    );
 
     //테이블 스타일
     const RenderRow = useCallback(
@@ -227,9 +219,7 @@ export default function App() {
             {row.cells.map((cell, idx) => {
               return (
                 <>
-                  {!campaignParticipationExceptionDataInTable.includes(
-                    cell.column.id
-                  ) && (
+                  {!campaignExceptionDataInTable.includes(cell.column.id) && (
                     <div
                       {...cell.getCellProps()}
                       className={`overflow-x-auto thin-scroll  td group border-r px-2 border-gray-300 
@@ -262,7 +252,7 @@ export default function App() {
                         )}
 
                         {/* 수정버튼 */}
-                        {!campaignParticipationExceptionDataInEditBtn.includes(
+                        {!campaignExceptionDataInEditBtn.includes(
                           cell.column.id
                         ) && (
                           <div
@@ -280,9 +270,7 @@ export default function App() {
                               const filteredCellValues = cellValues.filter(
                                 (e) => !["selection"].includes(e.accessor)
                               );
-                              setRawCampaignParticipationColumns(
-                                filteredCellValues
-                              );
+                              setRawCampaignColumns(filteredCellValues);
                               setisModalOpen_edit(true);
                             }}
                           >
@@ -305,7 +293,7 @@ export default function App() {
 
     return (
       <>
-        <Atm_CampaignParticipationForm
+        <Atm_CampaignForm
           getToggleHideAllColumnsProps={getToggleHideAllColumnsProps}
           allColumns={allColumns}
           selectedFlatRows={selectedFlatRows}
@@ -332,9 +320,7 @@ export default function App() {
               <tr {...headerGroup.getHeaderGroupProps()} key={idx}>
                 {headerGroup.headers.map(
                   (column, idx) =>
-                    !campaignParticipationExceptionDataInTable.includes(
-                      column.id
-                    ) && (
+                    !campaignExceptionDataInTable.includes(column.id) && (
                       <th {...column.getHeaderProps()} key={idx}>
                         <div
                           {...column.getSortByToggleProps()}
@@ -397,17 +383,15 @@ export default function App() {
     );
   }
 
-  const MemoTable = memo(Table);
-
-  if (findAllCampaignParticipationsError) {
+  if (findCampaignsError) {
     return (
       <TableStyle>
         권한이 없습니다.
-        <div className="">{findAllCampaignParticipationsError.toString()}</div>
+        <div className="">{findCampaignsError.toString()}</div>
       </TableStyle>
     );
   }
-  if (findAllCampaignParticipationsLoading) {
+  if (findCampaignsLoading) {
     return (
       <TableStyle>
         <div className=""></div>
@@ -417,7 +401,7 @@ export default function App() {
 
   return (
     <TableStyle>
-      <MemoTable columns={columns} data={campaignParticipationsData} />
+      <Table columns={columns} data={campaignsData} />
     </TableStyle>
   );
 }
