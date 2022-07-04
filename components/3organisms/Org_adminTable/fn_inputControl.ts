@@ -18,19 +18,17 @@ export const formDataSelect = (columnState, name) => {
   }
 };
 
-export const columnsInput = (columns, exceptionData) => {
+export const columnsMutationType = (columns, exceptionData) => {
   const valueTypeCheck = (column) => {
     if (column.value === "") {
       return null;
-    } else if (column.inputType === "string") {
-      return column.value;
-    } else if (column.inputType === "number") {
+    } else if (column.mutationType === "string") {
+      return column.value.trim();
+    } else if (column.mutationType === "number") {
       return +column.value;
-    } else if (column.inputType === "boolean") {
+    } else if (column.mutationType === "boolean") {
       return Boolean(column.value);
-    } else if (column.inputType === "won") {
-      return +column.value;
-    } else if (column.inputType === "array") {
+    } else if (column.mutationType === "array") {
       return column.value.split(",").map((val) => val.trim());
     }
   };

@@ -28,7 +28,7 @@ import {
   EDIT_CAMPAIGN,
   DELETE_CAMPAIGN,
   FIND_CAMPAIGNS,
-} from "./Gql_campaign";
+} from "../Campaign/Gql_campaign";
 import {
   campaignColumnsData,
   campaignColumnsDefault,

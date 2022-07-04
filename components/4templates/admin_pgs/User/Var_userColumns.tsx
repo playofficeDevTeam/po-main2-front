@@ -1,5 +1,5 @@
 import { atom, useRecoilState } from "recoil";
-import { IColumn } from "../adminAtoms/interface_column";
+import { IColumn } from "../../../3organisms/Org_adminTable2/interface_column";
 
 export const userColumnsDefault: IColumn[] = [
   {

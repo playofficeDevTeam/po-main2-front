@@ -1,6 +1,6 @@
 import { atom, useRecoilState } from "recoil";
 import { dateSmall } from "../../../3organisms/Org_adminTable/fn_DateSmall";
-import { IColumn } from "../adminAtoms/interface_column";
+import { IColumn } from "../../../3organisms/Org_adminTable2/interface_column";
 
 const nowDate = dateSmall(new Date());
 export const questionManagementColumnsDefault: IColumn[] = [

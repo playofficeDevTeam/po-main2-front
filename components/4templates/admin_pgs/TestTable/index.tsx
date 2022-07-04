@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useEffect, useMemo } from "react";
 import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
 import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
+import Org_adminTable2 from "../../../3organisms/Org_adminTable2";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import {
   DELETE_QUESTION_FOR_ADMIN,
@@ -16,7 +17,6 @@ import {
   findQuestionsForAdmin,
   findQuestionsForAdminVariables,
 } from "../Question/__generated__/findQuestionsForAdmin";
-import Table from "./Table";
 
 export default function App() {
   //토큰체크
@@ -78,13 +78,11 @@ export default function App() {
 
   if (findQuestionsForAdminData) {
     return (
-      <div>
-        <Table
-          columns={columns}
-          data={questionsData}
-          deleteMutation={deleteQuestionForAdminMutation}
-        />
-      </div>
+      <Org_adminTable2
+        columns={columns}
+        data={questionsData}
+        deleteMutation={deleteQuestionForAdminMutation}
+      />
     );
   }
   return <></>;

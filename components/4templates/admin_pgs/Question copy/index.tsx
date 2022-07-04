@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ColumnFilter,
@@ -30,23 +30,22 @@ import {
   tableFromDate,
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
-import { dateSmall } from "/home/app/components/3organisms/Org_adminTable/fn_DateSmall";
-import Atm_CampaignForm from "./Atm_CampaignForm";
+import Atm_QuestionForm from "./Atm_QuestionForm";
+import { FIND_QUESTIONS_FOR_ADMIN } from "./Gql_question";
 import {
-  campaignExceptionDataInEditBtn,
-  campaignExceptionDataInTable,
-} from "./campaignControlData";
+  questionExceptionDataInEditBtn,
+  questionExceptionDataInTable,
+} from "./questionControlData";
 import {
-  campaignColumnsDefault,
-  campaignColumnsData,
-  rawCampaignColumnsData,
-} from "./Var_campaignColumns";
-import { FIND_CAMPAIGNS } from "../Campaign/Gql_campaign";
-import {
-  findCampaigns,
-  findCampaignsVariables,
-} from "./__generated__/findCampaigns";
+  questionColumnsDefault,
+  questionColumnsData,
+  rawQuestionColumnsData,
+} from "./Var_questionColumns";
 import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
+import {
+  findQuestionsForAdmin,
+  findQuestionsForAdminVariables,
+} from "./__generated__/findQuestionsForAdmin";
 
 export default function App() {
   const [tableFromDateState, setTableFromDateState] =
@@ -58,37 +57,41 @@ export default function App() {
 
   //쿼리
   const {
-    loading: findCampaignsLoading,
-    error: findCampaignsError,
-    data: findCampaignsData,
+    loading: findQuestionsForAdminLoading,
+    error: findQuestionsForAdminError,
+    data: findQuestionsForAdminData,
     refetch,
-  } = useQuery<findCampaigns, findCampaignsVariables>(FIND_CAMPAIGNS, {
-    variables: {
-      input: {
-        fromDate: dateToInput(tableFromDateState),
-        toDate: dateToInput(tableToDateState),
+  } = useQuery<findQuestionsForAdmin, findQuestionsForAdminVariables>(
+    FIND_QUESTIONS_FOR_ADMIN,
+    {
+      variables: {
+        input: {
+          fromDate: dateToInput(tableFromDateState),
+          toDate: dateToInput(tableToDateState),
+        },
       },
-    },
-  });
+    }
+  );
   useEffect(() => {
     tokenCheck("query", refetch);
-  }, [findCampaignsData]);
+  }, [findQuestionsForAdminData]);
 
   //쿼리데이터 가공
-  const campaignsData = useMemo(
+  const questionsData = useMemo(
     () =>
-      findCampaignsData?.findCampaigns.campaigns?.map((val, idx) => ({
-        ...val,
-        createdAt: datePrettier(val.createdAt),
-        salesDate: dateSmall(val.salesDate),
-        targetDate: dateSmall(val.targetDate),
-        brandName_partner: val.partner?.nameId,
-      })),
-    [findCampaignsData]
+      findQuestionsForAdminData?.findQuestionsForAdmin.questions?.map(
+        (val, idx) => ({
+          ...val,
+          createdAt: datePrettier(val.createdAt),
+          isAgency: val.isAgency?.toString(),
+          brandName_partner: val.user?.nameId,
+        })
+      ),
+    [findQuestionsForAdminData]
   );
 
   //테이블 컬럼 가공
-  const columns = useMemo(() => campaignColumnsDefault, []);
+  const columns = useMemo(() => questionColumnsDefault, []);
 
   //테이블 컴포넌트
   function Table({ columns, data }) {
@@ -198,8 +201,8 @@ export default function App() {
     const [isModalOpen_edit, setisModalOpen_edit] = useRecoilState(
       isModal_adminEditOpenAtom
     );
-    const [rawCampaignColumns, setRawCampaignColumns] = useRecoilState(
-      rawCampaignColumnsData
+    const [rawQuestionColumns, setRawQuestionColumns] = useRecoilState(
+      rawQuestionColumnsData
     );
 
     //테이블 스타일
@@ -219,7 +222,7 @@ export default function App() {
             {row.cells.map((cell, idx) => {
               return (
                 <>
-                  {!campaignExceptionDataInTable.includes(cell.column.id) && (
+                  {!questionExceptionDataInTable.includes(cell.column.id) && (
                     <div
                       {...cell.getCellProps()}
                       className={`overflow-x-auto thin-scroll  td group border-r px-2 border-gray-300 
@@ -235,7 +238,7 @@ export default function App() {
                     >
                       <div
                         className={`w-max  items-center   ${
-                          !["selection"].includes(cell.column.id)
+                          !["selection", "newPage"].includes(cell.column.id)
                             ? "flex items-center h-full "
                             : "h-full mx-auto center"
                         }`}
@@ -252,7 +255,7 @@ export default function App() {
                         )}
 
                         {/* 수정버튼 */}
-                        {!campaignExceptionDataInEditBtn.includes(
+                        {!questionExceptionDataInEditBtn.includes(
                           cell.column.id
                         ) && (
                           <div
@@ -268,14 +271,36 @@ export default function App() {
                                 })
                               );
                               const filteredCellValues = cellValues.filter(
-                                (e) => !["selection"].includes(e.accessor)
+                                (e) =>
+                                  !["selection", "newPage"].includes(e.accessor)
                               );
-                              setRawCampaignColumns(filteredCellValues);
+                              setRawQuestionColumns(filteredCellValues);
                               setisModalOpen_edit(true);
                             }}
                           >
                             <div className="ml-1">
                               <i className="fas fa-pen cursor-pointer  text-gray-400 hover:text-gray-900  text-xs flex pb-1"></i>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 새창열기버튼 */}
+                        {["newPage"].includes(cell.column.id) && (
+                          <div className="">
+                            <div
+                              className="px-2 py-1 bg-gray-300 rounded-md text-white cursor-pointer hover:bg-orange-400"
+                              onClick={() => {
+                                window.open(
+                                  window.location.href.replace(
+                                    "question",
+                                    "question-management"
+                                  ) +
+                                    "/" +
+                                    cell.row.values.id
+                                );
+                              }}
+                            >
+                              열기
                             </div>
                           </div>
                         )}
@@ -293,7 +318,7 @@ export default function App() {
 
     return (
       <>
-        <Atm_CampaignForm
+        <Atm_QuestionForm
           getToggleHideAllColumnsProps={getToggleHideAllColumnsProps}
           allColumns={allColumns}
           selectedFlatRows={selectedFlatRows}
@@ -320,7 +345,7 @@ export default function App() {
               <tr {...headerGroup.getHeaderGroupProps()} key={idx}>
                 {headerGroup.headers.map(
                   (column, idx) =>
-                    !campaignExceptionDataInTable.includes(column.id) && (
+                    !questionExceptionDataInTable.includes(column.id) && (
                       <th {...column.getHeaderProps()} key={idx}>
                         <div
                           {...column.getSortByToggleProps()}
@@ -383,15 +408,15 @@ export default function App() {
     );
   }
 
-  if (findCampaignsError) {
+  if (findQuestionsForAdminError) {
     return (
       <TableStyle>
         권한이 없습니다.
-        <div className="">{findCampaignsError.toString()}</div>
+        <div className="">{findQuestionsForAdminError.toString()}</div>
       </TableStyle>
     );
   }
-  if (findCampaignsLoading) {
+  if (findQuestionsForAdminLoading) {
     return (
       <TableStyle>
         <div className=""></div>
@@ -401,7 +426,7 @@ export default function App() {
 
   return (
     <TableStyle>
-      <Table columns={columns} data={campaignsData} />
+      <Table columns={columns} data={questionsData} />
     </TableStyle>
   );
 }

@@ -20,7 +20,7 @@ import {
   userColumnsData,
   userColumnsDefault,
   useUserColumnsDataOnChange,
-} from "../User/Var_userColumns";
+} from "./Var_userColumns";
 
 import {
   userExceptionDataInCreateForm,
