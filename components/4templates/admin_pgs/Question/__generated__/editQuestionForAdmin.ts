@@ -13,6 +13,8 @@ export interface editQuestionForAdmin_editQuestionForAdmin {
   __typename: "EditQuestionOutput";
   ok: boolean;
   error: string | null;
+  id: number | null;
+  createdAt: any | null;
 }
 
 export interface editQuestionForAdmin {

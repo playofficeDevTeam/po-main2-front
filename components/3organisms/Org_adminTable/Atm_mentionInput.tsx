@@ -1,66 +1,31 @@
+import { useQuery } from "@apollo/client";
+import { useEffect } from "react";
 import { MentionsInput, Mention } from "react-mentions";
-
-const users = [
-  {
-    id: "walter",
-    display: "Walter White",
-  },
-  {
-    id: "satoshi2",
-    display: "サトシ・ナカモト",
-  },
-  {
-    id: "sung",
-    display: "성덕선",
-  },
-  {
-    id: "jesse",
-    display: "Jesse Pinkman",
-  },
-];
+import fn_base64ToSrc from "../../4templates/admin_pgs/Admin/fn_base64ToSrc";
+import { FIND_ALL_ADMIN } from "../../4templates/admin_pgs/Admin/Gql_admin";
+import { findAllAdmin } from "../../4templates/admin_pgs/Admin/__generated__/findAllAdmin";
+import { useTokenCheck } from "../../hooks/useTokenCheck";
 
 const defaultStyle = {
-  control: {
-    backgroundColor: "#fff",
-    fontSize: 16,
-    fontWeight: "normal",
-    width: "24rem",
-    padding: "0.25rem",
-    margin: "0.25rem",
-  },
+  control: {},
 
   "&multiLine": {
     control: {
-      fontFamily: "monospace",
-      minHeight: 63,
+      minHeight: "1.5rem",
     },
-    highlighter: {
-      padding: 9,
-      border: "1px solid transparent",
-    },
-    input: {
-      padding: 9,
-      border: "1px solid silver",
-    },
+    highlighter: {},
+    input: {},
   },
 
   "&singleLine": {
     display: "inline-block",
-    width: 180,
-
-    highlighter: {
-      padding: 1,
-      border: "2px inset transparent",
-    },
-    input: {
-      padding: 1,
-      border: "2px inset",
-    },
+    width: "24rem",
+    highlighter: {},
+    input: {},
   },
 
   suggestions: {
     list: {
-      backgroundColor: "white",
       border: "1px solid rgba(0,0,0,0.15)",
       fontSize: 14,
     },
@@ -74,26 +39,53 @@ const defaultStyle = {
   },
 };
 
-export default function App({ className, id, value, onChange }) {
+export default function App({ value, onChange }) {
+  //토큰체크
+  const tokenCheck = useTokenCheck();
+  //쿼리
+  const {
+    loading: findAllAdminLoading,
+    error: findAllAdminError,
+    data: findAllAdminData,
+    refetch,
+  } = useQuery<findAllAdmin>(FIND_ALL_ADMIN);
+  useEffect(() => {
+    tokenCheck("query", refetch);
+  }, [findAllAdminData]);
+
+  const users = findAllAdminData?.findAllAdmin?.admins?.map((val) => ({
+    id: val.email,
+    display: val.nickname,
+    image: val.profilePicture,
+  }));
+
   return (
     <MentionsInput
       markup="@[__display__](user:__id__)"
-      id={id}
+      id="mention"
       value={value}
       onChange={onChange}
-      className={className}
       singleLine={false}
       style={defaultStyle}
-      placeholder={"Mention people using '@'"}
+      placeholder={"'@'를 이용해서 멘션하기"}
       a11ySuggestionsListLabel={"Suggested mentions"}
     >
       <Mention
         trigger="@"
         data={users}
         renderSuggestion={(suggestion, search, highlightedDisplay) => (
-          <div className="user">{highlightedDisplay}</div>
+          <div className="">
+            {suggestion.image && (
+              <img
+                className="rounded-full w-6 h-6 mr-2"
+                src={fn_base64ToSrc(suggestion.image)}
+                alt="프로필사진"
+              />
+            )}
+            <div className="">{highlightedDisplay}</div>
+          </div>
         )}
-        style={defaultStyle}
+        className=" bg-orange-100 rounded-sm text-orange-500 "
       />
     </MentionsInput>
   );

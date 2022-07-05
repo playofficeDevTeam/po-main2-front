@@ -13,6 +13,7 @@ export interface EditQuestion_editQuestion {
   __typename: "EditQuestionOutput";
   ok: boolean;
   error: string | null;
+  id: number | null;
 }
 
 export interface EditQuestion {

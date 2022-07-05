@@ -18,6 +18,7 @@ import {
 import {
   questionColumnsDefault,
   questionExceptionData,
+  rawQuestionColumnsAtom,
 } from "../Question/Var_questionColumns";
 import {
   deleteQuestionForAdmin,
@@ -66,7 +67,7 @@ export default function App() {
     () =>
       query.data?.findQuestionsForAdmin.questions?.map((val, idx) => ({
         ...val,
-        createdAt: datePrettier(val.createdAt),
+        createdAt: val.createdAt,
         isAgency: val.isAgency?.toString(),
         brandName_partner: val.user?.nameId,
       })),
@@ -85,6 +86,7 @@ export default function App() {
       query.refetch();
     },
   });
+
   //수정 뮤테이션
   const editMutation = useMutation<
     editQuestionForAdmin,
@@ -94,6 +96,7 @@ export default function App() {
       query.refetch();
     },
   });
+
   //삭제 뮤테이션
   const deleteMutation = useMutation<
     deleteQuestionForAdmin,
@@ -114,8 +117,13 @@ export default function App() {
         createMutation={createMutation}
         editMutation={editMutation}
         deleteMutation={deleteMutation}
+        rawColumnsAtom={rawQuestionColumnsAtom}
         options={{
           dateFilter: true,
+          newPageLink: "/question-management",
+          mention: true,
+          createHotkey: true,
+          shortCutHotkey: true,
         }}
       />
     );

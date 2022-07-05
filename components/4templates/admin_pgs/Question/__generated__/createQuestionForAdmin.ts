@@ -13,7 +13,8 @@ export interface createQuestionForAdmin_createQuestionForAdmin {
   __typename: "CreateQuestionForAdminOutput";
   ok: boolean;
   error: string | null;
-  questionId: number | null;
+  id: number | null;
+  createdAt: any | null;
 }
 
 export interface createQuestionForAdmin {

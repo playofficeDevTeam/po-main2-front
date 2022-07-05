@@ -31,7 +31,7 @@ export const questionColumnsDefault: IColumn[] = [
     value: "",
     selected: false,
     mutationType: "string",
-    tableType: "string",
+    tableType: "newPage",
     formType: "string",
   },
   {
@@ -190,25 +190,26 @@ export const questionColumnsDefault: IColumn[] = [
   },
 ];
 
-export const rawQuestionColumnsData = atom({
-  key: "rawQuestionColumnsData",
-  default: questionColumnsDefault,
-});
-export const questionColumnsData = atom({
-  key: "questionColumnsData",
+export const rawQuestionColumnsAtom = atom({
+  key: "rawQuestionColumnsAtom",
   default: questionColumnsDefault,
 });
 
-export const useQuestionColumnsDataOnChange = () => {
-  const [questionColumnsDataState, setQuestionColumnsDataState] =
-    useRecoilState(questionColumnsData);
+// export const questionColumnsData = atom({
+//   key: "questionColumnsData",
+//   default: questionColumnsDefault,
+// });
 
-  const onChange = (e, id) => {
-    setQuestionColumnsDataState((columnsData) =>
-      columnsData.map((val, idx) =>
-        idx === id ? { ...val, value: e.target.value } : val
-      )
-    );
-  };
-  return onChange;
-};
+// export const useQuestionColumnsDataOnChange = () => {
+//   const [questionColumnsDataState, setQuestionColumnsDataState] =
+//     useRecoilState(questionColumnsData);
+
+//   const onChange = (e, id) => {
+//     setQuestionColumnsDataState((columnsData) =>
+//       columnsData.map((val, idx) =>
+//         idx === id ? { ...val, value: e.target.value } : val
+//       )
+//     );
+//   };
+//   return onChange;
+// };

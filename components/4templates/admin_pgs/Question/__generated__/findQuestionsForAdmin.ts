@@ -23,14 +23,14 @@ export interface findQuestionsForAdmin_findQuestionsForAdmin_questions {
   name: string | null;
   phoneNumber: string | null;
   email: string | null;
-  budget: string | null;
+  budget: number | null;
   productLink: string | null;
   uniqueness: string | null;
   isAgency: boolean | null;
   user: findQuestionsForAdmin_findQuestionsForAdmin_questions_user | null;
   product: string | null;
   serviceInquired: string | null;
-  isAnalyzed: string | null;
+  isAnalyzed: boolean | null;
 }
 
 export interface findQuestionsForAdmin_findQuestionsForAdmin {

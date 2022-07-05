@@ -34,7 +34,7 @@ export default function App({ trigger = false }) {
           if (data) {
             window.localStorage.setItem(
               "questionId",
-              (data.createQuestion.questionId ?? -1).toString()
+              (data.createQuestion.id ?? -1).toString()
             );
             router.push("/consulting/complete");
           } else {
@@ -83,7 +83,7 @@ export default function App({ trigger = false }) {
                 name: userFormDataState[1],
                 phoneNumber: userFormDataState[2],
                 email: userFormDataState[3],
-                budget: userDetail1FormDataState[0] as string,
+                budget: +userDetail1FormDataState[0],
                 productLink: userDetail1FormDataState[1] as string,
                 uniqueness: userDetail1FormDataState[2] as string,
                 isAgency: userDetail1FormDataState[3] as boolean,

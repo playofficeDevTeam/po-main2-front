@@ -189,14 +189,14 @@ export interface CreateQuestionForAdminInput {
   name?: string | null;
   phoneNumber?: string | null;
   email?: string | null;
-  budget?: string | null;
+  budget?: number | null;
   productLink?: string | null;
   uniqueness?: string | null;
   isAgency?: boolean | null;
   user?: UserInputType | null;
   product?: string | null;
   serviceInquired?: string | null;
-  isAnalyzed?: string | null;
+  isAnalyzed?: boolean | null;
   questionManagements?: questionManagementInputType[] | null;
   brandName_partner?: string | null;
 }
@@ -210,14 +210,14 @@ export interface CreateQuestionInput {
   name?: string | null;
   phoneNumber?: string | null;
   email?: string | null;
-  budget?: string | null;
+  budget?: number | null;
   productLink?: string | null;
   uniqueness?: string | null;
   isAgency?: boolean | null;
   user?: UserInputType | null;
   product?: string | null;
   serviceInquired?: string | null;
-  isAnalyzed?: string | null;
+  isAnalyzed?: boolean | null;
   questionManagements?: questionManagementInputType[] | null;
 }
 
@@ -420,14 +420,14 @@ export interface EditQuestionInput {
   name?: string | null;
   phoneNumber?: string | null;
   email?: string | null;
-  budget?: string | null;
+  budget?: number | null;
   productLink?: string | null;
   uniqueness?: string | null;
   isAgency?: boolean | null;
   user?: UserInputType | null;
   product?: string | null;
   serviceInquired?: string | null;
-  isAnalyzed?: string | null;
+  isAnalyzed?: boolean | null;
   questionManagements?: questionManagementInputType[] | null;
   brandName_partner?: string | null;
 }
@@ -592,14 +592,14 @@ export interface questionInputType {
   name?: string | null;
   phoneNumber?: string | null;
   email?: string | null;
-  budget?: string | null;
+  budget?: number | null;
   productLink?: string | null;
   uniqueness?: string | null;
   isAgency?: boolean | null;
   user?: UserInputType | null;
   product?: string | null;
   serviceInquired?: string | null;
-  isAnalyzed?: string | null;
+  isAnalyzed?: boolean | null;
   questionManagements?: questionManagementInputType[] | null;
 }
 

@@ -39,6 +39,13 @@ import {
   tableFromDate,
   tableToDate,
 } from "../Org_adminTable/Var_tableInputDate";
+import { useQuery } from "@apollo/client";
+import { FIND_ME_FOR_ADMIN } from "../../4templates/admin_pgs/Admin/Gql_admin";
+import { findMeforAdmin } from "../../4templates/admin_pgs/Admin/__generated__/findMeforAdmin";
+import { dateTime } from "../Org_adminTable/fn_DateTime";
+import Atm_mentionInput from "../Org_adminTable/Atm_mentionInput";
+import mentionToArray from "./mentionToArray";
+import axios from "axios";
 
 export const TableStyles = styled.div`
   width: max-content;
@@ -247,7 +254,17 @@ ColumnIndeterminateCheckbox.displayName = "ColumnIndeterminateCheckbox";
 // 테이블 컴포넌트
 // 테이블 컴포넌트
 // 테이블 컴포넌트
-function Table({ columns, data, query, exceptionData, options }) {
+function Table({
+  columns,
+  data,
+  query,
+  createMutation,
+  editMutation,
+  deleteMutation,
+  exceptionData,
+  rawColumnsAtom,
+  options,
+}) {
   const defaultColumn = useMemo(
     () => ({
       width: 150,
@@ -269,6 +286,13 @@ function Table({ columns, data, query, exceptionData, options }) {
     return scrollbarWidth;
   };
   const scrollBarSize = useMemo(() => scrollbarWidth(), []);
+
+  // 스테이트 관리
+  //수정 모달 열기
+  const [isModalOpen_edit, setisModalOpen_edit] = useRecoilState(
+    isModal_adminEditOpenAtom
+  );
+  const [rawColumns, setRawColumns] = useRecoilState(rawColumnsAtom);
 
   const {
     getTableProps,
@@ -326,8 +350,6 @@ function Table({ columns, data, query, exceptionData, options }) {
     }
   );
 
-  useEffect(() => {});
-
   // 테이블 높이 변경
   const [windowHeightState, setWindowHeightState] = useState(
     window.innerHeight - 200
@@ -373,21 +395,71 @@ function Table({ columns, data, query, exceptionData, options }) {
                     key={idx}
                   >
                     <div
-                      className={`w-max  items-center   ${
-                        !["selection"].includes(cell.column.id)
+                      className={`w-max ${
+                        !["selection", "newPage"].includes(cell.column.id)
                           ? "flex items-center h-full "
-                          : "center h-full"
+                          : "center mx-auto h-full"
                       }`}
                     >
+                      {/* 커스텀 렌더링 */}
                       {dateList.includes(cell.column.id) ? (
                         <>
                           <div className="">
-                            {cell.value.split(" ")[0].substr(-8)}
+                            {cell.value.split("T")[0].substr(-8)}
                           </div>
-                          <div className=" hidden">{cell.render("Cell")}</div>
+                          <div className="hidden">{cell.render("Cell")}</div>
                         </>
                       ) : (
                         <div className="">{cell.render("Cell")}</div>
+                      )}
+
+                      {/* 수정버튼 */}
+                      {!exceptionData.editBtn.includes(cell.column.id) && (
+                        <div
+                          className="hidden group-hover:block"
+                          onClick={() => {
+                            const cellValues = cell.row?.allCells?.map(
+                              (val, idx) => ({
+                                Header: val?.column?.Header,
+                                accessor: val?.column?.id,
+                                value: val?.value || "",
+                                selected: val?.column?.id === cell.column.id,
+                                mutationType: val?.column?.mutationType,
+                                tableType: val?.column?.tableType,
+                                formType: val?.column?.formType,
+                              })
+                            );
+                            const filteredCellValues = cellValues.filter(
+                              (e) =>
+                                !["selection", "newPage"].includes(e.accessor)
+                            );
+                            setRawColumns(filteredCellValues);
+                            setisModalOpen_edit(true);
+                          }}
+                        >
+                          <div className="ml-1">
+                            <i className="fas fa-pen cursor-pointer  text-gray-400 hover:text-gray-900  text-xs flex pb-1"></i>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* 새창열기버튼 */}
+                      {["newPage"].includes(cell.column.id) && (
+                        <div className="">
+                          <div
+                            className="px-2 py-1 bg-gray-300 rounded-md text-white cursor-pointer hover:bg-orange-400"
+                            onClick={() => {
+                              window.open(
+                                "/admin" +
+                                  options.newPageLink +
+                                  "/" +
+                                  cell.row.values.id
+                              );
+                            }}
+                          >
+                            열기
+                          </div>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -404,7 +476,18 @@ function Table({ columns, data, query, exceptionData, options }) {
   return (
     <>
       {/* 메뉴 */}
-      <div className=""></div>
+      <Form
+        columns={columns}
+        createMutation={createMutation}
+        editMutation={editMutation}
+        deleteMutation={deleteMutation}
+        exceptionData={exceptionData}
+        rawColumnsAtom={rawColumnsAtom}
+        selectedFlatRows={selectedFlatRows}
+        getToggleHideAllColumnsProps={getToggleHideAllColumnsProps}
+        allColumns={allColumns}
+        options={options}
+      />
       <table {...getTableProps()} className="bg-white">
         <thead>
           <tr>
@@ -427,12 +510,8 @@ function Table({ columns, data, query, exceptionData, options }) {
             <tr {...headerGroup.getHeaderGroupProps()} key={idx}>
               {headerGroup.headers.map(
                 (column, idx) =>
-                  !["id", "relationId"].includes(column.id) && (
-                    <th
-                      {...column.getHeaderProps()}
-                      className={`${!["id"].includes(column.id) ? "" : ""} `}
-                      key={idx}
-                    >
+                  !exceptionData.table.includes(column.id) && (
+                    <th {...column.getHeaderProps()} key={idx}>
                       <div
                         {...column.getSortByToggleProps()}
                         className={`mb-1 flex cursor-pointer ${
@@ -498,6 +577,11 @@ function Form({
   editMutation,
   deleteMutation,
   exceptionData,
+  rawColumnsAtom,
+  selectedFlatRows,
+  getToggleHideAllColumnsProps,
+  allColumns,
+  options,
 }) {
   const tokenCheck = useTokenCheck();
 
@@ -518,23 +602,38 @@ function Form({
       )
     );
   };
+  const [rawColumns, setRawColumns]: any = useRecoilState(rawColumnsAtom);
 
   //폼 관리
   const createInput = columnsMutationType(
     formDataState,
     exceptionData.createMutation
   );
-
   const onSubmit_create = () => {
-    tokenCheck("mutation", () => {
-      console.log(createInput);
+    tokenCheck("mutation", async () => {
       try {
         setisModalOpen(false);
-        createMutation[0]({
+        const mutated = await createMutation[0]({
           variables: {
             input: createInput,
           },
         });
+        const dataValue: any = Object.values(mutated.data);
+        const createdAt = dataValue[0].createdAt;
+        if (options.mention) {
+          const mentionArray = mentionToArray(mentionState);
+          mentionArray.forEach((val) => {
+            axios.post(
+              process.env.NEXT_PUBLIC_API_HOST + "/auth/ms/send-chat",
+              {
+                nicknameToSend:
+                  findMeforAdminData?.findMeforAdmin.admin?.nickname,
+                nicknameToReceive: val,
+                message: createdAt,
+              }
+            );
+          });
+        }
         setFormDataState(columns);
       } catch (error) {
         const errorString: string = error + "";
@@ -573,10 +672,77 @@ function Form({
     }
   }, [isModalOpen]);
 
+  //수정시 테이블데이터 반영 및 포커싱
+  useEffect(() => {
+    setFormDataState(rawColumns);
+    setTimeout(() => {
+      formFocus(rawColumns.find((val) => val.selected)?.accessor || "");
+    }, 0);
+  }, [rawColumns]);
+
+  //쿼리
+  const {
+    loading: findMeforAdminLoading,
+    error: findMeforAdminError,
+    data: findMeforAdminData,
+    refetch: findMeforAdminRefetch,
+  } = useQuery<findMeforAdmin>(FIND_ME_FOR_ADMIN);
+  useEffect(() => {
+    tokenCheck("query", findMeforAdminRefetch);
+  }, [findMeforAdminData]);
+  useEffect(() => {
+    const handler = (e) => {
+      try {
+        if (e.shiftKey) {
+          //시프트 c 누를때 생성
+          if (
+            [67].includes(e.keyCode) &&
+            options.createHotkey &&
+            !isEditModalOpen
+          ) {
+            setisModalOpen(true);
+          }
+          //시프트 s/d누를때 닉네임/데이트 생성
+          if ([83, 68].includes(e.keyCode) && options.shortCutHotkey) {
+            let newContent;
+            if ([83].includes(e.keyCode)) {
+              newContent = findMeforAdminData?.findMeforAdmin.admin?.nickname;
+            } else if ([68].includes(e.keyCode)) {
+              const date = new Date();
+              const prettyDate = dateTime(date);
+              newContent =
+                findMeforAdminData?.findMeforAdmin.admin?.nickname +
+                " " +
+                prettyDate;
+            }
+            const focusedElement: any = document.activeElement;
+            const selectedValue = focusedElement.value;
+            setTimeout(() => {
+              setFormDataState((state) =>
+                state.map((val) =>
+                  val.accessor === focusedElement.id
+                    ? { ...val, value: selectedValue + newContent }
+                    : val
+                )
+              );
+            }, 0);
+          }
+        }
+      } catch (error) {}
+    };
+    window.addEventListener("keydown", handler);
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [findMeforAdminData]);
+
+  //멘션정보
+  const [mentionState, setMentionState] = useState("");
+
   return (
     <>
       {/* 메뉴 */}
-      <div className="flex py-2 ml-4">
+      <div className="flex py-2 ">
         {/* 생성 */}
         <div className="mr-3 cursor-pointer">
           <Modal_adminCreate
@@ -596,6 +762,17 @@ function Form({
                   }}
                 >
                   <ul>
+                    {options.mention && (
+                      <li>
+                        <div className="">멘션</div>
+                        <Atm_mentionInput
+                          value={mentionState}
+                          onChange={(e) => {
+                            setMentionState(e.target.value);
+                          }}
+                        />
+                      </li>
+                    )}
                     {formDataState.map(
                       (val, idx) =>
                         !exceptionData.createForm.includes(val.accessor) && (
@@ -666,7 +843,18 @@ function Form({
                   }}
                 >
                   <ul>
-                    {columns.map(
+                    {options.mention && (
+                      <li>
+                        <div className="">멘션</div>
+                        <Atm_mentionInput
+                          value={mentionState}
+                          onChange={(e) => {
+                            setMentionState(e.target.value);
+                          }}
+                        />
+                      </li>
+                    )}
+                    {formDataState.map(
                       (val, idx) =>
                         !exceptionData.editForm.includes(val.accessor) && (
                           <li key={idx} className="flex items-center">
@@ -761,7 +949,7 @@ function Form({
         </div>
 
         {/* 삭제 */}
-        {/* {selectedFlatRows.length !== 0 && (
+        {selectedFlatRows.length !== 0 && (
           <div
             className="mr-3 cursor-pointer center w-14 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300 "
             onClick={() => {
@@ -775,7 +963,7 @@ function Form({
                     (val) => val.original.id
                   );
                   tokenCheck("mutation", () => {
-                    deleteQuestionForAdminMutation({
+                    deleteMutation[0]({
                       variables: {
                         input: {
                           ids: selectedIds,
@@ -791,21 +979,16 @@ function Form({
           >
             <i className="fas fa-trash-alt"></i>
           </div>
-        )} */}
+        )}
 
         {/* {새창열기} */}
-        {/* {selectedFlatRows.length !== 0 ? (
+        {options.newPageLink && selectedFlatRows?.length !== 0 ? (
           <div
             className="mr-3 cursor-pointer center px-3 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300"
             onClick={() => {
               selectedFlatRows.forEach((val) => {
                 window.open(
-                  window.location.href.replace(
-                    "question",
-                    "question-management"
-                  ) +
-                    "/" +
-                    val.values.id
+                  "/admin" + options.newPageLink + "/" + val.values.id
                 );
               });
             }}
@@ -814,7 +997,7 @@ function Form({
           </div>
         ) : (
           <></>
-        )} */}
+        )}
       </div>
     </>
   );
@@ -828,23 +1011,21 @@ function App({
   editMutation,
   deleteMutation,
   exceptionData,
+  rawColumnsAtom,
   options,
 }) {
   return (
     <div className="bg-gray-50 w-full overflow-x-scroll middle-scroll ">
-      <Form
-        columns={columns}
-        createMutation={createMutation}
-        editMutation={editMutation}
-        deleteMutation={deleteMutation}
-        exceptionData={exceptionData}
-      />
       <TableStyles>
         <Table
           columns={columns}
           data={data}
           query={query}
+          createMutation={createMutation}
+          editMutation={editMutation}
+          deleteMutation={deleteMutation}
           exceptionData={exceptionData}
+          rawColumnsAtom={rawColumnsAtom}
           options={options}
         />
       </TableStyles>

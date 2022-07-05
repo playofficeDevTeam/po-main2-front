@@ -163,8 +163,9 @@ function App() {
           <ul>
             <li className="center p-1">
               {findMeforAdminData && (
-                <div className="w-10 h-10 rounded-full">
+                <div className="w-10 h-10 ">
                   <img
+                    className="rounded-full"
                     src={fn_base64ToSrc(
                       findMeforAdminData.findMeforAdmin.admin?.profilePicture
                     )}

@@ -33,7 +33,8 @@ export const CREATE_QUESTION_FOR_ADMIN = gql`
     createQuestionForAdmin(input: $input) {
       ok
       error
-      questionId
+      id
+      createdAt
     }
   }
 `;
@@ -43,6 +44,8 @@ export const EDIT_QUESTION_FOR_ADMIN = gql`
     editQuestionForAdmin(input: $input) {
       ok
       error
+      id
+      createdAt
     }
   }
 `;

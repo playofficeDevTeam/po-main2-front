@@ -31,10 +31,15 @@ export const FormStyle = styled.div`
     & li {
       display: flex;
       align-items: center;
-      & div:nth-child(1) {
+      & > div:nth-child(1) {
         width: 10rem;
         display: flex;
         padding-left: 0.25rem;
+      }
+      & > div:nth-child(2) {
+        width: 24rem;
+        padding: 0.25rem;
+        margin: 0.25rem;
       }
       & input:nth-child(2) {
         border-width: 1px;

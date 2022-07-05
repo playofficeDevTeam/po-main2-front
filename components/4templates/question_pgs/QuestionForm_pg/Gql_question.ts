@@ -5,7 +5,7 @@ export const CREATE_QUESTION = gql`
     createQuestion(input: $input) {
       ok
       error
-      questionId
+      id
     }
   }
 `;
@@ -15,6 +15,7 @@ export const EDIT_QUESTION = gql`
     editQuestion(input: $input) {
       ok
       error
+      id
     }
   }
 `;
