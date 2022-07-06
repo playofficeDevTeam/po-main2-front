@@ -1,15 +1,5 @@
-import { atom, useRecoilState } from "recoil";
+import { atom } from "recoil";
 import { IColumn } from "../../../3organisms/Org_adminTable2/interface_column";
-
-export const questionExceptionData = {
-  table: ["id"],
-  createForm: ["id", "createdAt", "newPage"],
-  createMutation: ["id", "createdAt", "newPage"],
-  editForm: ["id", "createdAt", "newPage"],
-  editMutation: ["createdAt", "newPage"],
-  editBtn: ["id", "createdAt", "selection", "newPage"],
-  focusId: "brandName",
-};
 
 export const questionColumnsDefault: IColumn[] = [
   {
@@ -19,9 +9,26 @@ export const questionColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
-    tableType: "string",
-    formType: "string",
+    tableType: "date",
+    formType_create: "hidden",
+    formType_edit: "hidden",
+    mutationType_create: "hidden",
+    mutationType_edit: "hidden",
+    editable: false,
+  },
+  {
+    Header: "멘션",
+    accessor: "rawMention",
+    width: 0,
+    sortDescFirst: true,
+    value: "",
+    selected: false,
+    tableType: "hidden",
+    formType_create: "hidden",
+    formType_edit: "hidden",
+    mutationType_create: "hidden",
+    mutationType_edit: "hidden",
+    editable: false,
   },
   {
     Header: "새창",
@@ -30,9 +37,12 @@ export const questionColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "newPage",
-    formType: "string",
+    formType_create: "hidden",
+    formType_edit: "hidden",
+    mutationType_create: "hidden",
+    mutationType_edit: "hidden",
+    editable: false,
   },
   {
     Header: "브랜드명(R)",
@@ -41,9 +51,12 @@ export const questionColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "브랜드명",
@@ -51,10 +64,13 @@ export const questionColumnsDefault: IColumn[] = [
     width: 150,
     sortDescFirst: true,
     value: "",
-    selected: false,
-    mutationType: "string",
+    selected: true,
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "제품",
@@ -63,9 +79,12 @@ export const questionColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "문의서비스",
@@ -74,9 +93,12 @@ export const questionColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "분석유무",
@@ -85,9 +107,12 @@ export const questionColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "boolean",
     tableType: "boolean",
-    formType: "boolean",
+    formType_create: "boolean",
+    formType_edit: "boolean",
+    mutationType_create: "boolean",
+    mutationType_edit: "boolean",
+    editable: true,
   },
   {
     Header: "이름",
@@ -96,9 +121,12 @@ export const questionColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "연락처",
@@ -107,9 +135,12 @@ export const questionColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "이메일",
@@ -118,9 +149,12 @@ export const questionColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "예산",
@@ -129,9 +163,12 @@ export const questionColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "number",
     tableType: "won",
-    formType: "won",
+    formType_create: "won",
+    formType_edit: "won",
+    mutationType_create: "number",
+    mutationType_edit: "number",
+    editable: true,
   },
   {
     Header: "제품 링크",
@@ -140,9 +177,12 @@ export const questionColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "특이사항",
@@ -151,9 +191,12 @@ export const questionColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "textarea",
+    formType_create: "textarea",
+    formType_edit: "textarea",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "대행사",
@@ -162,9 +205,12 @@ export const questionColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "boolean",
     tableType: "boolean",
-    formType: "boolean",
+    formType_create: "boolean",
+    formType_edit: "boolean",
+    mutationType_create: "boolean",
+    mutationType_edit: "boolean",
+    editable: true,
   },
   {
     Header: "태그",
@@ -173,9 +219,12 @@ export const questionColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "dataId",
@@ -184,9 +233,12 @@ export const questionColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "number",
-    tableType: "string",
-    formType: "string",
+    tableType: "hidden",
+    formType_create: "hidden",
+    formType_edit: "hidden",
+    mutationType_create: "hidden",
+    mutationType_edit: "number",
+    editable: false,
   },
 ];
 
@@ -194,22 +246,3 @@ export const rawQuestionColumnsAtom = atom({
   key: "rawQuestionColumnsAtom",
   default: questionColumnsDefault,
 });
-
-// export const questionColumnsData = atom({
-//   key: "questionColumnsData",
-//   default: questionColumnsDefault,
-// });
-
-// export const useQuestionColumnsDataOnChange = () => {
-//   const [questionColumnsDataState, setQuestionColumnsDataState] =
-//     useRecoilState(questionColumnsData);
-
-//   const onChange = (e, id) => {
-//     setQuestionColumnsDataState((columnsData) =>
-//       columnsData.map((val, idx) =>
-//         idx === id ? { ...val, value: e.target.value } : val
-//       )
-//     );
-//   };
-//   return onChange;
-// };

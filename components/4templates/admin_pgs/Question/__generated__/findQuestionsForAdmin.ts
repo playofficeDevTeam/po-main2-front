@@ -18,6 +18,7 @@ export interface findQuestionsForAdmin_findQuestionsForAdmin_questions {
   __typename: "Question";
   id: number;
   createdAt: any;
+  mention: string | null;
   brandName: string | null;
   tags: string | null;
   name: string | null;

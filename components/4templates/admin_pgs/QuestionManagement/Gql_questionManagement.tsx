@@ -8,6 +8,7 @@ export const FIND_ALL_QUESTION_MANAGEMENT = gql`
       questionManagements {
         id
         createdAt
+        mention
         stateDate
         stateName
         state
@@ -31,6 +32,8 @@ export const CREATE_QUESTION_MANAGEMENT = gql`
     createQuestionManagement(input: $input) {
       ok
       error
+      id
+      createdAt
     }
   }
 `;
@@ -40,6 +43,8 @@ export const EDIT_QUESTION_MANAGEMENT = gql`
     editQuestionManagement(input: $input) {
       ok
       error
+      id
+      createdAt
     }
   }
 `;

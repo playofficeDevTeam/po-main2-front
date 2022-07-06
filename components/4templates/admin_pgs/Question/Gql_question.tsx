@@ -8,6 +8,7 @@ export const FIND_QUESTIONS_FOR_ADMIN = gql`
       questions {
         id
         createdAt
+        mention
         brandName
         tags
         name

@@ -25,12 +25,8 @@ import Modal_adminCreate, {
 import Modal_adminEdit, {
   isModal_adminEditOpenAtom,
 } from "../Org_adminTable/Modal_adminEdit";
-import { dateList } from "../Org_adminTable/tableViewTypeList";
 import { useTokenCheck } from "../../hooks/useTokenCheck";
-import {
-  columnsMutationType,
-  formFocus,
-} from "../Org_adminTable/fn_inputControl";
+import { columnsMutationType, formFocus } from "./fn_inputControl";
 import dayjs from "dayjs";
 import { dateToInput } from "../Org_adminTable/fn_dateToInput";
 import {
@@ -46,6 +42,7 @@ import { dateTime } from "../Org_adminTable/fn_DateTime";
 import Atm_mentionInput from "../Org_adminTable/Atm_mentionInput";
 import mentionToArray from "./mentionToArray";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 export const TableStyles = styled.div`
   width: max-content;
@@ -245,23 +242,12 @@ const ColumnIndeterminateCheckbox = forwardRef<HTMLInputElement>(
 ColumnIndeterminateCheckbox.displayName = "ColumnIndeterminateCheckbox";
 
 // 테이블 컴포넌트
-// 테이블 컴포넌트
-// 테이블 컴포넌트
-// 테이블 컴포넌트
-// 테이블 컴포넌트
-// 테이블 컴포넌트
-// 테이블 컴포넌트
-// 테이블 컴포넌트
-// 테이블 컴포넌트
-// 테이블 컴포넌트
 function Table({
   columns,
   data,
-  query,
   createMutation,
   editMutation,
   deleteMutation,
-  exceptionData,
   rawColumnsAtom,
   options,
 }) {
@@ -294,6 +280,8 @@ function Table({
   );
   const [rawColumns, setRawColumns] = useRecoilState(rawColumnsAtom);
 
+  const route = useRouter();
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -322,6 +310,10 @@ function Table({
       autoResetRowState: false,
       initialState: {
         sortBy: useMemo(() => [{ id: "createdAt", desc: true }], []),
+        filters: useMemo(
+          () => [{ id: "createdAt", value: route.query.createdAt || "" }],
+          []
+        ),
       },
     },
     useFilters,
@@ -380,10 +372,10 @@ function Table({
           {row.cells.map((cell, idx) => {
             return (
               <>
-                {!exceptionData.table.includes(cell.column.id) && (
+                {cell.column.tableType !== "hidden" && (
                   <div
                     {...cell.getCellProps()}
-                    className={`thin-scroll  td group border-r px-2 border-gray-300
+                    className={`thin-scroll overflow-x-auto  td group border-r px-2 border-gray-300
                        ${
                          selectedFlatRows
                            .map((val) => val.id)
@@ -402,10 +394,10 @@ function Table({
                       }`}
                     >
                       {/* 커스텀 렌더링 */}
-                      {dateList.includes(cell.column.id) ? (
+                      {cell.column.tableType === "date" ? (
                         <>
                           <div className="">
-                            {cell.value.split("T")[0].substr(-8)}
+                            {cell.value?.split("T")[0].substr(-8)}
                           </div>
                           <div className="hidden">{cell.render("Cell")}</div>
                         </>
@@ -414,7 +406,7 @@ function Table({
                       )}
 
                       {/* 수정버튼 */}
-                      {!exceptionData.editBtn.includes(cell.column.id) && (
+                      {cell.column.editable === true && (
                         <div
                           className="hidden group-hover:block"
                           onClick={() => {
@@ -424,15 +416,19 @@ function Table({
                                 accessor: val?.column?.id,
                                 value: val?.value || "",
                                 selected: val?.column?.id === cell.column.id,
-                                mutationType: val?.column?.mutationType,
-                                tableType: val?.column?.tableType,
-                                formType: val?.column?.formType,
+                                formType_create: val.column?.formType_create,
+                                formType_edit: val.column?.formType_edit,
+                                mutationType_create:
+                                  val.column?.mutationType_create,
+                                mutationType_edit:
+                                  val.column?.mutationType_edit,
+                                editable: val.column?.editable,
                               })
                             );
                             const filteredCellValues = cellValues.filter(
-                              (e) =>
-                                !["selection", "newPage"].includes(e.accessor)
+                              (val) => !["selection"].includes(val.accessor)
                             );
+
                             setRawColumns(filteredCellValues);
                             setisModalOpen_edit(true);
                           }}
@@ -481,7 +477,6 @@ function Table({
         createMutation={createMutation}
         editMutation={editMutation}
         deleteMutation={deleteMutation}
-        exceptionData={exceptionData}
         rawColumnsAtom={rawColumnsAtom}
         selectedFlatRows={selectedFlatRows}
         getToggleHideAllColumnsProps={getToggleHideAllColumnsProps}
@@ -510,7 +505,7 @@ function Table({
             <tr {...headerGroup.getHeaderGroupProps()} key={idx}>
               {headerGroup.headers.map(
                 (column, idx) =>
-                  !exceptionData.table.includes(column.id) && (
+                  column.tableType !== "hidden" && (
                     <th {...column.getHeaderProps()} key={idx}>
                       <div
                         {...column.getSortByToggleProps()}
@@ -564,19 +559,11 @@ function Table({
 }
 
 //폼 컴포넌트
-//폼 컴포넌트
-//폼 컴포넌트
-//폼 컴포넌트
-//폼 컴포넌트
-//폼 컴포넌트
-//폼 컴포넌트
-//폼 컴포넌트
 function Form({
   columns,
   createMutation,
   editMutation,
   deleteMutation,
-  exceptionData,
   rawColumnsAtom,
   selectedFlatRows,
   getToggleHideAllColumnsProps,
@@ -604,24 +591,39 @@ function Form({
   };
   const [rawColumns, setRawColumns]: any = useRecoilState(rawColumnsAtom);
 
-  //폼 관리
-  const createInput = columnsMutationType(
-    formDataState,
-    exceptionData.createMutation
-  );
+  //멘션정보
+  const [mentionState, setMentionState] = useState("");
+  const mentionToInput = mentionState;
+
+  //폼 제출 관리
+  const createInput = columnsMutationType("create", formDataState);
+
+  const isMentionExist = columns.find((val) => val.accessor === "rawMention");
+
   const onSubmit_create = () => {
     tokenCheck("mutation", async () => {
+      console.log(createInput);
       try {
         setisModalOpen(false);
         const mutated = await createMutation[0]({
           variables: {
-            input: createInput,
+            input: isMentionExist
+              ? {
+                  ...createInput,
+                  mention: mentionToInput,
+                }
+              : createInput,
           },
         });
-        const dataValue: any = Object.values(mutated.data);
-        const createdAt = dataValue[0].createdAt;
-        if (options.mention) {
+        if (isMentionExist) {
+          const dataValue: any = Object.values(mutated.data);
+          const createdAt = dataValue[0].createdAt;
           const mentionArray = mentionToArray(mentionState);
+
+          const message = `<a href="${
+            window.location.href.split("?")[0]
+          }?createdAt=${createdAt}">해당 멘션으로 바로가기</a>`;
+
           mentionArray.forEach((val) => {
             axios.post(
               process.env.NEXT_PUBLIC_API_HOST + "/auth/ms/send-chat",
@@ -629,11 +631,12 @@ function Form({
                 nicknameToSend:
                   findMeforAdminData?.findMeforAdmin.admin?.nickname,
                 nicknameToReceive: val,
-                message: createdAt,
+                message,
               }
             );
           });
         }
+        setMentionState("");
         setFormDataState(columns);
       } catch (error) {
         const errorString: string = error + "";
@@ -642,20 +645,44 @@ function Form({
       }
     });
   };
-
-  const editInput = columnsMutationType(
-    formDataState,
-    exceptionData.editMutation
-  );
+  const editInput = columnsMutationType("edit", formDataState);
   const onSubmit_edit = () => {
-    tokenCheck("mutation", () => {
+    tokenCheck("mutation", async () => {
       try {
         setisEditModalOpen(false);
-        editMutation[0]({
+        const mutated = await editMutation[0]({
           variables: {
-            input: editInput,
+            input: isMentionExist
+              ? {
+                  ...editInput,
+                  mention: mentionToInput,
+                }
+              : createInput,
           },
         });
+
+        if (isMentionExist) {
+          const dataValue: any = Object.values(mutated.data);
+          const createdAt = dataValue[0].createdAt;
+          const mentionArray = mentionToArray(mentionState);
+
+          const message = `<a href="${
+            window.location.href.split("?")[0]
+          }?createdAt=${createdAt}">해당 멘션으로 바로가기</a>`;
+
+          mentionArray.forEach((val) => {
+            axios.post(
+              process.env.NEXT_PUBLIC_API_HOST + "/auth/ms/send-chat",
+              {
+                nicknameToSend:
+                  findMeforAdminData?.findMeforAdmin.admin?.nickname,
+                nicknameToReceive: val,
+                message,
+              }
+            );
+          });
+        }
+        setMentionState("");
         setFormDataState(columns);
       } catch (error) {
         const errorString: string = error + "";
@@ -668,12 +695,16 @@ function Form({
   // 생성시 포커싱
   useEffect(() => {
     if (isModalOpen) {
-      formFocus(exceptionData.focusId);
+      setMentionState("");
+      formFocus(columns.find((val) => val.selected === true).accessor);
     }
   }, [isModalOpen]);
 
   //수정시 테이블데이터 반영 및 포커싱
   useEffect(() => {
+    setMentionState(
+      rawColumns.find((val) => val.accessor === "rawMention")?.value || ""
+    );
     setFormDataState(rawColumns);
     setTimeout(() => {
       formFocus(rawColumns.find((val) => val.selected)?.accessor || "");
@@ -736,9 +767,6 @@ function Form({
     };
   }, [findMeforAdminData]);
 
-  //멘션정보
-  const [mentionState, setMentionState] = useState("");
-
   return (
     <>
       {/* 메뉴 */}
@@ -762,7 +790,7 @@ function Form({
                   }}
                 >
                   <ul>
-                    {options.mention && (
+                    {isMentionExist && (
                       <li>
                         <div className="">멘션</div>
                         <Atm_mentionInput
@@ -775,10 +803,10 @@ function Form({
                     )}
                     {formDataState.map(
                       (val, idx) =>
-                        !exceptionData.createForm.includes(val.accessor) && (
+                        val.formType_create !== "hidden" && (
                           <li key={idx} className="flex items-center">
                             <div className="w-28 flex pl-1">{val.Header}</div>
-                            {val.formType === "textarea" ? (
+                            {val.formType_create === "textarea" ? (
                               <textarea
                                 id={val.accessor}
                                 value={val.value}
@@ -787,6 +815,16 @@ function Form({
                                 }}
                                 className="border w-96 p-1 m-1"
                               ></textarea>
+                            ) : val.formType_create === "date" ? (
+                              <input
+                                id={val.accessor}
+                                value={dateToInput(val.value)}
+                                onChange={(e) => {
+                                  onChange(e, idx);
+                                }}
+                                className="border w-96 p-1 m-1"
+                                type={`date`}
+                              />
                             ) : (
                               <input
                                 id={val.accessor}
@@ -806,8 +844,11 @@ function Form({
                     <div
                       className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
                       onClick={() => {
+                        setMentionState("");
                         setFormDataState(columns);
-                        formFocus(exceptionData.focusId);
+                        formFocus(
+                          columns.find((val) => val.selected === true).accessor
+                        );
                       }}
                     >
                       초기화
@@ -843,7 +884,7 @@ function Form({
                   }}
                 >
                   <ul>
-                    {options.mention && (
+                    {isMentionExist && (
                       <li>
                         <div className="">멘션</div>
                         <Atm_mentionInput
@@ -856,10 +897,10 @@ function Form({
                     )}
                     {formDataState.map(
                       (val, idx) =>
-                        !exceptionData.editForm.includes(val.accessor) && (
+                        val.formType_edit !== "hidden" && (
                           <li key={idx} className="flex items-center">
                             <div className="w-28 flex pl-1">{val.Header}</div>
-                            {val.formType === "textarea" ? (
+                            {val.formType_edit === "textarea" ? (
                               <textarea
                                 id={val.accessor}
                                 value={val.value}
@@ -868,6 +909,16 @@ function Form({
                                 }}
                                 className="border w-96 p-1 m-1"
                               ></textarea>
+                            ) : val.formType_edit === "date" ? (
+                              <input
+                                id={val.accessor}
+                                value={dateToInput(val.value)}
+                                onChange={(e) => {
+                                  onChange(e, idx);
+                                }}
+                                className="border w-96 p-1 m-1"
+                                type={`date`}
+                              />
                             ) : (
                               <input
                                 id={val.accessor}
@@ -1006,11 +1057,9 @@ function Form({
 function App({
   columns,
   data,
-  query,
   createMutation,
   editMutation,
   deleteMutation,
-  exceptionData,
   rawColumnsAtom,
   options,
 }) {
@@ -1020,11 +1069,9 @@ function App({
         <Table
           columns={columns}
           data={data}
-          query={query}
           createMutation={createMutation}
           editMutation={editMutation}
           deleteMutation={deleteMutation}
-          exceptionData={exceptionData}
           rawColumnsAtom={rawColumnsAtom}
           options={options}
         />

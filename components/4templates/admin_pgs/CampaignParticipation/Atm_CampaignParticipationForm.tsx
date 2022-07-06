@@ -8,7 +8,7 @@ import { formSelector } from "../../../3organisms/Org_adminTable/fn_formSelector
 import {
   formFocus,
   columnsInput,
-} from "../../../3organisms/Org_adminTable/fn_inputControl";
+} from "../../../3organisms/Org_adminTable2/fn_inputControl";
 import Modal_adminCreate, {
   isModal_adminCreateOpenAtom,
 } from "../../../3organisms/Org_adminTable/Modal_adminCreate";

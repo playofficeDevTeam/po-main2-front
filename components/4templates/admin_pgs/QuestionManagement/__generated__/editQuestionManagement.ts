@@ -13,6 +13,8 @@ export interface editQuestionManagement_editQuestionManagement {
   __typename: "EditQuestionManagementOutput";
   ok: boolean;
   error: string | null;
+  id: number | null;
+  createdAt: any | null;
 }
 
 export interface editQuestionManagement {

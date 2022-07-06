@@ -185,6 +185,7 @@ export interface CreateQuestionForAdminInput {
   createdAt?: any | null;
   updatedAt?: any | null;
   tags?: string | null;
+  mention?: string | null;
   brandName?: string | null;
   name?: string | null;
   phoneNumber?: string | null;
@@ -206,6 +207,7 @@ export interface CreateQuestionInput {
   createdAt?: any | null;
   updatedAt?: any | null;
   tags?: string | null;
+  mention?: string | null;
   brandName?: string | null;
   name?: string | null;
   phoneNumber?: string | null;
@@ -225,6 +227,7 @@ export interface CreateQuestionManagementInput {
   id?: number | null;
   createdAt?: any | null;
   updatedAt?: any | null;
+  mention?: string | null;
   stateDate?: any | null;
   stateName?: string | null;
   state?: string | null;
@@ -416,6 +419,7 @@ export interface EditQuestionInput {
   createdAt?: any | null;
   updatedAt?: any | null;
   tags?: string | null;
+  mention?: string | null;
   brandName?: string | null;
   name?: string | null;
   phoneNumber?: string | null;
@@ -435,6 +439,7 @@ export interface EditQuestionInput {
 export interface EditQuestionManagementInput {
   createdAt?: any | null;
   updatedAt?: any | null;
+  mention?: string | null;
   stateDate?: any | null;
   stateName?: string | null;
   state?: string | null;
@@ -588,6 +593,7 @@ export interface paymentInputType {
 
 export interface questionInputType {
   tags?: string | null;
+  mention?: string | null;
   brandName?: string | null;
   name?: string | null;
   phoneNumber?: string | null;
@@ -604,6 +610,7 @@ export interface questionInputType {
 }
 
 export interface questionManagementInputType {
+  mention?: string | null;
   stateDate?: any | null;
   stateName?: string | null;
   state?: string | null;

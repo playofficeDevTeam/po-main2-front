@@ -55,7 +55,7 @@ import useShortCutEffect from "../../../3organisms/Org_adminTable/useShortCutEff
 import {
   formFocus,
   columnsInput,
-} from "../../../3organisms/Org_adminTable/fn_inputControl";
+} from "../../../3organisms/Org_adminTable2/fn_inputControl";
 
 //폼 컴포넌트
 function Form({ getToggleHideAllColumnsProps, allColumns, selectedFlatRows }) {

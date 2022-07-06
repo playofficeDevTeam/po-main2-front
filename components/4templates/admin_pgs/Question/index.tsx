@@ -17,7 +17,6 @@ import {
 } from "../Question/Gql_question";
 import {
   questionColumnsDefault,
-  questionExceptionData,
   rawQuestionColumnsAtom,
 } from "../Question/Var_questionColumns";
 import {
@@ -67,7 +66,7 @@ export default function App() {
     () =>
       query.data?.findQuestionsForAdmin.questions?.map((val, idx) => ({
         ...val,
-        createdAt: val.createdAt,
+        rawMention: val.mention,
         isAgency: val.isAgency?.toString(),
         brandName_partner: val.user?.nameId,
       })),
@@ -112,8 +111,6 @@ export default function App() {
       <Org_adminTable2
         columns={columns}
         data={questionsData}
-        exceptionData={questionExceptionData}
-        query={query}
         createMutation={createMutation}
         editMutation={editMutation}
         deleteMutation={deleteMutation}
@@ -121,7 +118,6 @@ export default function App() {
         options={{
           dateFilter: true,
           newPageLink: "/question-management",
-          mention: true,
           createHotkey: true,
           shortCutHotkey: true,
         }}
