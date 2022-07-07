@@ -21,6 +21,7 @@ export interface findIdQuestionManagement_findIdQuestionManagement_questionManag
   __typename: "QuestionManagement";
   id: number;
   createdAt: any;
+  mention: string | null;
   stateDate: any | null;
   stateName: string | null;
   state: string | null;

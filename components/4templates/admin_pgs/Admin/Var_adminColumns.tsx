@@ -5,48 +5,78 @@ export const adminColumnsDefault: IColumn[] = [
   {
     Header: "생성일",
     accessor: "createdAt",
-    value: "",
-    selected: false,
     width: 87,
     sortDescFirst: true,
-    inputType: "string",
+    value: "",
+    selected: false,
+    tableType: "date",
+    formType_create: "hidden",
+    formType_edit: "hidden",
+    mutationType_create: "hidden",
+    mutationType_edit: "hidden",
+    editable: false,
   },
   {
     Header: "이메일(ID)",
     accessor: "email",
-    value: "",
-    selected: false,
     width: 400,
     sortDescFirst: true,
-    inputType: "string",
+    value: "",
+    selected: true,
+    tableType: "string",
+    formType_create: "hidden",
+    formType_edit: "hidden",
+    mutationType_create: "hidden",
+    mutationType_edit: "hidden",
+    editable: false,
   },
   {
     Header: "닉네임",
     accessor: "nickname",
-    value: "",
-    selected: false,
     width: 300,
     sortDescFirst: true,
-    inputType: "string",
+    value: "",
+    selected: false,
+    tableType: "string",
+    formType_create: "hidden",
+    formType_edit: "hidden",
+    mutationType_create: "hidden",
+    mutationType_edit: "hidden",
+    editable: false,
   },
 
   {
     Header: "역할",
     accessor: "role",
+    width: 120,
+    sortDescFirst: true,
     value: "",
     selected: false,
-    width: 100,
-    sortDescFirst: true,
-    inputType: "string",
+    tableType: "translate",
+    translate: [
+      { key: "General", value: "일반" },
+      { key: "Super", value: "슈퍼" },
+    ],
+    formType_create: "select",
+    formType_edit: "select",
+    formSelectList: ["일반", "슈퍼"],
+    mutationType_create: "translate",
+    mutationType_edit: "translate",
+    editable: true,
   },
   {
     Header: "dataId",
     accessor: "id",
-    value: "",
-    selected: false,
     width: 0,
     sortDescFirst: true,
-    inputType: "number",
+    value: "",
+    selected: false,
+    tableType: "hidden",
+    formType_create: "hidden",
+    formType_edit: "hidden",
+    mutationType_create: "hidden",
+    mutationType_edit: "number",
+    editable: false,
   },
 ];
 
@@ -54,22 +84,3 @@ export const rawAdminColumnsData = atom({
   key: "rawAdminColumnsData",
   default: adminColumnsDefault,
 });
-
-export const adminColumnsData = atom({
-  key: "adminColumnsData",
-  default: adminColumnsDefault,
-});
-
-export const useAdminColumnsDataOnChange = () => {
-  const [adminColumnsDataState, setAdminColumnsDataState] =
-    useRecoilState(adminColumnsData);
-
-  const onChange = (e, id) => {
-    setAdminColumnsDataState((columnsData) =>
-      columnsData.map((val, idx) =>
-        idx === id ? { ...val, value: e.target.value } : val
-      )
-    );
-  };
-  return onChange;
-};

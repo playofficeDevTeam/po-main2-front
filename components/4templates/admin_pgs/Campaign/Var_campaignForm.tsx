@@ -2,16 +2,6 @@ import { atom, useRecoilState } from "recoil";
 import { IColumn } from "../../../3organisms/Org_adminTable2/interface_column";
 import { dateSmall } from "/home/app/components/3organisms/Org_adminTable/fn_DateSmall";
 
-export const campaignExceptionData = {
-  table: ["id"],
-  createForm: ["id", "createdAt"],
-  createMutation: ["id", "createdAt"],
-  editForm: ["id", "createdAt"],
-  editMutation: ["createdAt"],
-  editBtn: ["id", "createdAt", "selection"],
-  focusId: "brandName_partner",
-};
-
 const nowDate = dateSmall(new Date());
 export const campaignColumnsDefault: IColumn[] = [
   {
@@ -21,9 +11,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
-    tableType: "string",
-    formType: "string",
+    tableType: "date",
+    formType_create: "hidden",
+    formType_edit: "hidden",
+    mutationType_create: "hidden",
+    mutationType_edit: "hidden",
+    editable: false,
   },
   {
     Header: "매출일",
@@ -32,9 +25,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: nowDate,
     selected: false,
-    mutationType: "string",
-    tableType: "string",
-    formType: "string",
+    tableType: "date",
+    formType_create: "date",
+    formType_edit: "date",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "목표일",
@@ -43,9 +39,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: nowDate,
     selected: false,
-    mutationType: "string",
-    tableType: "string",
-    formType: "string",
+    tableType: "date",
+    formType_create: "date",
+    formType_edit: "date",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "브랜드명(R)",
@@ -53,10 +52,13 @@ export const campaignColumnsDefault: IColumn[] = [
     width: 150,
     sortDescFirst: true,
     value: "",
-    selected: false,
-    mutationType: "string",
+    selected: true,
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "누적차수",
@@ -65,9 +67,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "number",
     tableType: "string",
-    formType: "string",
+    formType_create: "number",
+    formType_edit: "number",
+    mutationType_create: "number",
+    mutationType_edit: "number",
+    editable: true,
   },
   {
     Header: "아이템명",
@@ -76,9 +81,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "키워드",
@@ -87,9 +95,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "매체",
@@ -98,9 +109,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "서비스명",
@@ -109,9 +123,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "형태",
@@ -120,9 +137,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "플랜",
@@ -131,9 +151,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "가격",
@@ -142,9 +165,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "number",
     tableType: "won",
-    formType: "won",
+    formType_create: "won",
+    formType_edit: "won",
+    mutationType_create: "number",
+    mutationType_edit: "number",
+    editable: true,
   },
   {
     Header: "수량",
@@ -153,9 +179,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "number",
     tableType: "string",
-    formType: "string",
+    formType_create: "number",
+    formType_edit: "number",
+    mutationType_create: "number",
+    mutationType_edit: "number",
+    editable: true,
   },
   {
     Header: "할인률",
@@ -164,9 +193,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "number",
     tableType: "string",
-    formType: "string",
+    formType_create: "number",
+    formType_edit: "number",
+    mutationType_create: "number",
+    mutationType_edit: "number",
+    editable: true,
   },
   {
     Header: "수수료",
@@ -175,9 +207,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "number",
     tableType: "won",
-    formType: "won",
+    formType_create: "won",
+    formType_edit: "won",
+    mutationType_create: "number",
+    mutationType_edit: "number",
+    editable: true,
   },
   {
     Header: "광고비",
@@ -186,9 +221,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "number",
     tableType: "won",
-    formType: "won",
+    formType_create: "won",
+    formType_edit: "won",
+    mutationType_create: "number",
+    mutationType_edit: "number",
+    editable: true,
   },
   {
     Header: "캠페인 담당자",
@@ -197,9 +235,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "판매 담당자",
@@ -208,9 +249,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "태그",
@@ -219,9 +263,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
     tableType: "string",
-    formType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
   },
   {
     Header: "dataId",
@@ -230,9 +277,12 @@ export const campaignColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    mutationType: "string",
-    tableType: "string",
-    formType: "string",
+    tableType: "hidden",
+    formType_create: "hidden",
+    formType_edit: "hidden",
+    mutationType_create: "hidden",
+    mutationType_edit: "number",
+    editable: false,
   },
 ];
 
@@ -240,21 +290,3 @@ export const rawCampaignColumnsData = atom({
   key: "rawCampaignColumnsData",
   default: campaignColumnsDefault,
 });
-export const campaignColumnsData = atom({
-  key: "campaignColumnsData",
-  default: campaignColumnsDefault,
-});
-
-export const useCampaignColumnsDataOnChange = () => {
-  const [campaignColumnsDataState, setCampaignColumnsDataState] =
-    useRecoilState(campaignColumnsData);
-
-  const onChange = (e, id) => {
-    setCampaignColumnsDataState((columnsData) =>
-      columnsData.map((val, idx) =>
-        idx === id ? { ...val, value: e.target.value } : val
-      )
-    );
-  };
-  return onChange;
-};

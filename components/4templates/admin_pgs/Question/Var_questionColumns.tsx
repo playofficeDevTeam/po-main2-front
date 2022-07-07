@@ -240,6 +240,20 @@ export const questionColumnsDefault: IColumn[] = [
     mutationType_edit: "number",
     editable: false,
   },
+  {
+    Header: "newPageId",
+    accessor: "newPageId",
+    width: 0,
+    sortDescFirst: true,
+    value: "",
+    selected: false,
+    tableType: "hidden",
+    formType_create: "hidden",
+    formType_edit: "hidden",
+    mutationType_create: "hidden",
+    mutationType_edit: "hidden",
+    editable: false,
+  },
 ];
 
 export const rawQuestionColumnsAtom = atom({

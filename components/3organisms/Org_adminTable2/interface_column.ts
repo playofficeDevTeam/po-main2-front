@@ -5,25 +5,54 @@ export type IColumn = {
   selected: boolean;
   width: number;
   sortDescFirst: boolean;
-  tableType: "hidden" | "string" | "boolean" | "won" | "newPage" | "date";
+  tableType:
+    | "hidden"
+    | "string"
+    | "boolean"
+    | "won"
+    | "newPage"
+    | "date"
+    | "translate";
+  translate?: {
+    key: string;
+    value: string;
+  }[];
   formType_create:
     | "hidden"
     | "string"
+    | "number"
     | "won"
     | "select"
     | "boolean"
     | "textarea"
-    | "date";
+    | "date"
+    | "array"
+    | "password";
   formType_edit:
     | "hidden"
     | "string"
+    | "number"
     | "won"
     | "select"
     | "boolean"
     | "textarea"
-    | "date";
-  mutationType_create: "hidden" | "string" | "number" | "boolean" | "array";
-  mutationType_edit: "hidden" | "string" | "number" | "boolean" | "array";
+    | "date"
+    | "array"
+    | "password";
+  mutationType_create:
+    | "hidden"
+    | "string"
+    | "number"
+    | "boolean"
+    | "array"
+    | "translate";
+  mutationType_edit:
+    | "hidden"
+    | "string"
+    | "number"
+    | "boolean"
+    | "array"
+    | "translate";
   editable: boolean;
 
   formSelectList?: Array<string>;

@@ -66,6 +66,7 @@ export default function App() {
       query.data?.findAllQuestionManagement.questionManagements?.map(
         (val, idx) => ({
           ...val,
+          newPageId: val.questionId,
           rawMention: val.mention,
           brandName: val.question?.brandName,
           product: val.question?.product,
@@ -121,7 +122,7 @@ export default function App() {
         options={{
           dateFilter: true,
           newPageLink: "/question-management",
-          createHotkey: true,
+          createFunction: false,
           shortCutHotkey: true,
         }}
       />

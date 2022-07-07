@@ -1,8 +1,7 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ColumnFilter,
-  DateFilter,
   GlobalFilter,
   IndeterminateCheckbox,
 } from "../../../3organisms/Org_adminTable/tableOptions";
@@ -24,71 +23,44 @@ import { useRecoilState } from "recoil";
 import { isModal_adminEditOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminEdit";
 import { dateList } from "../../../3organisms/Org_adminTable/tableViewTypeList";
 import TableStyle from "../../../3organisms/Org_adminTable/TableStyle";
-import { dateToInput } from "../../../3organisms/Org_adminTable/fn_dateToInput";
-import { isModal_adminCreateOpenAtom } from "../../../3organisms/Org_adminTable/Modal_adminCreate";
+import Atm_ItemForm from "./Atm_ItemForm";
+import { FIND_ALL_ITEM } from "./Gql_item";
 import {
-  tableFromDate,
-  tableToDate,
-} from "../../../3organisms/Org_adminTable/Var_tableInputDate";
-import { dateSmall } from "/home/app/components/3organisms/Org_adminTable/fn_DateSmall";
-import Atm_CampaignForm from "./Atm_CampaignForm";
-import {
-  campaignExceptionDataInEditBtn,
-  campaignExceptionDataInTable,
-} from "./campaignControlData";
-import {
-  campaignColumnsDefault,
-  campaignColumnsData,
-  rawCampaignColumnsData,
-} from "./Var_campaignColumns";
-import { FIND_CAMPAIGNS } from "../Campaign/Gql_campaign";
-import {
-  findCampaigns,
-  findCampaignsVariables,
-} from "./__generated__/findCampaigns";
+  itemExceptionDataInEditBtn,
+  itemExceptionDataInTable,
+} from "./itemControlData";
+import { itemColumnsDefault, rawItemColumnsData } from "./Var_itemColumns";
+import { findAllItems } from "./__generated__/findAllItems";
 import { datePrettier } from "../../../3organisms/Org_adminTable/fn_DatePrettier";
 
 export default function App() {
-  const [tableFromDateState, setTableFromDateState] =
-    useRecoilState(tableFromDate);
-  const [tableToDateState, setTableToDateState] = useRecoilState(tableToDate);
-
   //토큰체크
   const tokenCheck = useTokenCheck();
 
   //쿼리
   const {
-    loading: findCampaignsLoading,
-    error: findCampaignsError,
-    data: findCampaignsData,
+    loading: findAllItemsLoading,
+    error: findAllItemsError,
+    data: findAllItemsData,
     refetch,
-  } = useQuery<findCampaigns, findCampaignsVariables>(FIND_CAMPAIGNS, {
-    variables: {
-      input: {
-        fromDate: dateToInput(tableFromDateState),
-        toDate: dateToInput(tableToDateState),
-      },
-    },
-  });
+  } = useQuery<findAllItems>(FIND_ALL_ITEM);
   useEffect(() => {
     tokenCheck("query", refetch);
-  }, [findCampaignsData]);
+  }, [findAllItemsData]);
 
   //쿼리데이터 가공
-  const campaignsData = useMemo(
+  const itemData = useMemo(
     () =>
-      findCampaignsData?.findCampaigns.campaigns?.map((val, idx) => ({
+      findAllItemsData?.findAllItems.items?.map((val, idx) => ({
         ...val,
         createdAt: datePrettier(val.createdAt),
-        salesDate: dateSmall(val.salesDate),
-        targetDate: dateSmall(val.targetDate),
-        brandName_partner: val.partner?.nameId,
+        detailInfo: val.detailInfo?.join(", "),
       })),
-    [findCampaignsData]
+    [findAllItemsData]
   );
 
   //테이블 컬럼 가공
-  const columns = useMemo(() => campaignColumnsDefault, []);
+  const columns = useMemo(() => itemColumnsDefault, []);
 
   //테이블 컴포넌트
   function Table({ columns, data }) {
@@ -198,9 +170,8 @@ export default function App() {
     const [isModalOpen_edit, setisModalOpen_edit] = useRecoilState(
       isModal_adminEditOpenAtom
     );
-    const [rawCampaignColumns, setRawCampaignColumns] = useRecoilState(
-      rawCampaignColumnsData
-    );
+    const [rawItemColumns, setRawItemColumns] =
+      useRecoilState(rawItemColumnsData);
 
     //테이블 스타일
     const RenderRow = useCallback(
@@ -219,7 +190,7 @@ export default function App() {
             {row.cells.map((cell, idx) => {
               return (
                 <>
-                  {!campaignExceptionDataInTable.includes(cell.column.id) && (
+                  {!["id"].includes(cell.column.id) && (
                     <div
                       {...cell.getCellProps()}
                       className={`overflow-x-auto thin-scroll  td group border-r px-2 border-gray-300 
@@ -252,7 +223,7 @@ export default function App() {
                         )}
 
                         {/* 수정버튼 */}
-                        {!campaignExceptionDataInEditBtn.includes(
+                        {!itemExceptionDataInEditBtn.includes(
                           cell.column.id
                         ) && (
                           <div
@@ -270,7 +241,7 @@ export default function App() {
                               const filteredCellValues = cellValues.filter(
                                 (e) => !["selection"].includes(e.accessor)
                               );
-                              setRawCampaignColumns(filteredCellValues);
+                              setRawItemColumns(filteredCellValues);
                               setisModalOpen_edit(true);
                             }}
                           >
@@ -293,7 +264,7 @@ export default function App() {
 
     return (
       <>
-        <Atm_CampaignForm
+        <Atm_ItemForm
           getToggleHideAllColumnsProps={getToggleHideAllColumnsProps}
           allColumns={allColumns}
           selectedFlatRows={selectedFlatRows}
@@ -313,14 +284,14 @@ export default function App() {
                   globalFilter={state.globalFilter}
                   setGlobalFilter={setGlobalFilter}
                 />
-                <DateFilter refetch={refetch} />
+                {/* <DateFilter refetch={refetch} /> */}
               </th>
             </tr>
             {headerGroups.map((headerGroup, idx) => (
               <tr {...headerGroup.getHeaderGroupProps()} key={idx}>
                 {headerGroup.headers.map(
                   (column, idx) =>
-                    !campaignExceptionDataInTable.includes(column.id) && (
+                    !itemExceptionDataInTable.includes(column.id) && (
                       <th {...column.getHeaderProps()} key={idx}>
                         <div
                           {...column.getSortByToggleProps()}
@@ -383,15 +354,15 @@ export default function App() {
     );
   }
 
-  if (findCampaignsError) {
+  if (findAllItemsError) {
     return (
       <TableStyle>
         권한이 없습니다.
-        <div className="">{findCampaignsError.toString()}</div>
+        <div className="">{findAllItemsError.toString()}</div>
       </TableStyle>
     );
   }
-  if (findCampaignsLoading) {
+  if (findAllItemsLoading) {
     return (
       <TableStyle>
         <div className=""></div>
@@ -401,7 +372,7 @@ export default function App() {
 
   return (
     <TableStyle>
-      <Table columns={columns} data={campaignsData} />
+      <Table columns={columns} data={itemData} />
     </TableStyle>
   );
 }

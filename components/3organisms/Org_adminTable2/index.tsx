@@ -43,6 +43,8 @@ import Atm_mentionInput from "../Org_adminTable/Atm_mentionInput";
 import mentionToArray from "./mentionToArray";
 import axios from "axios";
 import { useRouter } from "next/router";
+import St_label from "../Org_adminTable/St_label";
+import { AdminRole } from "../../../__generated__/globalTypes";
 
 export const TableStyles = styled.div`
   width: max-content;
@@ -416,8 +418,10 @@ function Table({
                                 accessor: val?.column?.id,
                                 value: val?.value || "",
                                 selected: val?.column?.id === cell.column.id,
+                                translate: val.column?.translate,
                                 formType_create: val.column?.formType_create,
                                 formType_edit: val.column?.formType_edit,
+                                formSelectList: val.column?.formSelectList,
                                 mutationType_create:
                                   val.column?.mutationType_create,
                                 mutationType_edit:
@@ -449,7 +453,7 @@ function Table({
                                 "/admin" +
                                   options.newPageLink +
                                   "/" +
-                                  cell.row.values.id
+                                  cell.row.values.newPageId
                               );
                             }}
                           >
@@ -596,23 +600,30 @@ function Form({
   const mentionToInput = mentionState;
 
   //폼 제출 관리
-  const createInput = columnsMutationType("create", formDataState);
-
   const isMentionExist = columns.find((val) => val.accessor === "rawMention");
-
+  const createInput = columnsMutationType("create", formDataState);
   const onSubmit_create = () => {
     tokenCheck("mutation", async () => {
-      console.log(createInput);
       try {
+        if (
+          formDataState.find((val) => val.accessor === "password")?.value !==
+          formDataState.find((val) => val.accessor === "passwordCheck")?.value
+        ) {
+          throw "비밀번호가 일치하지 않습니다";
+        }
+
         setisModalOpen(false);
+        const mentionInputObject = isMentionExist
+          ? { mention: mentionToInput }
+          : {};
+
         const mutated = await createMutation[0]({
           variables: {
-            input: isMentionExist
-              ? {
-                  ...createInput,
-                  mention: mentionToInput,
-                }
-              : createInput,
+            input: {
+              ...createInput,
+              ...mentionInputObject,
+              ...options.extraCreateInputObject,
+            },
           },
         });
         if (isMentionExist) {
@@ -649,15 +660,24 @@ function Form({
   const onSubmit_edit = () => {
     tokenCheck("mutation", async () => {
       try {
+        if (
+          formDataState.find((val) => val.accessor === "password")?.value !==
+          formDataState.find((val) => val.accessor === "passwordCheck")?.value
+        ) {
+          throw "비밀번호가 일치하지 않습니다";
+        }
+
         setisEditModalOpen(false);
+        const mentionInputObject = isMentionExist
+          ? { mention: mentionToInput }
+          : {};
         const mutated = await editMutation[0]({
           variables: {
-            input: isMentionExist
-              ? {
-                  ...editInput,
-                  mention: mentionToInput,
-                }
-              : createInput,
+            input: {
+              ...editInput,
+              ...mentionInputObject,
+              ...options.extraEditInputObject,
+            },
           },
         });
 
@@ -728,35 +748,37 @@ function Form({
           //시프트 c 누를때 생성
           if (
             [67].includes(e.keyCode) &&
-            options.createHotkey &&
+            options.createFunction &&
             !isEditModalOpen
           ) {
             setisModalOpen(true);
           }
-          //시프트 s/d누를때 닉네임/데이트 생성
-          if ([83, 68].includes(e.keyCode) && options.shortCutHotkey) {
-            let newContent;
-            if ([83].includes(e.keyCode)) {
-              newContent = findMeforAdminData?.findMeforAdmin.admin?.nickname;
-            } else if ([68].includes(e.keyCode)) {
-              const date = new Date();
-              const prettyDate = dateTime(date);
-              newContent =
-                findMeforAdminData?.findMeforAdmin.admin?.nickname +
-                " " +
-                prettyDate;
+          //컨트롤 시프트 s/d누를때 닉네임/데이트 생성
+          if (e.ctrlKey) {
+            if ([83, 68].includes(e.keyCode) && options.shortCutHotkey) {
+              let newContent;
+              if ([83].includes(e.keyCode)) {
+                newContent = findMeforAdminData?.findMeforAdmin.admin?.nickname;
+              } else if ([68].includes(e.keyCode)) {
+                const date = new Date();
+                const prettyDate = dateTime(date);
+                newContent =
+                  findMeforAdminData?.findMeforAdmin.admin?.nickname +
+                  " " +
+                  prettyDate;
+              }
+              const focusedElement: any = document.activeElement;
+              const selectedValue = focusedElement.value;
+              setTimeout(() => {
+                setFormDataState((state) =>
+                  state.map((val) =>
+                    val.accessor === focusedElement.id
+                      ? { ...val, value: selectedValue + newContent }
+                      : val
+                  )
+                );
+              }, 0);
             }
-            const focusedElement: any = document.activeElement;
-            const selectedValue = focusedElement.value;
-            setTimeout(() => {
-              setFormDataState((state) =>
-                state.map((val) =>
-                  val.accessor === focusedElement.id
-                    ? { ...val, value: selectedValue + newContent }
-                    : val
-                )
-              );
-            }, 0);
           }
         }
       } catch (error) {}
@@ -772,104 +794,120 @@ function Form({
       {/* 메뉴 */}
       <div className="flex py-2 ">
         {/* 생성 */}
-        <div className="mr-3 cursor-pointer">
-          <Modal_adminCreate
-            data={{
-              button: (
-                <>
-                  <div className="center w-20 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500">
-                    <i className="fas fa-plus mr-2 text-sm"></i> 생성
-                  </div>
-                </>
-              ),
-              modal: (
-                <form
-                  onSubmit={(e) => {
-                    onSubmit_create();
-                    e.preventDefault();
-                  }}
-                >
-                  <ul>
-                    {isMentionExist && (
-                      <li>
-                        <div className="">멘션</div>
-                        <Atm_mentionInput
-                          value={mentionState}
-                          onChange={(e) => {
-                            setMentionState(e.target.value);
-                          }}
-                        />
-                      </li>
-                    )}
-                    {formDataState.map(
-                      (val, idx) =>
-                        val.formType_create !== "hidden" && (
-                          <li key={idx} className="flex items-center">
-                            <div className="w-28 flex pl-1">{val.Header}</div>
-                            {val.formType_create === "textarea" ? (
-                              <textarea
-                                id={val.accessor}
-                                value={val.value}
-                                onChange={(e) => {
-                                  onChange(e, idx);
-                                }}
-                                className="border w-96 p-1 m-1"
-                              ></textarea>
-                            ) : val.formType_create === "date" ? (
-                              <input
-                                id={val.accessor}
-                                value={dateToInput(val.value)}
-                                onChange={(e) => {
-                                  onChange(e, idx);
-                                }}
-                                className="border w-96 p-1 m-1"
-                                type={`date`}
-                              />
-                            ) : (
-                              <input
-                                id={val.accessor}
-                                value={val.value}
-                                onChange={(e) => {
-                                  onChange(e, idx);
-                                }}
-                                className="border w-96 p-1 m-1"
-                                type={`text`}
-                              />
-                            )}
-                          </li>
-                        )
-                    )}
-                  </ul>
-                  <div className="flex justify-end mt-2">
-                    <div
-                      className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                      onClick={() => {
-                        setMentionState("");
-                        setFormDataState(columns);
-                        formFocus(
-                          columns.find((val) => val.selected === true).accessor
-                        );
-                      }}
-                    >
-                      초기화
+        {options.createFunction && (
+          <div className="mr-3 cursor-pointer">
+            <Modal_adminCreate
+              data={{
+                button: (
+                  <>
+                    <div className="center w-20 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500">
+                      <i className="fas fa-plus mr-2 text-sm"></i> 생성
                     </div>
-                    <div
-                      className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                      onClick={() => {
-                        setisModalOpen(false);
-                      }}
-                    >
-                      취소
+                  </>
+                ),
+                modal: (
+                  <form
+                    onSubmit={(e) => {
+                      onSubmit_create();
+                      e.preventDefault();
+                    }}
+                  >
+                    <ul>
+                      {isMentionExist && (
+                        <li>
+                          <div className="">멘션</div>
+                          <Atm_mentionInput
+                            value={mentionState}
+                            onChange={(e) => {
+                              setMentionState(e.target.value);
+                            }}
+                          />
+                        </li>
+                      )}
+                      {formDataState.map(
+                        (val, idx) =>
+                          val.formType_create !== "hidden" && (
+                            <li key={idx} className="flex items-center">
+                              <div className="w-28 flex pl-1">{val.Header}</div>
+                              {val.formType_create === "textarea" ? (
+                                <textarea
+                                  id={val.accessor}
+                                  value={val.value}
+                                  onChange={(e) => {
+                                    onChange(e, idx);
+                                  }}
+                                  className="border w-96 p-1 m-1"
+                                ></textarea>
+                              ) : val.formType_create === "date" ? (
+                                <input
+                                  id={val.accessor}
+                                  value={dateToInput(val.value)}
+                                  onChange={(e) => {
+                                    onChange(e, idx);
+                                  }}
+                                  className="border w-96 p-1 m-1"
+                                  type={`date`}
+                                />
+                              ) : val.formType_edit === "select" ? (
+                                <select
+                                  id={val.accessor}
+                                  value={val.value}
+                                  onChange={(e) => {
+                                    onChange(e, idx);
+                                  }}
+                                  className="border w-96 p-1 m-1"
+                                >
+                                  {val.formSelectList.map((val2, idx2) => (
+                                    <option key={idx2}>{val2}</option>
+                                  ))}
+                                </select>
+                              ) : (
+                                <input
+                                  id={val.accessor}
+                                  value={val.value}
+                                  onChange={(e) => {
+                                    onChange(e, idx);
+                                  }}
+                                  className="border w-96 p-1 m-1"
+                                  type={`text`}
+                                />
+                              )}
+                            </li>
+                          )
+                      )}
+                    </ul>
+                    <div className="flex justify-end mt-2">
+                      <div
+                        className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                        onClick={() => {
+                          setMentionState("");
+                          setFormDataState(columns);
+                          formFocus(
+                            columns.find((val) => val.selected === true)
+                              .accessor
+                          );
+                        }}
+                      >
+                        초기화
+                      </div>
+                      <div
+                        className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                        onClick={() => {
+                          setisModalOpen(false);
+                        }}
+                      >
+                        취소
+                      </div>
+                      <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
+                        확인
+                      </button>
                     </div>
-                    <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
-                      확인
-                    </button>
-                  </div>
-                </form>
-              ),
-            }}
-          />
-        </div>
+                  </form>
+                ),
+              }}
+            />
+          </div>
+        )}
 
         {/* 수정모달 */}
         <div className="">
@@ -919,6 +957,19 @@ function Form({
                                 className="border w-96 p-1 m-1"
                                 type={`date`}
                               />
+                            ) : val.formType_edit === "select" ? (
+                              <select
+                                id={val.accessor}
+                                value={val.value}
+                                onChange={(e) => {
+                                  onChange(e, idx);
+                                }}
+                                className="border w-96 p-1 m-1"
+                              >
+                                {val.formSelectList.map((val2, idx2) => (
+                                  <option key={idx2}>{val2}</option>
+                                ))}
+                              </select>
                             ) : (
                               <input
                                 id={val.accessor}
@@ -1039,7 +1090,7 @@ function Form({
             onClick={() => {
               selectedFlatRows.forEach((val) => {
                 window.open(
-                  "/admin" + options.newPageLink + "/" + val.values.id
+                  "/admin" + options.newPageLink + "/" + val.values.newPageId
                 );
               });
             }}
@@ -1049,6 +1100,9 @@ function Form({
         ) : (
           <></>
         )}
+
+        {/* 타이틀 */}
+        {options.tableTitle && <St_label>{options.tableTitle}</St_label>}
       </div>
     </>
   );

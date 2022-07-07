@@ -17,6 +17,11 @@ export const columnsMutationType = (type: "create" | "edit", columns) => {
         return Boolean(+column.value);
       } else if (column.mutationType_create === "array") {
         return column.value.split(",").map((val) => val.trim());
+      } else if (column.mutationType_edit === "translate") {
+        const key = column.translate?.find(
+          (val2) => val2.value === column.value
+        )?.key;
+        return key;
       } else {
         return column.value;
       }
@@ -31,6 +36,11 @@ export const columnsMutationType = (type: "create" | "edit", columns) => {
         return Boolean(+column.value);
       } else if (column.mutationType_edit === "array") {
         return column.value.split(",").map((val) => val.trim());
+      } else if (column.mutationType_edit === "translate") {
+        const key = column.translate?.find(
+          (val2) => val2.value === column.value
+        )?.key;
+        return key;
       } else {
         return column.value;
       }

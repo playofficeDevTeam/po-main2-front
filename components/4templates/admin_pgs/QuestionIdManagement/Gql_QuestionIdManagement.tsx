@@ -8,6 +8,7 @@ export const FIND_ID_QUESTION_MANAGEMENT = gql`
       questionManagements {
         id
         createdAt
+        mention
         stateDate
         stateName
         state
