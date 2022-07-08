@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { FIND_ME_FOR_ADMIN } from "../../4templates/admin_pgs/Admin/Gql_admin";
 import { findMeforAdmin } from "../../4templates/admin_pgs/Admin/__generated__/findMeforAdmin";
-import { paymentColumnsData } from "../../4templates/admin_pgs/Payment/Var_paymentColumns";
 import { useTokenCheck } from "../../hooks/useTokenCheck";
 import { dateTime } from "./fn_DateTime";
 import { isModal_adminCreateOpenAtom } from "./Modal_adminCreate";

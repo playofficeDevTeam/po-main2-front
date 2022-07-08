@@ -169,7 +169,7 @@ function App() {
                     src={fn_base64ToSrc(
                       findMeforAdminData.findMeforAdmin.admin?.profilePicture
                     )}
-                    alt="프로필사진"
+                    alt="프로필"
                   />
                 </div>
               )}

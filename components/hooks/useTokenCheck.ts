@@ -16,7 +16,6 @@ export const useTokenCheck = () => {
     RenewalAdminAccessTokenVariables
   >(RENEWAL_ADMIN_ACCESS_TOKEN, {
     onCompleted: (data: RenewalAdminAccessToken) => {
-      console.log("refresh success");
       const {
         renewalAdminAccessToken: { ok, error, accessToken },
       } = data;
