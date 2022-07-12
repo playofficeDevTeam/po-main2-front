@@ -29,6 +29,7 @@ export interface AdminInputType {
   socialRefreshToken?: string | null;
   role?: AdminRole | null;
   refreshToken?: string | null;
+  questionsInCharge?: questionInputType[] | null;
 }
 
 export interface CampaignInputType {
@@ -88,6 +89,7 @@ export interface CreateAdminSuperInput {
   socialRefreshToken?: string | null;
   role?: AdminRole | null;
   refreshToken?: string | null;
+  questionsInCharge?: questionInputType[] | null;
 }
 
 export interface CreateCampaignInput {
@@ -199,7 +201,10 @@ export interface CreateQuestionForAdminInput {
   serviceInquired?: string | null;
   isAnalyzed?: boolean | null;
   questionManagements?: questionManagementInputType[] | null;
+  paymentDueDate?: any | null;
+  contactPerson?: AdminInputType | null;
   brandName_partner?: string | null;
+  contactPerson_nickname?: string | null;
 }
 
 export interface CreateQuestionInput {
@@ -221,6 +226,8 @@ export interface CreateQuestionInput {
   serviceInquired?: string | null;
   isAnalyzed?: boolean | null;
   questionManagements?: questionManagementInputType[] | null;
+  paymentDueDate?: any | null;
+  contactPerson?: AdminInputType | null;
 }
 
 export interface CreateQuestionManagementInput {
@@ -310,6 +317,7 @@ export interface EditAdminInput {
   socialRefreshToken?: string | null;
   role?: AdminRole | null;
   refreshToken?: string | null;
+  questionsInCharge?: questionInputType[] | null;
   id: number;
 }
 
@@ -384,6 +392,7 @@ export interface EditMeForAdminInput {
   socialRefreshToken?: string | null;
   role?: AdminRole | null;
   refreshToken?: string | null;
+  questionsInCharge?: questionInputType[] | null;
 }
 
 export interface EditPaymentFormDataInput {
@@ -433,7 +442,10 @@ export interface EditQuestionInput {
   serviceInquired?: string | null;
   isAnalyzed?: boolean | null;
   questionManagements?: questionManagementInputType[] | null;
+  paymentDueDate?: any | null;
+  contactPerson?: AdminInputType | null;
   brandName_partner?: string | null;
+  contactPerson_nickname?: string | null;
 }
 
 export interface EditQuestionManagementInput {
@@ -607,6 +619,8 @@ export interface questionInputType {
   serviceInquired?: string | null;
   isAnalyzed?: boolean | null;
   questionManagements?: questionManagementInputType[] | null;
+  paymentDueDate?: any | null;
+  contactPerson?: AdminInputType | null;
 }
 
 export interface questionManagementInputType {

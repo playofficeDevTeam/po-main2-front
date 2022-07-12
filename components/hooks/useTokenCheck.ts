@@ -65,6 +65,8 @@ export const useTokenCheck = () => {
       }
 
       if (["Super", "General"].includes(refreshTokenRole)) {
+        accessTokenVar(accessToken);
+        adminLoggedInVar(true);
         if (!accessToken || accessTokenExpired - nowTime < marginTime) {
           await renewalAdminAccessToken({
             variables: {
@@ -78,7 +80,6 @@ export const useTokenCheck = () => {
           if (type === "mutation") {
             callback();
           }
-          adminLoggedInVar(true);
         }
       } else if (["Partner", "Creator"].includes(refreshTokenRole)) {
       } else {

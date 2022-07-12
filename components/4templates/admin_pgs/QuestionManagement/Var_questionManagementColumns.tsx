@@ -65,7 +65,7 @@ export const questionManagementColumnsDefault: IColumn[] = [
     accessor: "stateDate",
     value: nowDate,
     selected: false,
-    width: 97,
+    width: 100,
     sortDescFirst: true,
     tableType: "date",
     formType_create: "date",

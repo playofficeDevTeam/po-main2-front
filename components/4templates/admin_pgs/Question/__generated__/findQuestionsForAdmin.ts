@@ -14,6 +14,11 @@ export interface findQuestionsForAdmin_findQuestionsForAdmin_questions_user {
   nameId: string | null;
 }
 
+export interface findQuestionsForAdmin_findQuestionsForAdmin_questions_contactPerson {
+  __typename: "Admin";
+  nickname: string | null;
+}
+
 export interface findQuestionsForAdmin_findQuestionsForAdmin_questions {
   __typename: "Question";
   id: number;
@@ -29,6 +34,8 @@ export interface findQuestionsForAdmin_findQuestionsForAdmin_questions {
   uniqueness: string | null;
   isAgency: boolean | null;
   user: findQuestionsForAdmin_findQuestionsForAdmin_questions_user | null;
+  contactPerson: findQuestionsForAdmin_findQuestionsForAdmin_questions_contactPerson | null;
+  paymentDueDate: any | null;
   product: string | null;
   serviceInquired: string | null;
   isAnalyzed: boolean | null;

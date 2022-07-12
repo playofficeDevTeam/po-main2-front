@@ -70,6 +70,7 @@ export default function App() {
         rawMention: val.mention,
         isAgency: val.isAgency?.toString(),
         brandName_partner: val.user?.nameId,
+        contactPerson_nickname: val.contactPerson?.nickname,
       })),
     [query.data]
   );

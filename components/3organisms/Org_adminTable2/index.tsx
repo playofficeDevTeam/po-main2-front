@@ -612,7 +612,6 @@ function Form({
           throw "비밀번호가 일치하지 않습니다";
         }
 
-        setisModalOpen(false);
         const mentionInputObject = isMentionExist
           ? { mention: mentionToInput }
           : {};
@@ -626,6 +625,7 @@ function Form({
             },
           },
         });
+
         if (isMentionExist) {
           const dataValue: any = Object.values(mutated.data);
           const createdAt = dataValue[0].createdAt;
@@ -647,6 +647,7 @@ function Form({
             );
           });
         }
+        setisModalOpen(false);
         setMentionState("");
         setFormDataState(columns);
       } catch (error) {
@@ -667,7 +668,6 @@ function Form({
           throw "비밀번호가 일치하지 않습니다";
         }
 
-        setisEditModalOpen(false);
         const mentionInputObject = isMentionExist
           ? { mention: mentionToInput }
           : {};
@@ -702,6 +702,7 @@ function Form({
             );
           });
         }
+        setisEditModalOpen(false);
         setMentionState("");
         setFormDataState(columns);
       } catch (error) {
@@ -1032,7 +1033,8 @@ function Form({
                 </div>
                 {allColumns.map(
                   (column) =>
-                    !["selection", "id"].includes(column.id) && (
+                    !["selection"].includes(column.id) &&
+                    column.tableType !== "hidden" && (
                       <div key={column.id} className="py-1">
                         <label className="flex items-center cursor-pointer">
                           <input

@@ -1,6 +1,8 @@
 import { atom } from "recoil";
+import { dateSmall } from "../../../3organisms/Org_adminTable/fn_DateSmall";
 import { IColumn } from "../../../3organisms/Org_adminTable2/interface_column";
 
+const nowDate = dateSmall(new Date());
 export const questionColumnsDefault: IColumn[] = [
   {
     Header: "생성일",
@@ -59,7 +61,7 @@ export const questionColumnsDefault: IColumn[] = [
     editable: true,
   },
   {
-    Header: "브랜드명",
+    Header: "브랜드명*",
     accessor: "brandName",
     width: 150,
     sortDescFirst: true,
@@ -115,7 +117,7 @@ export const questionColumnsDefault: IColumn[] = [
     editable: true,
   },
   {
-    Header: "이름",
+    Header: "이름*",
     accessor: "name",
     width: 150,
     sortDescFirst: true,
@@ -129,7 +131,7 @@ export const questionColumnsDefault: IColumn[] = [
     editable: true,
   },
   {
-    Header: "연락처",
+    Header: "연락처*",
     accessor: "phoneNumber",
     width: 150,
     sortDescFirst: true,
@@ -143,7 +145,7 @@ export const questionColumnsDefault: IColumn[] = [
     editable: true,
   },
   {
-    Header: "이메일",
+    Header: "이메일*",
     accessor: "email",
     width: 150,
     sortDescFirst: true,
@@ -215,6 +217,34 @@ export const questionColumnsDefault: IColumn[] = [
   {
     Header: "태그",
     accessor: "tags",
+    width: 150,
+    sortDescFirst: true,
+    value: "",
+    selected: false,
+    tableType: "string",
+    formType_create: "string",
+    formType_edit: "string",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
+  },
+  {
+    Header: "결제 예정일",
+    accessor: "paymentDueDate",
+    width: 100,
+    sortDescFirst: true,
+    value: nowDate,
+    selected: false,
+    tableType: "date",
+    formType_create: "date",
+    formType_edit: "date",
+    mutationType_create: "string",
+    mutationType_edit: "string",
+    editable: true,
+  },
+  {
+    Header: "문의 담당자",
+    accessor: "contactPerson_nickname",
     width: 150,
     sortDescFirst: true,
     value: "",

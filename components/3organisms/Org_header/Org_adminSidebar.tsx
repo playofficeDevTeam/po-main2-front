@@ -1,20 +1,11 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { memo, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { atom, useRecoilState } from "recoil";
-import {
-  EDIT_ME_FOR_ADMIN,
-  FIND_ME_FOR_ADMIN,
-} from "../../4templates/admin_pgs/Admin/Gql_admin";
-import { editMeForAdmin } from "../../4templates/admin_pgs/Admin/__generated__/editMeForAdmin";
-import { adminLoggedInVar, refreshTokenVar } from "../../common/apollo";
+import { atom } from "recoil";
+import { FIND_ME_FOR_ADMIN } from "../../4templates/admin_pgs/Admin/Gql_admin";
+import { adminLoggedInVar } from "../../common/apollo";
 import { useTokenCheck } from "../../hooks/useTokenCheck";
-import Modal_changPassword, {
-  isModal_changePasswordAtom,
-} from "./Modal_changPassword";
-import * as jwt from "jsonwebtoken";
 import { findMeforAdmin } from "../../4templates/admin_pgs/Admin/__generated__/findMeforAdmin";
 import fn_base64ToSrc from "../../4templates/admin_pgs/Admin/fn_base64ToSrc";
 
@@ -105,9 +96,6 @@ function App() {
   }, [findMeforAdminData]);
 
   const [sideBarOpenState, setSideBarOpenState] = useState(true);
-
-  const [editMeForAdminMutation, { data: editMeForAdminData }] =
-    useMutation<editMeForAdmin>(EDIT_ME_FOR_ADMIN);
 
   return (
     <div className=" relative z-50">

@@ -21,6 +21,10 @@ export const FIND_QUESTIONS_FOR_ADMIN = gql`
         user {
           nameId
         }
+        contactPerson {
+          nickname
+        }
+        paymentDueDate
         product
         serviceInquired
         isAnalyzed
