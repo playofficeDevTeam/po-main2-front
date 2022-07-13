@@ -19,6 +19,9 @@ export const FIND_PAYMENTS = gql`
         user {
           nameId
         }
+        salesPerson {
+          nickname
+        }
       }
     }
   }
@@ -29,6 +32,7 @@ export const CREATE_PAYMENT_FOR_ADMIN = gql`
     createPaymentForAdmin(input: $input) {
       ok
       error
+      createdAt
     }
   }
 `;

@@ -1,7 +1,7 @@
-import { atom, useRecoilState } from "recoil";
-import { IColumn } from "../../../3organisms/Org_adminTable2/interface_column";
+import { atom } from "recoil";
+import { IColumn } from "../../../../3organisms/Org_adminTable2/interface_column";
 
-export const paymentColumnsDefault: IColumn[] = [
+export const paymentColumnsDefault_general: IColumn[] = [
   {
     Header: "생성일",
     accessor: "createdAt",
@@ -122,11 +122,11 @@ export const paymentColumnsDefault: IColumn[] = [
     value: "",
     selected: false,
     tableType: "string",
-    formType_create: "string",
-    formType_edit: "string",
+    formType_create: "hidden",
+    formType_edit: "hidden",
     mutationType_create: "string",
     mutationType_edit: "string",
-    editable: true,
+    editable: false,
   },
   {
     Header: "태그",
@@ -172,7 +172,7 @@ export const paymentColumnsDefault: IColumn[] = [
   },
 ];
 
-export const rawPaymentColumnsData = atom({
-  key: "rawPaymentColumnsData",
-  default: paymentColumnsDefault,
+export const rawPaymentColumnsData_general = atom({
+  key: "rawPaymentColumnsData_general",
+  default: paymentColumnsDefault_general,
 });

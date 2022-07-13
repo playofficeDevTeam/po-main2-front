@@ -13,6 +13,7 @@ export interface createPaymentForAdmin_createPaymentForAdmin {
   __typename: "CreatePaymentForAdminOutput";
   ok: boolean;
   error: string | null;
+  createdAt: any | null;
 }
 
 export interface createPaymentForAdmin {

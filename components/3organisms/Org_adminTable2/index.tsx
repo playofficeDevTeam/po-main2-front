@@ -631,7 +631,11 @@ function Form({
           const createdAt = dataValue[0].createdAt;
           const mentionArray = mentionToArray(mentionState);
 
-          const message = `<a href="${
+          const message = `
+          <b>${
+            findMeforAdminData?.findMeforAdmin.admin?.nickname
+          }</b> 님에게서 온 멘션<br/>
+          <a href="${
             window.location.href.split("?")[0]
           }?createdAt=${createdAt}">해당 멘션으로 바로가기</a>`;
 
@@ -639,12 +643,27 @@ function Form({
             axios.post(
               process.env.NEXT_PUBLIC_API_HOST + "/auth/ms/send-chat",
               {
-                nicknameToSend:
-                  findMeforAdminData?.findMeforAdmin.admin?.nickname,
                 nicknameToReceive: val,
                 message,
               }
             );
+          });
+        }
+        if (options.paymentRequest) {
+          const dataValue: any = Object.values(mutated.data);
+          const createdAt = dataValue[0].createdAt;
+
+          const message = `
+          <b>${
+            findMeforAdminData?.findMeforAdmin.admin?.nickname
+          }</b> 님에게서 온 결제 확인 요청<br/>
+          <a href="${
+            window.location.href.split("?")[0]
+          }?createdAt=${createdAt}">해당 요청으로 바로가기</a>`;
+
+          axios.post(process.env.NEXT_PUBLIC_API_HOST + "/auth/ms/send-chat", {
+            nicknameToReceive: "jongjong_종종",
+            message,
           });
         }
         setisModalOpen(false);
@@ -686,7 +705,11 @@ function Form({
           const createdAt = dataValue[0].createdAt;
           const mentionArray = mentionToArray(mentionState);
 
-          const message = `<a href="${
+          const message = `
+          <b>${
+            findMeforAdminData?.findMeforAdmin.admin?.nickname
+          }</b> 님에게서 온 멘션<br/>
+          <a href="${
             window.location.href.split("?")[0]
           }?createdAt=${createdAt}">해당 멘션으로 바로가기</a>`;
 
@@ -694,8 +717,6 @@ function Form({
             axios.post(
               process.env.NEXT_PUBLIC_API_HOST + "/auth/ms/send-chat",
               {
-                nicknameToSend:
-                  findMeforAdminData?.findMeforAdmin.admin?.nickname,
                 nicknameToReceive: val,
                 message,
               }
@@ -801,8 +822,9 @@ function Form({
               data={{
                 button: (
                   <>
-                    <div className="center w-20 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500">
-                      <i className="fas fa-plus mr-2 text-sm"></i> 생성
+                    <div className="center px-3 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500">
+                      <i className="fas fa-plus mr-2 text-sm"></i>
+                      {options.paymentRequest ? "결제 확인 요청" : "생성"}
                     </div>
                   </>
                 ),

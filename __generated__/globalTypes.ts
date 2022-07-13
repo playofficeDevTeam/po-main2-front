@@ -30,6 +30,7 @@ export interface AdminInputType {
   role?: AdminRole | null;
   refreshToken?: string | null;
   questionsInCharge?: questionInputType[] | null;
+  paymentsInCharge?: paymentInputType[] | null;
 }
 
 export interface CampaignInputType {
@@ -90,6 +91,7 @@ export interface CreateAdminSuperInput {
   role?: AdminRole | null;
   refreshToken?: string | null;
   questionsInCharge?: questionInputType[] | null;
+  paymentsInCharge?: paymentInputType[] | null;
 }
 
 export interface CreateCampaignInput {
@@ -160,6 +162,7 @@ export interface CreatePaymentForAdminInput {
   phoneNumber?: string | null;
   email?: string | null;
   user?: UserInputType | null;
+  salesPerson?: AdminInputType | null;
   carts?: cartInputType[] | null;
   paymentMethod?: string | null;
   paymentKey?: string | null;
@@ -168,6 +171,7 @@ export interface CreatePaymentForAdminInput {
   paymentState?: string | null;
   itemInfo?: ItemIdAndAmount[] | null;
   brandName_partner?: string | null;
+  salesPerson_nickname?: string | null;
 }
 
 export interface CreatePaymentInput {
@@ -318,6 +322,7 @@ export interface EditAdminInput {
   role?: AdminRole | null;
   refreshToken?: string | null;
   questionsInCharge?: questionInputType[] | null;
+  paymentsInCharge?: paymentInputType[] | null;
   id: number;
 }
 
@@ -393,6 +398,7 @@ export interface EditMeForAdminInput {
   role?: AdminRole | null;
   refreshToken?: string | null;
   questionsInCharge?: questionInputType[] | null;
+  paymentsInCharge?: paymentInputType[] | null;
 }
 
 export interface EditPaymentFormDataInput {
@@ -412,6 +418,7 @@ export interface EditPaymentInput {
   phoneNumber?: string | null;
   email?: string | null;
   user?: UserInputType | null;
+  salesPerson?: AdminInputType | null;
   carts?: cartInputType[] | null;
   paymentMethod?: string | null;
   paymentKey?: string | null;
@@ -421,6 +428,7 @@ export interface EditPaymentInput {
   id: number;
   itemInfo?: ItemIdAndAmount[] | null;
   brandName_partner?: string | null;
+  salesPerson_nickname?: string | null;
 }
 
 export interface EditQuestionInput {
@@ -595,6 +603,7 @@ export interface paymentInputType {
   phoneNumber?: string | null;
   email?: string | null;
   user?: UserInputType | null;
+  salesPerson?: AdminInputType | null;
   carts?: cartInputType[] | null;
   paymentMethod?: string | null;
   paymentKey?: string | null;

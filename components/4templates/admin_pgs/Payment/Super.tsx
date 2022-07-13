@@ -60,6 +60,7 @@ export default function App() {
       query.data?.findPayments.payments?.map((val, idx) => ({
         ...val,
         brandName_partner: val.user?.nameId,
+        salesPerson_nickname: val.salesPerson?.nickname,
       })),
     [query.data]
   );

@@ -14,6 +14,11 @@ export interface findPayments_findPayments_payments_user {
   nameId: string | null;
 }
 
+export interface findPayments_findPayments_payments_salesPerson {
+  __typename: "Admin";
+  nickname: string | null;
+}
+
 export interface findPayments_findPayments_payments {
   __typename: "Payment";
   id: number;
@@ -27,6 +32,7 @@ export interface findPayments_findPayments_payments {
   amount: number | null;
   paymentState: string | null;
   user: findPayments_findPayments_payments_user | null;
+  salesPerson: findPayments_findPayments_payments_salesPerson | null;
 }
 
 export interface findPayments_findPayments {
