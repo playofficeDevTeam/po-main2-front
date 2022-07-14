@@ -9,36 +9,53 @@ import { FindUsersInput, UserRole } from "./../../../../../__generated__/globalT
 // GraphQL query operation: findUsers
 // ====================================================
 
-export interface findUsers_findUsers_users_campaignParticipations {
-  __typename: "CampaignParticipation";
-  id: number;
-}
-
-export interface findUsers_findUsers_users_payments {
-  __typename: "Payment";
-  id: number;
-}
-
-export interface findUsers_findUsers_users_questions {
-  __typename: "Question";
-  id: number;
-}
-
 export interface findUsers_findUsers_users {
   __typename: "User";
   id: number;
   createdAt: any;
-  tags: string | null;
-  email: string | null;
   role: UserRole;
+  email: string | null;
+  additionalEmail: string | null;
   name: string | null;
+  nameId: string | null;
   phoneNumber: string | null;
+  tags: string | null;
   brandName: string | null;
   residentRegistrationNumber: string | null;
-  nameId: string | null;
-  campaignParticipations: findUsers_findUsers_users_campaignParticipations[] | null;
-  payments: findUsers_findUsers_users_payments[] | null;
-  questions: findUsers_findUsers_users_questions[] | null;
+  isNaverUser: boolean | null;
+  isInstaUser: boolean | null;
+  isYoutubeUser: boolean | null;
+  gender: string | null;
+  job: string | null;
+  address: string | null;
+  bank: string | null;
+  accountNumber: string | null;
+  creditPoint: number | null;
+  qualitativePoint: number | null;
+  isJoinedInPlusBuddy: boolean | null;
+  insta_isExisted: boolean | null;
+  insta_id: string | null;
+  insta_NumberOfFollowers: number | null;
+  insta_canMakeVideo: boolean | null;
+  insta_category1: string | null;
+  insta_category2: string | null;
+  insta_style: string | null;
+  insta_professionalPoint: number | null;
+  insta_heathyPoint: number | null;
+  insta_designatedPrice: number | null;
+  insta_numberOfProposals: number | null;
+  insta_participationRate: number | null;
+  naver_isExisted: boolean | null;
+  naver_id: string | null;
+  naver_averageNumberOfVisitors: number | null;
+  naver_totalNumberOfVisitors: number | null;
+  naver_numberOfBuddys: number | null;
+  naver_isNaverInfluencer: boolean | null;
+  naver_category1: string | null;
+  naver_category2: string | null;
+  naver_heathyPoint: number | null;
+  naver_numberOfProposals: number | null;
+  naver_participationRate: number | null;
 }
 
 export interface findUsers_findUsers {

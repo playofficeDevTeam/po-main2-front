@@ -44,7 +44,6 @@ import mentionToArray from "./mentionToArray";
 import axios from "axios";
 import { useRouter } from "next/router";
 import St_label from "../Org_adminTable/St_label";
-import { AdminRole } from "../../../__generated__/globalTypes";
 
 export const TableStyles = styled.div`
   width: max-content;
@@ -777,7 +776,7 @@ function Form({
           }
           //컨트롤 시프트 s/d누를때 닉네임/데이트 생성
           if (e.ctrlKey) {
-            if ([83, 68].includes(e.keyCode) && options.shortCutHotkey) {
+            if ([83, 68, 190].includes(e.keyCode) && options.shortCutHotkey) {
               let newContent;
               if ([83].includes(e.keyCode)) {
                 newContent = findMeforAdminData?.findMeforAdmin.admin?.nickname;
@@ -788,6 +787,8 @@ function Form({
                   findMeforAdminData?.findMeforAdmin.admin?.nickname +
                   " " +
                   prettyDate;
+              } else if ([190].includes(e.keyCode)) {
+                newContent = "◎";
               }
               const focusedElement: any = document.activeElement;
               const selectedValue = focusedElement.value;

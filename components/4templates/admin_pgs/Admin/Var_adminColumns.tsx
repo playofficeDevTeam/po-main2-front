@@ -44,7 +44,6 @@ export const adminColumnsDefault: IColumn[] = [
     mutationType_edit: "hidden",
     editable: false,
   },
-
   {
     Header: "역할",
     accessor: "role",

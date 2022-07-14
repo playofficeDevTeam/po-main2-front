@@ -8,6 +8,7 @@ import {
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import Org_adminTable2 from "../../../3organisms/Org_adminTable2";
+import { tableTranslator } from "../../../3organisms/Org_adminTable2/tableTranslator";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import {
   FIND_USERS,
@@ -53,17 +54,17 @@ export default function App() {
     tokenCheck("query", query.refetch);
   }, [query.data]);
 
+  //테이블 컬럼 가공
+  const columns = useMemo(() => userColumnsDefault, []);
+
   //쿼리데이터 가공
   const usersData = useMemo(
     () =>
       query.data?.findUsers.users?.map((val, idx) => ({
-        ...val,
+        ...tableTranslator(columns, val),
       })),
     [query.data]
   );
-
-  //테이블 컬럼 가공
-  const columns = useMemo(() => userColumnsDefault, []);
 
   //생성 뮤테이션
   const createMutation = useMutation<

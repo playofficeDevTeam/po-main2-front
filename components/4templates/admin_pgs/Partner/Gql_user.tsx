@@ -8,23 +8,49 @@ export const FIND_USERS = gql`
       users {
         id
         createdAt
-        tags
-        email
         role
+        email
+        additionalEmail
         name
+        nameId
         phoneNumber
+        tags
         brandName
         residentRegistrationNumber
-        nameId
-        campaignParticipations {
-          id
-        }
-        payments {
-          id
-        }
-        questions {
-          id
-        }
+        isNaverUser
+        isInstaUser
+        isYoutubeUser
+        gender
+        job
+        address
+        bank
+        accountNumber
+        creditPoint
+        qualitativePoint
+        isJoinedInPlusBuddy
+        insta_isExisted
+        insta_id
+        insta_NumberOfFollowers
+        insta_canMakeVideo
+        insta_category1
+        insta_category2
+        insta_style
+        insta_professionalPoint
+        insta_heathyPoint
+        insta_designatedPrice
+        insta_numberOfProposals
+        insta_participationRate
+        naver_isExisted
+        naver_id
+        naver_averageNumberOfVisitors
+        naver_totalNumberOfVisitors
+        naver_numberOfBuddys
+        naver_isNaverInfluencer
+        naver_category1
+        naver_category2
+        naver_heathyPoint
+        naver_numberOfProposals
+        naver_participationRate
       }
     }
   }

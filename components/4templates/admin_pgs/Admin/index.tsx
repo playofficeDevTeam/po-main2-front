@@ -30,18 +30,17 @@ export default function App() {
     tokenCheck("query", query.refetch);
   }, [query.data]);
 
+  //테이블 컬럼 가공
+  const columns = useMemo(() => adminColumnsDefault, []);
+
   //쿼리데이터 가공
   const questionsData = useMemo(
     () =>
       query.data?.findAllAdmin.admins?.map((val, idx) => ({
-        ...val,
-        role: tableTranslator("role", adminColumnsDefault, val.role),
+        ...tableTranslator(columns, val),
       })),
     [query.data]
   );
-
-  //테이블 컬럼 가공
-  const columns = useMemo(() => adminColumnsDefault, []);
 
   //생성 뮤테이션
   const createMutation = useMutation<createAdmin, createAdminVariables>(
