@@ -32,6 +32,7 @@ export interface findUsers_findUsers_users {
   accountNumber: string | null;
   creditPoint: number | null;
   qualitativePoint: number | null;
+  economyPoint: number | null;
   isJoinedInPlusBuddy: boolean | null;
   insta_isExisted: boolean | null;
   insta_id: string | null;

@@ -278,6 +278,7 @@ export interface CreateUserForAdminInput {
   accountNumber?: string | null;
   creditPoint?: number | null;
   qualitativePoint?: number | null;
+  economyPoint?: number | null;
   isJoinedInPlusBuddy?: boolean | null;
   insta_isExisted?: boolean | null;
   insta_id?: string | null;
@@ -528,6 +529,7 @@ export interface EditUserInput {
   accountNumber?: string | null;
   creditPoint?: number | null;
   qualitativePoint?: number | null;
+  economyPoint?: number | null;
   isJoinedInPlusBuddy?: boolean | null;
   insta_isExisted?: boolean | null;
   insta_id?: string | null;
@@ -639,6 +641,7 @@ export interface UserInputType {
   accountNumber?: string | null;
   creditPoint?: number | null;
   qualitativePoint?: number | null;
+  economyPoint?: number | null;
   isJoinedInPlusBuddy?: boolean | null;
   insta_isExisted?: boolean | null;
   insta_id?: string | null;

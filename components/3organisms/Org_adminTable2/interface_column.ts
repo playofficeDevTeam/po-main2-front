@@ -1,13 +1,16 @@
 export type IColumn = {
   Header: string;
   accessor: string;
-  value: string;
+  Filter?: any;
+  filter?: string;
+  value: string | number;
   selected: boolean;
   width: number;
   sortDescFirst: boolean;
   tableType:
     | "hidden"
     | "string"
+    | "number"
     | "boolean"
     | "won"
     | "newPage"
@@ -21,6 +24,7 @@ export type IColumn = {
     | "hidden"
     | "string"
     | "number"
+    | "point"
     | "won"
     | "select"
     | "boolean"
@@ -32,6 +36,7 @@ export type IColumn = {
     | "hidden"
     | "string"
     | "number"
+    | "point"
     | "won"
     | "select"
     | "boolean"

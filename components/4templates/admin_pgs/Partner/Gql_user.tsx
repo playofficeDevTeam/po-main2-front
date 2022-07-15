@@ -27,6 +27,7 @@ export const FIND_USERS = gql`
         accountNumber
         creditPoint
         qualitativePoint
+        economyPoint
         isJoinedInPlusBuddy
         insta_isExisted
         insta_id

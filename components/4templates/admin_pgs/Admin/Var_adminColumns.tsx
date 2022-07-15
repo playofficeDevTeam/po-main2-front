@@ -1,4 +1,5 @@
 import { atom, useRecoilState } from "recoil";
+import { SelectColumnFilter } from "../../../3organisms/Org_adminTable2";
 import { IColumn } from "../../../3organisms/Org_adminTable2/interface_column";
 
 export const adminColumnsDefault: IColumn[] = [
@@ -62,6 +63,7 @@ export const adminColumnsDefault: IColumn[] = [
     mutationType_create: "translate",
     mutationType_edit: "translate",
     editable: true,
+    Filter: SelectColumnFilter,
   },
   {
     Header: "dataId",

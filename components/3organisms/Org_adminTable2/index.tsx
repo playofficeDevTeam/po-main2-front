@@ -137,13 +137,128 @@ export function SelectColumnFilter({
       }}
       className="border rounded-sm w-full"
     >
-      <option value="">All</option>
+      <option value="">전체</option>
       {options.map((option: any, i) => (
         <option key={i} value={option}>
           {option}
         </option>
       ))}
     </select>
+  );
+}
+
+export function PointRangeColumnFilter({
+  column: { filterValue = [], preFilteredRows, setFilter, id },
+}) {
+  const [min, max] = useMemo(() => {
+    let min = preFilteredRows.length ? preFilteredRows[0].values[id] : 0;
+    let max = preFilteredRows.length ? preFilteredRows[0].values[id] : 0;
+    preFilteredRows.forEach((row) => {
+      min = Math.min(row.values[id], min);
+      max = Math.max(row.values[id], max);
+    });
+    return [min, max];
+  }, [id, preFilteredRows]);
+
+  return (
+    <div
+      style={{
+        display: "flex",
+      }}
+    >
+      <input
+        value={filterValue[0] || ""}
+        type="number"
+        onChange={(e) => {
+          const val = e.target.value;
+          setFilter((old = []) => [
+            val ? parseInt(val, 10) : undefined,
+            old[1],
+          ]);
+        }}
+        // placeholder={`Min (${min})`}
+        className="border rounded-sm"
+        style={{
+          width: "40px",
+          marginRight: "0.2rem",
+        }}
+      />
+      ~
+      <input
+        value={filterValue[1] || ""}
+        type="number"
+        onChange={(e) => {
+          const val = e.target.value;
+          setFilter((old = []) => [
+            old[0],
+            val ? parseInt(val, 10) : undefined,
+          ]);
+        }}
+        // placeholder={`Max (${max})`}
+        className="border rounded-sm"
+        style={{
+          width: "40px",
+          marginLeft: "0.2rem",
+        }}
+      />
+    </div>
+  );
+}
+export function NumberRangeColumnFilter({
+  column: { filterValue = [], preFilteredRows, setFilter, id },
+}) {
+  const [min, max] = useMemo(() => {
+    let min = preFilteredRows.length ? preFilteredRows[0].values[id] : 0;
+    let max = preFilteredRows.length ? preFilteredRows[0].values[id] : 0;
+    preFilteredRows.forEach((row) => {
+      min = Math.min(row.values[id], min);
+      max = Math.max(row.values[id], max);
+    });
+    return [min, max];
+  }, [id, preFilteredRows]);
+
+  return (
+    <div
+      style={{
+        display: "flex",
+      }}
+    >
+      <input
+        value={filterValue[0] || ""}
+        type="number"
+        onChange={(e) => {
+          const val = e.target.value;
+          setFilter((old = []) => [
+            val ? parseInt(val, 10) : undefined,
+            old[1],
+          ]);
+        }}
+        // placeholder={`Min (${min})`}
+        className="border rounded-sm"
+        style={{
+          width: "60px",
+          marginRight: "0.2rem",
+        }}
+      />
+      ~
+      <input
+        value={filterValue[1] || ""}
+        type="number"
+        onChange={(e) => {
+          const val = e.target.value;
+          setFilter((old = []) => [
+            old[0],
+            val ? parseInt(val, 10) : undefined,
+          ]);
+        }}
+        // placeholder={`Max (${max})`}
+        className="border rounded-sm"
+        style={{
+          width: "60px",
+          marginLeft: "0.2rem",
+        }}
+      />
+    </div>
   );
 }
 
@@ -509,10 +624,14 @@ function Table({
               {headerGroup.headers.map(
                 (column, idx) =>
                   column.tableType !== "hidden" && (
-                    <th {...column.getHeaderProps()} key={idx}>
+                    <th
+                      {...column.getHeaderProps()}
+                      key={idx}
+                      className="overflow-x-auto thin-scroll"
+                    >
                       <div
                         {...column.getSortByToggleProps()}
-                        className={`mb-1 flex cursor-pointer ${
+                        className={`mb-1 flex cursor-pointer w-max ${
                           !["selection"].includes(column.id)
                             ? ""
                             : "center pt-5"
@@ -836,70 +955,111 @@ function Form({
                       e.preventDefault();
                     }}
                   >
-                    <ul>
-                      {isMentionExist && (
-                        <li>
-                          <div className="">멘션</div>
-                          <Atm_mentionInput
-                            value={mentionState}
-                            onChange={(e) => {
-                              setMentionState(e.target.value);
-                            }}
-                          />
-                        </li>
-                      )}
-                      {formDataState.map(
-                        (val, idx) =>
-                          val.formType_create !== "hidden" && (
-                            <li key={idx} className="flex items-center">
-                              <div className="w-28 flex pl-1">{val.Header}</div>
-                              {val.formType_create === "textarea" ? (
-                                <textarea
-                                  id={val.accessor}
-                                  value={val.value}
-                                  onChange={(e) => {
-                                    onChange(e, idx);
-                                  }}
-                                  className="border w-96 p-1 m-1"
-                                ></textarea>
-                              ) : val.formType_create === "date" ? (
-                                <input
-                                  id={val.accessor}
-                                  value={dateToInput(val.value)}
-                                  onChange={(e) => {
-                                    onChange(e, idx);
-                                  }}
-                                  className="border w-96 p-1 m-1"
-                                  type={`date`}
-                                />
-                              ) : val.formType_edit === "select" ? (
-                                <select
-                                  id={val.accessor}
-                                  value={val.value}
-                                  onChange={(e) => {
-                                    onChange(e, idx);
-                                  }}
-                                  className="border w-96 p-1 m-1"
-                                >
-                                  {val.formSelectList.map((val2, idx2) => (
-                                    <option key={idx2}>{val2}</option>
-                                  ))}
-                                </select>
-                              ) : (
-                                <input
-                                  id={val.accessor}
-                                  value={val.value}
-                                  onChange={(e) => {
-                                    onChange(e, idx);
-                                  }}
-                                  className="border w-96 p-1 m-1"
-                                  type={`text`}
-                                />
-                              )}
-                            </li>
-                          )
-                      )}
-                    </ul>
+                    <div
+                      className="overflow-y-auto middle-scroll"
+                      style={{ maxHeight: "70vh" }}
+                    >
+                      <ul className="">
+                        {isMentionExist && (
+                          <li>
+                            <div className="">멘션</div>
+                            <Atm_mentionInput
+                              value={mentionState}
+                              onChange={(e) => {
+                                setMentionState(e.target.value);
+                              }}
+                            />
+                          </li>
+                        )}
+                        {formDataState.map(
+                          (val, idx) =>
+                            val.formType_create !== "hidden" && (
+                              <li key={idx} className="flex items-center">
+                                <div className="w-28 flex pl-1">
+                                  {val.Header}
+                                </div>
+                                {val.formType_create === "textarea" ? (
+                                  <textarea
+                                    id={val.accessor}
+                                    value={val.value}
+                                    onChange={(e) => {
+                                      onChange(e, idx);
+                                    }}
+                                    className="border w-96 p-1 m-1"
+                                  ></textarea>
+                                ) : val.formType_create === "date" ? (
+                                  <input
+                                    id={val.accessor}
+                                    value={dateToInput(val.value)}
+                                    onChange={(e) => {
+                                      onChange(e, idx);
+                                    }}
+                                    className="border w-96 p-1 m-1"
+                                    type={`date`}
+                                  />
+                                ) : val.formType_create === "select" ? (
+                                  <select
+                                    id={val.accessor}
+                                    value={val.value}
+                                    onChange={(e) => {
+                                      onChange(e, idx);
+                                    }}
+                                    className="border w-96 p-1 m-1"
+                                  >
+                                    {val.formSelectList.map((val2, idx2) => (
+                                      <option key={idx2}>{val2}</option>
+                                    ))}
+                                  </select>
+                                ) : val.formType_create === "boolean" ? (
+                                  <select
+                                    id={val.accessor}
+                                    value={val.value}
+                                    onChange={(e) => {
+                                      onChange(e, idx);
+                                    }}
+                                    className="border w-96 p-1 m-1"
+                                  >
+                                    <option>O</option>
+                                    <option>X</option>
+                                  </select>
+                                ) : val.formType_create === "number" ? (
+                                  <input
+                                    id={val.accessor}
+                                    value={val.value}
+                                    onChange={(e) => {
+                                      onChange(e, idx);
+                                    }}
+                                    className="border w-96 p-1 m-1"
+                                    type={`number`}
+                                  />
+                                ) : val.formType_create === "point" ? (
+                                  <input
+                                    id={val.accessor}
+                                    value={val.value}
+                                    onChange={(e) => {
+                                      onChange(e, idx);
+                                    }}
+                                    className="border w-96 p-1 m-1"
+                                    type={`number`}
+                                    min="1"
+                                    max="9"
+                                  />
+                                ) : (
+                                  <input
+                                    id={val.accessor}
+                                    value={val.value}
+                                    onChange={(e) => {
+                                      onChange(e, idx);
+                                    }}
+                                    className="border w-96 p-1 m-1"
+                                    type={`text`}
+                                  />
+                                )}
+                              </li>
+                            )
+                        )}
+                      </ul>
+                    </div>
                     <div className="flex justify-end mt-2">
                       <div
                         className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
@@ -945,70 +1105,109 @@ function Form({
                     e.preventDefault();
                   }}
                 >
-                  <ul>
-                    {isMentionExist && (
-                      <li>
-                        <div className="">멘션</div>
-                        <Atm_mentionInput
-                          value={mentionState}
-                          onChange={(e) => {
-                            setMentionState(e.target.value);
-                          }}
-                        />
-                      </li>
-                    )}
-                    {formDataState.map(
-                      (val, idx) =>
-                        val.formType_edit !== "hidden" && (
-                          <li key={idx} className="flex items-center">
-                            <div className="w-28 flex pl-1">{val.Header}</div>
-                            {val.formType_edit === "textarea" ? (
-                              <textarea
-                                id={val.accessor}
-                                value={val.value}
-                                onChange={(e) => {
-                                  onChange(e, idx);
-                                }}
-                                className="border w-96 p-1 m-1"
-                              ></textarea>
-                            ) : val.formType_edit === "date" ? (
-                              <input
-                                id={val.accessor}
-                                value={dateToInput(val.value)}
-                                onChange={(e) => {
-                                  onChange(e, idx);
-                                }}
-                                className="border w-96 p-1 m-1"
-                                type={`date`}
-                              />
-                            ) : val.formType_edit === "select" ? (
-                              <select
-                                id={val.accessor}
-                                value={val.value}
-                                onChange={(e) => {
-                                  onChange(e, idx);
-                                }}
-                                className="border w-96 p-1 m-1"
-                              >
-                                {val.formSelectList.map((val2, idx2) => (
-                                  <option key={idx2}>{val2}</option>
-                                ))}
-                              </select>
-                            ) : (
-                              <input
-                                id={val.accessor}
-                                value={val.value}
-                                onChange={(e) => {
-                                  onChange(e, idx);
-                                }}
-                                className="border w-96 p-1 m-1"
-                                type={`text`}
-                              />
-                            )}
-                          </li>
-                        )
-                    )}
-                  </ul>
+                  <div
+                    className="overflow-y-auto middle-scroll"
+                    style={{ maxHeight: "70vh" }}
+                  >
+                    <ul>
+                      {isMentionExist && (
+                        <li>
+                          <div className="">멘션</div>
+                          <Atm_mentionInput
+                            value={mentionState}
+                            onChange={(e) => {
+                              setMentionState(e.target.value);
+                            }}
+                          />
+                        </li>
+                      )}
+                      {formDataState.map(
+                        (val, idx) =>
+                          val.formType_edit !== "hidden" && (
+                            <li key={idx} className="flex items-center">
+                              <div className="w-28 flex pl-1">{val.Header}</div>
+                              {val.formType_edit === "textarea" ? (
+                                <textarea
+                                  id={val.accessor}
+                                  value={val.value}
+                                  onChange={(e) => {
+                                    onChange(e, idx);
+                                  }}
+                                  className="border w-96 p-1 m-1"
+                                ></textarea>
+                              ) : val.formType_edit === "date" ? (
+                                <input
+                                  id={val.accessor}
+                                  value={dateToInput(val.value)}
+                                  onChange={(e) => {
+                                    onChange(e, idx);
+                                  }}
+                                  className="border w-96 p-1 m-1"
+                                  type={`date`}
+                                />
+                              ) : val.formType_edit === "select" ? (
+                                <select
+                                  id={val.accessor}
+                                  value={val.value}
+                                  onChange={(e) => {
+                                    onChange(e, idx);
+                                  }}
+                                  className="border w-96 p-1 m-1"
+                                >
+                                  {val.formSelectList.map((val2, idx2) => (
+                                    <option key={idx2}>{val2}</option>
+                                  ))}
+                                </select>
+                              ) : val.formType_create === "boolean" ? (
+                                <select
+                                  id={val.accessor}
+                                  value={val.value}
+                                  onChange={(e) => {
+                                    onChange(e, idx);
+                                  }}
+                                  className="border w-96 p-1 m-1"
+                                >
+                                  <option>O</option>
+                                  <option>X</option>
+                                </select>
+                              ) : val.formType_create === "number" ? (
+                                <input
+                                  id={val.accessor}
+                                  value={val.value}
+                                  onChange={(e) => {
+                                    onChange(e, idx);
+                                  }}
+                                  className="border w-96 p-1 m-1"
+                                  type={`number`}
+                                />
+                              ) : val.formType_create === "point" ? (
+                                <input
+                                  id={val.accessor}
+                                  value={val.value}
+                                  onChange={(e) => {
+                                    onChange(e, idx);
+                                  }}
+                                  className="border w-96 p-1 m-1"
+                                  type={`number`}
+                                  min="1"
+                                  max="9"
+                                />
+                              ) : (
+                                <input
+                                  id={val.accessor}
+                                  value={val.value}
+                                  onChange={(e) => {
+                                    onChange(e, idx);
+                                  }}
+                                  className="border w-96 p-1 m-1"
+                                  type={`text`}
+                                />
+                              )}
+                            </li>
+                          )
+                      )}
+                    </ul>
+                  </div>
                   <div className="flex justify-end mt-2">
                     <div
                       className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"

@@ -14,10 +14,10 @@ export const columnsMutationType = (type: "create" | "edit", columns) => {
       } else if (column.mutationType_create === "number") {
         return +column.value;
       } else if (column.mutationType_create === "boolean") {
-        return Boolean(+column.value);
+        return column.value === "O" ? true : false;
       } else if (column.mutationType_create === "array") {
         return column.value.split(",").map((val) => val.trim());
-      } else if (column.mutationType_edit === "translate") {
+      } else if (column.mutationType_create === "translate") {
         const key = column.translate?.find(
           (val2) => val2.value === column.value
         )?.key;
@@ -33,7 +33,7 @@ export const columnsMutationType = (type: "create" | "edit", columns) => {
       } else if (column.mutationType_edit === "number") {
         return +column.value;
       } else if (column.mutationType_edit === "boolean") {
-        return Boolean(+column.value);
+        return column.value === "O" ? true : false;
       } else if (column.mutationType_edit === "array") {
         return column.value.split(",").map((val) => val.trim());
       } else if (column.mutationType_edit === "translate") {

@@ -135,7 +135,7 @@ export default function App({ data = data1 }) {
         </div>
         <div
           className="pc-max overflow-y-auto middle-scroll"
-          style={{ maxHeight: "80vh" }}
+          // style={{ maxHeight: "80vh" }}
         >
           <div className="p-4">
             <ScrollLock />
