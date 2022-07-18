@@ -21,6 +21,10 @@ export interface findUsers_findUsers_users {
   phoneNumber: string | null;
   tags: string | null;
   brandName: string | null;
+  brand_item: string | null;
+  brand_category: string | null;
+  brand_option: string | null;
+  brand_region: string | null;
   residentRegistrationNumber: string | null;
   isNaverUser: boolean | null;
   isInstaUser: boolean | null;
@@ -51,6 +55,7 @@ export interface findUsers_findUsers_users {
   naver_averageNumberOfVisitors: number | null;
   naver_totalNumberOfVisitors: number | null;
   naver_numberOfBuddys: number | null;
+  naver_numberOfFans: number | null;
   naver_isNaverInfluencer: boolean | null;
   naver_category1: string | null;
   naver_category2: string | null;

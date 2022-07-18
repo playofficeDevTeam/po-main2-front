@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import { useRecoilState } from "recoil";
 import { UserRole } from "../../../../../__generated__/globalTypes";
@@ -57,7 +58,7 @@ export default function App() {
   });
   useEffect(() => {
     tokenCheck("query", query.refetch);
-  }, [query.data]);
+  }, [query.loading]);
 
   const newInstaColumns = fn_newColumnsGenerator(
     userColumnsDefault,
@@ -70,9 +71,11 @@ export default function App() {
   //쿼리데이터 가공
   const usersData = useMemo(
     () =>
-      query.data?.findUsers.users?.map((val, idx) => ({
-        ...tableTranslator(columns, val),
-      })),
+      query.data?.findUsers.users
+        ?.filter((val) => val.isInstaUser)
+        .map((val, idx) => ({
+          ...tableTranslator(columns, val),
+        })),
     [query.data]
   );
 
@@ -120,6 +123,11 @@ export default function App() {
           // tableTitle: tableTitle,
           extraCreateInputObject: { role: UserRole.Creator },
           extraEditInputObject: {},
+          label: [
+            { url: "/admin/user", title: "전체" },
+            { url: "/admin/user/insta", title: "인스타" },
+            { url: "/admin/user/naver", title: "네이버" },
+          ],
         }}
       />
     );

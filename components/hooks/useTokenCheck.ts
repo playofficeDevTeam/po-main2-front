@@ -31,10 +31,7 @@ export const useTokenCheck = () => {
     },
   });
 
-  const tokenDecode = async (
-    type: "query" | "mutation",
-    callback: () => void
-  ) => {
+  const tokenDecode = async (type: "query" | "mutation", callback: any) => {
     try {
       // 토큰디코드
       const accessToken =
@@ -87,11 +84,9 @@ export const useTokenCheck = () => {
       }
     } catch (error) {
       adminLoggedInVar(false);
-      router.push("/admin/log-in");
-      setTimeout(() => {
-        alert(error);
-      }, 100);
+      router.push(`/admin/log-in?error=${error}`);
     }
   };
+
   return tokenDecode;
 };

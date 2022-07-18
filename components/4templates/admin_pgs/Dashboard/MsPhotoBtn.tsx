@@ -71,7 +71,6 @@ export default function App() {
       >
         사진가져오기
       </div>
-      <div className="w-40 h-40 overflow-auto">{myPhoto}</div>
       <img src={`${fn_base64ToSrc(myPhoto)}`} alt="" className=" w-20 h-20" />
     </>
   );

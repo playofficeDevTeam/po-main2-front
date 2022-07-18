@@ -266,6 +266,10 @@ export interface CreateUserForAdminInput {
   questions?: questionInputType[] | null;
   payments?: paymentInputType[] | null;
   campaigns?: CampaignInputType[] | null;
+  brand_item?: string | null;
+  brand_category?: string | null;
+  brand_option?: string | null;
+  brand_region?: string | null;
   campaignParticipations?: CampaignParticipationInput[] | null;
   residentRegistrationNumber?: string | null;
   isNaverUser?: boolean | null;
@@ -297,6 +301,7 @@ export interface CreateUserForAdminInput {
   naver_averageNumberOfVisitors?: number | null;
   naver_totalNumberOfVisitors?: number | null;
   naver_numberOfBuddys?: number | null;
+  naver_numberOfFans?: number | null;
   naver_isNaverInfluencer?: boolean | null;
   naver_category1?: string | null;
   naver_category2?: string | null;
@@ -517,6 +522,10 @@ export interface EditUserInput {
   questions?: questionInputType[] | null;
   payments?: paymentInputType[] | null;
   campaigns?: CampaignInputType[] | null;
+  brand_item?: string | null;
+  brand_category?: string | null;
+  brand_option?: string | null;
+  brand_region?: string | null;
   campaignParticipations?: CampaignParticipationInput[] | null;
   residentRegistrationNumber?: string | null;
   isNaverUser?: boolean | null;
@@ -548,6 +557,7 @@ export interface EditUserInput {
   naver_averageNumberOfVisitors?: number | null;
   naver_totalNumberOfVisitors?: number | null;
   naver_numberOfBuddys?: number | null;
+  naver_numberOfFans?: number | null;
   naver_isNaverInfluencer?: boolean | null;
   naver_category1?: string | null;
   naver_category2?: string | null;
@@ -629,6 +639,10 @@ export interface UserInputType {
   questions?: questionInputType[] | null;
   payments?: paymentInputType[] | null;
   campaigns?: CampaignInputType[] | null;
+  brand_item?: string | null;
+  brand_category?: string | null;
+  brand_option?: string | null;
+  brand_region?: string | null;
   campaignParticipations?: CampaignParticipationInput[] | null;
   residentRegistrationNumber?: string | null;
   isNaverUser?: boolean | null;
@@ -660,6 +674,7 @@ export interface UserInputType {
   naver_averageNumberOfVisitors?: number | null;
   naver_totalNumberOfVisitors?: number | null;
   naver_numberOfBuddys?: number | null;
+  naver_numberOfFans?: number | null;
   naver_isNaverInfluencer?: boolean | null;
   naver_category1?: string | null;
   naver_category2?: string | null;

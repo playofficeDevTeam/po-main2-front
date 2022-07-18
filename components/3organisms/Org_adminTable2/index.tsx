@@ -44,6 +44,8 @@ import mentionToArray from "./mentionToArray";
 import axios from "axios";
 import { useRouter } from "next/router";
 import St_label from "../Org_adminTable/St_label";
+import Atom_tableLabel from "./Atom_tableLabel";
+import { callbackify } from "util";
 
 export const TableStyles = styled.div`
   width: max-content;
@@ -609,6 +611,7 @@ function Table({
               colSpan={visibleColumns.length}
               style={{
                 textAlign: "left",
+                minWidth: `calc(100vw - 13.5rem)`,
               }}
             >
               <GlobalFilter
@@ -856,6 +859,7 @@ function Form({
   useEffect(() => {
     if (isModalOpen) {
       setMentionState("");
+      setFormDataState(columns);
       formFocus(columns.find((val) => val.selected === true).accessor);
     }
   }, [isModalOpen]);
@@ -934,24 +938,177 @@ function Form({
   return (
     <>
       {/* 메뉴 */}
-      <div className="flex py-2 ">
-        {/* 생성 */}
-        {options.createFunction && (
-          <div className="mr-3 cursor-pointer">
-            <Modal_adminCreate
+      <div
+        className="flex justify-between py-2 "
+        style={{ width: `calc(100vw - 14rem)` }}
+      >
+        <div className="flex">
+          {/* 생성 */}
+          {options.createFunction && (
+            <div className="mr-3 cursor-pointer">
+              <Modal_adminCreate
+                data={{
+                  button: (
+                    <>
+                      <div className="center px-3 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500">
+                        <i className="fas fa-plus mr-2 text-sm"></i>
+                        {options.paymentRequest ? "결제 확인 요청" : "생성"}
+                      </div>
+                    </>
+                  ),
+                  modal: (
+                    <form
+                      onSubmit={(e) => {
+                        onSubmit_create();
+                        e.preventDefault();
+                      }}
+                    >
+                      <div
+                        className="overflow-y-auto middle-scroll"
+                        style={{ maxHeight: `calc(100vh - 12rem)` }}
+                      >
+                        <ul className="">
+                          {isMentionExist && (
+                            <li>
+                              <div className="">멘션</div>
+                              <Atm_mentionInput
+                                value={mentionState}
+                                onChange={(e) => {
+                                  setMentionState(e.target.value);
+                                }}
+                              />
+                            </li>
+                          )}
+                          {formDataState.map(
+                            (val, idx) =>
+                              val.formType_create !== "hidden" && (
+                                <li key={idx} className="flex items-center">
+                                  <div className="w-28 flex pl-1">
+                                    {val.Header}
+                                  </div>
+                                  {val.formType_create === "textarea" ? (
+                                    <textarea
+                                      id={val.accessor}
+                                      value={val.value}
+                                      onChange={(e) => {
+                                        onChange(e, idx);
+                                      }}
+                                      className="border w-96 p-1 m-1"
+                                    ></textarea>
+                                  ) : val.formType_create === "date" ? (
+                                    <input
+                                      id={val.accessor}
+                                      value={dateToInput(val.value)}
+                                      onChange={(e) => {
+                                        onChange(e, idx);
+                                      }}
+                                      className="border w-96 p-1 m-1"
+                                      type={`date`}
+                                    />
+                                  ) : val.formType_create === "select" ? (
+                                    <select
+                                      id={val.accessor}
+                                      value={val.value}
+                                      onChange={(e) => {
+                                        onChange(e, idx);
+                                      }}
+                                      className="border w-96 p-1 m-1"
+                                    >
+                                      {val.formSelectList.map((val2, idx2) => (
+                                        <option key={idx2}>{val2}</option>
+                                      ))}
+                                    </select>
+                                  ) : val.formType_create === "boolean" ? (
+                                    <select
+                                      id={val.accessor}
+                                      value={val.value}
+                                      onChange={(e) => {
+                                        onChange(e, idx);
+                                      }}
+                                      className="border w-96 p-1 m-1"
+                                    >
+                                      <option>O</option>
+                                      <option>X</option>
+                                    </select>
+                                  ) : val.formType_create === "number" ? (
+                                    <input
+                                      id={val.accessor}
+                                      value={val.value}
+                                      onChange={(e) => {
+                                        onChange(e, idx);
+                                      }}
+                                      className="border w-96 p-1 m-1"
+                                      type={`number`}
+                                    />
+                                  ) : val.formType_create === "point" ? (
+                                    <input
+                                      id={val.accessor}
+                                      value={val.value}
+                                      onChange={(e) => {
+                                        onChange(e, idx);
+                                      }}
+                                      className="border w-96 p-1 m-1"
+                                      type={`number`}
+                                      min="1"
+                                      max="9"
+                                    />
+                                  ) : (
+                                    <input
+                                      id={val.accessor}
+                                      value={val.value}
+                                      onChange={(e) => {
+                                        onChange(e, idx);
+                                      }}
+                                      className="border w-96 p-1 m-1"
+                                      type={`text`}
+                                    />
+                                  )}
+                                </li>
+                              )
+                          )}
+                        </ul>
+                      </div>
+                      <div className="flex justify-end mt-2">
+                        <div
+                          className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                          onClick={() => {
+                            setMentionState("");
+                            setFormDataState(columns);
+                            formFocus(
+                              columns.find((val) => val.selected === true)
+                                .accessor
+                            );
+                          }}
+                        >
+                          초기화
+                        </div>
+                        <div
+                          className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
+                          onClick={() => {
+                            setisModalOpen(false);
+                          }}
+                        >
+                          취소
+                        </div>
+                        <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
+                          확인
+                        </button>
+                      </div>
+                    </form>
+                  ),
+                }}
+              />
+            </div>
+          )}
+          {/* 수정모달 */}
+          <div className="">
+            <Modal_adminEdit
               data={{
-                button: (
-                  <>
-                    <div className="center px-3 h-8 bg-orange-400 rounded-md text-white hover:bg-orange-500">
-                      <i className="fas fa-plus mr-2 text-sm"></i>
-                      {options.paymentRequest ? "결제 확인 요청" : "생성"}
-                    </div>
-                  </>
-                ),
+                button: <></>,
                 modal: (
                   <form
                     onSubmit={(e) => {
-                      onSubmit_create();
+                      onSubmit_edit();
                       e.preventDefault();
                     }}
                   >
@@ -959,7 +1116,7 @@ function Form({
                       className="overflow-y-auto middle-scroll"
                       style={{ maxHeight: "70vh" }}
                     >
-                      <ul className="">
+                      <ul>
                         {isMentionExist && (
                           <li>
                             <div className="">멘션</div>
@@ -973,12 +1130,12 @@ function Form({
                         )}
                         {formDataState.map(
                           (val, idx) =>
-                            val.formType_create !== "hidden" && (
+                            val.formType_edit !== "hidden" && (
                               <li key={idx} className="flex items-center">
                                 <div className="w-28 flex pl-1">
                                   {val.Header}
                                 </div>
-                                {val.formType_create === "textarea" ? (
+                                {val.formType_edit === "textarea" ? (
                                   <textarea
                                     id={val.accessor}
                                     value={val.value}
@@ -987,7 +1144,7 @@ function Form({
                                     }}
                                     className="border w-96 p-1 m-1"
                                   ></textarea>
-                                ) : val.formType_create === "date" ? (
+                                ) : val.formType_edit === "date" ? (
                                   <input
                                     id={val.accessor}
                                     value={dateToInput(val.value)}
@@ -997,7 +1154,7 @@ function Form({
                                     className="border w-96 p-1 m-1"
                                     type={`date`}
                                   />
-                                ) : val.formType_create === "select" ? (
+                                ) : val.formType_edit === "select" ? (
                                   <select
                                     id={val.accessor}
                                     value={val.value}
@@ -1064,20 +1221,7 @@ function Form({
                       <div
                         className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
                         onClick={() => {
-                          setMentionState("");
-                          setFormDataState(columns);
-                          formFocus(
-                            columns.find((val) => val.selected === true)
-                              .accessor
-                          );
-                        }}
-                      >
-                        초기화
-                      </div>
-                      <div
-                        className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                        onClick={() => {
-                          setisModalOpen(false);
+                          setisEditModalOpen(false);
                         }}
                       >
                         취소
@@ -1091,242 +1235,117 @@ function Form({
               }}
             />
           </div>
-        )}
+          {/* 열선택 */}
+          <div className="mr-3">
+            <div
+              className="center w-20 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300 cursor-pointer"
+              onClick={() => {
+                setColumnPopupState((state) => !state);
+              }}
+            >
+              <i className="fas fa-columns mr-2"></i>
+              <span className="mr-2">열</span>
+              {columnPopupState ? (
+                <i className="fas fa-caret-up"></i>
+              ) : (
+                <i className="fas fa-caret-down"></i>
+              )}
+            </div>
 
-        {/* 수정모달 */}
-        <div className="">
-          <Modal_adminEdit
-            data={{
-              button: <></>,
-              modal: (
-                <form
-                  onSubmit={(e) => {
-                    onSubmit_edit();
-                    e.preventDefault();
-                  }}
-                >
-                  <div
-                    className="overflow-y-auto middle-scroll"
-                    style={{ maxHeight: "70vh" }}
-                  >
-                    <ul>
-                      {isMentionExist && (
-                        <li>
-                          <div className="">멘션</div>
-                          <Atm_mentionInput
-                            value={mentionState}
-                            onChange={(e) => {
-                              setMentionState(e.target.value);
-                            }}
-                          />
-                        </li>
-                      )}
-                      {formDataState.map(
-                        (val, idx) =>
-                          val.formType_edit !== "hidden" && (
-                            <li key={idx} className="flex items-center">
-                              <div className="w-28 flex pl-1">{val.Header}</div>
-                              {val.formType_edit === "textarea" ? (
-                                <textarea
-                                  id={val.accessor}
-                                  value={val.value}
-                                  onChange={(e) => {
-                                    onChange(e, idx);
-                                  }}
-                                  className="border w-96 p-1 m-1"
-                                ></textarea>
-                              ) : val.formType_edit === "date" ? (
-                                <input
-                                  id={val.accessor}
-                                  value={dateToInput(val.value)}
-                                  onChange={(e) => {
-                                    onChange(e, idx);
-                                  }}
-                                  className="border w-96 p-1 m-1"
-                                  type={`date`}
-                                />
-                              ) : val.formType_edit === "select" ? (
-                                <select
-                                  id={val.accessor}
-                                  value={val.value}
-                                  onChange={(e) => {
-                                    onChange(e, idx);
-                                  }}
-                                  className="border w-96 p-1 m-1"
-                                >
-                                  {val.formSelectList.map((val2, idx2) => (
-                                    <option key={idx2}>{val2}</option>
-                                  ))}
-                                </select>
-                              ) : val.formType_create === "boolean" ? (
-                                <select
-                                  id={val.accessor}
-                                  value={val.value}
-                                  onChange={(e) => {
-                                    onChange(e, idx);
-                                  }}
-                                  className="border w-96 p-1 m-1"
-                                >
-                                  <option>O</option>
-                                  <option>X</option>
-                                </select>
-                              ) : val.formType_create === "number" ? (
-                                <input
-                                  id={val.accessor}
-                                  value={val.value}
-                                  onChange={(e) => {
-                                    onChange(e, idx);
-                                  }}
-                                  className="border w-96 p-1 m-1"
-                                  type={`number`}
-                                />
-                              ) : val.formType_create === "point" ? (
-                                <input
-                                  id={val.accessor}
-                                  value={val.value}
-                                  onChange={(e) => {
-                                    onChange(e, idx);
-                                  }}
-                                  className="border w-96 p-1 m-1"
-                                  type={`number`}
-                                  min="1"
-                                  max="9"
-                                />
-                              ) : (
-                                <input
-                                  id={val.accessor}
-                                  value={val.value}
-                                  onChange={(e) => {
-                                    onChange(e, idx);
-                                  }}
-                                  className="border w-96 p-1 m-1"
-                                  type={`text`}
-                                />
-                              )}
-                            </li>
-                          )
-                      )}
-                    </ul>
+            {columnPopupState && (
+              <div className="h-0 w-0 relative z-50 top-1">
+                <div className="w-48 p-3 px-4 bg-white border rounded-md shadow-md">
+                  <div className="py-1 flex items-center">
+                    <ColumnIndeterminateCheckbox
+                      {...getToggleHideAllColumnsProps()}
+                    />{" "}
+                    <span className="ml-2">전체 선택</span>
                   </div>
-                  <div className="flex justify-end mt-2">
-                    <div
-                      className="p-1 px-3 bg-gray-200 hover:bg-gray-300 rounded-md  cursor-pointer mr-2"
-                      onClick={() => {
-                        setisEditModalOpen(false);
-                      }}
-                    >
-                      취소
-                    </div>
-                    <button className="p-1 px-3 bg-orange-400 hover:bg-orange-500 rounded-md text-white cursor-pointer">
-                      확인
-                    </button>
-                  </div>
-                </form>
-              ),
-            }}
-          />
-        </div>
-
-        {/* 열선택 */}
-        <div className="mr-3">
-          <div
-            className="center w-20 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300 cursor-pointer"
-            onClick={() => {
-              setColumnPopupState((state) => !state);
-            }}
-          >
-            <i className="fas fa-columns mr-2"></i>
-            <span className="mr-2">열</span>
-            {columnPopupState ? (
-              <i className="fas fa-caret-up"></i>
-            ) : (
-              <i className="fas fa-caret-down"></i>
+                  {allColumns.map(
+                    (column) =>
+                      !["selection"].includes(column.id) &&
+                      column.tableType !== "hidden" && (
+                        <div key={column.id} className="py-1">
+                          <label className="flex items-center cursor-pointer">
+                            <input
+                              className="w-4 h-4 mr-2"
+                              type="checkbox"
+                              {...column.getToggleHiddenProps()}
+                            />{" "}
+                            {column.Header}
+                          </label>
+                        </div>
+                      )
+                  )}
+                </div>
+              </div>
             )}
           </div>
-
-          {columnPopupState && (
-            <div className="h-0 w-0 relative z-50 top-1">
-              <div className="w-48 p-3 px-4 bg-white border rounded-md shadow-md">
-                <div className="py-1 flex items-center">
-                  <ColumnIndeterminateCheckbox
-                    {...getToggleHideAllColumnsProps()}
-                  />{" "}
-                  <span className="ml-2">전체 선택</span>
-                </div>
-                {allColumns.map(
-                  (column) =>
-                    !["selection"].includes(column.id) &&
-                    column.tableType !== "hidden" && (
-                      <div key={column.id} className="py-1">
-                        <label className="flex items-center cursor-pointer">
-                          <input
-                            className="w-4 h-4 mr-2"
-                            type="checkbox"
-                            {...column.getToggleHiddenProps()}
-                          />{" "}
-                          {column.Header}
-                        </label>
-                      </div>
-                    )
-                )}
-              </div>
+          {/* 삭제 */}
+          {selectedFlatRows.length !== 0 && (
+            <div
+              className="mr-3 cursor-pointer center w-14 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300 "
+              onClick={() => {
+                try {
+                  if (selectedFlatRows.length > 4) {
+                    throw "5개 이상의 데이터를 한번에 지울 수 없습니다.";
+                  }
+                  const returnValue = confirm("정말로 삭제하시겠습니까?");
+                  if (returnValue) {
+                    const selectedIds = selectedFlatRows.map(
+                      (val) => val.original.id
+                    );
+                    tokenCheck("mutation", () => {
+                      deleteMutation[0]({
+                        variables: {
+                          input: {
+                            ids: selectedIds,
+                          },
+                        },
+                      });
+                    });
+                  }
+                } catch (error) {
+                  alert(error);
+                }
+              }}
+            >
+              <i className="fas fa-trash-alt"></i>
             </div>
           )}
+          {/* {새창열기} */}
+          {options.newPageLink && selectedFlatRows?.length !== 0 ? (
+            <div
+              className="mr-3 cursor-pointer center px-3 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300"
+              onClick={() => {
+                selectedFlatRows.forEach((val) => {
+                  window.open(
+                    "/admin" + options.newPageLink + "/" + val.values.newPageId
+                  );
+                });
+              }}
+            >
+              상세정보 열기
+            </div>
+          ) : (
+            <></>
+          )}
+          {/* 타이틀 */}
+          {options.tableTitle && <St_label>{options.tableTitle}</St_label>}
         </div>
 
-        {/* 삭제 */}
-        {selectedFlatRows.length !== 0 && (
-          <div
-            className="mr-3 cursor-pointer center w-14 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300 "
-            onClick={() => {
-              try {
-                if (selectedFlatRows.length > 4) {
-                  throw "5개 이상의 데이터를 한번에 지울 수 없습니다.";
-                }
-                const returnValue = confirm("정말로 삭제하시겠습니까?");
-                if (returnValue) {
-                  const selectedIds = selectedFlatRows.map(
-                    (val) => val.original.id
-                  );
-                  tokenCheck("mutation", () => {
-                    deleteMutation[0]({
-                      variables: {
-                        input: {
-                          ids: selectedIds,
-                        },
-                      },
-                    });
-                  });
-                }
-              } catch (error) {
-                alert(error);
-              }
-            }}
-          >
-            <i className="fas fa-trash-alt"></i>
-          </div>
-        )}
-
-        {/* {새창열기} */}
-        {options.newPageLink && selectedFlatRows?.length !== 0 ? (
-          <div
-            className="mr-3 cursor-pointer center px-3 h-8 bg-gray-200 rounded-md text-gray-900 hover:bg-gray-300"
-            onClick={() => {
-              selectedFlatRows.forEach((val) => {
-                window.open(
-                  "/admin" + options.newPageLink + "/" + val.values.newPageId
-                );
-              });
-            }}
-          >
-            상세정보 열기
-          </div>
-        ) : (
-          <></>
-        )}
-
-        {/* 타이틀 */}
-        {options.tableTitle && <St_label>{options.tableTitle}</St_label>}
+        <div className="flex">
+          {/* 테이블라벨 */}
+          {options.label && (
+            <>
+              {options.label.map((val, idx) => (
+                <Atom_tableLabel input={val} className="mr-1" key={idx}>
+                  {val.title}
+                </Atom_tableLabel>
+              ))}
+            </>
+          )}
+        </div>
       </div>
     </>
   );

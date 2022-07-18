@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import { useRecoilState } from "recoil";
 import { UserRole } from "../../../../__generated__/globalTypes";
@@ -110,6 +111,11 @@ export default function App() {
           // tableTitle: tableTitle,
           extraCreateInputObject: { role: UserRole.Creator },
           extraEditInputObject: {},
+          label: [
+            { url: "/admin/user", title: "전체" },
+            { url: "/admin/user/insta", title: "인스타" },
+            { url: "/admin/user/naver", title: "네이버" },
+          ],
         }}
       />
     );

@@ -16,6 +16,10 @@ export const FIND_USERS = gql`
         phoneNumber
         tags
         brandName
+        brand_item
+        brand_category
+        brand_option
+        brand_region
         residentRegistrationNumber
         isNaverUser
         isInstaUser
@@ -46,6 +50,7 @@ export const FIND_USERS = gql`
         naver_averageNumberOfVisitors
         naver_totalNumberOfVisitors
         naver_numberOfBuddys
+        naver_numberOfFans
         naver_isNaverInfluencer
         naver_category1
         naver_category2

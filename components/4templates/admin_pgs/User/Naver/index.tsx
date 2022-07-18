@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import { useRecoilState } from "recoil";
 import { UserRole } from "../../../../../__generated__/globalTypes";
@@ -8,6 +9,7 @@ import {
   tableToDate,
 } from "../../../../3organisms/Org_adminTable/Var_tableInputDate";
 import Org_adminTable2 from "../../../../3organisms/Org_adminTable2";
+import { fn_newColumnsGenerator } from "../../../../3organisms/Org_adminTable2/fn_newColumnsGenerator";
 import { tableTranslator } from "../../../../3organisms/Org_adminTable2/tableTranslator";
 import { useTokenCheck } from "../../../../hooks/useTokenCheck";
 import {
@@ -33,6 +35,7 @@ import {
   findUsersVariables,
 } from "../../Partner/__generated__/findUsers";
 import { userColumnsDefault, rawUserColumnsData } from "../Var_userColumns";
+import { naverUserColumns } from "./naverUserColumns";
 
 export default function App() {
   //토큰체크
@@ -57,15 +60,22 @@ export default function App() {
     tokenCheck("query", query.refetch);
   }, [query.data]);
 
+  const newNaverColumns = fn_newColumnsGenerator(
+    userColumnsDefault,
+    naverUserColumns
+  );
+
   //테이블 컬럼 가공
-  const columns = useMemo(() => userColumnsDefault, []);
+  const columns = useMemo(() => newNaverColumns, []);
 
   //쿼리데이터 가공
   const usersData = useMemo(
     () =>
-      query.data?.findUsers.users?.map((val, idx) => ({
-        ...tableTranslator(columns, val),
-      })),
+      query.data?.findUsers.users
+        ?.filter((val) => val.isNaverUser)
+        .map((val, idx) => ({
+          ...tableTranslator(columns, val),
+        })),
     [query.data]
   );
 
@@ -113,6 +123,11 @@ export default function App() {
           // tableTitle: tableTitle,
           extraCreateInputObject: { role: UserRole.Creator },
           extraEditInputObject: {},
+          label: [
+            { url: "/admin/user", title: "전체" },
+            { url: "/admin/user/insta", title: "인스타" },
+            { url: "/admin/user/naver", title: "네이버" },
+          ],
         }}
       />
     );

@@ -25,7 +25,7 @@ export const userColumnsDefault: IColumn[] = [
     Header: "계정(ID)",
     accessor: "email",
     value: "",
-    selected: true,
+    selected: false,
     width: 150,
     sortDescFirst: true,
     tableType: "string",
@@ -69,7 +69,7 @@ export const userColumnsDefault: IColumn[] = [
     width: 110,
     sortDescFirst: true,
     value: "",
-    selected: false,
+    selected: true,
     tableType: "string",
     formType_create: "string",
     formType_edit: "string",
@@ -401,7 +401,7 @@ export const userColumnsDefault: IColumn[] = [
     editable: true,
   },
   {
-    Header: "전문점수",
+    Header: "전문 점수",
     accessor: "insta_professionalPoint",
     width: 70,
     sortDescFirst: true,
@@ -417,7 +417,7 @@ export const userColumnsDefault: IColumn[] = [
     filter: "between",
   },
   {
-    Header: "건강점수",
+    Header: "건강 점수",
     accessor: "insta_heathyPoint",
     width: 70,
     sortDescFirst: true,
@@ -447,7 +447,7 @@ export const userColumnsDefault: IColumn[] = [
     editable: true,
   },
   {
-    Header: "제안횟수",
+    Header: "제안 횟수",
     accessor: "insta_numberOfProposals",
     width: 70,
     sortDescFirst: true,
@@ -546,7 +546,7 @@ export const userColumnsDefault: IColumn[] = [
     editable: true,
   },
   {
-    Header: "네이버 인플루언서 여부",
+    Header: "네이버 인플루언서",
     accessor: "naver_isNaverInfluencer",
     width: 70,
     sortDescFirst: true,
@@ -589,7 +589,7 @@ export const userColumnsDefault: IColumn[] = [
     editable: true,
   },
   {
-    Header: "건강점수",
+    Header: "건강 점수",
     accessor: "naver_heathyPoint",
     width: 70,
     sortDescFirst: true,
@@ -605,7 +605,7 @@ export const userColumnsDefault: IColumn[] = [
     filter: "between",
   },
   {
-    Header: "제안횟수",
+    Header: "제안 횟수",
     accessor: "naver_numberOfProposals",
     width: 70,
     sortDescFirst: true,
