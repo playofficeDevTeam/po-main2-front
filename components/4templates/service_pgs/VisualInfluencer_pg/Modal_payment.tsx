@@ -117,7 +117,7 @@ export default function App({ data = data1 }) {
       </Modal>
     </div>
   ) : (
-    <div className={`relative z-40`}>
+    <div className={`relative z-40  `}>
       <span onClick={openModal} className="z-30">
         {data.button}
       </span>

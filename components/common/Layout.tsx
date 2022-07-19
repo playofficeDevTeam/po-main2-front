@@ -10,6 +10,7 @@ import { useGtmScroll } from "../hooks/useGtmScroll";
 import GoToTopArrow from "../2molecules/GoToTopArrow";
 import UserDetect from "./UserDetect";
 import { client } from "./apollo";
+import { useRouter } from "next/router";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,14 @@ export default function Layout({ children }: any) {
     };
     asyncEffect();
     return () => {};
+  }, []);
+
+  const route = useRouter();
+  useEffect(() => {
+    if (route.asPath.split("/")[1] === "admin") {
+      let htmlElement = document.getElementsByTagName("html")[0];
+      htmlElement.style.overflowY = "auto";
+    }
   }, []);
 
   return (
