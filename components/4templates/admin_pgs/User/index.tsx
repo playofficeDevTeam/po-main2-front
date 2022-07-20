@@ -57,7 +57,6 @@ export default function App() {
 
   //테이블 컬럼 가공
   const columns = useMemo(() => userColumnsDefault, []);
-
   //쿼리데이터 가공
   const usersData = useMemo(
     () =>
@@ -94,6 +93,9 @@ export default function App() {
     }
   );
 
+  if (query.error) {
+    return <>{query.error.message}</>;
+  }
   if (query.data) {
     return (
       <Org_adminTable2

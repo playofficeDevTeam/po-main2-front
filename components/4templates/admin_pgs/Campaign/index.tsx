@@ -8,6 +8,7 @@ import {
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import Org_adminTable2 from "../../../3organisms/Org_adminTable2";
+import { tableTranslator } from "../../../3organisms/Org_adminTable2/tableTranslator";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import {
   FIND_CAMPAIGNS,
@@ -61,18 +62,17 @@ export default function App() {
     tokenCheck("query", query.refetch);
   }, [query.data]);
 
+  //테이블 컬럼 가공
+  const columns = useMemo(() => campaignColumnsDefault, []);
   //쿼리데이터 가공
   const campaignsData = useMemo(
     () =>
       query.data?.findCampaigns.campaigns?.map((val, idx) => ({
-        ...val,
+        ...tableTranslator(columns, val),
         brandName_partner: val.partner?.nameId,
       })),
     [query.data]
   );
-
-  //테이블 컬럼 가공
-  const columns = useMemo(() => campaignColumnsDefault, []);
 
   //생성 뮤테이션
   const createMutation = useMutation<createCampaign, createCampaignVariables>(

@@ -196,7 +196,7 @@ export interface CreateQuestionForAdminInput {
   name?: string | null;
   phoneNumber?: string | null;
   email?: string | null;
-  budget?: number | null;
+  budget?: string | null;
   productLink?: string | null;
   uniqueness?: string | null;
   isAgency?: boolean | null;
@@ -221,7 +221,7 @@ export interface CreateQuestionInput {
   name?: string | null;
   phoneNumber?: string | null;
   email?: string | null;
-  budget?: number | null;
+  budget?: string | null;
   productLink?: string | null;
   uniqueness?: string | null;
   isAgency?: boolean | null;
@@ -476,7 +476,7 @@ export interface EditQuestionInput {
   name?: string | null;
   phoneNumber?: string | null;
   email?: string | null;
-  budget?: number | null;
+  budget?: string | null;
   productLink?: string | null;
   uniqueness?: string | null;
   isAgency?: boolean | null;
@@ -724,7 +724,7 @@ export interface questionInputType {
   name?: string | null;
   phoneNumber?: string | null;
   email?: string | null;
-  budget?: number | null;
+  budget?: string | null;
   productLink?: string | null;
   uniqueness?: string | null;
   isAgency?: boolean | null;

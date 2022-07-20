@@ -7,6 +7,7 @@ import {
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import Org_adminTable2 from "../../../3organisms/Org_adminTable2";
+import { tableTranslator } from "../../../3organisms/Org_adminTable2/tableTranslator";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import {
   FIND_ALL_QUESTION_MANAGEMENT,
@@ -60,12 +61,14 @@ export default function App() {
     tokenCheck("query", query.refetch);
   }, [query.data]);
 
+  //테이블 컬럼 가공
+  const columns = useMemo(() => questionManagementColumnsDefault, []);
   //쿼리데이터 가공
   const questionManagementData = useMemo(
     () =>
       query.data?.findAllQuestionManagement.questionManagements?.map(
         (val, idx) => ({
-          ...val,
+          ...tableTranslator(columns, val),
           newPageId: val.questionId,
           rawMention: val.mention,
           brandName: val.question?.brandName,
@@ -76,9 +79,6 @@ export default function App() {
       ),
     [query.data]
   );
-
-  //테이블 컬럼 가공
-  const columns = useMemo(() => questionManagementColumnsDefault, []);
 
   //생성 뮤테이션
   const createMutation = useMutation<

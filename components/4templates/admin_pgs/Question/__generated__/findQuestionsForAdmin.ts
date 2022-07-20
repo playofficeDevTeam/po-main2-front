@@ -29,7 +29,7 @@ export interface findQuestionsForAdmin_findQuestionsForAdmin_questions {
   name: string | null;
   phoneNumber: string | null;
   email: string | null;
-  budget: number | null;
+  budget: string | null;
   productLink: string | null;
   uniqueness: string | null;
   isAgency: boolean | null;

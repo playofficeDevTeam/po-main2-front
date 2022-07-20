@@ -6,7 +6,6 @@ import {
 } from "../../payment_pgs/OrderSheet_pg/Var_userFormData";
 import { EDIT_QUESTION } from "../QuestionForm_pg/Gql_question";
 import {
-  inputDetail1Setting,
   userDetail1FormData,
   userDetail1FormDataValidate,
 } from "../QuestionForm_pg/Var_userDetail1FormData";
@@ -60,7 +59,7 @@ export default function App({ onClick = () => {} }) {
                 name: userFormDataState[1],
                 phoneNumber: userFormDataState[2],
                 email: userFormDataState[3],
-                budget: +userDetail1FormDataState[0],
+                budget: userDetail1FormDataState[0] + "",
                 productLink: userDetail1FormDataState[1] + "",
                 uniqueness: userDetail1FormDataState[2] + "",
                 isAgency: userDetail1FormDataState[3] as boolean,

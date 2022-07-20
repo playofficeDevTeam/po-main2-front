@@ -7,6 +7,7 @@ import {
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import Org_adminTable2 from "../../../3organisms/Org_adminTable2";
+import { tableTranslator } from "../../../3organisms/Org_adminTable2/tableTranslator";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import { FIND_ALL_ITEM, CREATE_ITEM, EDIT_ITEM, DELETE_ITEM } from "./Gql_item";
 import { itemColumnsDefault, rawItemColumnsData } from "./Var_itemColumns";
@@ -30,18 +31,16 @@ export default function App() {
     tokenCheck("query", query.refetch);
   }, [query.data]);
 
+  //테이블 컬럼 가공
+  const columns = useMemo(() => itemColumnsDefault, []);
   //쿼리데이터 가공
   const itemData = useMemo(
     () =>
       query.data?.findAllItems.items?.map((val, idx) => ({
-        ...val,
-        detailInfo: val.detailInfo?.join(", "),
+        ...tableTranslator(columns, val),
       })),
     [query.data]
   );
-
-  //테이블 컬럼 가공
-  const columns = useMemo(() => itemColumnsDefault, []);
 
   //생성 뮤테이션
   const createMutation = useMutation<createItem, createItemVariables>(

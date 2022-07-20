@@ -34,9 +34,25 @@ export const tableTranslator = (columns, data) => {
       {}
     );
   }
+  const arrayList = columns.filter((val) => val.tableType === "array");
+  let newArrayObject;
+  if (arrayList) {
+    const newArrayObjectArray = arrayList.map((val) => {
+      const dataIndex = dataKeys.indexOf(val.accessor);
+      const indexValue: any = dataValues[dataIndex];
+      return {
+        [val.accessor]: indexValue?.join(", "),
+      };
+    });
+    newArrayObject = newArrayObjectArray.reduce(
+      (pre, cur) => ({ ...pre, ...cur }),
+      {}
+    );
+  }
   return {
     ...data,
     ...newTransObject,
     ...newBooleanObject,
+    ...newArrayObject,
   };
 };

@@ -7,6 +7,7 @@ import {
   tableToDate,
 } from "../../../3organisms/Org_adminTable/Var_tableInputDate";
 import Org_adminTable2 from "../../../3organisms/Org_adminTable2";
+import { tableTranslator } from "../../../3organisms/Org_adminTable2/tableTranslator";
 import { useTokenCheck } from "../../../hooks/useTokenCheck";
 import {
   FIND_PAYMENTS,
@@ -54,19 +55,18 @@ export default function App() {
     tokenCheck("query", query.refetch);
   }, [query.data]);
 
+  //테이블 컬럼 가공
+  const columns = useMemo(() => paymentColumnsDefault, []);
   //쿼리데이터 가공
   const paymentsData = useMemo(
     () =>
       query.data?.findPayments.payments?.map((val, idx) => ({
-        ...val,
+        ...tableTranslator(columns, val),
         brandName_partner: val.user?.nameId,
         salesPerson_nickname: val.salesPerson?.nickname,
       })),
     [query.data]
   );
-
-  //테이블 컬럼 가공
-  const columns = useMemo(() => paymentColumnsDefault, []);
 
   //생성 뮤테이션
   const createMutation = useMutation<

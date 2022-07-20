@@ -7,6 +7,7 @@ import {
   tableToDate,
 } from "../../../../3organisms/Org_adminTable/Var_tableInputDate";
 import Org_adminTable2 from "../../../../3organisms/Org_adminTable2";
+import { tableTranslator } from "../../../../3organisms/Org_adminTable2/tableTranslator";
 import { useTokenCheck } from "../../../../hooks/useTokenCheck";
 import { FIND_ME_FOR_ADMIN } from "../../Admin/Gql_admin";
 import { findMeforAdmin } from "../../Admin/__generated__/findMeforAdmin";
@@ -98,6 +99,8 @@ export default function App() {
         meQuery.data?.findMeforAdmin.admin?.nickname
     );
 
+  //테이블 컬럼 가공
+  const columns = useMemo(() => paymentColumnsDefault_general, []);
   //쿼리데이터 가공
   const paymentsData = useMemo(
     () =>
@@ -125,15 +128,12 @@ export default function App() {
               .includes(true)
         )
         .map((val, idx) => ({
-          ...val,
+          ...tableTranslator(columns, val),
           brandName_partner: val.user?.nameId,
           salesPerson_nickname: val.salesPerson?.nickname,
         })),
     [query.data, filterQuery.data, meQuery.data]
   );
-
-  //테이블 컬럼 가공
-  const columns = useMemo(() => paymentColumnsDefault_general, []);
 
   //생성 뮤테이션
   const createMutation = useMutation<

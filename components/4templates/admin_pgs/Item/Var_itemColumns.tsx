@@ -51,7 +51,7 @@ export const itemColumnsDefault: IColumn[] = [
     sortDescFirst: true,
     value: "",
     selected: false,
-    tableType: "string",
+    tableType: "array",
     formType_create: "array",
     formType_edit: "array",
     mutationType_create: "array",

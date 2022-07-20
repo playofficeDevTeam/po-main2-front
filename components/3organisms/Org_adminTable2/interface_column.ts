@@ -10,6 +10,7 @@ export type IColumn = {
   tableType:
     | "hidden"
     | "string"
+    | "array"
     | "number"
     | "boolean"
     | "won"
