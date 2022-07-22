@@ -272,9 +272,6 @@ export interface CreateUserForAdminInput {
   brand_region?: string | null;
   campaignParticipations?: CampaignParticipationInput[] | null;
   residentRegistrationNumber?: string | null;
-  isNaverUser?: boolean | null;
-  isInstaUser?: boolean | null;
-  isYoutubeUser?: boolean | null;
   gender?: string | null;
   job?: string | null;
   address?: string | null;
@@ -284,6 +281,10 @@ export interface CreateUserForAdminInput {
   qualitativePoint?: number | null;
   economyPoint?: number | null;
   isJoinedInPlusBuddy?: boolean | null;
+  insta_isInstaUser?: boolean | null;
+  naver_isNaverUser?: boolean | null;
+  naverIn_isNaverInfluencer?: boolean | null;
+  youtube_isYoutubeUser?: boolean | null;
   insta_isExisted?: boolean | null;
   insta_id?: string | null;
   insta_NumberOfFollowers?: number | null;
@@ -301,13 +302,19 @@ export interface CreateUserForAdminInput {
   naver_averageNumberOfVisitors?: number | null;
   naver_totalNumberOfVisitors?: number | null;
   naver_numberOfBuddys?: number | null;
-  naver_numberOfFans?: number | null;
-  naver_isNaverInfluencer?: boolean | null;
   naver_category1?: string | null;
   naver_category2?: string | null;
   naver_heathyPoint?: number | null;
   naver_numberOfProposals?: number | null;
   naver_participationRate?: number | null;
+  naverIn_isExisted?: boolean | null;
+  naverIn_id?: string | null;
+  naverIn_numberOfFans?: number | null;
+  naverIn_category1?: string | null;
+  naverIn_category2?: string | null;
+  naverIn_numberOfProposals?: number | null;
+  naverIn_participationRate?: number | null;
+  youtube_id?: string | null;
 }
 
 export interface DeleteAdminInput {
@@ -528,9 +535,6 @@ export interface EditUserInput {
   brand_region?: string | null;
   campaignParticipations?: CampaignParticipationInput[] | null;
   residentRegistrationNumber?: string | null;
-  isNaverUser?: boolean | null;
-  isInstaUser?: boolean | null;
-  isYoutubeUser?: boolean | null;
   gender?: string | null;
   job?: string | null;
   address?: string | null;
@@ -540,6 +544,10 @@ export interface EditUserInput {
   qualitativePoint?: number | null;
   economyPoint?: number | null;
   isJoinedInPlusBuddy?: boolean | null;
+  insta_isInstaUser?: boolean | null;
+  naver_isNaverUser?: boolean | null;
+  naverIn_isNaverInfluencer?: boolean | null;
+  youtube_isYoutubeUser?: boolean | null;
   insta_isExisted?: boolean | null;
   insta_id?: string | null;
   insta_NumberOfFollowers?: number | null;
@@ -557,13 +565,19 @@ export interface EditUserInput {
   naver_averageNumberOfVisitors?: number | null;
   naver_totalNumberOfVisitors?: number | null;
   naver_numberOfBuddys?: number | null;
-  naver_numberOfFans?: number | null;
-  naver_isNaverInfluencer?: boolean | null;
   naver_category1?: string | null;
   naver_category2?: string | null;
   naver_heathyPoint?: number | null;
   naver_numberOfProposals?: number | null;
   naver_participationRate?: number | null;
+  naverIn_isExisted?: boolean | null;
+  naverIn_id?: string | null;
+  naverIn_numberOfFans?: number | null;
+  naverIn_category1?: string | null;
+  naverIn_category2?: string | null;
+  naverIn_numberOfProposals?: number | null;
+  naverIn_participationRate?: number | null;
+  youtube_id?: string | null;
   id: number;
 }
 
@@ -645,9 +659,6 @@ export interface UserInputType {
   brand_region?: string | null;
   campaignParticipations?: CampaignParticipationInput[] | null;
   residentRegistrationNumber?: string | null;
-  isNaverUser?: boolean | null;
-  isInstaUser?: boolean | null;
-  isYoutubeUser?: boolean | null;
   gender?: string | null;
   job?: string | null;
   address?: string | null;
@@ -657,6 +668,10 @@ export interface UserInputType {
   qualitativePoint?: number | null;
   economyPoint?: number | null;
   isJoinedInPlusBuddy?: boolean | null;
+  insta_isInstaUser?: boolean | null;
+  naver_isNaverUser?: boolean | null;
+  naverIn_isNaverInfluencer?: boolean | null;
+  youtube_isYoutubeUser?: boolean | null;
   insta_isExisted?: boolean | null;
   insta_id?: string | null;
   insta_NumberOfFollowers?: number | null;
@@ -674,13 +689,19 @@ export interface UserInputType {
   naver_averageNumberOfVisitors?: number | null;
   naver_totalNumberOfVisitors?: number | null;
   naver_numberOfBuddys?: number | null;
-  naver_numberOfFans?: number | null;
-  naver_isNaverInfluencer?: boolean | null;
   naver_category1?: string | null;
   naver_category2?: string | null;
   naver_heathyPoint?: number | null;
   naver_numberOfProposals?: number | null;
   naver_participationRate?: number | null;
+  naverIn_isExisted?: boolean | null;
+  naverIn_id?: string | null;
+  naverIn_numberOfFans?: number | null;
+  naverIn_category1?: string | null;
+  naverIn_category2?: string | null;
+  naverIn_numberOfProposals?: number | null;
+  naverIn_participationRate?: number | null;
+  youtube_id?: string | null;
 }
 
 export interface cartInputType {

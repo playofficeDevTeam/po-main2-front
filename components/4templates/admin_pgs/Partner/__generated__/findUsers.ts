@@ -26,9 +26,10 @@ export interface findUsers_findUsers_users {
   brand_option: string | null;
   brand_region: string | null;
   residentRegistrationNumber: string | null;
-  isNaverUser: boolean | null;
-  isInstaUser: boolean | null;
-  isYoutubeUser: boolean | null;
+  naver_isNaverUser: boolean | null;
+  naverIn_isNaverInfluencer: boolean | null;
+  insta_isInstaUser: boolean | null;
+  youtube_isYoutubeUser: boolean | null;
   gender: string | null;
   job: string | null;
   address: string | null;
@@ -55,13 +56,19 @@ export interface findUsers_findUsers_users {
   naver_averageNumberOfVisitors: number | null;
   naver_totalNumberOfVisitors: number | null;
   naver_numberOfBuddys: number | null;
-  naver_numberOfFans: number | null;
-  naver_isNaverInfluencer: boolean | null;
   naver_category1: string | null;
   naver_category2: string | null;
   naver_heathyPoint: number | null;
   naver_numberOfProposals: number | null;
   naver_participationRate: number | null;
+  naverIn_isExisted: boolean | null;
+  naverIn_id: string | null;
+  naverIn_numberOfFans: number | null;
+  naverIn_category1: string | null;
+  naverIn_category2: string | null;
+  naverIn_numberOfProposals: number | null;
+  naverIn_participationRate: number | null;
+  youtube_id: string | null;
 }
 
 export interface findUsers_findUsers {

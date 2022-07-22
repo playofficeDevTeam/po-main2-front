@@ -21,9 +21,12 @@ export const FIND_USERS = gql`
         brand_option
         brand_region
         residentRegistrationNumber
-        isNaverUser
-        isInstaUser
-        isYoutubeUser
+
+        naver_isNaverUser
+        naverIn_isNaverInfluencer
+        insta_isInstaUser
+        youtube_isYoutubeUser
+
         gender
         job
         address
@@ -33,6 +36,7 @@ export const FIND_USERS = gql`
         qualitativePoint
         economyPoint
         isJoinedInPlusBuddy
+
         insta_isExisted
         insta_id
         insta_NumberOfFollowers
@@ -45,18 +49,27 @@ export const FIND_USERS = gql`
         insta_designatedPrice
         insta_numberOfProposals
         insta_participationRate
+
         naver_isExisted
         naver_id
         naver_averageNumberOfVisitors
         naver_totalNumberOfVisitors
         naver_numberOfBuddys
-        naver_numberOfFans
-        naver_isNaverInfluencer
         naver_category1
         naver_category2
         naver_heathyPoint
         naver_numberOfProposals
         naver_participationRate
+
+        naverIn_isExisted
+        naverIn_id
+        naverIn_numberOfFans
+        naverIn_category1
+        naverIn_category2
+        naverIn_numberOfProposals
+        naverIn_participationRate
+
+        youtube_id
       }
     }
   }
