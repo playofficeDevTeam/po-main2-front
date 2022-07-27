@@ -72,7 +72,7 @@ export default function App() {
   const usersData = useMemo(
     () =>
       query.data?.findUsers.users
-        ?.filter((val) => val.isNaverUser)
+        ?.filter((val) => val.naver_isNaverUser)
         .map((val, idx) => ({
           ...tableTranslator(columns, val),
         })),

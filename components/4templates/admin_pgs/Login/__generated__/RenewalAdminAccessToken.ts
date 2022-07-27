@@ -14,6 +14,7 @@ export interface RenewalAdminAccessToken_renewalAdminAccessToken {
   ok: boolean;
   error: string | null;
   accessToken: string | null;
+  refreshToken: string | null;
 }
 
 export interface RenewalAdminAccessToken {

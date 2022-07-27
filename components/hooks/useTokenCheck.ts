@@ -1,12 +1,22 @@
 import { gql, useMutation } from "@apollo/client";
 import * as jwt from "jsonwebtoken";
 import { useRouter } from "next/router";
+import { atom, useRecoilState } from "recoil";
 import { RENEWAL_ADMIN_ACCESS_TOKEN } from "../4templates/admin_pgs/Login/Gql_login";
 import {
   RenewalAdminAccessToken,
   RenewalAdminAccessTokenVariables,
 } from "../4templates/admin_pgs/Login/__generated__/RenewalAdminAccessToken";
-import { accessTokenVar, adminLoggedInVar } from "../common/apollo";
+import {
+  accessTokenVar,
+  adminLoggedInVar,
+  refreshTokenVar,
+} from "../common/apollo";
+
+const isTokenCheckActivatedAtom = atom({
+  key: "isTokenCheckActivatedAtom",
+  default: false,
+});
 
 export const useTokenCheck = () => {
   //어드민 토큰 리프레쉬
@@ -17,12 +27,15 @@ export const useTokenCheck = () => {
   >(RENEWAL_ADMIN_ACCESS_TOKEN, {
     onCompleted: (data: RenewalAdminAccessToken) => {
       const {
-        renewalAdminAccessToken: { ok, error, accessToken },
+        renewalAdminAccessToken: { ok, error, accessToken, refreshToken },
       } = data;
-      if (ok && accessToken) {
+      if (ok && accessToken && refreshToken) {
         localStorage.setItem("accessToken", accessToken);
         accessTokenVar(accessToken);
-        adminLoggedInVar(true);
+        console.log(refreshToken);
+        // localStorage.setItem("refreshToken", refreshToken);
+        // refreshTokenVar(refreshToken);
+        // adminLoggedInVar(true);
       } else if (error) {
         throw (
           "오류가 생겼습니다. 다시 로그인해주세요." + " 에러메세지:" + error
@@ -55,7 +68,8 @@ export const useTokenCheck = () => {
 
       const now = new Date();
       const nowTime = now.getTime();
-      const marginTime = 1000 * 60 * 5;
+      const marginTime = 0;
+      // const marginTime = 1000 * 60 * 5;
 
       if (refreshTokenExpired - nowTime < marginTime) {
         throw "자동로그인 유효기한(1주)이 만료되었습니다. 다시 로그인해주세요.";

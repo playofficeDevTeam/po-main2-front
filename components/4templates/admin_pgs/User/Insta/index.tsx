@@ -72,7 +72,7 @@ export default function App() {
   const usersData = useMemo(
     () =>
       query.data?.findUsers.users
-        ?.filter((val) => val.isInstaUser)
+        ?.filter((val) => val.insta_isInstaUser)
         .map((val, idx) => ({
           ...tableTranslator(columns, val),
         })),

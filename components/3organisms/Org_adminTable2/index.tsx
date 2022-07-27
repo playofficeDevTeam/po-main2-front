@@ -640,7 +640,24 @@ function Table({
                             : "center pt-5"
                         }`}
                       >
-                        {column.render("Header")}
+                        <div
+                          onClick={() => {
+                            console.log(column);
+                          }}
+                          className={
+                            column.id.split("_")[0] === "insta"
+                              ? " text-pink-400"
+                              : column.id.split("_")[0] === "naver"
+                              ? "text-green-500"
+                              : column.id.split("_")[0] === "naverIn"
+                              ? "  text-indigo-400"
+                              : column.id.split("_")[0] === "youtube"
+                              ? "text-red-400"
+                              : ""
+                          }
+                        >
+                          {column.render("Header")}
+                        </div>
                         <span>
                           {column.isSorted ? (
                             column.isSortedDesc ? (

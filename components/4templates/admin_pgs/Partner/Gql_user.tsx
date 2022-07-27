@@ -33,7 +33,6 @@ export const FIND_USERS = gql`
         bank
         accountNumber
         creditPoint
-        qualitativePoint
         economyPoint
         isJoinedInPlusBuddy
 
@@ -46,6 +45,7 @@ export const FIND_USERS = gql`
         insta_style
         insta_professionalPoint
         insta_heathyPoint
+        insta_qualitativePoint
         insta_designatedPrice
         insta_numberOfProposals
         insta_participationRate
@@ -58,6 +58,7 @@ export const FIND_USERS = gql`
         naver_category1
         naver_category2
         naver_heathyPoint
+        naver_qualitativePoint
         naver_numberOfProposals
         naver_participationRate
 

@@ -278,7 +278,6 @@ export interface CreateUserForAdminInput {
   bank?: string | null;
   accountNumber?: string | null;
   creditPoint?: number | null;
-  qualitativePoint?: number | null;
   economyPoint?: number | null;
   isJoinedInPlusBuddy?: boolean | null;
   insta_isInstaUser?: boolean | null;
@@ -294,6 +293,7 @@ export interface CreateUserForAdminInput {
   insta_style?: string | null;
   insta_professionalPoint?: number | null;
   insta_heathyPoint?: number | null;
+  insta_qualitativePoint?: number | null;
   insta_designatedPrice?: number | null;
   insta_numberOfProposals?: number | null;
   insta_participationRate?: number | null;
@@ -305,6 +305,7 @@ export interface CreateUserForAdminInput {
   naver_category1?: string | null;
   naver_category2?: string | null;
   naver_heathyPoint?: number | null;
+  naver_qualitativePoint?: number | null;
   naver_numberOfProposals?: number | null;
   naver_participationRate?: number | null;
   naverIn_isExisted?: boolean | null;
@@ -541,7 +542,6 @@ export interface EditUserInput {
   bank?: string | null;
   accountNumber?: string | null;
   creditPoint?: number | null;
-  qualitativePoint?: number | null;
   economyPoint?: number | null;
   isJoinedInPlusBuddy?: boolean | null;
   insta_isInstaUser?: boolean | null;
@@ -557,6 +557,7 @@ export interface EditUserInput {
   insta_style?: string | null;
   insta_professionalPoint?: number | null;
   insta_heathyPoint?: number | null;
+  insta_qualitativePoint?: number | null;
   insta_designatedPrice?: number | null;
   insta_numberOfProposals?: number | null;
   insta_participationRate?: number | null;
@@ -568,6 +569,7 @@ export interface EditUserInput {
   naver_category1?: string | null;
   naver_category2?: string | null;
   naver_heathyPoint?: number | null;
+  naver_qualitativePoint?: number | null;
   naver_numberOfProposals?: number | null;
   naver_participationRate?: number | null;
   naverIn_isExisted?: boolean | null;
@@ -631,10 +633,6 @@ export interface ItemIdAndAmount {
   amountOfItem?: number | null;
 }
 
-export interface LoginAdminInput {
-  email?: string | null;
-}
-
 export interface RenewalAdminAccessTokenInput {
   refreshToken?: string | null;
 }
@@ -665,7 +663,6 @@ export interface UserInputType {
   bank?: string | null;
   accountNumber?: string | null;
   creditPoint?: number | null;
-  qualitativePoint?: number | null;
   economyPoint?: number | null;
   isJoinedInPlusBuddy?: boolean | null;
   insta_isInstaUser?: boolean | null;
@@ -681,6 +678,7 @@ export interface UserInputType {
   insta_style?: string | null;
   insta_professionalPoint?: number | null;
   insta_heathyPoint?: number | null;
+  insta_qualitativePoint?: number | null;
   insta_designatedPrice?: number | null;
   insta_numberOfProposals?: number | null;
   insta_participationRate?: number | null;
@@ -692,6 +690,7 @@ export interface UserInputType {
   naver_category1?: string | null;
   naver_category2?: string | null;
   naver_heathyPoint?: number | null;
+  naver_qualitativePoint?: number | null;
   naver_numberOfProposals?: number | null;
   naver_participationRate?: number | null;
   naverIn_isExisted?: boolean | null;

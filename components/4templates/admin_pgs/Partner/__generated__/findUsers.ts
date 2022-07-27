@@ -36,7 +36,6 @@ export interface findUsers_findUsers_users {
   bank: string | null;
   accountNumber: string | null;
   creditPoint: number | null;
-  qualitativePoint: number | null;
   economyPoint: number | null;
   isJoinedInPlusBuddy: boolean | null;
   insta_isExisted: boolean | null;
@@ -48,6 +47,7 @@ export interface findUsers_findUsers_users {
   insta_style: string | null;
   insta_professionalPoint: number | null;
   insta_heathyPoint: number | null;
+  insta_qualitativePoint: number | null;
   insta_designatedPrice: number | null;
   insta_numberOfProposals: number | null;
   insta_participationRate: number | null;
@@ -59,6 +59,7 @@ export interface findUsers_findUsers_users {
   naver_category1: string | null;
   naver_category2: string | null;
   naver_heathyPoint: number | null;
+  naver_qualitativePoint: number | null;
   naver_numberOfProposals: number | null;
   naver_participationRate: number | null;
   naverIn_isExisted: boolean | null;

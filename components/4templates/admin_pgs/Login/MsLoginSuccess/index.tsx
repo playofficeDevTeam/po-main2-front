@@ -10,7 +10,9 @@ import {
   editMeForAdminVariables,
 } from "../../Admin/__generated__/editMeForAdmin";
 import { findMeforAdmin } from "../../Admin/__generated__/findMeforAdmin";
+
 export default function App() {
+  const tokenCheck = useTokenCheck();
   const router = useRouter();
   const refreshToken = router.query.refreshToken + "";
   const socialRefreshToken = router.query.socialRefreshToken + "";
@@ -35,8 +37,6 @@ export default function App() {
       refetch();
     },
   });
-
-  const tokenCheck = useTokenCheck();
 
   useEffect(() => {
     if (router.query.refreshToken) {
