@@ -1,5 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import * as jwt from "jsonwebtoken";
+import { throttle } from "lodash";
 import { useRouter } from "next/router";
 import { atom, useRecoilState } from "recoil";
 import { RENEWAL_ADMIN_ACCESS_TOKEN } from "../4templates/admin_pgs/Login/Gql_login";
@@ -12,11 +13,7 @@ import {
   adminLoggedInVar,
   refreshTokenVar,
 } from "../common/apollo";
-
-const isTokenCheckActivatedAtom = atom({
-  key: "isTokenCheckActivatedAtom",
-  default: false,
-});
+import { isRefreshedAtom } from "../common/UserDetect";
 
 export const useTokenCheck = () => {
   //어드민 토큰 리프레쉬
@@ -32,7 +29,6 @@ export const useTokenCheck = () => {
       if (ok && accessToken && refreshToken) {
         localStorage.setItem("accessToken", accessToken);
         accessTokenVar(accessToken);
-        console.log(refreshToken);
         // localStorage.setItem("refreshToken", refreshToken);
         // refreshTokenVar(refreshToken);
         // adminLoggedInVar(true);
@@ -44,7 +40,12 @@ export const useTokenCheck = () => {
     },
   });
 
-  const tokenDecode = async (type: "query" | "mutation", callback: any) => {
+  const [isRefreshed, setIsRefreshed] = useRecoilState(isRefreshedAtom);
+
+  const tokenDecode = async (
+    type: "query" | "mutation",
+    callback: () => void
+  ) => {
     try {
       // 토큰디코드
       const accessToken =
@@ -68,8 +69,7 @@ export const useTokenCheck = () => {
 
       const now = new Date();
       const nowTime = now.getTime();
-      const marginTime = 0;
-      // const marginTime = 1000 * 60 * 5;
+      const marginTime = 1000 * 60 * 5;
 
       if (refreshTokenExpired - nowTime < marginTime) {
         throw "자동로그인 유효기한(1주)이 만료되었습니다. 다시 로그인해주세요.";
@@ -79,15 +79,12 @@ export const useTokenCheck = () => {
         accessTokenVar(accessToken);
         adminLoggedInVar(true);
         if (!accessToken || accessTokenExpired - nowTime < marginTime) {
-          await renewalAdminAccessToken({
-            variables: {
-              input: {
-                refreshToken,
-              },
-            },
-          });
-          callback();
+          setIsRefreshed({ state: false, callback: callback });
+          setTimeout(() => {
+            setIsRefreshed({ state: true, callback: () => {} });
+          }, 1000);
         } else {
+          // 뮤테이션일때는 그냥 콜백 실행함
           if (type === "mutation") {
             callback();
           }

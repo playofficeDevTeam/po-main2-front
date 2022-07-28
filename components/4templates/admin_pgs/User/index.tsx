@@ -94,7 +94,7 @@ export default function App() {
   );
 
   if (query.error) {
-    return <>{query.error.message}</>;
+    return <>{}</>;
   }
   if (query.data) {
     return (
