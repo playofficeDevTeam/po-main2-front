@@ -641,9 +641,6 @@ function Table({
                         }`}
                       >
                         <div
-                          onClick={() => {
-                            console.log(column);
-                          }}
                           className={
                             column.id.split("_")[0] === "insta"
                               ? " text-pink-400"

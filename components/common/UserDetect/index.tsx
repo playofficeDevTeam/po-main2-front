@@ -36,7 +36,6 @@ export default function App({ children }) {
       if (ok && accessToken && refreshToken) {
         localStorage.setItem("accessToken", accessToken);
         accessTokenVar(accessToken);
-        console.log(refreshToken);
         localStorage.setItem("refreshToken", refreshToken);
         refreshTokenVar(refreshToken);
         adminLoggedInVar(true);
