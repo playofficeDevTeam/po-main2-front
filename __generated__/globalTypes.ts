@@ -28,9 +28,16 @@ export interface AdminInputType {
   socialAccessToken?: string | null;
   socialRefreshToken?: string | null;
   role?: AdminRole | null;
-  refreshToken?: string | null;
+  refreshTokens?: AdminRefreshTokenInputType[] | null;
   questionsInCharge?: questionInputType[] | null;
   paymentsInCharge?: paymentInputType[] | null;
+}
+
+export interface AdminRefreshTokenInputType {
+  admin?: AdminInputType | null;
+  adminId: number;
+  refreshToken?: string | null;
+  userAgent?: string | null;
 }
 
 export interface CampaignInputType {
@@ -89,7 +96,7 @@ export interface CreateAdminSuperInput {
   socialAccessToken?: string | null;
   socialRefreshToken?: string | null;
   role?: AdminRole | null;
-  refreshToken?: string | null;
+  refreshTokens?: AdminRefreshTokenInputType[] | null;
   questionsInCharge?: questionInputType[] | null;
   paymentsInCharge?: paymentInputType[] | null;
 }
@@ -254,7 +261,7 @@ export interface CreateUserForAdminInput {
   createdAt?: any | null;
   updatedAt?: any | null;
   role?: UserRole | null;
-  refreshToken?: string | null;
+  refreshTokens?: UserRefreshTokenInputType[] | null;
   email?: string | null;
   additionalEmail?: string | null;
   password?: string | null;
@@ -363,7 +370,7 @@ export interface EditAdminInput {
   socialAccessToken?: string | null;
   socialRefreshToken?: string | null;
   role?: AdminRole | null;
-  refreshToken?: string | null;
+  refreshTokens?: AdminRefreshTokenInputType[] | null;
   questionsInCharge?: questionInputType[] | null;
   paymentsInCharge?: paymentInputType[] | null;
   id: number;
@@ -439,7 +446,7 @@ export interface EditMeForAdminInput {
   socialAccessToken?: string | null;
   socialRefreshToken?: string | null;
   role?: AdminRole | null;
-  refreshToken?: string | null;
+  refreshTokens?: AdminRefreshTokenInputType[] | null;
   questionsInCharge?: questionInputType[] | null;
   paymentsInCharge?: paymentInputType[] | null;
 }
@@ -518,7 +525,7 @@ export interface EditUserInput {
   createdAt?: any | null;
   updatedAt?: any | null;
   role?: UserRole | null;
-  refreshToken?: string | null;
+  refreshTokens?: UserRefreshTokenInputType[] | null;
   email?: string | null;
   additionalEmail?: string | null;
   password?: string | null;
@@ -633,13 +640,19 @@ export interface ItemIdAndAmount {
   amountOfItem?: number | null;
 }
 
+export interface LoginUserInput {
+  email?: string | null;
+  password?: string | null;
+  userAgent?: string | null;
+}
+
 export interface RenewalAdminAccessTokenInput {
   refreshToken?: string | null;
 }
 
 export interface UserInputType {
   role: UserRole;
-  refreshToken: string;
+  refreshTokens?: UserRefreshTokenInputType[] | null;
   email?: string | null;
   additionalEmail?: string | null;
   password?: string | null;
@@ -701,6 +714,13 @@ export interface UserInputType {
   naverIn_numberOfProposals?: number | null;
   naverIn_participationRate?: number | null;
   youtube_id?: string | null;
+}
+
+export interface UserRefreshTokenInputType {
+  user?: UserInputType | null;
+  userId: number;
+  refreshToken?: string | null;
+  userAgent?: string | null;
 }
 
 export interface cartInputType {

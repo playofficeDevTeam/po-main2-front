@@ -71,11 +71,11 @@ export const useTokenCheck = () => {
       const nowTime = now.getTime();
       const marginTime = 1000 * 60 * 5;
 
-      if (refreshTokenExpired - nowTime < marginTime) {
-        throw "자동로그인 유효기한(1주)이 만료되었습니다. 다시 로그인해주세요.";
-      }
-
       if (["Super", "General"].includes(refreshTokenRole)) {
+        if (refreshTokenExpired - nowTime < marginTime) {
+          adminLoggedInVar(false);
+          router.push(`/admin/log-in`);
+        }
         accessTokenVar(accessToken);
         adminLoggedInVar(true);
         if (!accessToken || accessTokenExpired - nowTime < marginTime) {

@@ -1066,6 +1066,16 @@ function Form({
                                       min="1"
                                       max="9"
                                     />
+                                  ) : val.formType_create === "password" ? (
+                                    <input
+                                      id={val.accessor}
+                                      value={val.value}
+                                      onChange={(e) => {
+                                        onChange(e, idx);
+                                      }}
+                                      className="border w-96 p-1 m-1"
+                                      type={`password`}
+                                    />
                                   ) : (
                                     <input
                                       id={val.accessor}
@@ -1214,6 +1224,16 @@ function Form({
                                     type={`number`}
                                     min="1"
                                     max="9"
+                                  />
+                                ) : val.formType_create === "password" ? (
+                                  <input
+                                    id={val.accessor}
+                                    value={val.value}
+                                    onChange={(e) => {
+                                      onChange(e, idx);
+                                    }}
+                                    className="border w-96 p-1 m-1"
+                                    type={`password`}
                                   />
                                 ) : (
                                   <input

@@ -1,9 +1,9 @@
-import User from "../../components/4templates/admin_pgs/User";
+import Login from "../../components/4templates/user_pgs/Login";
 
 export default function App() {
   return (
     <>
-      <User />
+      <Login />
     </>
   );
 }
