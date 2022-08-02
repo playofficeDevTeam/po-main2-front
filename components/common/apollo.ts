@@ -8,6 +8,7 @@ import {
 } from "@apollo/client";
 
 export const adminLoggedInVar = makeVar(false);
+export const userLoggedInVar = makeVar(false);
 export const accessTokenVar = makeVar("");
 export const refreshTokenVar = makeVar("");
 

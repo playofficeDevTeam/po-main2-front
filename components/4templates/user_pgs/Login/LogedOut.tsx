@@ -1,5 +1,10 @@
 import { useMutation } from "@apollo/client";
 import { atom, useRecoilState } from "recoil";
+import {
+  accessTokenVar,
+  refreshTokenVar,
+  userLoggedInVar,
+} from "../../../common/apollo";
 import { LOGIN_USER } from "./gql_loginUser";
 import { loginUser, loginUserVariables } from "./__generated__/loginUser";
 
@@ -28,8 +33,8 @@ const userLoginAtom = atom({
 function App() {
   const [userLoginState, setUserLoginState] = useRecoilState(userLoginAtom);
   const onChange = (e, id) => {
-    setUserLoginState((inputData) =>
-      inputData.map((val, idx) =>
+    setUserLoginState((userLolginState) =>
+      userLolginState.map((val, idx) =>
         idx === id ? { ...val, value: e.target.value } : val
       )
     );
@@ -37,7 +42,15 @@ function App() {
 
   const loginMutation = useMutation<loginUser, loginUserVariables>(LOGIN_USER, {
     onCompleted: (data) => {
-      console.log(data);
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+
+      localStorage.setItem("accessToken", data.loginUser.accessToken + "");
+      localStorage.setItem("refreshToken", data.loginUser.refreshToken + "");
+
+      accessTokenVar(data.loginUser.accessToken + "");
+      refreshTokenVar(data.loginUser.refreshToken + "");
+      userLoggedInVar(true);
     },
   });
 

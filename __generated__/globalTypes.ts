@@ -646,6 +646,10 @@ export interface LoginUserInput {
   userAgent?: string | null;
 }
 
+export interface RenewalAccessTokenInput {
+  refreshToken?: string | null;
+}
+
 export interface RenewalAdminAccessTokenInput {
   refreshToken?: string | null;
 }

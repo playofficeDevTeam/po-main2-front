@@ -3,13 +3,13 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { RenewalAdminAccessTokenInput } from "./../../../../../__generated__/globalTypes";
+import { RenewalAdminAccessTokenInput } from "./../../../../__generated__/globalTypes";
 
 // ====================================================
-// GraphQL mutation operation: RenewalAdminAccessToken
+// GraphQL mutation operation: renewalAdminAccessToken
 // ====================================================
 
-export interface RenewalAdminAccessToken_renewalAdminAccessToken {
+export interface renewalAdminAccessToken_renewalAdminAccessToken {
   __typename: "RenewalAdminAccessTokenOutput";
   ok: boolean;
   error: string | null;
@@ -17,10 +17,10 @@ export interface RenewalAdminAccessToken_renewalAdminAccessToken {
   refreshToken: string | null;
 }
 
-export interface RenewalAdminAccessToken {
-  renewalAdminAccessToken: RenewalAdminAccessToken_renewalAdminAccessToken;
+export interface renewalAdminAccessToken {
+  renewalAdminAccessToken: renewalAdminAccessToken_renewalAdminAccessToken;
 }
 
-export interface RenewalAdminAccessTokenVariables {
+export interface renewalAdminAccessTokenVariables {
   input: RenewalAdminAccessTokenInput;
 }

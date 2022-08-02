@@ -1,44 +1,12 @@
-import { gql, useMutation } from "@apollo/client";
 import * as jwt from "jsonwebtoken";
-import { throttle } from "lodash";
 import { useRouter } from "next/router";
-import { atom, useRecoilState } from "recoil";
-import { RENEWAL_ADMIN_ACCESS_TOKEN } from "../4templates/admin_pgs/Login/Gql_login";
-import {
-  RenewalAdminAccessToken,
-  RenewalAdminAccessTokenVariables,
-} from "../4templates/admin_pgs/Login/__generated__/RenewalAdminAccessToken";
-import {
-  accessTokenVar,
-  adminLoggedInVar,
-  refreshTokenVar,
-} from "../common/apollo";
+import { useRecoilState } from "recoil";
+import { adminLoggedInVar, userLoggedInVar } from "../common/apollo";
 import { isRefreshedAtom } from "../common/UserDetect";
 
 export const useTokenCheck = () => {
   //어드민 토큰 리프레쉬
   const router = useRouter();
-  const [renewalAdminAccessToken] = useMutation<
-    RenewalAdminAccessToken,
-    RenewalAdminAccessTokenVariables
-  >(RENEWAL_ADMIN_ACCESS_TOKEN, {
-    onCompleted: (data: RenewalAdminAccessToken) => {
-      const {
-        renewalAdminAccessToken: { ok, error, accessToken, refreshToken },
-      } = data;
-      if (ok && accessToken && refreshToken) {
-        localStorage.setItem("accessToken", accessToken);
-        accessTokenVar(accessToken);
-        // localStorage.setItem("refreshToken", refreshToken);
-        // refreshTokenVar(refreshToken);
-        // adminLoggedInVar(true);
-      } else if (error) {
-        throw (
-          "오류가 생겼습니다. 다시 로그인해주세요." + " 에러메세지:" + error
-        );
-      }
-    },
-  });
 
   const [isRefreshed, setIsRefreshed] = useRecoilState(isRefreshedAtom);
 
@@ -71,27 +39,63 @@ export const useTokenCheck = () => {
       const nowTime = now.getTime();
       const marginTime = 1000 * 60 * 5;
 
+      //어드민 계정일때
       if (["Super", "General"].includes(refreshTokenRole)) {
+        userLoggedInVar(false);
+        //리프레시토큰 만료시
         if (refreshTokenExpired - nowTime < marginTime) {
           adminLoggedInVar(false);
-          router.push(`/admin/log-in`);
         }
-        accessTokenVar(accessToken);
-        adminLoggedInVar(true);
-        if (!accessToken || accessTokenExpired - nowTime < marginTime) {
-          setIsRefreshed({ state: false, callback: callback });
-          setTimeout(() => {
-            setIsRefreshed({ state: true, callback: () => {} });
-          }, 1000);
-        } else {
-          // 뮤테이션일때는 그냥 콜백 실행함
-          if (type === "mutation") {
-            callback();
+        //리프레시토큰 살아있을시
+        else {
+          //액세스토큰 만료시
+          if (!accessToken || accessTokenExpired - nowTime < marginTime) {
+            setIsRefreshed({ state: false, callback: callback });
+            setTimeout(() => {
+              setIsRefreshed({ state: true, callback: () => {} });
+            }, 1000);
           }
+          //액세스토큰 살아있을시
+          else {
+            // 뮤테이션일때는 그냥 콜백 실행함
+            if (type === "mutation") {
+              callback();
+            }
+          }
+          adminLoggedInVar(true);
         }
-      } else if (["Partner", "Creator"].includes(refreshTokenRole)) {
-      } else {
+      }
+      //유저 계정일때
+      else if (["Partner", "Creator"].includes(refreshTokenRole)) {
+        console.log(refreshTokenRole);
         adminLoggedInVar(false);
+        //리프레시토큰 만료시
+        if (refreshTokenExpired - nowTime < marginTime) {
+          userLoggedInVar(false);
+        }
+        //리프레시토큰 살아있을시
+        else {
+          //액세스토큰 만료시
+          if (!accessToken || accessTokenExpired - nowTime < marginTime) {
+            setIsRefreshed({ state: false, callback: callback });
+            setTimeout(() => {
+              setIsRefreshed({ state: true, callback: () => {} });
+            }, 1000);
+          }
+          //액세스토큰 살아있을시
+          else {
+            // 뮤테이션일때는 그냥 콜백 실행함
+            if (type === "mutation") {
+              callback();
+            }
+          }
+          userLoggedInVar(true);
+        }
+      }
+      //role 확인 불가일때
+      else {
+        adminLoggedInVar(false);
+        userLoggedInVar(false);
       }
     } catch (error) {
       adminLoggedInVar(false);
