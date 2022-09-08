@@ -23,11 +23,6 @@ export default function App() {
       src="/assets/고객반응/고객반응_운동기구/4_4"
       className=" mx-auto"
     />,
-    <Vdo
-      key={5}
-      src="/assets/고객반응/고객반응_운동기구/4_5"
-      className=" mx-auto"
-    />,
   ];
 
   return <Org_8reference_R_ data={data} />;

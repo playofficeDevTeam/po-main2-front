@@ -76,7 +76,7 @@ function App() {
         >
           <ul>
             {userLoginState.map((val, idx) => (
-              <li>
+              <li key={idx}>
                 <input
                   type={val.formType}
                   className="border w-96 p-1 m-1"

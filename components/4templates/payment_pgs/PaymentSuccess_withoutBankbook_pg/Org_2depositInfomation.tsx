@@ -5,11 +5,10 @@ import toast, { Toaster } from "react-hot-toast";
 import { useRecoilValue } from "recoil";
 import { clickedServiceDataClass } from "../../service_pgs/VisualInfluencer_pg/Var_serviceDatas";
 
-export const paymentResponse = JSON.parse(
-  window.localStorage.getItem("paymentResponse") ?? JSON.stringify({})
-);
-
 export default function App() {
+  const paymentResponse = JSON.parse(
+    window.localStorage.getItem("paymentResponse") ?? JSON.stringify({})
+  );
   const notify = () => toast("복사되었습니다.");
   const dueDate = new Date(paymentResponse.virtualAccount.dueDate);
   const clickedServiceData = useRecoilValue(clickedServiceDataClass);
