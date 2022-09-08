@@ -26,7 +26,7 @@ const data1 = {
         />,
         <Vdo
           key={4}
-          src="/assets/서비스_비주얼/7_3"
+          src="/assets/서비스_비주얼/7_4"
           className="rounded-2xl mx-auto"
         />,
         <Vdo
