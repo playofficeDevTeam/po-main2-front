@@ -63,7 +63,7 @@ export default function App({ children }: any) {
         slidesToScroll: 1,
         centerMode: true,
         centerPadding: "30px",
-        lazyLoad: "ondemand",
+        // lazyLoad: "ondemand",
       }
     : {
         dots: true,
@@ -72,7 +72,7 @@ export default function App({ children }: any) {
         speed: 300,
         slidesToShow: 1,
         slidesToScroll: 1,
-        lazyLoad: "ondemand",
+        // lazyLoad: "ondemand",
       };
   return (
     <CustomCarousel isMobile={isMobile}>

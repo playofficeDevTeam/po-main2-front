@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import { atom, useRecoilState } from "recoil";
 import Ani_box from "../../1atoms/Ani_box";
 import useIsMobile from "../../hooks/useIsMobile";
+import clickChannelTalk from "/home/app/components/2molecules/clickChannelTalk";
+import { useGtm } from "../../hooks/useGtm";
 
 const sitemapData = [
   { title: "서비스", url: "/service", selected: false },
@@ -64,64 +66,81 @@ export default function App() {
     selectTab(nowPathIndex);
   }, [router, selectTab]);
 
+  //채널톡 열릴때 이벤트 발생
+  const startContactGtm = useGtm({
+    event: "StartContact",
+    eventModel: {
+      search_string: "전문가 컨설팅 신청",
+    },
+  });
+  useEffect(() => {
+    let w: any = window;
+    if (w.ChannelIO) {
+      w.ChannelIO("onShowMessenger", function () {
+        startContactGtm();
+      });
+    }
+  }, []);
+
   return (
     <>
       {isMobile ? (
         // 모바일
         // 모바일
         // 모바일
-        <header className=" sticky top-0" style={{ zIndex: 100 }}>
-          {/* 메인메뉴 */}
-          <div className="h-12 bg-white border-b relative z-50">
-            <div className="mo-max center h-full">
-              <div
-                className="w-2/12 center cursor-pointer"
-                onClick={() => {
-                  menuToggle();
-                }}
-              >
-                <i className="fas fa-bars text-xl text-gray-700"></i>
-              </div>
-              <Link href={"/"}>
-                <a
-                  className="w-8/12 center cursor-pointer"
+        <>
+          <header className=" sticky top-0" style={{ zIndex: 100 }}>
+            {/* 메인메뉴 */}
+            <div className="h-12 bg-white border-b relative z-50">
+              <div className="mo-max center h-full">
+                <div
+                  className="w-2/12 center cursor-pointer"
                   onClick={() => {
-                    setMenuState(false);
+                    menuToggle();
                   }}
                 >
-                  <div className="text-xl font-black text-orange-600">
-                    POKETING
-                  </div>
-                </a>
-              </Link>
-              <div className="w-2/12 center"></div>
+                  <i className="fas fa-bars text-xl text-gray-700"></i>
+                </div>
+                <Link href={"/"}>
+                  <a
+                    className="w-8/12 center cursor-pointer"
+                    onClick={() => {
+                      setMenuState(false);
+                    }}
+                  >
+                    <div className="text-xl font-black text-orange-600">
+                      POKETING
+                    </div>
+                  </a>
+                </Link>
+                <div className="w-2/12 center"></div>
+              </div>
             </div>
-          </div>
-          {/* 서브메뉴 */}
-          <Ani_box trigger={isMenuOpened}>
-            <div className="h-0 z-40">
-              <nav className=" bg-white">
-                <ul className="py-4 border-b shadow-md">
-                  {sitemapDataState.map((val, idx) => (
-                    <Link href={val.url} key={idx}>
-                      <a
-                        className="center py-2 "
-                        onClick={() => {
-                          setMenuState(false);
-                        }}
-                      >
-                        <div className="center text-base">{val.title}</div>
+            {/* 서브메뉴 */}
+            <Ani_box trigger={isMenuOpened}>
+              <div className="h-0 z-40">
+                <nav className=" bg-white">
+                  <ul className="py-4 border-b shadow-md">
+                    {sitemapDataState.map((val, idx) => (
+                      <Link href={val.url} key={idx}>
+                        <a
+                          className="center py-2 "
+                          onClick={() => {
+                            setMenuState(false);
+                          }}
+                        >
+                          <div className="center text-base">{val.title}</div>
 
-                        <i className="fas fa-chevron-right text-gray-500 pl-2   text-xs center relative top-px "></i>
-                      </a>
-                    </Link>
-                  ))}
-                </ul>
-              </nav>
-            </div>
-          </Ani_box>
-          {/* 서브메뉴 */}
-          {/* {isMenuOpened ? (
+                          <i className="fas fa-chevron-right text-gray-500 pl-2   text-xs center relative top-px "></i>
+                        </a>
+                      </Link>
+                    ))}
+                  </ul>
+                </nav>
+              </div>
+            </Ani_box>
+            {/* 서브메뉴 */}
+            {/* {isMenuOpened ? (
             <div className="h-0">
               <nav className=" bg-white">
                 <ul className="py-4 border-b shadow-md">
@@ -145,7 +164,21 @@ export default function App() {
           ) : (
             <></>
           )} */}
-        </header>
+          </header>
+          {/* <div
+            className="fixed bg-red-100 opacity-80 cursor-pointer"
+            style={{
+              width: "2.9rem",
+              height: "2.9rem",
+              bottom: "1.7rem",
+              right: "0.9rem",
+              zIndex: 10000001,
+            }}
+            onClick={() => {
+              clickChannelTalk();
+            }}
+          ></div> */}
+        </>
       ) : (
         // 피씨
         // 피씨

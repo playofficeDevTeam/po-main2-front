@@ -4,18 +4,11 @@ import { useGtm } from "../../../hooks/useGtm";
 
 export default function App() {
   const router = useRouter();
-  const startContactGtm = useGtm({
-    event: "StartContact",
-    eventModel: {
-      search_string: "전문가 컨설팅 신청",
-    },
-  });
   return (
     <>
       <RoundedOrangeBtn
         onClick={() => {
           router.push("/consulting/form");
-          startContactGtm();
         }}
       >
         <>

@@ -1,8 +1,6 @@
 import { useRouter } from "next/router";
 import RoundedOrangeBtn from "../../../1atoms/RoundedOrangeBtn";
 import ShutdownChanneltalk from "../../../2molecules/ShutdownChanneltalk";
-import { isVisibleFooterAtom } from "/home/app/components/3organisms/Org_footer/Org_footer";
-import { isVisibleHeaderAtom } from "/home/app/components/3organisms/Org_header/Org_header";
 import ScrollLock from "../../../effects/ScrollLock";
 import OrderSheet_pg from "../OrderSheet_pg";
 import useIsMobile from "/home/app/components/hooks/useIsMobile";

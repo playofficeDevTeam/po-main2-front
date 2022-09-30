@@ -11,6 +11,8 @@ import GoToTopArrow from "../2molecules/GoToTopArrow";
 import UserDetect from "./UserDetect";
 import { client } from "./apollo";
 import { useRouter } from "next/router";
+import ChannelService from "./ChannelService";
+import { v1 } from "uuid";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +24,8 @@ export default function Layout({ children }: any) {
   const tagManagerArgs = {
     gtmId: process.env.NEXT_PUBLIC_TYPE === "prod" ? prodGtmId : devGtmId,
   };
+
+  //태그매니저 부트
   useEffect(() => {
     const asyncEffect = async () => {
       TagManager.initialize(tagManagerArgs);
@@ -30,12 +34,27 @@ export default function Layout({ children }: any) {
     return () => {};
   }, []);
 
+  //어드민 페이지 구분
   const route = useRouter();
   useEffect(() => {
     if (route.asPath.split("/")[1] === "admin") {
       let htmlElement = document.getElementsByTagName("html")[0];
       htmlElement.style.overflowY = "auto";
     }
+  }, []);
+
+  const memberId = v1();
+  //채널톡 부트
+  useEffect(() => {
+    const channelTalk = new ChannelService();
+    channelTalk.boot({
+      pluginKey: process.env.NEXT_PUBLIC_CHANNEL_IO_KEY,
+      memberId: memberId,
+    });
+
+    return () => {
+      channelTalk.shutdown();
+    };
   }, []);
 
   return (

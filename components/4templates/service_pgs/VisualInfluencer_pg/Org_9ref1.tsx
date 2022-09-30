@@ -41,36 +41,6 @@ const data1 = {
       src: [
         <Vdo
           key={1}
-          src="/assets/서비스_비주얼/8_1"
-          className="rounded-2xl mx-auto"
-        />,
-        <Vdo
-          key={2}
-          src="/assets/서비스_비주얼/8_2"
-          className="rounded-2xl mx-auto"
-        />,
-        <Vdo
-          key={3}
-          src="/assets/서비스_비주얼/8_3"
-          className="rounded-2xl mx-auto"
-        />,
-        <Vdo
-          key={4}
-          src="/assets/서비스_비주얼/8_4"
-          className="rounded-2xl mx-auto"
-        />,
-        <Vdo
-          key={5}
-          src="/assets/서비스_비주얼/8_5"
-          className="rounded-2xl mx-auto"
-        />,
-      ],
-    },
-    {
-      h1: <>콘텐츠</>,
-      src: [
-        <Vdo
-          key={1}
           src="/assets/서비스_비주얼/9_1"
           className="rounded-2xl mx-auto"
         />,
@@ -92,6 +62,36 @@ const data1 = {
         <Vdo
           key={5}
           src="/assets/서비스_비주얼/9_5"
+          className="rounded-2xl mx-auto"
+        />,
+      ],
+    },
+    {
+      h1: <>콘텐츠</>,
+      src: [
+        <Vdo
+          key={1}
+          src="/assets/서비스_비주얼/8_1"
+          className="rounded-2xl mx-auto"
+        />,
+        <Vdo
+          key={2}
+          src="/assets/서비스_비주얼/8_2"
+          className="rounded-2xl mx-auto"
+        />,
+        <Vdo
+          key={3}
+          src="/assets/서비스_비주얼/8_3"
+          className="rounded-2xl mx-auto"
+        />,
+        <Vdo
+          key={4}
+          src="/assets/서비스_비주얼/8_4"
+          className="rounded-2xl mx-auto"
+        />,
+        <Vdo
+          key={5}
+          src="/assets/서비스_비주얼/8_5"
           className="rounded-2xl mx-auto"
         />,
       ],

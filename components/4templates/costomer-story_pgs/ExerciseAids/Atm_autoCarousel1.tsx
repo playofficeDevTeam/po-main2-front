@@ -73,7 +73,7 @@ const App = ({ children = defaultData }: any) => {
         className: "center",
         centerMode: true,
         centerPadding: "60px",
-        lazyLoad: "ondemand",
+        // lazyLoad: "ondemand",
       }
     : //   피씨
       //   피씨
@@ -88,7 +88,7 @@ const App = ({ children = defaultData }: any) => {
         autoplaySpeed: 4000,
         draggable: false,
         pauseOnHover: false,
-        lazyLoad: "ondemand",
+        // lazyLoad: "ondemand",
       };
   return (
     <CustomCarousel>

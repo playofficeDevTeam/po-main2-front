@@ -5,18 +5,19 @@ import Document, {
   NextScript,
   DocumentContext,
 } from "next/document";
+import { v1 } from "uuid";
+
+const memberId = v1();
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
     const initialProps = await Document.getInitialProps(ctx);
     return { ...initialProps };
   }
-
   render() {
     return (
       <Html lang="ko">
         <Head></Head>
-
         <body>
           <Main />
           <NextScript />
@@ -63,7 +64,7 @@ class MyDocument extends Document {
           />
 
           {/* 채널톡 */}
-          <script
+          {/* <script
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{
               __html: `(function() {
@@ -102,11 +103,12 @@ class MyDocument extends Document {
                 }
               })();
               ChannelIO('boot', {
-                "pluginKey": "e1c90e36-cc0f-469d-91a9-bbf94a98004c"
+                "pluginKey": "e1c90e36-cc0f-469d-91a9-bbf94a98004c",
+                "memberId": "${memberId}",
               });
               `,
             }}
-          />
+          /> */}
         </body>
       </Html>
     );
