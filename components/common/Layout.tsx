@@ -16,6 +16,8 @@ import { v1 } from "uuid";
 
 const queryClient = new QueryClient();
 
+export const LOCAL_SAVED_MEMVER_ID = "localSavedMemberId";
+
 export default function Layout({ children }: any) {
   useGtmScroll();
 
@@ -43,15 +45,22 @@ export default function Layout({ children }: any) {
     }
   }, []);
 
-  const memberId = v1();
   //채널톡 부트
   useEffect(() => {
+    let memberId;
+    let localSavedMemberId = window.localStorage.getItem(LOCAL_SAVED_MEMVER_ID);
+    if (localSavedMemberId) {
+      memberId = localSavedMemberId;
+    } else {
+      memberId = v1();
+      window.localStorage.setItem(LOCAL_SAVED_MEMVER_ID, memberId);
+    }
+
     const channelTalk = new ChannelService();
     channelTalk.boot({
       pluginKey: process.env.NEXT_PUBLIC_CHANNEL_IO_KEY,
       memberId: memberId,
     });
-
     return () => {
       channelTalk.shutdown();
     };

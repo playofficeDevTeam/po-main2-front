@@ -16,6 +16,34 @@ import {
 } from "./__generated__/CreatePayment";
 import { useState } from "react";
 import ReactLoading from "react-loading";
+import { LOCAL_SAVED_MEMVER_ID } from "../../../common/Layout";
+
+//휴대폰 번호를 숫자만 남기는 정규식
+const regExp = /[^0-9]/g;
+
+//휴대폰 번호를 숫자만 남기는 함수
+const removeNonNumber = (phoneNumber: string) => {
+  return phoneNumber.replace(regExp, "");
+};
+
+//한국 휴대폰 번호를 국제 휴대폰 번호로 변환하는 함수
+const convertKoreanPhoneNumberToInternationalPhoneNumber = (
+  koreanPhoneNumber: string
+) => {
+  if (koreanPhoneNumber[0] === "0") {
+    return `+82${koreanPhoneNumber.substring(1)}`;
+  } else {
+    return `+82${koreanPhoneNumber}`;
+  }
+};
+
+//한국 휴대폰 번호를 숫자만 남기고 국제 휴대폰 번호로 변환하는 함수
+export const convertKoreanPhoneNumberToInternationalPhoneNumberAndRemoveNonNumber =
+  (koreanPhoneNumber: string) => {
+    return convertKoreanPhoneNumberToInternationalPhoneNumber(
+      removeNonNumber(koreanPhoneNumber)
+    );
+  };
 
 export default function App({ trigger = false }) {
   const [serviceDataState, setServiceDataState] =
@@ -111,12 +139,19 @@ export default function App({ trigger = false }) {
                 JSON.stringify(userFormDataState)
               );
               disabledPaymentClick();
+              const memberId = window.localStorage.getItem(
+                LOCAL_SAVED_MEMVER_ID
+              );
               createPayment({
                 variables: {
                   input: {
+                    memberId,
                     brandName: userFormDataState[0].trim(),
                     name: userFormDataState[1].trim(),
-                    phoneNumber: userFormDataState[2].trim(),
+                    phoneNumber:
+                      convertKoreanPhoneNumberToInternationalPhoneNumberAndRemoveNonNumber(
+                        userFormDataState[2].trim()
+                      ),
                     email: userFormDataState[3].trim(),
                     paymentMethod: clickedPaymentMethod ?? "오류",
                     amount,

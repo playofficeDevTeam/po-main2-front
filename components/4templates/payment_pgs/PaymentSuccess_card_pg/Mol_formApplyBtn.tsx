@@ -1,5 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { useRecoilState } from "recoil";
+import { LOCAL_SAVED_MEMVER_ID } from "../../../common/Layout";
+import { convertKoreanPhoneNumberToInternationalPhoneNumberAndRemoveNonNumber } from "../OrderSheet_pg/Mol_formApplyBtn";
 import {
   userFormData,
   userFormDataValidate,
@@ -15,9 +17,10 @@ export default function App({ onClick = () => {} }) {
   const [userFormDataState, setUserFormDataState] =
     useRecoilState(userFormData);
 
-  const [editPayment] = useMutation<EditPaymentForm, EditPaymentFormVariables>(
-    EDIT_PAYMENT_FORM
-  );
+  const [editPaymentFormData] = useMutation<
+    EditPaymentForm,
+    EditPaymentFormVariables
+  >(EDIT_PAYMENT_FORM);
 
   return (
     <div
@@ -34,14 +37,19 @@ export default function App({ onClick = () => {} }) {
             "userFormDataState",
             JSON.stringify(userFormDataState)
           );
-          editPayment({
+          const memberId = window.localStorage.getItem(LOCAL_SAVED_MEMVER_ID);
+          editPaymentFormData({
             variables: {
               input: {
+                memberId,
                 id: paymentId,
-                brandName: userFormDataState[0],
-                name: userFormDataState[1],
-                phoneNumber: userFormDataState[2],
-                email: userFormDataState[3],
+                brandName: userFormDataState[0].trim(),
+                name: userFormDataState[1].trim(),
+                phoneNumber:
+                  convertKoreanPhoneNumberToInternationalPhoneNumberAndRemoveNonNumber(
+                    userFormDataState[2].trim()
+                  ),
+                email: userFormDataState[3].trim(),
               },
             },
           });

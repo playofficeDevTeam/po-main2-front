@@ -191,6 +191,7 @@ export interface CreatePaymentInput {
   orderId?: string | null;
   amount?: number | null;
   itemInfo?: ItemIdAndAmount[] | null;
+  memberId?: string | null;
 }
 
 export interface CreateQuestionForAdminInput {
@@ -457,6 +458,7 @@ export interface EditPaymentFormDataInput {
   name?: string | null;
   phoneNumber?: string | null;
   email?: string | null;
+  memberId?: string | null;
 }
 
 export interface EditPaymentInput {
