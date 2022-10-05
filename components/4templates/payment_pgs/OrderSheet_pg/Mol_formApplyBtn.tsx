@@ -139,9 +139,12 @@ export default function App({ trigger = false }) {
                 JSON.stringify(userFormDataState)
               );
               disabledPaymentClick();
+
+              // memberId 가져오기
               const memberId = window.localStorage.getItem(
                 LOCAL_SAVED_MEMVER_ID
               );
+
               createPayment({
                 variables: {
                   input: {

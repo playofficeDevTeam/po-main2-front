@@ -8,7 +8,7 @@ export default function App() {
         <title>포케팅-결제완료(카드)</title>
         <meta name="description" property="og:description" />
       </Head>
-      <PaymentSuccess_card_pg />;
+      <PaymentSuccess_card_pg />
     </>
   );
 }

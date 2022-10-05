@@ -2,6 +2,8 @@ import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import RoundedOrangeBtn from "../../../1atoms/RoundedOrangeBtn";
+import { LOCAL_SAVED_MEMVER_ID } from "../../../common/Layout";
+import { convertKoreanPhoneNumberToInternationalPhoneNumberAndRemoveNonNumber } from "../../payment_pgs/OrderSheet_pg/Mol_formApplyBtn";
 import {
   userFormData,
   userFormDataValidate,
@@ -76,13 +78,21 @@ export default function App({ trigger = false }) {
             "userDetail1FormDataState",
             JSON.stringify(userDetail1FormDataState)
           );
+
+          //memberId 가져오기
+          const memberId = window.localStorage.getItem(LOCAL_SAVED_MEMVER_ID);
+
           createQuestion({
             variables: {
               input: {
-                brandName: userFormDataState[0],
-                name: userFormDataState[1],
-                phoneNumber: userFormDataState[2],
-                email: userFormDataState[3],
+                memberId,
+                brandName: userFormDataState[0].trim(),
+                name: userFormDataState[1].trim(),
+                phoneNumber:
+                  convertKoreanPhoneNumberToInternationalPhoneNumberAndRemoveNonNumber(
+                    userFormDataState[2].trim()
+                  ),
+                email: userFormDataState[3].trim(),
                 budget: userDetail1FormDataState[0] + "",
                 productLink: userDetail1FormDataState[1] + "",
                 uniqueness: userDetail1FormDataState[2] + "",

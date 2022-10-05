@@ -37,7 +37,11 @@ export default function App({ onClick = () => {} }) {
             "userFormDataState",
             JSON.stringify(userFormDataState)
           );
-          const memberId = window.localStorage.getItem(LOCAL_SAVED_MEMVER_ID);
+
+          // memberId 가져오기
+          const memberId =
+            window.localStorage.getItem(LOCAL_SAVED_MEMVER_ID) ?? "";
+
           editPaymentFormData({
             variables: {
               input: {
