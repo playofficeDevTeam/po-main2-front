@@ -8,7 +8,7 @@ export default function App() {
         <title>포케팅-결제완료(무통장)</title>
         <meta name="description" property="og:description" />
       </Head>
-      <PaymentSuccess_withoutBankbook_pg />;
+      <PaymentSuccess_withoutBankbook_pg />
     </>
   );
 }
