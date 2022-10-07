@@ -65,7 +65,6 @@ export default function Layout({ children }: any) {
       channelTalk.shutdown();
     };
   }, []);
-
   return (
     <ApolloProvider client={client}>
       <QueryClientProvider client={queryClient}>
