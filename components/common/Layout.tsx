@@ -5,37 +5,14 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
 import DeviceDetect from "./DeviceDetect";
 import { useEffect } from "react";
-import TagManager from "react-gtm-module";
-import { useGtmScroll } from "../hooks/useGtmScroll";
 import GoToTopArrow from "../2molecules/GoToTopArrow";
 import UserDetect from "./UserDetect";
 import { client } from "./apollo";
 import { useRouter } from "next/router";
-import ChannelService from "./ChannelService";
-import { v1 } from "uuid";
-
+import ExternalBoot from "./ExternalBoot";
 const queryClient = new QueryClient();
 
-export const LOCAL_SAVED_MEMVER_ID = "localSavedMemberId";
-
 export default function Layout({ children }: any) {
-  useGtmScroll();
-
-  const prodGtmId = "GTM-WTBKCZ8";
-  const devGtmId = "GTM-TCF867Z";
-  const tagManagerArgs = {
-    gtmId: process.env.NEXT_PUBLIC_TYPE === "prod" ? prodGtmId : devGtmId,
-  };
-
-  //태그매니저 부트
-  useEffect(() => {
-    const asyncEffect = async () => {
-      TagManager.initialize(tagManagerArgs);
-    };
-    asyncEffect();
-    return () => {};
-  }, []);
-
   //어드민 페이지 구분
   const route = useRouter();
   useEffect(() => {
@@ -45,32 +22,13 @@ export default function Layout({ children }: any) {
     }
   }, []);
 
-  //채널톡 부트
-  useEffect(() => {
-    let memberId;
-    let localSavedMemberId = window.localStorage.getItem(LOCAL_SAVED_MEMVER_ID);
-    if (localSavedMemberId) {
-      memberId = localSavedMemberId;
-    } else {
-      memberId = v1();
-      window.localStorage.setItem(LOCAL_SAVED_MEMVER_ID, memberId);
-    }
-
-    const channelTalk = new ChannelService();
-    channelTalk.boot({
-      pluginKey: process.env.NEXT_PUBLIC_CHANNEL_IO_KEY,
-      memberId: memberId,
-    });
-    return () => {
-      channelTalk.shutdown();
-    };
-  }, []);
   return (
     <ApolloProvider client={client}>
       <QueryClientProvider client={queryClient}>
         <RecoilRoot>
           <DeviceDetect>
             <UserDetect>
+              <ExternalBoot />
               <Org_header />
               <GoToTopArrow />
               <>{children}</>

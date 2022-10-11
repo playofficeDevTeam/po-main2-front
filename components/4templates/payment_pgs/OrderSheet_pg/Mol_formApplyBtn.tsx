@@ -16,7 +16,7 @@ import {
 } from "./__generated__/CreatePayment";
 import { useState } from "react";
 import ReactLoading from "react-loading";
-import { LOCAL_SAVED_MEMVER_ID } from "../../../common/Layout";
+import { LOCAL_SAVED_MEMVER_ID } from "../../../common/ExternalBoot";
 
 //휴대폰 번호를 숫자만 남기는 정규식
 const regExp = /[^0-9]/g;

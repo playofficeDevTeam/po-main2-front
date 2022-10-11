@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { useRecoilState } from "recoil";
-import { LOCAL_SAVED_MEMVER_ID } from "../../../common/Layout";
+import { LOCAL_SAVED_MEMVER_ID } from "../../../common/ExternalBoot";
 import { convertKoreanPhoneNumberToInternationalPhoneNumberAndRemoveNonNumber } from "../OrderSheet_pg/Mol_formApplyBtn";
 import {
   userFormData,
