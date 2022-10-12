@@ -66,21 +66,21 @@ export default function App() {
     selectTab(nowPathIndex);
   }, [router, selectTab]);
 
-  //채널톡 열릴때 이벤트 발생
-  const startContactGtm = useGtm({
-    event: "StartContact",
-    eventModel: {
-      search_string: "전문가 컨설팅 신청",
-    },
-  });
-  useEffect(() => {
-    let w: any = window;
-    if (w.ChannelIO) {
-      w.ChannelIO("onShowMessenger", function () {
-        startContactGtm();
-      });
-    }
-  }, []);
+  // //채널톡 열릴때 이벤트 발생
+  // const startContactGtm = useGtm({
+  //   event: "StartContact",
+  //   eventModel: {
+  //     search_string: "전문가 컨설팅 신청",
+  //   },
+  // });
+  // useEffect(() => {
+  //   let w: any = window;
+  //   if (w.ChannelIO) {
+  //     w.ChannelIO("onShowMessenger", function () {
+  //       startContactGtm();
+  //     });
+  //   }
+  // }, []);
 
   return (
     <>

@@ -2,9 +2,9 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import TagManager from "react-gtm-module";
 
-const data1 = {};
+const defaultInput = {};
 
-export const useGtm = (data = data1) => {
+export const useGtm = (input = defaultInput) => {
   const [isSent, setIsSent] = useState(false);
   const router = useRouter();
   const checkToggle = () => {
@@ -24,10 +24,10 @@ export const useGtm = (data = data1) => {
     }
   }
 
-  const onClick = () => {
+  const onClick = (dataLayer) => {
     checkToggle();
     const gtmArgs = {
-      dataLayer: data,
+      dataLayer: dataLayer ?? input,
     };
     if (!isSent) {
       waitForFbq(() => {

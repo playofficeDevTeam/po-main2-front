@@ -1,25 +1,19 @@
 import { gql, useMutation, useSubscription } from "@apollo/client";
 import { useEffect, useState } from "react";
+import { LOCAL_SAVED_MEMVER_ID } from "../common/ExternalBoot";
 
-const SUBSCRIPTION_TEST = gql`
-  subscription jong {
-    jong
-  }
-`;
-
-const MUTATION_TEST = gql`
-  mutation jongStart($input: String!) {
-    jongStart(input: $input)
+const GTM_PUB = gql`
+  mutation gtmPub($input: GtmPubInput!) {
+    gtmPub(input: $input) {
+      ok
+      error
+    }
   }
 `;
 
 export default function App() {
-  const { data, loading } = useSubscription(SUBSCRIPTION_TEST, {
-    variables: { channelId: "channelId232" },
-  });
-
   // useMutation
-  const [jongStart] = useMutation(MUTATION_TEST);
+  const [gtmPub] = useMutation(GTM_PUB);
 
   //input state
   const [input, setInput] = useState("");
@@ -27,8 +21,6 @@ export default function App() {
   return (
     <>
       <div className="">
-        {loading && <div className="">loading</div>}
-        <div>{data?.jong}</div>
         <input
           className="border border-gray-300 w-12"
           type="text"
@@ -39,10 +31,15 @@ export default function App() {
         <button
           className=" m-2 border border-gray-200 p-2"
           onClick={() => {
-            console.log("clicked");
-            jongStart({
+            gtmPub({
               variables: {
-                input: input,
+                input: {
+                  channelTalkMemberId: window.localStorage.getItem(
+                    LOCAL_SAVED_MEMVER_ID
+                  ),
+                  event: input,
+                  eventModel: "eventModel",
+                },
               },
             });
           }}

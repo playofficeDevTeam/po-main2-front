@@ -10,6 +10,7 @@ import UserDetect from "./UserDetect";
 import { client } from "./apollo";
 import { useRouter } from "next/router";
 import ExternalBoot from "./ExternalBoot";
+import GtmWs from "./GtmWs";
 const queryClient = new QueryClient();
 
 export default function Layout({ children }: any) {
@@ -29,6 +30,7 @@ export default function Layout({ children }: any) {
           <DeviceDetect>
             <UserDetect>
               <ExternalBoot />
+              <GtmWs />
               <Org_header />
               <GoToTopArrow />
               <>{children}</>

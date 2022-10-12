@@ -642,6 +642,16 @@ export interface FindUsersInput {
   userRole: UserRole;
 }
 
+export interface GtmPubInput {
+  channelTalkMemberId: string;
+  event: string;
+  eventModel?: string | null;
+}
+
+export interface GtmSubInput {
+  channelTalkMemberId: string;
+}
+
 export interface ItemIdAndAmount {
   itemId?: number | null;
   amountOfItem?: number | null;
