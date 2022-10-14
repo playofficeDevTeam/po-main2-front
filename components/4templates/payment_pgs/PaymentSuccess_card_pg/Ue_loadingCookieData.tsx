@@ -30,6 +30,7 @@ export default function App() {
           item_name: clickedServiceData?.input.itemName,
           price: clickedServiceData?.priceDiscounted,
           quantity: 1,
+          
         },
       ],
     },

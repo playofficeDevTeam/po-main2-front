@@ -104,6 +104,8 @@ export default function App({ trigger = false }) {
         const paymentId = data.createPayment.paymentId ?? 0;
         window.localStorage.setItem("paymentId", paymentId.toString());
         makeAPayment();
+
+        //orderId 초기화
         setOrderId(v1());
       },
     }

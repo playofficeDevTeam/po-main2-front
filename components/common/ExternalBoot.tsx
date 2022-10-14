@@ -24,7 +24,7 @@ export default function App() {
     const prodGtmId = "GTM-WTBKCZ8";
     const testGtmId = "GTM-MJD569B";
     const tagManagerArgs = {
-      gtmId: process.env.NODE_ENV === "production" ? prodGtmId : prodGtmId,
+      gtmId: process.env.NODE_ENV === "production" ? prodGtmId : testGtmId,
     };
     const asyncEffect = async () => {
       TagManager.initialize(tagManagerArgs);
