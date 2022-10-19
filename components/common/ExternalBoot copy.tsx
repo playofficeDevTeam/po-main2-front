@@ -44,15 +44,14 @@ export default function App() {
   const router = useRouter();
   const conversionApiMutation = useConversionApi();
 
+  //픽셀 첫 부팅
   useEffect(() => {
-    const event_id = v1();
-    (window as any).fbq.disablePushState = true;
     // fb 쿠키 생성용으로 이벤트 한번 발생 시켜야함
-    (window as any).fbq("track", "PageView", {}, { eventID: event_id });
-    conversionApiMutation({
-      event_name: "PageView",
-      event_id,
-    });
+    (window as any).fbq("track", "PageView", { test: "testpageview" });
+    console.log("픽셀 첫 부팅");
+  }, []);
+
+  useEffect(() => {
     const handleRouteChange = () => {
       conversionApiMutation({
         event_name: "PageView",

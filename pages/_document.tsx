@@ -5,9 +5,8 @@ import Document, {
   NextScript,
   DocumentContext,
 } from "next/document";
-import { v1 } from "uuid";
 
-const memberId = v1();
+const pixelId = process.env.NEXT_PUBLIC_PIXEL_ID || "";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -17,7 +16,16 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="ko">
-        <Head></Head>
+        <Head>
+          <noscript>
+            <img
+              height="1"
+              width="1"
+              style={{ display: "none" }}
+              src={`https://www.facebook.com/tr?id=${pixelId}&ev=PageView&noscript=1`}
+            />
+          </noscript>
+        </Head>
         <body>
           <Main />
           <NextScript />
@@ -62,53 +70,6 @@ class MyDocument extends Document {
             type="text/css"
             href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
           />
-
-          {/* 채널톡 */}
-          {/* <script
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{
-              __html: `(function() {
-                var w = window;
-                if (w.ChannelIO) {
-                  return (window.console.error || window.console.log || function(){})('ChannelIO script included twice.');
-                }
-                var ch = function() {
-                  ch.c(arguments);
-                };
-                ch.q = [];
-                ch.c = function(args) {
-                  ch.q.push(args);
-                };
-                w.ChannelIO = ch;
-                function l() {
-                  if (w.ChannelIOInitialized) {
-                    return;
-                  }
-                  w.ChannelIOInitialized = true;
-                  var s = document.createElement('script');
-                  s.type = 'text/javascript';
-                  s.async = true;
-                  s.src = 'https://cdn.channel.io/plugin/ch-plugin-web.js';
-                  s.charset = 'UTF-8';
-                  var x = document.getElementsByTagName('script')[0];
-                  x.parentNode.insertBefore(s, x);
-                }
-                if (document.readyState === 'complete') {
-                  l();
-                } else if (window.attachEvent) {
-                  window.attachEvent('onload', l);
-                } else {
-                  window.addEventListener('DOMContentLoaded', l, false);
-                  window.addEventListener('load', l, false);
-                }
-              })();
-              ChannelIO('boot', {
-                "pluginKey": "e1c90e36-cc0f-469d-91a9-bbf94a98004c",
-                "memberId": "${memberId}",
-              });
-              `,
-            }}
-          /> */}
         </body>
       </Html>
     );

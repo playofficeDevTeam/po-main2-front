@@ -82,6 +82,21 @@ export interface CampaignUploadLinkType {
   campaignParticipation: CampaignParticipationInput;
 }
 
+export interface ConversionApiInput {
+  event_name: string;
+  event_id: string;
+  user_data_email?: string[] | null;
+  user_data_phone?: string[] | null;
+  user_data_fbc?: string | null;
+  user_data_fbp?: string | null;
+  custom_data_value?: number | null;
+  custom_data_order_id?: string | null;
+  contents_id?: string | null;
+  contents_quantity?: number | null;
+  contents_delivery_category?: string | null;
+  event_source_url?: string | null;
+}
+
 export interface CreateAdminSuperInput {
   id?: number | null;
   createdAt?: any | null;

@@ -4103,6 +4103,11 @@
   dependencies:
     "randombytes" "^2.1.0"
 
+"set-fb-cookies@^0.0.3":
+  "integrity" "sha512-gk8t3MJY1p5xU/OEii6w+KOA5VQCM5Qq7S3tROSe+gr9tRadhWjDy12gmuXiBDoUqzZJ5tGYIee6zHAiesUiVw=="
+  "resolved" "https://registry.npmjs.org/set-fb-cookies/-/set-fb-cookies-0.0.3.tgz"
+  "version" "0.0.3"
+
 "setimmediate@^1.0.4":
   "integrity" "sha1-KQy7Iy4waULX1+qbg3Mqt4VvgoU="
   "resolved" "https://registry.npmjs.org/setimmediate/-/setimmediate-1.0.5.tgz"
