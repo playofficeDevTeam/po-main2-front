@@ -39,9 +39,6 @@ export const useGtmScroll = () => {
 
   const [scrollDepth, setscrollDepth] = useState(-1);
   const scrollYCheck = () => {
-    router.events.on("routeChangeComplete", () => {
-      setscrollDepth(-1);
-    });
     const scrollPercent = Math.round(
       (window.scrollY / document.body.scrollHeight) * 100
     );
@@ -73,8 +70,19 @@ export const useGtmScroll = () => {
   }, [scrollDepth]);
 
   const throttleScrollYCheck = throttle(200, scrollYCheck);
+
   useEffect(() => {
     window.addEventListener("scroll", throttleScrollYCheck);
     return () => window.removeEventListener("scroll", throttleScrollYCheck);
+  }, []);
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setscrollDepth(-1);
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
   }, []);
 };

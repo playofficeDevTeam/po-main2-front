@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Carowsel1 from "../../../1atoms/Carowsel1";
+import useConversionApi from "../../../hooks/useConversionApi";
 import { useGtm } from "../../../hooks/useGtm";
 import useIsMobile from "../../../hooks/useIsMobile";
 
@@ -68,13 +69,7 @@ const defaultData = [
 
 export default function App({ data = defaultData }) {
   const isMobile = useIsMobile();
-
-  const moreGtm = useGtm({
-    event: "More",
-    eventModel: {
-      content_name: "to customer-story page",
-    },
-  });
+  const conversionApiMutation = useConversionApi();
 
   return isMobile ? (
     // 모바일
@@ -98,7 +93,10 @@ export default function App({ data = defaultData }) {
                   <Link href={val.url}>
                     <a
                       onClick={() => {
-                        moreGtm();
+                        conversionApiMutation({
+                          event_name: "More",
+                          custom_data_content_name: "to customer-story page",
+                        });
                       }}
                     >
                       <div className="bg-indigo-50 p-3 mb-2 rounded-lg shadow-md max-w-xs mx-auto cursor-pointer">
@@ -142,7 +140,10 @@ export default function App({ data = defaultData }) {
               <Link key={idx} href={val.url}>
                 <a
                   onClick={() => {
-                    moreGtm();
+                    conversionApiMutation({
+                      event_name: "More",
+                      custom_data_content_name: "to customer-story page",
+                    });
                   }}
                 >
                   <li className="bg-indigo-50 p-3 mb-2 rounded-lg shadow-md cursor-pointer">

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Br_mo from "../../../1atoms/Br_mo";
 import Br_pc from "../../../1atoms/Br_pc";
+import useConversionApi from "../../../hooks/useConversionApi";
 import { useGtm } from "../../../hooks/useGtm";
 import useIsMobile from "../../../hooks/useIsMobile";
 import Org_2explanation_R_ from "./Org_2explanation_R_";
@@ -16,12 +17,8 @@ const defaultData = {
 
 export default function App({ data = defaultData }) {
   const isMobile = useIsMobile();
-  const moreGtm = useGtm({
-    event: "More",
-    eventModel: {
-      content_name: "to service page",
-    },
-  });
+  const conversionApiMutation = useConversionApi();
+
   return (
     <>
       <Org_2explanation_R_ data={data} />
@@ -38,7 +35,10 @@ export default function App({ data = defaultData }) {
           <Link href={data.linkData.url}>
             <a
               onClick={() => {
-                moreGtm();
+                conversionApiMutation({
+                  event_name: "More",
+                  custom_data_content_name: "to service page",
+                });
               }}
             >
               {data.linkData.title}
@@ -56,7 +56,10 @@ export default function App({ data = defaultData }) {
           <Link href={data.linkData.url}>
             <a
               onClick={() => {
-                moreGtm();
+                conversionApiMutation({
+                  event_name: "More",
+                  custom_data_content_name: "to service page",
+                });
               }}
             >
               {data.linkData.title}

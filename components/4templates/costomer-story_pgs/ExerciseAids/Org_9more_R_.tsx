@@ -1,4 +1,5 @@
 import Link from "next/link";
+import useConversionApi from "../../../hooks/useConversionApi";
 import { useGtm } from "../../../hooks/useGtm";
 import useIsMobile from "../../../hooks/useIsMobile";
 
@@ -53,12 +54,7 @@ const defaultData = {
 export default function App({ data = defaultData }) {
   const isMobile = useIsMobile();
 
-  const moreGtm = useGtm({
-    event: "More",
-    eventModel: {
-      content_name: "to customer-story page",
-    },
-  });
+  const conversionApiMutation = useConversionApi();
 
   return (
     <section className="">
@@ -71,7 +67,10 @@ export default function App({ data = defaultData }) {
                 <a
                   key={idx}
                   onClick={() => {
-                    moreGtm();
+                    conversionApiMutation({
+                      event_name: "More",
+                      custom_data_content_name: "to customer-story page",
+                    });
                   }}
                 >
                   <li className="bg-blue-50 rounded-md shadow-md p-2 text-center mb-10 max-w-xs mx-auto">
@@ -97,7 +96,10 @@ export default function App({ data = defaultData }) {
                   <a
                     key={idx}
                     onClick={() => {
-                      moreGtm();
+                      conversionApiMutation({
+                        event_name: "More",
+                        custom_data_content_name: "to customer-story page",
+                      });
                     }}
                   >
                     <div className="bg-blue-50 rounded-md shadow-md p-2 text-center mb-10 max-w-xs mx-auto">

@@ -1,21 +1,19 @@
 import RoundedOrangeBtn from "../../../1atoms/RoundedOrangeBtn";
-import { useGtm } from "../../../hooks/useGtm";
+import useConversionApi from "../../../hooks/useConversionApi";
 import useGotoService_Hk from "./useGotoService_Hk";
 
 export default function App() {
   const goToService = useGotoService_Hk();
-  const moreGtm = useGtm({
-    event: "More",
-    eventModel: {
-      content_name: "to service page",
-    },
-  });
+  const conversionApiMutation = useConversionApi();
   return (
     <>
       <RoundedOrangeBtn
         onClick={() => {
           goToService();
-          moreGtm();
+          conversionApiMutation({
+            event_name: "More",
+            custom_data_content_name: "to service page",
+          });
         }}
       >
         <>

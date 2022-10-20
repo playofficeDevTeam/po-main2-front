@@ -7,6 +7,7 @@ import useConversionApi from "../hooks/useConversionApi";
 import Script from "next/script";
 import { v1 } from "uuid";
 import setFbCookies from "set-fb-cookies";
+import { useConverstionApiScroll } from "../hooks/useConverstionApiScroll";
 
 export const LOCAL_SAVED_MEMVER_ID = "localSavedMemberId";
 
@@ -24,20 +25,20 @@ export default function App() {
   }, []);
 
   //태그매니저 부팅
-  useEffect(() => {
-    const prodGtmId = "GTM-WTBKCZ8";
-    const testGtmId = "GTM-MJD569B";
-    const tagManagerArgs = {
-      gtmId: process.env.NODE_ENV === "production" ? prodGtmId : testGtmId,
-    };
-    const asyncEffect = async () => {
-      TagManager.initialize(tagManagerArgs);
-    };
-    if (process.env.NODE_ENV === "production") {
-      asyncEffect();
-    }
-  }, []);
-  useGtmScroll();
+  // useEffect(() => {
+  //   const prodGtmId = "GTM-WTBKCZ8";
+  //   const testGtmId = "GTM-MJD569B";
+  //   const tagManagerArgs = {
+  //     gtmId: process.env.NODE_ENV === "production" ? prodGtmId : testGtmId,
+  //   };
+  //   const asyncEffect = async () => {
+  //     TagManager.initialize(tagManagerArgs);
+  //   };
+  //   if (process.env.NODE_ENV === "production") {
+  //     asyncEffect();
+  //   }
+  // }, []);
+  // useGtmScroll();
 
   //픽셀 부팅
   const pixelId = process.env.NEXT_PUBLIC_PIXEL_ID || "";
@@ -46,23 +47,35 @@ export default function App() {
 
   useEffect(() => {
     const event_id = v1();
-    (window as any).fbq.disablePushState = true;
     // fb 쿠키 생성용으로 이벤트 한번 발생 시켜야함
     (window as any).fbq("track", "PageView", {}, { eventID: event_id });
     conversionApiMutation({
       event_name: "PageView",
       event_id,
     });
+    conversionApiMutation({
+      event_name: "ViewContent",
+      custom_data_content_name: document.title,
+    });
+
     const handleRouteChange = () => {
+      const event_id = v1();
+      (window as any).fbq("track", "PageView", {}, { eventID: event_id });
       conversionApiMutation({
         event_name: "PageView",
+        event_id,
+      });
+      conversionApiMutation({
+        event_name: "ViewContent",
+        custom_data_content_name: document.title,
       });
     };
     router.events.on("routeChangeComplete", handleRouteChange);
     return () => {
       router.events.off("routeChangeComplete", handleRouteChange);
     };
-  }, [router.events]);
+  }, []);
+  useConverstionApiScroll();
 
   return (
     <>
@@ -80,6 +93,9 @@ export default function App() {
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
+            
+            fbq.disablePushState = true;
+            fbq.allowDuplicatePageViews = true
             fbq('init', ${pixelId});
           `,
         }}

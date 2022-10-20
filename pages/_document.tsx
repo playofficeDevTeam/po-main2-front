@@ -17,6 +17,7 @@ class MyDocument extends Document {
     return (
       <Html lang="ko">
         <Head>
+          {/* 픽셀 설치 */}
           <noscript>
             <img
               height="1"
