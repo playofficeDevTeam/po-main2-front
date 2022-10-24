@@ -1,17 +1,20 @@
 import { gql, useMutation } from "@apollo/client";
-import { useEffect, useState } from "react";
 import { ConversionApiInput } from "../../__generated__/globalTypes";
 import {
   ConversionApi,
   ConversionApiVariables,
 } from "./__generated__/ConversionApi";
 import crypto from "crypto";
-import { useRouter } from "next/router";
+import {
+  convertKoreanPhoneNumberToInternationalPhoneNumberAndRemoveNonNumber,
+  removeNonNumber,
+} from "../4templates/payment_pgs/OrderSheet_pg/Mol_formApplyBtn";
 
 export const CONVERSION_API = gql`
   mutation ConversionApi($input: ConversionApiInput!) {
     conversionApi(input: $input) {
       ok
+      event_name
       error
     }
   }
@@ -29,7 +32,7 @@ export const getCookie = (name: string) => {
 };
 
 //crypto 이용해서 sha256 해싱 하는 함수
-const hash = async (stringToHash: string) => {
+export const hash = async (stringToHash: string) => {
   const hash = crypto.createHash("sha256");
   hash.update(stringToHash);
   return hash.digest("hex");
@@ -42,7 +45,10 @@ export default function useConversionApi() {
     ConversionApiVariables
   >(CONVERSION_API, {
     onCompleted: (data) => {
-      console.log(data.conversionApi);
+      console.log(
+        `${data.conversionApi.event_name} / 전환 api 요청 `,
+        data.conversionApi
+      );
     },
   });
   const conversionApiMutation_dataAdded = async (input: ConversionApiInput) => {
@@ -52,11 +58,21 @@ export default function useConversionApi() {
     const userFormData =
       JSON.parse(window.localStorage.getItem("userFormDataState") || "") || [];
 
-    const hashed_email = await Promise.all(
-      ([userFormData[3]] || []).map((value) => hash(value))
+    //이메일 트림하고 소문자로 변환
+    const email = userFormData[3]?.trim().toLowerCase();
+
+    //한국 휴대폰 번호를 숫자만 남기고 국제 휴대폰 번호로 변환하는 함수
+    const phone = removeNonNumber(
+      convertKoreanPhoneNumberToInternationalPhoneNumberAndRemoveNonNumber(
+        userFormData[2]
+      )
     );
-    const hashed_phone = await Promise.all(
-      ([userFormData[2]] || []).map((value) => hash(value))
+
+    const hashed_emails = await Promise.all(
+      [email].map((value) => hash(value))
+    );
+    const hashed_phones = await Promise.all(
+      ([phone] || []).map((value) => hash(value))
     );
     const hashed_last_name = await hash(userFormData[1] || "");
 
@@ -67,8 +83,8 @@ export default function useConversionApi() {
           event_source_url: (window as any).location.href,
           // user_data_fbp: fbp,
           // user_data_fbc: fbc,
-          user_data_email: hashed_email,
-          user_data_phone: hashed_phone,
+          user_data_email: hashed_emails,
+          user_data_phone: hashed_phones,
           user_data_last_name: hashed_last_name,
         },
       },

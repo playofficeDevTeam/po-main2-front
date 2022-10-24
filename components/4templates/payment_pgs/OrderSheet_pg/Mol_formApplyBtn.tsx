@@ -17,13 +17,14 @@ import {
 import { useState } from "react";
 import ReactLoading from "react-loading";
 import { LOCAL_SAVED_MEMVER_ID } from "../../../common/ExternalBoot";
+import { getCookie } from "../../../hooks/useConversionApi";
 
 //휴대폰 번호를 숫자만 남기는 정규식
 const regExp = /[^0-9]/g;
 
 //휴대폰 번호를 숫자만 남기는 함수
-const removeNonNumber = (phoneNumber: string) => {
-  return phoneNumber.replace(regExp, "");
+export const removeNonNumber = (phoneNumber: string) => {
+  return phoneNumber.trim().replace(regExp, "");
 };
 
 //한국 휴대폰 번호를 국제 휴대폰 번호로 변환하는 함수
@@ -147,9 +148,14 @@ export default function App({ trigger = false }) {
                 LOCAL_SAVED_MEMVER_ID
               );
 
+              const fbp = getCookie("_fbp");
+              const fbc = getCookie("_fbc");
+
               createPayment({
                 variables: {
                   input: {
+                    // clientUserFbc: fbc,
+                    // clientUserFbp: fbp,
                     memberId,
                     brandName: userFormDataState[0].trim(),
                     name: userFormDataState[1].trim(),

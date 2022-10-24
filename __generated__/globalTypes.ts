@@ -200,6 +200,10 @@ export interface CreatePaymentForAdminInput {
   amount?: number | null;
   paymentState?: string | null;
   channelTalkId?: string | null;
+  clientIpAddress?: string | null;
+  clientUserAgent?: string | null;
+  clientUserFbp?: string | null;
+  clientUserFbc?: string | null;
   itemInfo?: ItemIdAndAmount[] | null;
   brandName_partner?: string | null;
   salesPerson_nickname?: string | null;
@@ -214,6 +218,8 @@ export interface CreatePaymentInput {
   paymentKey?: string | null;
   orderId?: string | null;
   amount?: number | null;
+  clientUserFbp?: string | null;
+  clientUserFbc?: string | null;
   itemInfo?: ItemIdAndAmount[] | null;
   memberId?: string | null;
 }
@@ -504,6 +510,10 @@ export interface EditPaymentInput {
   amount?: number | null;
   paymentState?: string | null;
   channelTalkId?: string | null;
+  clientIpAddress?: string | null;
+  clientUserAgent?: string | null;
+  clientUserFbp?: string | null;
+  clientUserFbc?: string | null;
   id: number;
   itemInfo?: ItemIdAndAmount[] | null;
   brandName_partner?: string | null;
@@ -794,6 +804,10 @@ export interface paymentInputType {
   amount?: number | null;
   paymentState?: string | null;
   channelTalkId?: string | null;
+  clientIpAddress?: string | null;
+  clientUserAgent?: string | null;
+  clientUserFbp?: string | null;
+  clientUserFbc?: string | null;
 }
 
 export interface questionInputType {

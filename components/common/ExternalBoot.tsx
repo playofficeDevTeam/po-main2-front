@@ -6,10 +6,21 @@ import { useRouter } from "next/router";
 import useConversionApi from "../hooks/useConversionApi";
 import Script from "next/script";
 import { v1 } from "uuid";
-import setFbCookies from "set-fb-cookies";
 import { useConverstionApiScroll } from "../hooks/useConverstionApiScroll";
+import { gql, useSubscription } from "@apollo/client";
 
 export const LOCAL_SAVED_MEMVER_ID = "localSavedMemberId";
+
+const GTM_SUB = gql`
+  subscription gtmSub($input: GtmSubInput!) {
+    gtmSub(input: $input) {
+      ok
+      error
+      event
+      eventModel
+    }
+  }
+`;
 
 export default function App() {
   //채널톡 부팅
@@ -76,6 +87,24 @@ export default function App() {
     };
   }, []);
   useConverstionApiScroll();
+
+  // 채널톡 to conversion api
+  const { data, loading, error } = useSubscription(GTM_SUB, {
+    variables: {
+      input: {
+        channelTalkMemberId: window.localStorage.getItem(LOCAL_SAVED_MEMVER_ID),
+      },
+    },
+  });
+  useEffect(() => {
+    if (data) {
+      conversionApiMutation({
+        event_name: data.gtmSub.event,
+        ...JSON.parse(data.gtmSub.eventModel),
+      });
+      console.log("구독하고 있던 채널톡 api 에서 데이터가 들어옴", data);
+    }
+  }, [data]);
 
   return (
     <>

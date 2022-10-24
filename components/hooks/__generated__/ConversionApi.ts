@@ -12,6 +12,7 @@ import { ConversionApiInput } from "./../../../__generated__/globalTypes";
 export interface ConversionApi_conversionApi {
   __typename: "ConversionApiOutput";
   ok: boolean;
+  event_name: string;
   error: string | null;
 }
 

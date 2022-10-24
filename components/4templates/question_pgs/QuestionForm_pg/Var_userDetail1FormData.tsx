@@ -37,7 +37,7 @@ export const inputDetail1Setting = [
     required: true,
   },
   {
-    title: "특이사항",
+    title: "문의사항",
     inputProps: {
       placehoder: "상세내용 작성 부탁드립니다.",
       type: "textarea",

@@ -187,7 +187,7 @@ export const questionColumnsDefault: IColumn[] = [
     editable: true,
   },
   {
-    Header: "특이사항",
+    Header: "문의사항",
     accessor: "uniqueness",
     width: 150,
     sortDescFirst: true,
