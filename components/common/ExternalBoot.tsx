@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ChannelService from "./ChannelService";
 import { useGtmScroll } from "../hooks/useGtmScroll";
 import TagManager from "react-gtm-module";
@@ -56,6 +56,8 @@ export default function App() {
   const router = useRouter();
   const conversionApiMutation = useConversionApi();
 
+  const [isSend, setIsSend] = useState(false);
+
   useEffect(() => {
     const event_id = v1();
     // fb 쿠키 생성용으로 이벤트 한번 발생 시켜야함
@@ -80,6 +82,9 @@ export default function App() {
         event_name: "ViewContent",
         custom_data_content_name: document.title,
       });
+
+      // 페이지당 한번일 경우 사용되는 스테이트
+      setIsSend(false);
     };
     router.events.on("routeChangeComplete", handleRouteChange);
     return () => {
@@ -96,13 +101,15 @@ export default function App() {
       },
     },
   });
+
   useEffect(() => {
-    if (data) {
+    if (data && !isSend) {
       conversionApiMutation({
         event_name: data.gtmSub.event,
         ...JSON.parse(data.gtmSub.eventModel),
       });
       console.log("구독하고 있던 채널톡 api 에서 데이터가 들어옴", data);
+      setIsSend(true);
     }
   }, [data]);
 

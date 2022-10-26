@@ -154,8 +154,8 @@ export default function App({ trigger = false }) {
               createPayment({
                 variables: {
                   input: {
-                    // clientUserFbc: fbc,
-                    // clientUserFbp: fbp,
+                    clientUserFbc: fbc,
+                    clientUserFbp: fbp,
                     memberId,
                     brandName: userFormDataState[0].trim(),
                     name: userFormDataState[1].trim(),

@@ -36,7 +36,7 @@ export default function App() {
           className="m-4 p-4 border cursor-pointer "
           onClick={async () => {
             conversionApiMutation({
-              event_name: "test10",
+              event_name: input,
             });
           }}
         >

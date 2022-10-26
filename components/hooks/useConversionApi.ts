@@ -56,7 +56,10 @@ export default function useConversionApi() {
     const fbc = getCookie("_fbc");
 
     const userFormData =
-      JSON.parse(window.localStorage.getItem("userFormDataState") || "") || [];
+      JSON.parse(
+        window.localStorage.getItem("userFormDataState") ||
+          JSON.stringify(["", "", "", ""])
+      ) || [];
 
     //이메일 트림하고 소문자로 변환
     const email = userFormData[3]?.trim().toLowerCase();
@@ -81,8 +84,8 @@ export default function useConversionApi() {
         input: {
           ...input,
           event_source_url: (window as any).location.href,
-          // user_data_fbp: fbp,
-          // user_data_fbc: fbc,
+          user_data_fbp: fbp,
+          user_data_fbc: fbc,
           user_data_email: hashed_emails,
           user_data_phone: hashed_phones,
           user_data_last_name: hashed_last_name,
