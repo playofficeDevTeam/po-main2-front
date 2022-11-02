@@ -1,8 +1,5 @@
 import Link from "next/link";
-import Br_mo from "../../../1atoms/Br_mo";
-import Br_pc from "../../../1atoms/Br_pc";
 import useConversionApi from "../../../hooks/useConversionApi";
-import { useGtm } from "../../../hooks/useGtm";
 import useIsMobile from "../../../hooks/useIsMobile";
 import Org_2explanation_R_ from "./Org_2explanation_R_";
 

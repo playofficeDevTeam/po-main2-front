@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import RoundedOrangeBtn from "../../../1atoms/RoundedOrangeBtn";
-import { useGtm } from "../../../hooks/useGtm";
 
 export default function App() {
   const router = useRouter();

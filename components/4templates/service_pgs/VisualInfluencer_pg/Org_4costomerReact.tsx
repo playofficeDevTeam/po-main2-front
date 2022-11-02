@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Carowsel1 from "../../../1atoms/Carowsel1";
 import useConversionApi from "../../../hooks/useConversionApi";
-import { useGtm } from "../../../hooks/useGtm";
 import useIsMobile from "../../../hooks/useIsMobile";
 
 const defaultData = [

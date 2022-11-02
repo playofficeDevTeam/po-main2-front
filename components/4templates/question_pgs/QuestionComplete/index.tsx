@@ -1,4 +1,3 @@
-import { useGtm } from "../../../hooks/useGtm";
 import Org_1topMsg from "./Org_1topMsg";
 import Org_2confirmForm from "./Org_2confirmForm";
 import Ue_conversionApi from "./Ue_conversionApi";

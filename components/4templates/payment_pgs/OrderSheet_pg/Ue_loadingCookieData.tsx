@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import useConversionApi from "../../../hooks/useConversionApi";
-import { useGtm } from "../../../hooks/useGtm";
 import {
   clickedServiceDataClass,
   serviceDatasAtom,
@@ -16,22 +15,6 @@ export default function App() {
     useRecoilState(userFormData);
 
   const clickedServiceData = useRecoilValue(clickedServiceDataClass);
-
-  const begin_checkoutGtm = useGtm({
-    event: "begin_checkout",
-    eventModel: {
-      content_category: clickedServiceData?.input.itemCategory1,
-      content_name: clickedServiceData?.input.itemName,
-      value: clickedServiceData?.priceDiscounted,
-      currency: "KRW",
-      items: [
-        {
-          item_id: clickedServiceData?.input.itemId,
-          item_name: clickedServiceData?.input.itemName,
-        },
-      ],
-    },
-  });
 
   //데이터 로딩 상태 스테이트
   const [isServiceDataLoad, setIsServiceDataLoad] = useState(false);

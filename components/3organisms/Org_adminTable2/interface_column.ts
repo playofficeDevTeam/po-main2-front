@@ -16,6 +16,7 @@ export type IColumn = {
     | "won"
     | "newPage"
     | "date"
+    | "detailDate"
     | "translate";
   translate?: {
     key: string;

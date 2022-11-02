@@ -5,11 +5,11 @@ export const paymentColumnsDefault_general: IColumn[] = [
   {
     Header: "생성일",
     accessor: "createdAt",
-    width: 87,
+    width: 130,
     sortDescFirst: true,
     value: "",
     selected: false,
-    tableType: "date",
+    tableType: "detailDate",
     formType_create: "hidden",
     formType_edit: "hidden",
     mutationType_create: "hidden",

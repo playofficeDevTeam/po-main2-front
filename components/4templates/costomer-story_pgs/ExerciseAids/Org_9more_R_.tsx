@@ -1,6 +1,5 @@
 import Link from "next/link";
 import useConversionApi from "../../../hooks/useConversionApi";
-import { useGtm } from "../../../hooks/useGtm";
 import useIsMobile from "../../../hooks/useIsMobile";
 
 const defaultData = {

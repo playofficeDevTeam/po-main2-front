@@ -4,8 +4,6 @@ import { useRouter } from "next/router";
 import { atom, useRecoilState } from "recoil";
 import Ani_box from "../../1atoms/Ani_box";
 import useIsMobile from "../../hooks/useIsMobile";
-import clickChannelTalk from "/home/app/components/2molecules/clickChannelTalk";
-import { useGtm } from "../../hooks/useGtm";
 
 const sitemapData = [
   { title: "서비스", url: "/service", selected: false },

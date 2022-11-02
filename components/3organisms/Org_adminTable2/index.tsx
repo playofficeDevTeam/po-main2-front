@@ -512,7 +512,15 @@ function Table({
                       }`}
                     >
                       {/* 커스텀 렌더링 */}
-                      {cell.column.tableType === "date" ? (
+                      {cell.column.tableType === "detailDate" ? (
+                        <>
+                          <div className="">
+                            {cell.value?.split("T")[0].substr(-8)}{" "}
+                            {cell.value?.split("T")[1].substr(0, 5)}
+                          </div>
+                          <div className="hidden">{cell.render("Cell")}</div>
+                        </>
+                      ) : cell.column.tableType === "date" ? (
                         <>
                           <div className="">
                             {cell.value?.split("T")[0].substr(-8)}
