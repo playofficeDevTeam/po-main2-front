@@ -186,6 +186,7 @@ export interface CreatePaymentForAdminInput {
   id?: number | null;
   createdAt?: any | null;
   updatedAt?: any | null;
+  paymentDate?: any | null;
   tags?: string | null;
   brandName?: string | null;
   name?: string | null;
@@ -496,6 +497,7 @@ export interface EditPaymentFormDataInput {
 export interface EditPaymentInput {
   createdAt?: any | null;
   updatedAt?: any | null;
+  paymentDate?: any | null;
   tags?: string | null;
   brandName?: string | null;
   name?: string | null;
@@ -790,6 +792,7 @@ export interface itemInputType {
 }
 
 export interface paymentInputType {
+  paymentDate?: any | null;
   tags?: string | null;
   brandName?: string | null;
   name?: string | null;

@@ -16,6 +16,7 @@ export const FIND_PAYMENTS = gql`
         paymentMethod
         amount
         paymentState
+        paymentDate
         user {
           nameId
         }

@@ -35,10 +35,12 @@ class MyDocument extends Document {
           <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta name="theme-color" content="#000000" />
+
+          <title>포케팅 - 좋은 성과는 결국, 크리에이터 콘텐츠</title>
           <meta
             name="description"
             property="og:description"
-            content="비주얼 인플루언서 마케팅, 키워드 블로그 체험단 마케팅, 바이럴 마케팅, 콘텐츠 마케팅, 브랜드 마케팅"
+            content="광고 소재와 상세페이지에 사용하고 마케팅 성과를 개선해보세요. 포케팅 크리에이터 콘텐츠는 고객의 공감을 쉽게 얻을 수 있는 가장 좋은 콘텐츠입니다."
           />
 
           {/* 카드링크 이미지 */}

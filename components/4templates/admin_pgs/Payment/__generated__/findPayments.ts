@@ -31,6 +31,7 @@ export interface findPayments_findPayments_payments {
   paymentMethod: string | null;
   amount: number | null;
   paymentState: string | null;
+  paymentDate: any | null;
   user: findPayments_findPayments_payments_user | null;
   salesPerson: findPayments_findPayments_payments_salesPerson | null;
 }

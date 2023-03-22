@@ -149,6 +149,16 @@ export function SelectColumnFilter({
   );
 }
 
+const getDetailDate = (date: string | null): string | null => {
+  if (date) {
+    const newDate = new Date(date);
+    const formattedDate = dayjs(newDate).format("YY.MM.DD HH:mm");
+    return formattedDate;
+  } else {
+    return null;
+  }
+};
+
 export function PointRangeColumnFilter({
   column: { filterValue = [], preFilteredRows, setFilter, id },
 }) {
@@ -514,10 +524,7 @@ function Table({
                       {/* 커스텀 렌더링 */}
                       {cell.column.tableType === "detailDate" ? (
                         <>
-                          <div className="">
-                            {cell.value?.split("T")[0].substr(-8)}{" "}
-                            {cell.value?.split("T")[1].substr(0, 5)}
-                          </div>
+                          <div className="">{getDetailDate(cell.value)}</div>
                           <div className="hidden">{cell.render("Cell")}</div>
                         </>
                       ) : cell.column.tableType === "date" ? (

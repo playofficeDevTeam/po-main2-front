@@ -36,20 +36,19 @@ export default function App() {
   }, []);
 
   //태그매니저 부팅
-  // useEffect(() => {
-  //   const prodGtmId = "GTM-WTBKCZ8";
-  //   const testGtmId = "GTM-MJD569B";
-  //   const tagManagerArgs = {
-  //     gtmId: process.env.NODE_ENV === "production" ? prodGtmId : testGtmId,
-  //   };
-  //   const asyncEffect = async () => {
-  //     TagManager.initialize(tagManagerArgs);
-  //   };
-  //   if (process.env.NODE_ENV === "production") {
-  //     asyncEffect();
-  //   }
-  // }, []);
-  // useGtmScroll();
+  useEffect(() => {
+    const prodGtmId = "GTM-WTBKCZ8";
+    const testGtmId = "GTM-MJD569B";
+    const tagManagerArgs = {
+      // gtmId: process.env.NODE_ENV === "production" ? prodGtmId : testGtmId,
+      gtmId: prodGtmId,
+    };
+    const asyncEffect = async () => {
+      TagManager.initialize(tagManagerArgs);
+    };
+    asyncEffect();
+  }, []);
+  useGtmScroll();
 
   //픽셀 부팅
   const pixelId = process.env.NEXT_PUBLIC_PIXEL_ID || "";

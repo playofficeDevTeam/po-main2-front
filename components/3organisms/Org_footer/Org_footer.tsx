@@ -49,7 +49,8 @@ export default function App() {
                 개인정보 보호 최고책임자 : 이종원 <br />
                 사업자등록번호 : 265-12-00221 <br />
                 통신판매업신고번호 : 2016-부산해운대-0499호 <br />
-                주소: 부산광역시 해운대구 센텀중앙로 48 <br />
+                주소: 부산광역시 해운대구 해운대해변로257
+                <br />
                 메일 : help@poketing.com <br />
                 전화 : 051-904-0118 <br />
                 월-금 10:00 - 19:00 / 주말, 공휴일 휴무
@@ -93,7 +94,9 @@ export default function App() {
                   </span>
                   전화 : 051-904-0118
                 </div>
-                <div className="">주소: 부산광역시 해운대구 센텀중앙로 48</div>
+                <div className="">
+                  주소: 부산광역시 해운대구 해운대해변로257
+                </div>
               </div>
               <div className="">ⓒ PLAY OFFICE Inc. All Right Reserved.</div>
             </div>

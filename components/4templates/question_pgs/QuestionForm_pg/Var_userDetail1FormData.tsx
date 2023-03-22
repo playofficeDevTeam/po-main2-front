@@ -34,12 +34,14 @@ export const inputDetail1Setting = [
       type: "text",
       name: "link",
     },
+    ps: <>홈페이지 메인이 아닌 특정 제품 링크를 입력해주세요.</>,
     required: true,
   },
   {
     title: "문의사항",
     inputProps: {
-      placehoder: "상세내용 작성 부탁드립니다.",
+      placehoder:
+        "원하시는 콘텐츠가 있다면 레퍼런스 링크를 입력해 주시면 더욱 효과적인 컨설팅이 가능합니다. 이 외 궁금하신 점이 있다면 구체적으로 작성해 주시면 통화 상담 시 자세히 안내 해드리겠습니다.",
       type: "textarea",
       name: "etc",
     },

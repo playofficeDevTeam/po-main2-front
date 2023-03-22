@@ -20,7 +20,7 @@ import useIsMobile from "/home/app/components/hooks/useIsMobile";
 const defaultTemData = {
   title: (
     <div className="mt-12 mb-3">
-      무료로 전문가의 컨설팅을
+      무료로 전문가의 <span className="text-orange-500">콘텐츠 컨설팅을</span>
       <Br_mo />
       받아보세요.
     </div>
@@ -167,23 +167,28 @@ export default function App({ temData = defaultTemData }) {
                     <textarea
                       placeholder={val.inputProps?.placehoder}
                       name={val.inputProps?.name}
-                      className="input1 border-2 h-32"
+                      className="input1 border-2 h-36"
                       value={userDetail1FormDataState[idx].toString()}
                       onChange={(e) => {
                         inputDetail1OnChange(e, idx);
                       }}
                     />
                   ) : (
-                    <input
-                      placeholder={val.inputProps?.placehoder}
-                      name={val.inputProps?.name}
-                      type={val.inputProps?.type}
-                      className="input1 border-2"
-                      value={userDetail1FormDataState[idx].toString()}
-                      onChange={(e) => {
-                        inputDetail1OnChange(e, idx);
-                      }}
-                    />
+                    <>
+                      <input
+                        placeholder={val.inputProps?.placehoder}
+                        name={val.inputProps?.name}
+                        type={val.inputProps?.type}
+                        className="input1 border-2"
+                        value={userDetail1FormDataState[idx].toString()}
+                        onChange={(e) => {
+                          inputDetail1OnChange(e, idx);
+                        }}
+                      />
+                      <div className="px-1 text-sm">
+                        홈페이지 메인이 아닌 특정 제품 링크를 입력해주세요.
+                      </div>
+                    </>
                   )}
                 </li>
               ) : (
@@ -324,16 +329,21 @@ export default function App({ temData = defaultTemData }) {
                       }}
                     />
                   ) : (
-                    <input
-                      placeholder={val.inputProps?.placehoder}
-                      name={val.inputProps?.name}
-                      type={val.inputProps?.type}
-                      className="input1 border-2"
-                      value={userDetail1FormDataState[idx].toString()}
-                      onChange={(e) => {
-                        inputDetail1OnChange(e, idx);
-                      }}
-                    />
+                    <>
+                      <input
+                        placeholder={val.inputProps?.placehoder}
+                        name={val.inputProps?.name}
+                        type={val.inputProps?.type}
+                        className="input1 border-2"
+                        value={userDetail1FormDataState[idx].toString()}
+                        onChange={(e) => {
+                          inputDetail1OnChange(e, idx);
+                        }}
+                      />
+                      <div className="px-1 text-sm">
+                        홈페이지 메인이 아닌 특정 제품 링크를 입력해주세요.
+                      </div>
+                    </>
                   )}
                 </li>
               ) : (

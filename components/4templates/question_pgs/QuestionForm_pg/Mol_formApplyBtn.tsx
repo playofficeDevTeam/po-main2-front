@@ -105,7 +105,7 @@ export default function App({ trigger = false }) {
         }
       }}
     >
-      <div className="px-4 text-lg">전문가 컨설팅 신청</div>
+      <div className="px-4 text-lg">콘텐츠 컨설팅 신청</div>
     </RoundedOrangeBtn>
   );
 }
