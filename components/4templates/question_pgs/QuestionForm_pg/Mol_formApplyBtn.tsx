@@ -82,6 +82,14 @@ export default function App({ trigger = false }) {
           //memberId 가져오기
           const memberId = window.localStorage.getItem(LOCAL_SAVED_MEMVER_ID);
 
+          const phoneNumber = convertKoreanPhoneNumberToInternationalPhoneNumberAndRemoveNonNumber(
+            userFormDataState[2].trim()
+          )
+          console.log(phoneNumber);
+          if (["+821028983692"].includes(phoneNumber) ) {
+            throw Error("일시적인 오류로 문의를 제출하지 못했습니다.")
+          }
+
           createQuestion({
             variables: {
               input: {
