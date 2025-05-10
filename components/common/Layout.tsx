@@ -33,6 +33,7 @@ export default function Layout({ children }: any) {
               <GoToTopArrow />
               <>{children}</>
               <Org_footer />
+              
             </UserDetect>
           </DeviceDetect>
         </RecoilRoot>

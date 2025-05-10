@@ -18,6 +18,7 @@ import {
   CreateQuestion,
   CreateQuestionVariables,
 } from "./__generated__/CreateQuestion";
+import ChannelService from "../../../common/ChannelService";
 
 export default function App({ trigger = false }) {
   const router = useRouter();
@@ -82,13 +83,21 @@ export default function App({ trigger = false }) {
           //memberId 가져오기
           const memberId = window.localStorage.getItem(LOCAL_SAVED_MEMVER_ID);
 
-          const phoneNumber = convertKoreanPhoneNumberToInternationalPhoneNumberAndRemoveNonNumber(
-            userFormDataState[2].trim()
-          )
+          const phoneNumber =
+            convertKoreanPhoneNumberToInternationalPhoneNumberAndRemoveNonNumber(
+              userFormDataState[2].trim()
+            );
           console.log(phoneNumber);
-          if (["+821028983692"].includes(phoneNumber) ) {
-            throw Error("일시적인 오류로 문의를 제출하지 못했습니다.")
+          if (["+821028983692"].includes(phoneNumber)) {
+            throw Error("일시적인 오류로 문의를 제출하지 못했습니다.");
           }
+
+          const channelTalk = new ChannelService();
+          channelTalk.shutdown(); // 현재 채널톡 인스턴스를 셧다운합니다.
+          channelTalk.boot({
+            pluginKey: process.env.NEXT_PUBLIC_CHANNEL_IO_KEY,
+            memberId: window.localStorage.getItem(LOCAL_SAVED_MEMVER_ID),
+          });
 
           createQuestion({
             variables: {

@@ -18,6 +18,7 @@ import { useState } from "react";
 import ReactLoading from "react-loading";
 import { LOCAL_SAVED_MEMVER_ID } from "../../../common/ExternalBoot";
 import { getCookie } from "../../../hooks/useConversionApi";
+import ChannelService from "../../../common/ChannelService";
 
 //휴대폰 번호를 숫자만 남기는 정규식
 const regExp = /[^0-9]/g;
@@ -150,6 +151,13 @@ export default function App({ trigger = false }) {
 
               const fbp = getCookie("_fbp");
               const fbc = getCookie("_fbc");
+
+              const channelTalk = new ChannelService();
+              channelTalk.shutdown(); // 현재 채널톡 인스턴스를 셧다운합니다.
+              channelTalk.boot({
+                pluginKey: process.env.NEXT_PUBLIC_CHANNEL_IO_KEY,
+                memberId: window.localStorage.getItem(LOCAL_SAVED_MEMVER_ID),
+              });
 
               createPayment({
                 variables: {

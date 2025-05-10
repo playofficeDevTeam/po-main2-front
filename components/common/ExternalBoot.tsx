@@ -28,7 +28,8 @@ export default function App() {
     const channelTalk = new ChannelService();
     channelTalk.boot({
       pluginKey: process.env.NEXT_PUBLIC_CHANNEL_IO_KEY,
-      memberId: window.localStorage.getItem(LOCAL_SAVED_MEMVER_ID),
+      // 비용 이슈로 처음 시작할때 멤버아이디 제공하지 않음
+      // memberId: window.localStorage.getItem(LOCAL_SAVED_MEMVER_ID),
     });
     return () => {
       channelTalk.shutdown();
