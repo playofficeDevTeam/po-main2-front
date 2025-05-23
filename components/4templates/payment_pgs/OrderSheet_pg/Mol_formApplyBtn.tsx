@@ -128,12 +128,16 @@ export default function App({ trigger = false }) {
           trigger={trigger}
           onClick={() => {
             try {
+              console.log("결제 버튼 클릭됨");
+
+              console.log("userFormDataState", userFormDataState);
               userFormDataValidate.forEach((val, idx) => {
                 if (!val.validateFunction(userFormDataState[idx])) {
                   const error = val.validateError;
                   throw error;
                 }
               });
+
               window.localStorage.setItem(
                 "serviceDataState",
                 JSON.stringify(serviceDataState)
@@ -142,22 +146,25 @@ export default function App({ trigger = false }) {
                 "userFormDataState",
                 JSON.stringify(userFormDataState)
               );
+
               disabledPaymentClick();
 
-              // memberId 가져오기
               const memberId = window.localStorage.getItem(
                 LOCAL_SAVED_MEMVER_ID
               );
-
+              console.log("memberId", memberId);
               const fbp = getCookie("_fbp");
               const fbc = getCookie("_fbc");
 
               const channelTalk = new ChannelService();
-              channelTalk.shutdown(); // 현재 채널톡 인스턴스를 셧다운합니다.
+              channelTalk.shutdown();
               channelTalk.boot({
                 pluginKey: process.env.NEXT_PUBLIC_CHANNEL_IO_KEY,
-                memberId: window.localStorage.getItem(LOCAL_SAVED_MEMVER_ID),
+                memberId,
               });
+
+              console.log("clickedServiceClass", clickedServiceClass);
+              console.log("clickedPaymentMethod", clickedPaymentMethod);
 
               createPayment({
                 variables: {
@@ -165,27 +172,32 @@ export default function App({ trigger = false }) {
                     clientUserFbc: fbc,
                     clientUserFbp: fbp,
                     memberId,
-                    brandName: userFormDataState[0].trim(),
-                    name: userFormDataState[1].trim(),
+                    brandName: userFormDataState[0]?.trim(),
+                    name: userFormDataState[1]?.trim(),
                     phoneNumber:
                       convertKoreanPhoneNumberToInternationalPhoneNumberAndRemoveNonNumber(
-                        userFormDataState[2].trim()
+                        userFormDataState[2]?.trim()
                       ),
-                    email: userFormDataState[3].trim(),
+                    email: userFormDataState[3]?.trim(),
                     paymentMethod: clickedPaymentMethod ?? "오류",
                     amount,
                     orderId,
                     itemInfo: [
                       {
-                        itemId: clickedServiceClass?.input.itemId ?? 0,
+                        itemId: clickedServiceClass?.input?.itemId ?? 0,
                         amountOfItem:
-                          clickedServiceClass?.input.amountOfItems ?? 0,
+                          clickedServiceClass?.input?.amountOfItems ?? 0,
                       },
                     ],
                   },
                 },
+                onError: (error) => {
+                  console.error("createPayment 실패:", error);
+                  alert("결제 요청 중 오류가 발생했습니다.");
+                },
               });
             } catch (error) {
+              console.error("결제 로직 에러:", error);
               alert(error);
             }
           }}

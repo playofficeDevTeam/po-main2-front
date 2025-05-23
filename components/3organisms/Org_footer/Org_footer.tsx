@@ -70,10 +70,6 @@ export default function App() {
               <div className=" text-2xl font-black mb-4">POKETING</div>
               <div className=" text-sm text-gray-600 leading-6 mb-4">
                 <div className="">
-                  상호명 : 5일의 휴일
-                  <span className="mx-2 relative bottom-px text-gray-200">
-                    |
-                  </span>
                   대표이사 : 이제성
                   <span className="mx-2 relative bottom-px text-gray-200">
                     |
@@ -92,7 +88,7 @@ export default function App() {
                   <span className="mx-2 relative bottom-px text-gray-200">
                     |
                   </span>
-                  전화 : 051-904-0118
+                  전화 : 0502-1937-0118
                 </div>
                 <div className="">
                   주소: 부산광역시 해운대구 해운대해변로257
@@ -101,9 +97,9 @@ export default function App() {
               <div className="">ⓒ PLAY OFFICE Inc. All Right Reserved.</div>
             </div>
             <div className="flex flex-col justify-end items-end">
-              <div className=" text-3xl font-bold mb-4">051-904-0118</div>
+              <div className=" text-3xl font-bold mb-4">0502-1937-0118</div>
               <div className="text-sm text-gray-600">
-                월-금 10:00 - 19:00 / 주말, 공휴일 휴무
+                월-금 11:00 - 17:00 / 주말, 공휴일 휴무
               </div>
             </div>
           </div>
@@ -114,3 +110,4 @@ export default function App() {
     <></>
   );
 }
+7;
